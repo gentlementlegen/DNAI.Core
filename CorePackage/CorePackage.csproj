@@ -106,7 +106,32 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Execution\BinaryOperator.cs" />
+    <Compile Include="Execution\UnaryOperator.cs" />
+    <Compile Include="Global\Declaration.cs" />
+    <Compile Include="Entity\Context.cs" />
+    <Compile Include="Global\Definition.cs" />
+    <Compile Include="Entity\Type\EnumType.cs" />
+    <Compile Include="Entity\Function.cs" />
+    <Compile Include="Entity\Type\ListType.cs" />
+    <Compile Include="Entity\Type\ObjectType.cs" />
+    <Compile Include="Entity\Type\ScalarType.cs" />
+    <Compile Include="Entity\DataType.cs" />
+    <Compile Include="Entity\Variable.cs" />
+    <Compile Include="Global\Declarator.cs" />
+    <Compile Include="Execution\Input.cs" />
+    <Compile Include="Execution\Output.cs" />
+    <Compile Include="Execution\AccessRefreshInstruction.cs" />
+    <Compile Include="Execution\Debug.cs" />
+    <Compile Include="Execution\ExecutionRefreshInstruction.cs" />
+    <Compile Include="Execution\Formula.cs" />
+    <Compile Include="Execution\FunctionCall.cs" />
+    <Compile Include="Execution\Getter.cs" />
+    <Compile Include="Execution\If.cs" />
+    <Compile Include="Execution\Instruction.cs" />
+    <Compile Include="Execution\Operator.cs" />
+    <Compile Include="Execution\Setter.cs" />
+    <Compile Include="Execution\Statement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\CorePackage.rd.xml" />
   </ItemGroup>
@@ -118,6 +143,7 @@
       <Version>5.2.3</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
