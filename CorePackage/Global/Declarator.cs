@@ -70,9 +70,10 @@ namespace CorePackage.Global
         /// <returns>Declaration of the entity</returns>
         public Declaration<DefinitionType> AddExternal(string name, DefinitionType definition)
         {
-            this.externals[name] = new Declaration<DefinitionType>{ name = name, definition = definition };
+            Declaration<DefinitionType> tmp = new Declaration<DefinitionType> { name = name, definition = definition };
+            this.externals[name] = tmp;
             this.defined.Add(definition);
-            return this.internals[name];
+            return tmp;
         }
 
         /// <summary>

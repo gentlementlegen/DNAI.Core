@@ -45,19 +45,30 @@ namespace CorePackage.Entity.Type
         /// <see cref="DataType.Instanciate"/>
         public override dynamic Instanciate()
         {
-            throw new NotImplementedException();
+            return values.Keys.First();
         }
 
         /// <see cref="Global.Definition.IsValid"/>
         public override bool IsValid()
         {
-            throw new NotImplementedException();
+            //incohérence des types stockés par rapport à celui défini
+            foreach (Global.Declaration<Variable> curr in values.Values)
+            {
+                if (curr.definition.Type != this.stored)
+                    return false;
+            }
+            return true;
         }
 
         /// <see cref="DataType.IsValueOfType(dynamic)"/>
         public override bool IsValueOfType(dynamic value)
         {
-            throw new NotImplementedException();
+            return value.GetType() == typeof(string) && values.Keys.Contains((string)value);
+        }
+
+        public Variable GetValue(string name)
+        {
+            return values[name].definition;
         }
     }
 }

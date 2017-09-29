@@ -6,21 +6,22 @@ using System.Threading.Tasks;
 
 namespace CorePackage.Execution
 {
-    public class If : Statement
+    public class Formula : ExecutionRefreshInstruction
     {
-        public If():
+  
+        public Formula(Dictionary<string, Entity.Variable> inputs, Entity.Variable output):
             base(
+                inputs,
                 new Dictionary<string, Entity.Variable>
                 {
-                    { "condition", new Entity.Variable(Entity.Type.Scalar.Boolean, false) }
-                },
-                2
+                    { "result", output }
+                }
             )
         {
 
         }
 
-        public override ExecutionRefreshInstruction[] GetNextInstructions()
+        public override void Execute()
         {
             throw new NotImplementedException();
         }

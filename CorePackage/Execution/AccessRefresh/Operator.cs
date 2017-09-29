@@ -10,10 +10,13 @@ namespace CorePackage.Execution
     {
         protected Delegate operation;
             
-        public Operator(Dictionary<string, Entity.Variable> inputs, Entity.Variable output, Delegate operation):
+        public Operator(Dictionary<string, Entity.Variable> inputs, Entity.DataType outputType, Delegate operation):
             base(
                 inputs,
-                output
+                new Dictionary<string, Entity.Variable>
+                {
+                    { "result", new Entity.Variable(outputType) }
+                }
             )
         {
             this.operation = operation;

@@ -8,13 +8,10 @@ namespace CorePackage.Execution
 {
     public abstract class AccessRefreshInstruction : Instruction
     {
-        public AccessRefreshInstruction(Dictionary<string, Entity.Variable> inputs, Entity.Variable output) :
+        public AccessRefreshInstruction(Dictionary<string, Entity.Variable> inputs, Dictionary<string, Entity.Variable> outputs) :
             base(
                 inputs,
-                new Dictionary<string, Entity.Variable>
-                {
-                    { "result", output }
-                }
+                outputs
             )
         {
 

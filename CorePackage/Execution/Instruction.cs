@@ -34,13 +34,13 @@ namespace CorePackage.Execution
             if (inputs != null)
                 foreach (KeyValuePair<string, Entity.Variable> curr in inputs)
                 {
-                    this.inputs[curr.Key] = new Input(scope.AddExternal(curr.Key, curr.Value));
+                    AddInput(curr.Key, curr.Value);
                 }
 
             if (outputs != null)
                 foreach (KeyValuePair<string, Entity.Variable> curr in outputs)
                 {
-                    this.outputs[curr.Key] = new Output(scope.AddExternal(curr.Key, curr.Value));
+                    AddOutput(curr.Key, curr.Value);
                 }
         }
 
@@ -54,6 +54,26 @@ namespace CorePackage.Execution
             get { return outputs.Values.ToList(); }
         }
 
+        public void AddInput(string name, Entity.Variable definition)
+        {
+            AddInput(scope.AddExternal(name, definition));
+        }
+
+        public void AddInput(Global.Declaration<Entity.Variable> declaration)
+        {
+            this.inputs[declaration.name] = new Input(declaration);
+        }
+
+        public void AddOutput(string name, Entity.Variable definition)
+        {
+            AddOutput(scope.AddExternal(name, definition));
+        }
+
+        public void AddOutput(Global.Declaration<Entity.Variable> declaration)
+        {
+            this.outputs[declaration.name] = new Output(declaration);
+        }
+
         public Input GetInput(string name)
         {
             return this.inputs[name];
@@ -62,6 +82,11 @@ namespace CorePackage.Execution
         public virtual Output GetOutput(string name)
         {
             return this.outputs[name];
+        }
+
+        public void SetInputValue(string name, dynamic value)
+        {
+            this.inputs[name].Value.definition.Value = value;
         }
 
         public abstract void Execute();

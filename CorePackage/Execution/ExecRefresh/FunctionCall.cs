@@ -18,12 +18,12 @@ namespace CorePackage.Execution
         {
             foreach (Global.Declaration<Entity.Variable> curr in tocall.Parameters)
             {
-                this.inputs[curr.name] = new Input(curr);
+                AddInput(curr);
             }
 
             foreach (Global.Declaration<Entity.Variable> curr in tocall.Returns)
             {
-                this.outputs[curr.name] = new Output(curr);
+                AddOutput(curr);
             }
 
             this.tocall = tocall;
@@ -31,7 +31,7 @@ namespace CorePackage.Execution
 
         public override void Execute()
         {
-            throw new NotImplementedException();
+            tocall.Call();
         }
     }
 }

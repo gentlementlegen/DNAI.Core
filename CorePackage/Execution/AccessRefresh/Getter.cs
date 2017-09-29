@@ -6,23 +6,22 @@ using System.Threading.Tasks;
 
 namespace CorePackage.Execution
 {
-    public class Formula : ExecutionRefreshInstruction
+    public class Getter : AccessRefreshInstruction
     {
-        public Formula(Dictionary<string, Entity.Variable> inputs, Entity.Variable output):
+        public Getter(Entity.Variable toget):
             base(
-                inputs,
+                null,
                 new Dictionary<string, Entity.Variable>
                 {
-                    { "result", output }
-                }
-            )
+                    { "reference", toget }
+                })
         {
 
         }
 
         public override void Execute()
         {
-            throw new NotImplementedException();
+            /* do nothing */
         }
     }
 }

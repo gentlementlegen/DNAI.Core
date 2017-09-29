@@ -83,8 +83,13 @@ namespace CorePackage.Entity
         /// <param name="value">Value to set</param>
         public void SetParameterValue(string name, dynamic value)
         {
-            /*if (this.parameters.Keys.Contains(name))
-                this.parameters[name].definition.Set(value);*/
+            if (this.parameters.Keys.Contains(name))
+                this.parameters[name].definition.Value = value;
+        }
+
+        public Variable GetParameter(string name)
+        {
+            return this.parameters[name].definition;
         }
 
         /// <summary>
@@ -100,11 +105,9 @@ namespace CorePackage.Entity
         /// </summary>
         /// <param name="name">Name of the return</param>
         /// <returns>Value to find or null</returns>
-        public dynamic GetReturnValue(string name)
+        public Variable GetReturn(string name)
         {
-            /*if (this.returns.Keys.Contains(name))
-                return this.returns[name].definition.value;*/
-            return 0;
+            return this.returns[name].definition;
         }
 
         /// <summary>
@@ -112,7 +115,23 @@ namespace CorePackage.Entity
         /// </summary>
         public void Call()
         {
-            //execution algorithm
+            Stack<Execution.ExecutionRefreshInstruction> instructions = new Stack<Execution.ExecutionRefreshInstruction>();
+
+            instructions.Push(entrypoint);
+            while (instructions.Count > 0)
+            {
+                Execution.ExecutionRefreshInstruction toexecute = instructions.Pop();
+                
+                toexecute.Execute();
+
+                Execution.ExecutionRefreshInstruction[] nexts = toexecute.GetNextInstructions();
+
+                foreach (Execution.ExecutionRefreshInstruction curr in nexts)
+                {
+                    if (curr != null)
+                        instructions.Push(curr);
+                }
+            }
         }
 
         /// <see cref="Global.Definition.IsValid"/>
