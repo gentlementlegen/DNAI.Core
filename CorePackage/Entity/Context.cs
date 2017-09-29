@@ -144,9 +144,9 @@ namespace CorePackage.Entity
         /// </summary>
         /// <param name="name">Nmae of the variable to find</param>
         /// <returns>Variable associated to the given name or null</returns>
-        public Global.Declaration<Variable> FindVariableFrom(string name)
+        public Global.Declaration<Variable> FindVariableFrom(string name, Global.AccessMode access = Global.AccessMode.EXTERNAL)
         {
-            return this.storage.FindFrom(name);
+            return this.storage.FindFrom(name, access);
         }
 
         /// <see cref="Global.Definition"/>

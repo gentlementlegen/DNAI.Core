@@ -28,19 +28,19 @@ namespace CorePackage.Entity.Type
         /// <see cref="DataType.Instanciate"/>
         public override dynamic Instanciate()
         {
-            throw new NotImplementedException();
+            return Activator.CreateInstance(real_type);
         }
 
         /// <see cref="Global.Definition.IsValid"/>
         public override bool IsValid()
         {
-            throw new NotImplementedException();
+            return real_type != null;
         }
 
         /// <see cref="DataType.IsValueOfType(dynamic)"/>
         public override bool IsValueOfType(dynamic value)
         {
-            throw new NotImplementedException();
+            return real_type == value.GetType();
         }
     }
 
