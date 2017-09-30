@@ -30,7 +30,7 @@ namespace CorePackage.Execution
 
         public override ExecutionRefreshInstruction[] GetNextInstructions()
         {
-            nextinstrution[0] = this.OutPoints[this.GetInput("condition").Value.definition.Value ? (int)ConditionIndexes.OnTrue : (int)ConditionIndexes.OnFalse];
+            nextinstrution[0] = this.OutPoints[this.GetInput("condition").Value.definition.Value == true ? (int)ConditionIndexes.OnTrue : (int)ConditionIndexes.OnFalse];
             return nextinstrution;
         }
 

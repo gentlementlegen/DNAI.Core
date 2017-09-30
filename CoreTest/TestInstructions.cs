@@ -147,7 +147,7 @@ namespace CoreTest
         /// Test execution of a condition that set a variable
         /// </summary>
         [TestMethod]
-        public void TestExecutionRefresh()
+        public void TestExecutionRefreshAsync()
         {
             //Function that will be executed
             CorePackage.Entity.Function test = new CorePackage.Entity.Function();
@@ -157,34 +157,34 @@ namespace CoreTest
 
             //if (4 == 5)
             CorePackage.Execution.If f_cond = new CorePackage.Execution.If();
-                CorePackage.Execution.Operators.Equal condition = new CorePackage.Execution.Operators.Equal(CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer);
-                    condition.SetInputValue("LeftOperand", 4);
-                    condition.SetInputValue("RightOperand", 5);
+            CorePackage.Execution.Operators.Equal condition = new CorePackage.Execution.Operators.Equal(CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer);
+            condition.SetInputValue("LeftOperand", 4);
+            condition.SetInputValue("RightOperand", 5);
             f_cond.GetInput("condition").LinkTo(condition, "result");
 
-                //print("Hello World !")
-                CorePackage.Execution.Debug print_hello = new CorePackage.Execution.Debug(new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.String, "Hello World !"));
-                //witness = 84
-                CorePackage.Execution.Setter true_change = new CorePackage.Execution.Setter(witness);
-                    true_change.SetInputValue("value", 84);
-                print_hello.LinkTo(0, true_change);
+            //print("Hello World !")
+            CorePackage.Execution.Debug print_hello = new CorePackage.Execution.Debug(new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.String, "Hello World !"));
+            //witness = 84
+            CorePackage.Execution.Setter true_change = new CorePackage.Execution.Setter(witness);
+            true_change.SetInputValue("value", 84);
+            print_hello.LinkTo(0, true_change);
 
             //If the condition is true, then do print_hello
             f_cond.Then(print_hello);
 
-                //print("Goodbye World !")
-                CorePackage.Execution.Debug print_goodbye = new CorePackage.Execution.Debug(new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.String, "Goodbye World !"));
-                //witness = 0
-                CorePackage.Execution.Setter false_change = new CorePackage.Execution.Setter(witness);
-                    false_change.SetInputValue("value", 0);
-                print_goodbye.LinkTo(0, false_change);
-            
+            //print("Goodbye World !")
+            CorePackage.Execution.Debug print_goodbye = new CorePackage.Execution.Debug(new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.String, "Goodbye World !"));
+            //witness = 0
+            CorePackage.Execution.Setter false_change = new CorePackage.Execution.Setter(witness);
+            false_change.SetInputValue("value", 0);
+            print_goodbye.LinkTo(0, false_change);
+
             //Else, do print_goodbye
             f_cond.Else(print_goodbye);
 
             //Set the function entry point before calling it
             test.entrypoint = f_cond;
-            
+
             //In this call, it will check that 4 is equal to 5, then it will execute print_goodbye and false_change
             test.Call();
 
@@ -201,6 +201,8 @@ namespace CoreTest
             //So the witness value is exepected to be 84
             if (witness.Value != 84)
                 throw new Exception("Failed: Witness have to be equal to 84");
+
+            System.Diagnostics.Debug.Write(test.ToDotFile());
         }
     }
 }

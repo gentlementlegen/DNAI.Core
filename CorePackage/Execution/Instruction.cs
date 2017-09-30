@@ -89,6 +89,16 @@ namespace CorePackage.Execution
             this.inputs[name].Value.definition.Value = value;
         }
 
+        public dynamic GetInputValue(string name)
+        {
+            return this.GetInput(name).Value.definition.Value;
+        }
+
+        public dynamic GetOutputValue(string name)
+        {
+            return this.GetOutput(name).Value.definition.Value;
+        }
+
         public abstract void Execute();
     }
 }

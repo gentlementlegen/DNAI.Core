@@ -46,7 +46,7 @@ namespace CorePackage.Global
                 return this.AddInternal(name, definition);
             else if (mode == AccessMode.EXTERNAL)
                 return this.AddExternal(name, definition);
-            return null;
+            throw new ArgumentException("Declarator: access mode have to be INTERNAL or EXTERNAL");
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace CorePackage.Global
                 return this.FindExternalFrom(name);
             else if (mode == AccessMode.INTERNAL)
                 return this.FindInternalFrom(name);
-            return null;
+            throw new KeyNotFoundException("Declarator: No such entity named \"" + name + "\"");
         }
 
         /// <summary>
