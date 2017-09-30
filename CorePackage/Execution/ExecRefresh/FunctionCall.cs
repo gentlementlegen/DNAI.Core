@@ -10,6 +10,8 @@ namespace CorePackage.Execution
     {
         private Entity.Function tocall;
 
+        //add a constructor that decompose c# function to a duly function
+
         public FunctionCall(Entity.Function tocall) :
             base(
                 null,

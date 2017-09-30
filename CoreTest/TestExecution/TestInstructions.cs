@@ -10,17 +10,6 @@ namespace CoreTest
     [TestClass]
     public class TestInstructions
     {
-        private void HandleOperations<T>(List<CorePackage.Execution.Operator> to_test, List<T> expected, Func<CorePackage.Execution.Instruction, bool> init)
-        {
-            if (to_test.Count != expected.Count)
-                throw new Exception("Test count have to be equal to expected results count");
-            for (int i = 0; i < expected.Count; i++)
-            {
-                init.DynamicInvoke(to_test[i]);
-                if (to_test[i].GetOutput("result").Value.definition.Value != expected[i])
-                    throw new Exception("Invalid result for index " + i.ToString() + ": Expected " + expected[i].ToString() + " got " + ((T)to_test[i].GetOutput("result").Value.definition.Value).ToString());
-            }
-        }
 
         /// <summary>
         /// Test all the operators on integer values
@@ -30,8 +19,10 @@ namespace CoreTest
         {
             CorePackage.Entity.DataType opType = CorePackage.Entity.Type.Scalar.Integer;
 
-            //binary combination operators
-            HandleOperations<int>(
+            
+
+            //binary combination operators : add, divide, xor, leftShift, etc...
+            TestAuxiliary.HandleOperations<int>(
                 new List<CorePackage.Execution.Operator>
                 {
                     new CorePackage.Execution.Operators.Add(opType, opType, opType),
@@ -45,28 +36,33 @@ namespace CoreTest
                     new CorePackage.Execution.Operators.RightShift(opType, opType, opType),
                     new CorePackage.Execution.Operators.Xor(opType, opType, opType)
                 },
-                new List<int>
+                new List<Func<CorePackage.Execution.Instruction, bool>>
                 {
-                    6,
-                    2,
-                    8,
-                    2,
-                    0,
-                    0,
-                    6,
-                    16,
-                    1,
-                    6
+                    (CorePackage.Execution.Instruction toinit) => {
+                        toinit.SetInputValue("LeftOperand", 4);
+                        toinit.SetInputValue("RightOperand", 2);
+                        return true;
+                    }
                 },
-                delegate(CorePackage.Execution.Instruction toinit)
+                new List<List<int>>
                 {
-                    toinit.SetInputValue("LeftOperand", 4);
-                    toinit.SetInputValue("RightOperand", 2);
-                    return true;
+                    new List<int>
+                    {
+                        6,
+                        2,
+                        8,
+                        2,
+                        0,
+                        0,
+                        6,
+                        16,
+                        1,
+                        6
+                    }
                 });
 
-            //binary logical operators
-            HandleOperations<bool>(
+            //binary logical operators : greater, less, equal, etc...
+            TestAuxiliary.HandleOperations<bool>(
                 new List<CorePackage.Execution.Operator>
                 {
                     new CorePackage.Execution.Operators.Equal(opType, opType),
@@ -76,24 +72,30 @@ namespace CoreTest
                     new CorePackage.Execution.Operators.LessEqual(opType, opType),
                     new CorePackage.Execution.Operators.Different(opType, opType)
                 },
-                new List<bool>
+                new List<Func<CorePackage.Execution.Instruction, bool>>
                 {
-                    false,
-                    true,
-                    true,
-                    false,
-                    false,
-                    true
+                    delegate (CorePackage.Execution.Instruction toinit)
+                    {
+                        toinit.SetInputValue("LeftOperand", 4);
+                        toinit.SetInputValue("RightOperand", 2);
+                        return true;
+                    }
                 },
-                delegate (CorePackage.Execution.Instruction toinit)
+                new List<List<bool>>
                 {
-                    toinit.SetInputValue("LeftOperand", 4);
-                    toinit.SetInputValue("RightOperand", 2);
-                    return true;
+                    new List<bool>
+                    {
+                        false,
+                        true,
+                        true,
+                        false,
+                        false,
+                        true
+                    }
                 });
 
-            //unary operators
-            HandleOperations<int>(
+            //unary operators : binary not, increment, etc...
+            TestAuxiliary.HandleOperations<int>(
                 new List<CorePackage.Execution.Operator>
                 {
                     new CorePackage.Execution.Operators.BinaryNot(opType, opType),
@@ -101,53 +103,101 @@ namespace CoreTest
                     new CorePackage.Execution.Operators.Increment(opType, opType),
                     new CorePackage.Execution.Operators.Inverse(opType, opType)
                 },
-                new List<int>
+                new List<Func<CorePackage.Execution.Instruction, bool>>
                 {
-                    -5,
-                    3,
-                    5,
-                    -4
+                    delegate (CorePackage.Execution.Instruction toinit)
+                    {
+                        toinit.SetInputValue("Operand", 4);
+                        return true;
+                    }
                 },
-                delegate (CorePackage.Execution.Instruction toinit)
+                new List<List<int>>
                 {
-                    toinit.SetInputValue("Operand", 4);
-                    return true;
+                    new List<int>
+                    {
+                        -5,
+                        3,
+                        5,
+                        -4
+                    }
                 });
 
-            //logical operators
-            HandleOperations<bool>(
+            //logical operators: and, or, not
+            TestAuxiliary.HandleOperations<bool>(
                 new List<CorePackage.Execution.Operator>
                 {
                     new CorePackage.Execution.Operators.And(),
                     new CorePackage.Execution.Operators.Or(),
                     new CorePackage.Execution.Operators.Not(CorePackage.Entity.Type.Scalar.Boolean)
                 },
-                new List<bool>
+                new List<Func<CorePackage.Execution.Instruction, bool>>
                 {
-                    false,
-                    true,
-                    false
+                    delegate (CorePackage.Execution.Instruction toinit)
+                    {
+                        if (toinit.GetType() == typeof(CorePackage.Execution.Operators.Not))
+                        {
+                            toinit.SetInputValue("Operand", true);
+                        }
+                        else
+                        {
+                            toinit.SetInputValue("LeftOperand", true);
+                            toinit.SetInputValue("RightOperand", false);
+                        }
+                        return true;
+                    }
                 },
-                delegate(CorePackage.Execution.Instruction toinit)
+                new List<List<bool>>
                 {
-                    if (toinit.GetType() == typeof(CorePackage.Execution.Operators.Not))
+                    new List<bool>
                     {
-                        toinit.SetInputValue("Operand", true);
+                        false,
+                        true,
+                        false
                     }
-                    else
-                    {
-                        toinit.SetInputValue("LeftOperand", true);
-                        toinit.SetInputValue("RightOperand", false);
-                    }
-                    return true;
                 });
+
+            //add a test for the access operator => leftOperand[rightOperand]
         }
 
         /// <summary>
-        /// Test execution of a condition that set a variable
+        /// Execution method that test if, getter, setter, debug and function call instructions on integer values
         /// </summary>
+        /// 
+        /// <remarks>
+        /// Corresponds to the following code :
+        /// 
+        /// <code>
+        /// int i;
+        /// int witness = 42;
+        /// 
+        /// function say_hello()
+        /// {
+        ///     print("Hello World !");
+        ///     witness = 84;
+        /// }
+        /// 
+        /// function say_bye()
+        /// {
+        ///     print("Goodbye World !");
+        ///     witness = 0;
+        /// }
+        /// 
+        /// if (i == 5)
+        /// {
+        ///     say_hello();
+        /// }
+        /// else
+        /// {
+        ///     say_bye();
+        /// }
+        /// </code>
+        /// 
+        /// We gonna test this function for :
+        ///     - i = 4 => expected value of witness is 0
+        ///     - i = 5 => expected value of witness is 84
+        /// </remarks>
         [TestMethod]
-        public void TestExecutionRefreshAsync()
+        public void Test_if_getter_setter_debug_functionCall_Instructions()
         {
             //Function that will be executed
             CorePackage.Entity.Function test = new CorePackage.Entity.Function();
@@ -162,25 +212,30 @@ namespace CoreTest
             condition.SetInputValue("RightOperand", 5);
             f_cond.GetInput("condition").LinkTo(condition, "result");
 
+            CorePackage.Entity.Function say_hello = new CorePackage.Entity.Function();
+            
             //print("Hello World !")
             CorePackage.Execution.Debug print_hello = new CorePackage.Execution.Debug(new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.String, "Hello World !"));
             //witness = 84
             CorePackage.Execution.Setter true_change = new CorePackage.Execution.Setter(witness);
             true_change.SetInputValue("value", 84);
             print_hello.LinkTo(0, true_change);
+            say_hello.entrypoint = print_hello;
 
             //If the condition is true, then do print_hello
-            f_cond.Then(print_hello);
+            f_cond.Then(new CorePackage.Execution.FunctionCall(say_hello));
 
+            CorePackage.Entity.Function say_bye = new CorePackage.Entity.Function();
             //print("Goodbye World !")
             CorePackage.Execution.Debug print_goodbye = new CorePackage.Execution.Debug(new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.String, "Goodbye World !"));
             //witness = 0
             CorePackage.Execution.Setter false_change = new CorePackage.Execution.Setter(witness);
             false_change.SetInputValue("value", 0);
             print_goodbye.LinkTo(0, false_change);
+            say_bye.entrypoint = print_goodbye;
 
             //Else, do print_goodbye
-            f_cond.Else(print_goodbye);
+            f_cond.Else(new CorePackage.Execution.FunctionCall(say_bye));
 
             //Set the function entry point before calling it
             test.entrypoint = f_cond;
@@ -204,5 +259,7 @@ namespace CoreTest
 
             System.Diagnostics.Debug.Write(test.ToDotFile());
         }
+
+
     }
 }
