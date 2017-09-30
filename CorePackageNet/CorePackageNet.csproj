@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DC0C6FC8-7D9D-4AC6-9B64-C8E3C39CA105}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CorePackage</RootNamespace>
+    <AssemblyName>CorePackageNet</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="protobuf-net, Version=2.3.2.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\CorePackage\packages\protobuf-net.2.3.2\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Communication\Packet.cs" />
+    <Compile Include="Communication\TcpManager.cs" />
+    <Compile Include="Entity\Context.cs" />
+    <Compile Include="Entity\DataType.cs" />
+    <Compile Include="Entity\Function.cs" />
+    <Compile Include="Entity\Type\EnumType.cs" />
+    <Compile Include="Entity\Type\ListType.cs" />
+    <Compile Include="Entity\Type\ObjectType.cs" />
+    <Compile Include="Entity\Type\ScalarType.cs" />
+    <Compile Include="Entity\Variable.cs" />
+    <Compile Include="Execution\AccessRefreshInstruction.cs" />
+    <Compile Include="Execution\BinaryOperator.cs" />
+    <Compile Include="Execution\Debug.cs" />
+    <Compile Include="Execution\ExecutionRefreshInstruction.cs" />
+    <Compile Include="Execution\Formula.cs" />
+    <Compile Include="Execution\FunctionCall.cs" />
+    <Compile Include="Execution\Getter.cs" />
+    <Compile Include="Execution\If.cs" />
+    <Compile Include="Execution\Input.cs" />
+    <Compile Include="Execution\Instruction.cs" />
+    <Compile Include="Execution\Operator.cs" />
+    <Compile Include="Execution\Output.cs" />
+    <Compile Include="Execution\Setter.cs" />
+    <Compile Include="Execution\Statement.cs" />
+    <Compile Include="Execution\UnaryOperator.cs" />
+    <Compile Include="Global\Declaration.cs" />
+    <Compile Include="Global\Declarator.cs" />
+    <Compile Include="Global\Definition.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
