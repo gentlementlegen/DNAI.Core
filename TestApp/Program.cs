@@ -1,18 +1,19 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CorePackage.Communication;
-using System.Net.Sockets;
-using System.Net;
-using ProtoBuf;
+﻿using CorePackage.Communication;
 using CorePackageNet.Communication;
+using ProtoBuf;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CoreTestNet
+namespace TestApp
 {
-    [TestClass]
-    public class UnitTest1
+    class Program
     {
-        [TestMethod]
-        public void TestMethod1()
+        static void Main(string[] args)
         {
             TcpManager tcp = new TcpManager(4242);
 
@@ -26,7 +27,10 @@ namespace CoreTestNet
             s.Connect(localEndPoint);
 
             var str = new NetworkStream(s);
-                Serializer.SerializeWithLengthPrefix<PacketRegisterEventRequest>(str, new PacketRegisterEventRequest() { Id = 3 }, PrefixStyle.Base128);
+            while (true)
+            {
+                Serializer.SerializeWithLengthPrefix<PacketRegisterEventRequest>(str, new PacketRegisterEventRequest() { Id = 3 /*ClientName = "mabit"*/ }, PrefixStyle.Base128);
+            }
         }
     }
 }

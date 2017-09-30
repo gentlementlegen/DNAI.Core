@@ -2,6 +2,20 @@
 
 namespace CorePackageNet.Communication
 {
+    [ProtoContract]
+    public class PacketBase
+    {
+        // 0x44756c79
+        [ProtoMember(1)]
+        public int MagicNumber { get; set; }
+
+        [ProtoMember(2)]
+        public uint PacketSize { get; set; }
+
+        [ProtoMember(3)]
+        public uint Id { get; set; }
+    }
+
     /// <summary>
     /// Packet class contract for Protobuf usage.
     /// </summary>

@@ -1,8 +1,10 @@
-﻿using ProtoBuf;
+﻿using CorePackageNet.Communication;
+using ProtoBuf;
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace CorePackage.Communication
 {
@@ -29,14 +31,21 @@ namespace CorePackage.Communication
 
                 _tcpListener.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), _tcpListener);
 
-                // Wait until a connection is made and processed before 
+                // Wait until a connection is made and processed before
                 // continuing.
                 _tcpClientConnected.WaitOne();
             }
             catch
             {
-
             }
+        }
+
+        public Task StartListeningAsync()
+        {
+            return Task.Run(() =>
+            {
+                StartListening();
+            });
         }
 
         public void StopListening()
@@ -49,7 +58,7 @@ namespace CorePackage.Communication
             // Get the listener that handles the client request.
             TcpListener listener = (TcpListener)ar.AsyncState;
 
-            // End the operation and display the received data on 
+            // End the operation and display the received data on
             // the console.
             TcpClient client = listener.EndAcceptTcpClient(ar);
 
@@ -66,9 +75,24 @@ namespace CorePackage.Communication
         {
             byte[] buffer = new byte[8192];
             var stream = client.GetStream();
-            while (stream.Read(buffer, 0, 8192) > 0)
+            PacketBase t;
+            while ((t = Serializer.DeserializeWithLengthPrefix<PacketBase>(stream, PrefixStyle.Base128)) != null)
             {
+                switch (t.Id)
+                {
+                    case 1:
+                        Console.WriteLine("1.");
+                        break;
 
+                    case 2:
+                        Console.WriteLine("2.");
+                        break;
+
+                    case 3:
+                        Console.WriteLine("3.");
+                        var x = Serializer.DeserializeWithLengthPrefix<PacketRegisterEventRequest>(stream, PrefixStyle.Base128);
+                        break;
+                }
             }
         }
     }
