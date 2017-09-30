@@ -28,7 +28,7 @@ namespace CoreTest
                 {
                     init[j].DynamicInvoke(to_test[i]);
                     if (to_test[i].GetOutputValue("result") != expected[j][i])
-                        throw new Exception("Invalid result for " + to_test[i].GetType().ToString() + ": Expected " + expected[j][i].ToString() + " got " + ((T)to_test[i].GetOutputValue("result")).ToString());
+                        throw new Exception("Sequence " + j.ToString() + ": Operator " + to_test[i].GetType().ToString() + ": Expected " + expected[j][i].ToString() + " got " + ((T)to_test[i].GetOutputValue("result")).ToString());
                 }
             }
         }

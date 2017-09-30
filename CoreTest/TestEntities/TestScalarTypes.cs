@@ -285,26 +285,346 @@ namespace CoreTest.TestEntities
             );
 
             //BinaryNot, Decrement, Increment, Inverse
+            TestAuxiliary.HandleOperations<int>(
+                new List<CorePackage.Execution.Operator>
+                {
+                    new CorePackage.Execution.Operators.BinaryNot(integer, integer),
+                    new CorePackage.Execution.Operators.Decrement(integer, integer),
+                    new CorePackage.Execution.Operators.Increment(integer, integer),
+                    new CorePackage.Execution.Operators.Inverse(integer, integer)
+                },
+                new List<Func<CorePackage.Execution.Instruction, bool>>
+                {
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("Operand", 42);
+                        return true;
+                    },
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("Operand", -42);
+                        return true;
+                    }
+                },
+                new List<List<int>>
+                {
+                    new List<int>
+                    {
+                        -43,
+                        41,
+                        43,
+                        -42
+                    },
+                    new List<int>
+                    {
+                        41,
+                        -43,
+                        -41,
+                        42
+                    }
+                });
         }
 
         [TestMethod]
         public void TestFloating()
         {
+            CorePackage.Entity.DataType floating = CorePackage.Entity.Type.Scalar.Floating;
+
             //Different, Equal, Greater, GreaterEqual, Less, LessEqual
+            TestAuxiliary.HandleOperations<bool>(
+                new List<CorePackage.Execution.Operator>
+            {
+                new CorePackage.Execution.Operators.Different(floating, floating),
+                new CorePackage.Execution.Operators.Equal(floating, floating),
+                new CorePackage.Execution.Operators.Greater(floating, floating),
+                new CorePackage.Execution.Operators.GreaterEqual(floating, floating),
+                new CorePackage.Execution.Operators.Less(floating, floating),
+                new CorePackage.Execution.Operators.LessEqual(floating, floating)
+            },
+                new List<Func<CorePackage.Execution.Instruction, bool>>
+            {
+                (CorePackage.Execution.Instruction i) =>
+                {
+                    i.SetInputValue("LeftOperand", 3.14);
+                    i.SetInputValue("RightOperand", 4.2);
+                    return true;
+                },
+                (CorePackage.Execution.Instruction i) =>
+                {
+                    i.SetInputValue("LeftOperand", 4.2);
+                    i.SetInputValue("RightOperand", 4.2);
+                    return true;
+                },
+                (CorePackage.Execution.Instruction i) =>
+                {
+                    i.SetInputValue("LeftOperand", 4.2);
+                    i.SetInputValue("RightOperand", 3.14);
+                    return true;
+                }
+            },
+                new List<List<bool>>
+            {
+                new List<bool>
+                {
+                    true,
+                    false,
+                    false,
+                    false,
+                    true,
+                    true
+                },
+                new List<bool>
+                {
+                    false,
+                    true,
+                    false,
+                    true,
+                    false,
+                    true
+                },
+                new List<bool>
+                {
+                    true,
+                    false,
+                    true,
+                    true,
+                    false,
+                    false
+                }
+            });
+
             //Add, Divide, Multiplicate, Substract, Modulo
+            TestAuxiliary.HandleOperations<double>(
+                new List<CorePackage.Execution.Operator>
+                {
+                    new CorePackage.Execution.Operators.Add(floating, floating, floating),
+                    new CorePackage.Execution.Operators.Divide(floating, floating, floating),
+                    new CorePackage.Execution.Operators.Multiplicate(floating, floating, floating),
+                    new CorePackage.Execution.Operators.Substract(floating, floating, floating),
+                    new CorePackage.Execution.Operators.Modulo(floating, floating, floating)
+                },
+                new List<Func<CorePackage.Execution.Instruction, bool>>
+                {
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("LeftOperand", 3.14);
+                        i.SetInputValue("RightOperand", 4.2);
+                        return true;
+                    },
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("LeftOperand", 0.0);
+                        i.SetInputValue("RightOperand", 4.2);
+                        return true;
+                    },
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("LeftOperand", 3.14);
+                        i.SetInputValue("RightOperand", -4.2);
+                        return true;
+                    },
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("LeftOperand", -3.14);
+                        i.SetInputValue("RightOperand", -4.2);
+                        return true;
+                    }
+                },
+                new List<List<double>>
+                {
+                    new List<double>
+                    {
+                        3.14 + 4.2,
+                        3.14 / 4.2,
+                        3.14 * 4.2,
+                        3.14 - 4.2,
+                        3.14 % 4.2
+                    },
+                    new List<double>
+                    {
+                        0 + 4.2,
+                        0 / 4.2,
+                        0 * 4.2,
+                        0 - 4.2,
+                        0 % 4.2
+                    },
+                    new List<double>
+                    {
+                        3.14 + -4.2,
+                        3.14 / -4.2,
+                        3.14 * -4.2,
+                        3.14 - -4.2,
+                        3.14 % -4.2
+                    },
+                    new List<double>
+                    {
+                        -3.14 + -4.2,
+                        -3.14 / -4.2,
+                        -3.14 * -4.2,
+                        -3.14 - -4.2,
+                        -3.14 % -4.2
+                    }
+                });
+
             //Decrement, Increment, Inverse
+            TestAuxiliary.HandleOperations<double>(
+                new List<CorePackage.Execution.Operator>
+                {
+                    new CorePackage.Execution.Operators.Decrement(floating, floating),
+                    new CorePackage.Execution.Operators.Increment(floating, floating),
+                    new CorePackage.Execution.Operators.Inverse(floating, floating)
+                },
+                new List<Func<CorePackage.Execution.Instruction, bool>>
+                {
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("Operand", 4.2);
+                        return true;
+                    },
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("Operand", -4.2);
+                        return true;
+                    }
+                },
+                new List<List<double>>
+                {
+                    new List<double>
+                    {
+                        3.2,
+                        5.2,
+                        -4.2
+                    },
+                    new List<double>
+                    {
+                        -5.2,
+                        -3.2,
+                        4.2
+                    }
+                });
         }
 
         [TestMethod]
         public void TestCharacter()
         {
+            CorePackage.Entity.DataType character = CorePackage.Entity.Type.Scalar.Character;
+
             //Different, Equal, Greater, GreaterEqual, Less, LessEqual
+            TestAuxiliary.HandleOperations<bool>(
+                new List<CorePackage.Execution.Operator>
+                {
+                    new CorePackage.Execution.Operators.Different(character, character),
+                    new CorePackage.Execution.Operators.Equal(character, character),
+                    new CorePackage.Execution.Operators.Greater(character, character),
+                    new CorePackage.Execution.Operators.GreaterEqual(character, character),
+                    new CorePackage.Execution.Operators.Less(character, character),
+                    new CorePackage.Execution.Operators.LessEqual(character, character)
+                },
+                new List<Func<CorePackage.Execution.Instruction, bool>>
+                {
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("LeftOperand", 'A');
+                        i.SetInputValue("RightOperand", 'R');
+                        return true;
+                    },
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("LeftOperand", 'A');
+                        i.SetInputValue("RightOperand", 'A');
+                        return true;
+                    },
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("LeftOperand", 'R');
+                        i.SetInputValue("RightOperand", 'A');
+                        return true;
+                    }
+                },
+                new List<List<bool>>
+                {
+                    new List<bool>
+                    {
+                        true,
+                        false,
+                        false,
+                        false,
+                        true,
+                        true
+                    },
+                    new List<bool>
+                    {
+                        false,
+                        true,
+                        false,
+                        true,
+                        false,
+                        true
+                    },
+                    new List<bool>
+                    {
+                        true,
+                        false,
+                        true,
+                        true,
+                        false,
+                        false
+                    }
+                });
         }
 
         [TestMethod]
         public void TestString()
         {
+            CorePackage.Entity.DataType my_string = CorePackage.Entity.Type.Scalar.String;
+
             //Different, Equal, Greater, GreaterEqual, Less, LessEqual
+            TestAuxiliary.HandleOperations<bool>(
+                new List<CorePackage.Execution.Operator>
+                {
+                    new CorePackage.Execution.Operators.Different(my_string, my_string),
+                    new CorePackage.Execution.Operators.Equal(my_string, my_string)
+                },
+                new List<Func<CorePackage.Execution.Instruction, bool>>
+                {
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("LeftOperand", "duly");
+                        i.SetInputValue("RightOperand", "apero");
+                        return true;
+                    },
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("LeftOperand", "duly");
+                        i.SetInputValue("RightOperand", "duly");
+                        return true;
+                    },
+                    (CorePackage.Execution.Instruction i) =>
+                    {
+                        i.SetInputValue("LeftOperand", "apero");
+                        i.SetInputValue("RightOperand", "duly");
+                        return true;
+                    }
+                },
+                new List<List<bool>>
+                {
+                    new List<bool>
+                    {
+                        true,
+                        false
+                    },
+                    new List<bool>
+                    {
+                        false,
+                        true
+                    },
+                    new List<bool>
+                    {
+                        true,
+                        false
+                    }
+                });
+
             //Add
         }
     }

@@ -45,7 +45,7 @@ namespace CorePackage.Entity.Type
         /// <see cref="DataType.Instanciate"/>
         public override dynamic Instanciate()
         {
-            return values.Keys.First();
+            return values.Values.First().definition.Value;
         }
 
         /// <see cref="Global.Definition.IsValid"/>

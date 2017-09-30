@@ -56,6 +56,8 @@ namespace CorePackage.Entity
                 {
                     this.value = value;
                 }
+                else
+                    throw new ArgumentException("Trying to set a value of a type inconcistant with " + this.type.GetType().ToString() + ": " + value.ToString());
             }
         }
 
