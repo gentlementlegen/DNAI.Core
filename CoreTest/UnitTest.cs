@@ -10,6 +10,7 @@ namespace CoreTest
         [TestMethod]
         public void TestMethod1()
         {
+
         }
     }
 }
