@@ -24,6 +24,16 @@ namespace CorePackage.Execution
 
         private string linkedOutputName;
 
+        public Instruction LinkedInstruction
+        {
+            get { return linkedInstruction; }
+        }
+
+        public string LinkedOutputName
+        {
+            get { return linkedOutputName; }
+        }
+
         public Input(Global.Declaration<Entity.Variable> value)
         {
             this.value = value;

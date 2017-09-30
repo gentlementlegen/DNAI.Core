@@ -100,6 +100,7 @@ namespace CoreTest
             numberEqqLastGiven.GetInput("RightOperand").LinkTo(new CorePackage.Execution.Getter(moreOrLessCtx.FindVariableFrom("lastGiven", CorePackage.Global.AccessMode.INTERNAL).definition), "reference");
             condition.GetInput("condition").LinkTo(numberEqqLastGiven, "result");
 
+            maxEqLastGiven.LinkTo(0, numCalculation);
             numCalculation.LinkTo(0, condition);
             
             //lastGiven = number
@@ -107,9 +108,9 @@ namespace CoreTest
             lastGivenEqNumber.GetInput("value").LinkTo(new CorePackage.Execution.Getter(play.GetReturn("number")), "reference");
             condition.LinkTo(1, lastGivenEqNumber);
 
-            //if (lastResult == LESS)
+            //if (lastResult == MORE)
             CorePackage.Execution.If last = new CorePackage.Execution.If();
-            last.GetInput("condition").LinkTo(lastResEqqLess, "result");
+            last.GetInput("condition").LinkTo(lastResEqqMore, "result");
 
             condition.LinkTo(0, last);
 
@@ -121,7 +122,7 @@ namespace CoreTest
                     CorePackage.Entity.Type.Scalar.Integer,
                     CorePackage.Entity.Type.Scalar.Integer);
                 numAddOne.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(play.GetReturn("number")), "reference");
-                numAddOne.SetInputValue("RightOperand", 1);;
+                numAddOne.SetInputValue("RightOperand", 1);
                 numberPlusOne.GetInput("value").LinkTo(numAddOne, "result");
                 last.LinkTo(0, numberPlusOne);
 
@@ -141,7 +142,9 @@ namespace CoreTest
             numberPlusOne.LinkTo(0, lastGivenEqNumber);
             numberMinusOne.LinkTo(0, lastGivenEqNumber);
 
-            play.SetParameterValue("lastGiven", "NONE");
+            play.SetParameterValue("lastResult", cmp.GetValue("NONE").Value);
+
+            System.Diagnostics.Debug.Write(play.ToDotFile());
 
             int mystery_number = 47;
 
@@ -157,20 +160,23 @@ namespace CoreTest
 
                 if (play.GetReturn("number").Value > mystery_number)
                 {
-                    play.SetParameterValue("lastGiven", "LESS");
+                    play.SetParameterValue("lastResult", cmp.GetValue("LESS").Value);
                     Debug.WriteLine("==> It's less");
                 }
                 else if (play.GetReturn("number").Value < mystery_number)
                 {
-                    play.SetParameterValue("lastGiven", "MORE");
+                    play.SetParameterValue("lastResult", cmp.GetValue("MORE").Value);
                     Debug.WriteLine("==> It's more");
                 }
                 else
                     break;
                 ++i;
-            } while (i < 10);
+            } while (play.GetReturn("number").Value != mystery_number && i < 10);
 
-            Debug.Write("AI found the mystery number: " + mystery_number.ToString());
+            if (i == 10)
+                throw new Exception("Failed to reach mystery number in less that 10 times");
+            else
+                Debug.Write("AI found the mystery number: " + mystery_number.ToString());
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -85,10 +86,14 @@ namespace CorePackage.Entity
         {
             if (this.parameters.Keys.Contains(name))
                 this.parameters[name].definition.Value = value;
+            else
+                throw new KeyNotFoundException("Function: No such parameter named \"" + name + "\"");
         }
 
         public Variable GetParameter(string name)
         {
+            if (!this.parameters.ContainsKey(name))
+                throw new KeyNotFoundException("Function: No such parameter named \"" + name + "\"");
             return this.parameters[name].definition;
         }
 
@@ -107,6 +112,8 @@ namespace CorePackage.Entity
         /// <returns>Value to find or null</returns>
         public Variable GetReturn(string name)
         {
+            if (!this.returns.ContainsKey(name))
+                throw new KeyNotFoundException("Function: No such return named \"" + name + "\"");
             return this.returns[name].definition;
         }
 
@@ -138,6 +145,65 @@ namespace CorePackage.Entity
         public override bool IsValid()
         {
             throw new NotImplementedException();
+        }
+
+        private string DeclareNode(Execution.Instruction node, ref int id, Dictionary<Execution.Instruction, string> declared)
+        {
+            string name = node.GetType().ToString().Split('.').Last() + "_" + id.ToString();
+            id++;
+            declared[node] = name;
+
+            string decl = "";
+            string links = "";
+
+            //resolve inputs declaration
+            foreach (Execution.Input curr in node.Inputs)
+            {
+                if (curr.LinkedInstruction == null)
+                    continue;
+                if (!declared.ContainsKey(curr.LinkedInstruction))
+                    decl += DeclareNode(curr.LinkedInstruction, ref id, declared);
+                links += declared[curr.LinkedInstruction] + " -> " + name + " [style=dotted;label=\"" + curr.LinkedOutputName + "\"];\r\n";
+            }
+            return decl + name + " [color=" + (typeof(Execution.ExecutionRefreshInstruction).IsAssignableFrom(node.GetType()) ? "red" : "blue") + "];\r\n" + links;
+        }
+
+        public string ToDotFile()
+        {
+            int node_id = 0;
+            Stack<Execution.ExecutionRefreshInstruction> instr = new Stack<Execution.ExecutionRefreshInstruction>();
+            Dictionary<Execution.Instruction, string> declared = new Dictionary<Execution.Instruction, string>();
+            string text = "digraph G {\r\n";
+
+            instr.Push(entrypoint);
+            while (instr.Count > 0)
+            {
+                Execution.ExecutionRefreshInstruction toprocess = instr.Pop();
+
+                if (!declared.ContainsKey(toprocess))
+                    text += DeclareNode(toprocess, ref node_id, declared);
+
+                string decname = declared[toprocess];
+
+                //stack declarations / links
+                foreach (Execution.ExecutionRefreshInstruction curr in toprocess.OutPoints)
+                {
+                    if (curr == null)
+                        continue;
+                    if (!declared.ContainsKey(curr))
+                    {
+                        text += DeclareNode(curr, ref node_id, declared);
+                        instr.Push(curr);
+                    }
+                    text += decname + " -> " + declared[curr] + " [color=red];\r\n";
+                }
+            }
+
+            text += "}";
+
+            return text;
+
+            //System.Diagnostics.Debug.Write(text);
         }
     }
 }
