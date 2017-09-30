@@ -76,17 +76,21 @@ namespace CorePackage.Execution
 
         public Input GetInput(string name)
         {
+            if (!this.inputs.ContainsKey(name))
+                throw new KeyNotFoundException("No such input named: " + name);
             return this.inputs[name];
         }
 
         public virtual Output GetOutput(string name)
         {
+            if (!this.outputs.ContainsKey(name))
+                throw new KeyNotFoundException("No such output named: " + name);
             return this.outputs[name];
         }
 
         public void SetInputValue(string name, dynamic value)
         {
-            this.inputs[name].Value.definition.Value = value;
+            GetInput(name).Value.definition.Value = value;
         }
 
         public dynamic GetInputValue(string name)

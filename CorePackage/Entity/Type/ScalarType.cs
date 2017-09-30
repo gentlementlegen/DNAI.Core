@@ -28,6 +28,8 @@ namespace CorePackage.Entity.Type
         /// <see cref="DataType.Instanciate"/>
         public override dynamic Instanciate()
         {
+            if (real_type == typeof(string))
+                return "";
             return Activator.CreateInstance(real_type);
         }
 
