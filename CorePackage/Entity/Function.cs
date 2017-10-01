@@ -149,23 +149,37 @@ namespace CorePackage.Entity
 
         private string DeclareNode(Execution.Instruction node, ref int id, Dictionary<Execution.Instruction, string> declared)
         {
-            string name = node.GetType().ToString().Split('.').Last() + "_" + id.ToString();
+            string name = "node_" + id.ToString();
             id++;
             declared[node] = name;
 
-            string decl = "";
-            string links = "";
-
-            //resolve inputs declaration
-            foreach (Execution.Input curr in node.Inputs)
+            if (node.Inputs.Count > 0)
             {
-                if (curr.LinkedInstruction == null)
-                    continue;
-                if (!declared.ContainsKey(curr.LinkedInstruction))
-                    decl += DeclareNode(curr.LinkedInstruction, ref id, declared);
-                links += declared[curr.LinkedInstruction] + " -> " + name + " [style=dotted;label=\"" + curr.LinkedOutputName + "\"];\r\n";
+                string decl = "";
+                string links = "";
+
+                int inputId = 0;
+                string inputs = "";
+
+                //resolve inputs declaration
+                foreach (Execution.Input curr in node.Inputs)
+                {
+                    string inpName = name + "_var_" + inputId.ToString();
+                    string label = "<" + inpName + "> " + curr.Value.name + (curr.LinkedInstruction == null ? " = " + curr.Value.definition.Value.ToString() : "");
+
+                    ++inputId;
+                    inputs += label + (inputId < node.Inputs.Count ? "|" : "");
+                    //links += inpName + " -> " + name + " [color=green];\r\n";
+
+                    if (curr.LinkedInstruction == null)
+                        continue;
+                    if (!declared.ContainsKey(curr.LinkedInstruction))
+                        decl += DeclareNode(curr.LinkedInstruction, ref id, declared);
+                    links += declared[curr.LinkedInstruction] + " -> " + name + ":" + inpName + " [style=dotted;label=\"" + curr.LinkedOutputName + "\"];\r\n";
+                }
+                return decl + name + " [shape=record,label=\"{" + inputs + "}|<" + name + "_exec> " + node.GetType().ToString().Split('.').Last() + "\",color=" + (typeof(Execution.ExecutionRefreshInstruction).IsAssignableFrom(node.GetType()) ? "red" : "blue") + "];\r\n" + links;
             }
-            return decl + name + " [color=" + (typeof(Execution.ExecutionRefreshInstruction).IsAssignableFrom(node.GetType()) ? "red" : "blue") + "];\r\n" + links;
+            return name + " [label=\"" + node.GetType().ToString().Split('.').Last() + "\",color=" + (typeof(Execution.ExecutionRefreshInstruction).IsAssignableFrom(node.GetType()) ? "red" : "blue") + "];\r\n";
         }
 
         public string ToDotFile()
@@ -173,7 +187,7 @@ namespace CorePackage.Entity
             int node_id = 0;
             Stack<Execution.ExecutionRefreshInstruction> instr = new Stack<Execution.ExecutionRefreshInstruction>();
             Dictionary<Execution.Instruction, string> declared = new Dictionary<Execution.Instruction, string>();
-            string text = "digraph G {\r\n";
+            string text = "digraph G {\r\n"; //rankdir=LR\r\n
 
             instr.Push(entrypoint);
             while (instr.Count > 0)
@@ -195,7 +209,7 @@ namespace CorePackage.Entity
                         text += DeclareNode(curr, ref node_id, declared);
                         instr.Push(curr);
                     }
-                    text += decname + " -> " + declared[curr] + " [color=red];\r\n";
+                    text += decname + ":" + decname + "_exec -> " + declared[curr] + ":" + declared[curr] + "_exec [color=red];\r\n";
                 }
             }
 
