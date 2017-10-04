@@ -19,9 +19,14 @@ namespace CorePackage.Entity.Type
         private Context context;
 
         /// <summary>
-        /// Used to represent object attributes 
+        /// Used to represent object public attributes 
         /// </summary>
-        private StorageDeclarator attributes = new StorageDeclarator();
+        private Dictionary<string, DataType> publicAttributes;
+
+        /// <summary>
+        /// Used to represent object private attributes
+        /// </summary>
+        private Dictionary<string, DataType> privateAttributes;
 
         /// <summary>
         /// Constructor that asks for the object parent context in order to link his internal context
@@ -30,6 +35,8 @@ namespace CorePackage.Entity.Type
         public ObjectType(Context parent)
         {
             this.context = new Context(parent);
+            publicAttributes = new Dictionary<string, DataType>();
+            privateAttributes = new Dictionary<string, DataType>();
         }
 
         /// <summary>
@@ -46,9 +53,9 @@ namespace CorePackage.Entity.Type
         /// <param name="name">Name of the attribute</param>
         /// <param name="definition">Variable definition of the attribute</param>
         /// <returns>Freshly created declaration from name and definition</returns>
-        public Global.Declaration<Variable> AddPublicAttribute(string name, Variable definition)
+        public void AddPublicAttribute(string name, DataType attrType)
         {
-            return this.attributes.AddExternal(name, definition);
+            this.publicAttributes[name] = attrType;
         }
 
         /// <summary>
@@ -57,9 +64,19 @@ namespace CorePackage.Entity.Type
         /// <param name="name">Name of the attribute</param>
         /// <param name="definition">Variable definition of the attribute</param>
         /// <returns>Freshly created declaration from name and definition</returns>
-        public Global.Declaration<Variable> AddPrivateAttribute(string name, Variable definition)
+        public void AddPrivateAttribute(string name, DataType attrType)
         {
-            return this.attributes.AddInternal(name, definition);
+            this.privateAttributes[name] = attrType;
+        }
+
+        Dictionary<string, DataType> PublicAttributes
+        {
+            get { return publicAttributes; }
+        }
+
+        Dictionary<string, DataType> PrivateAttributes
+        {
+            get { return privateAttributes; }
         }
 
         /// <see cref="DataType.Instanciate"/>
