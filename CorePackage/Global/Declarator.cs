@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CorePackage.Global
 {
+    /// <summary>
+    /// Enumeration that represents the access level of a declaration
+    /// </summary>
     public enum AccessMode
     {
         INTERNAL,

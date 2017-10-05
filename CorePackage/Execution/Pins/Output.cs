@@ -16,11 +16,18 @@ namespace CorePackage.Execution
         /// </summary>
         private Global.Declaration<Entity.Variable> value;
 
+        /// <summary>
+        /// Constructor that need the declaration to bind
+        /// </summary>
+        /// <param name="value">Variable declaration to bind</param>
         public Output(Global.Declaration<Entity.Variable> value)
         {
             this.value = value;
         }
 
+        /// <summary>
+        /// Getter for the declaration
+        /// </summary>
         public Global.Declaration<Entity.Variable> Value
         {
             get

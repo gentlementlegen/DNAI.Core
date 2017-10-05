@@ -54,7 +54,7 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Represents a boolean type
         /// </summary>
-        public static ScalarType Boolean = new ScalarType(true.GetType());
+        public static ScalarType Boolean = new ScalarType((true).GetType());
 
         /// <summary>
         /// Represents an integer type
@@ -69,11 +69,11 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Represents a character type
         /// </summary>
-        public static ScalarType Character = new ScalarType('D'.GetType());
+        public static ScalarType Character = new ScalarType('c'.GetType());
 
         /// <summary>
         /// Represents a string type
         /// </summary>
-        public static ScalarType String = new ScalarType("Duly".GetType());
+        public static ScalarType String = new ScalarType("string".GetType());
     }
 }

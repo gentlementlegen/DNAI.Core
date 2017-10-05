@@ -90,6 +90,12 @@ namespace CorePackage.Entity
                 throw new KeyNotFoundException("Function: No such parameter named \"" + name + "\"");
         }
 
+        /// <summary>
+        /// Allow user to get the parameters that corresponds to the given name
+        /// Throws a KeyNotFoundException if doesn't exists
+        /// </summary>
+        /// <param name="name">Name of the parameter to find</param>
+        /// <returns>Variable definition that corresponds to the parameter</returns>
         public Variable GetParameter(string name)
         {
             if (!this.parameters.ContainsKey(name))
@@ -147,77 +153,118 @@ namespace CorePackage.Entity
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Used to convert the function into dot file. Will declare a node and recursively declare it's linked inputs
+        /// </summary>
+        /// <param name="node">The node to declare</param>
+        /// <param name="id">Current node identifier that will be incremented</param>
+        /// <param name="declared">Dictionarry of already declared node</param>
+        /// <returns>The dot file lines to add to the file</returns>
         private string DeclareNode(Execution.Instruction node, ref int id, Dictionary<Execution.Instruction, string> declared)
         {
+            //name of the node to declare
             string name = "node_" + id.ToString();
             id++;
             declared[node] = name;
 
+            //process its inputs
             if (node.Inputs.Count > 0)
             {
+                //contains inputs declaration
                 string decl = "";
+                //containes inputs links
                 string links = "";
 
+                //node input unique identifier
                 int inputId = 0;
+                //concatenation of declared name to make splitted node
                 string inputs = "";
 
                 //resolve inputs declaration
                 foreach (Execution.Input curr in node.Inputs)
                 {
+                    //input name that depends on node name
                     string inpName = name + "_var_" + inputId.ToString();
+                    //label of the input in order to be able to link it
                     string label = "<" + inpName + "> " + curr.Value.name + (curr.LinkedInstruction == null ? " = " + curr.Value.definition.Value.ToString() : "");
 
                     ++inputId;
+                    //concatenate label to inputs for splitted box effect
                     inputs += label + (inputId < node.Inputs.Count ? "|" : "");
-                    //links += inpName + " -> " + name + " [color=green];\r\n";
 
                     if (curr.LinkedInstruction == null)
                         continue;
+
+                    //in case there is a linked node to the input, declare it
                     if (!declared.ContainsKey(curr.LinkedInstruction))
                         decl += DeclareNode(curr.LinkedInstruction, ref id, declared);
+
+                    //link this node to the labeled input
                     links += declared[curr.LinkedInstruction] + " -> " + name + ":" + inpName + " [style=dotted;label=\"" + curr.LinkedOutputName + "\"];\r\n";
                 }
+
+                //splitted box format with each inputs labeled and linked to their node
                 return decl + name + " [shape=record,label=\"{" + inputs + "}|<" + name + "_exec> " + node.GetType().ToString().Split('.').Last() + "\",color=" + (typeof(Execution.ExecutionRefreshInstruction).IsAssignableFrom(node.GetType()) ? "red" : "blue") + "];\r\n" + links;
             }
+            //basic node, circle in red or blue
             return name + " [label=\"" + node.GetType().ToString().Split('.').Last() + "\",color=" + (typeof(Execution.ExecutionRefreshInstruction).IsAssignableFrom(node.GetType()) ? "red" : "blue") + "];\r\n";
         }
 
+        /// <summary>
+        /// Converts a function into a dot file
+        /// </summary>
+        /// <returns>The dot data to write into a file</returns>
         public string ToDotFile()
         {
+            //unique identifier for a declared node
             int node_id = 0;
-            Stack<Execution.ExecutionRefreshInstruction> instr = new Stack<Execution.ExecutionRefreshInstruction>();
-            Dictionary<Execution.Instruction, string> declared = new Dictionary<Execution.Instruction, string>();
-            string text = "digraph G {\r\n"; //rankdir=LR\r\n
 
+            //stack of graph instructions => for graph exploration
+            Stack<Execution.ExecutionRefreshInstruction> instr = new Stack<Execution.ExecutionRefreshInstruction>();
+
+            //Dictionarry of declared nodes that associates a reference of an instruction to its name in the dot file
+            Dictionary<Execution.Instruction, string> declared = new Dictionary<Execution.Instruction, string>();
+
+            //data that will contain dot file text and that will be returned
+            string text = "digraph G {\r\n";
+            
             instr.Push(entrypoint);
             while (instr.Count > 0)
             {
+                //current instruction to process
                 Execution.ExecutionRefreshInstruction toprocess = instr.Pop();
 
+                //Checks if the instruction need to be declared
                 if (!declared.ContainsKey(toprocess))
                     text += DeclareNode(toprocess, ref node_id, declared);
 
+                //current instruction declaration name
                 string decname = declared[toprocess];
-
-                //stack declarations / links
+                
+                //Add each instruction linked to the current one
                 foreach (Execution.ExecutionRefreshInstruction curr in toprocess.OutPoints)
                 {
                     if (curr == null)
                         continue;
+
+                    //declare it if needed
                     if (!declared.ContainsKey(curr))
                     {
                         text += DeclareNode(curr, ref node_id, declared);
+
+                        //in case the instruction is not declared, push it in the stack to process it
                         instr.Push(curr);
                     }
+
+                    //add the link between current node and its linked one
                     text += decname + ":" + decname + "_exec -> " + declared[curr] + ":" + declared[curr] + "_exec [color=red];\r\n";
                 }
             }
 
+            //end the file
             text += "}";
 
             return text;
-
-            //System.Diagnostics.Debug.Write(text);
         }
     }
 }

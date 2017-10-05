@@ -74,6 +74,11 @@ namespace CorePackage.Entity.Type
             return false;
         }
 
+        /// <summary>
+        /// Returns the variable that corresponds to the given name
+        /// </summary>
+        /// <param name="name">Name of the enum value to return</param>
+        /// <returns>Variable corresponding to the enum value</returns>
         public Variable GetValue(string name)
         {
             return values[name].definition;
