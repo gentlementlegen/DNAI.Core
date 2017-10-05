@@ -22,23 +22,39 @@ namespace CorePackage.Execution
         /// </summary>
         private Instruction linkedInstruction;
 
+        /// <summary>
+        /// Name of the output linked
+        /// </summary>
         private string linkedOutputName;
 
+        /// <summary>
+        /// Getter for linked instruction
+        /// </summary>
         public Instruction LinkedInstruction
         {
             get { return linkedInstruction; }
         }
 
+        /// <summary>
+        /// Getter for linked output name
+        /// </summary>
         public string LinkedOutputName
         {
             get { return linkedOutputName; }
         }
 
+        /// <summary>
+        /// Constructor that asks for the declaration to bind
+        /// </summary>
+        /// <param name="value"></param>
         public Input(Global.Declaration<Entity.Variable> value)
         {
             this.value = value;
         }
 
+        /// <summary>
+        /// Getter for the input value that refresh it with linked instruction
+        /// </summary>
         public Global.Declaration<Entity.Variable> Value
         {
             get
@@ -49,12 +65,20 @@ namespace CorePackage.Execution
             }
         }
 
+        /// <summary>
+        /// Link the input to an instruction at a specific output
+        /// </summary>
+        /// <param name="linked">Instruction to link</param>
+        /// <param name="outputname">Output name of the instruction to link</param>
         public void LinkTo(Instruction linked, string outputname)
         {
             this.linkedInstruction = linked;
             this.linkedOutputName = outputname;
         }
 
+        /// <summary>
+        /// Remove the link on the input
+        /// </summary>
         public void Unlink()
         {
             this.linkedInstruction = null;

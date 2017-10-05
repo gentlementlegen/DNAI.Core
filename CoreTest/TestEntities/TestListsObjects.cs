@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace CoreTest.TestEntities
 {
     [TestClass]
-    class TestLists
+    class TestListsObjects
     {
         [TestMethod]
         public void TestListActions()

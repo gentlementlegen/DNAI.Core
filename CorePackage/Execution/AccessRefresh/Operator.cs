@@ -6,10 +6,22 @@ using System.Threading.Tasks;
 
 namespace CorePackage.Execution
 {
+    /// <summary>
+    /// Class that represents an operator which need inputs, outputs and operation
+    /// </summary>
     public abstract class Operator : AccessRefreshInstruction
     {
+        /// <summary>
+        /// The operation to execute
+        /// </summary>
         protected Delegate operation;
-            
+       
+        /// <summary>
+        /// Constructor that need inputs, outputs and operation
+        /// </summary>
+        /// <param name="inputs">Dictionnary of all inputs</param>
+        /// <param name="outputType">Dictionnary of all outputs</param>
+        /// <param name="operation">Operation to execute</param>
         public Operator(Dictionary<string, Entity.Variable> inputs, Entity.DataType outputType, Delegate operation):
             base(
                 inputs,

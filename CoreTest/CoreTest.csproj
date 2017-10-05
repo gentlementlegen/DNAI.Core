@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAuxiliary.cs" />
+    <Compile Include="TestEntities\TestListsObjects.cs" />
     <Compile Include="TestEntities\TestScalarTypes.cs" />
     <Compile Include="TestExecution\TestInstructions.cs" />
     <Compile Include="UnitTestApp.xaml.cs">
