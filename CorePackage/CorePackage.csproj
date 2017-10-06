@@ -1,186 +1,109 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5BA47E07-8871-4F32-B2B4-EA35502F96CF}</ProjectGuid>
+    <ProjectGuid>{DC0C6FC8-7D9D-4AC6-9B64-C8E3C39CA105}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CorePackage</RootNamespace>
     <AssemblyName>CorePackage</AssemblyName>
-    <DefaultLanguage>fr-FR</DefaultLanguage>
-    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.15063.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
-    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <PlatformTarget>x86</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <PlatformTarget>x86</PlatformTarget>
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
-    <PlatformTarget>ARM</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\ARM\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>ARM</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
-    <PlatformTarget>ARM</PlatformTarget>
-    <OutputPath>bin\ARM\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>ARM</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;2008</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="protobuf-net, Version=2.3.2.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.2.3.2\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Dynamic" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Communication\Packet.cs" />
+    <Compile Include="Communication\TcpManager.cs" />
+    <Compile Include="Entity\Context.cs" />
+    <Compile Include="Entity\DataType.cs" />
+    <Compile Include="Entity\Function.cs" />
+    <Compile Include="Entity\Type\EnumType.cs" />
+    <Compile Include="Entity\Type\ListType.cs" />
+    <Compile Include="Entity\Type\ObjectType.cs" />
+    <Compile Include="Entity\Type\ScalarType.cs" />
+    <Compile Include="Entity\Variable.cs" />
+    <Compile Include="Execution\AccessRefreshInstruction.cs" />
+    <Compile Include="Execution\AccessRefresh\Getter.cs" />
+    <Compile Include="Execution\AccessRefresh\Operator.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\BinaryOperator.cs" />
-    <Compile Include="Execution\FieldAccess.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Access.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\LogicalOperator.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Add.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\And.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\BinaryAnd.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Unary\BinaryNot.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\BinaryOr.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Unary\Decrement.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\Different.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Divide.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\Equal.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\Greater.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\GreaterEqual.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Unary\Increment.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Unary\Inverse.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\LeftShift.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\Less.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\LessEqual.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\Or.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Access.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Add.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\BinaryAnd.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\BinaryOr.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Divide.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\LeftShift.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Modulo.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Multiplicate.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Unary\Not.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\Or.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\RightShift.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Substract.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Xor.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\OverloadableBinaryOperator.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\OverloadableUnaryOperator.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\UnaryOperator.cs" />
-    <Compile Include="Global\Declaration.cs" />
-    <Compile Include="Entity\Context.cs" />
-    <Compile Include="Global\Definition.cs" />
-    <Compile Include="Entity\Type\EnumType.cs" />
-    <Compile Include="Entity\Function.cs" />
-    <Compile Include="Entity\Type\ListType.cs" />
-    <Compile Include="Entity\Type\ObjectType.cs" />
-    <Compile Include="Entity\Type\ScalarType.cs" />
-    <Compile Include="Entity\DataType.cs" />
-    <Compile Include="Entity\Variable.cs" />
-    <Compile Include="Global\Declarator.cs" />
-    <Compile Include="Execution\Pins\Input.cs" />
-    <Compile Include="Execution\Pins\Output.cs" />
-    <Compile Include="Execution\AccessRefreshInstruction.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Unary\BinaryNot.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Unary\Decrement.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Unary\Increment.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Unary\Inverse.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Unary\Not.cs" />
     <Compile Include="Execution\ExecRefresh\Debug.cs" />
-    <Compile Include="Execution\ExecutionRefreshInstruction.cs" />
     <Compile Include="Execution\ExecRefresh\Formula.cs" />
     <Compile Include="Execution\ExecRefresh\FunctionCall.cs" />
-    <Compile Include="Execution\AccessRefresh\Getter.cs" />
-    <Compile Include="Execution\ExecRefresh\Statements\If.cs" />
-    <Compile Include="Execution\Instruction.cs" />
-    <Compile Include="Execution\AccessRefresh\Operator.cs" />
     <Compile Include="Execution\ExecRefresh\Setter.cs" />
     <Compile Include="Execution\ExecRefresh\Statement.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\If.cs" />
+    <Compile Include="Execution\ExecutionRefreshInstruction.cs" />
+    <Compile Include="Execution\FieldAccess.cs" />
+    <Compile Include="Execution\Instruction.cs" />
+    <Compile Include="Execution\Pins\Input.cs" />
+    <Compile Include="Execution\Pins\Output.cs" />
+    <Compile Include="Global\Declaration.cs" />
+    <Compile Include="Global\Declarator.cs" />
+    <Compile Include="Global\Definition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\CorePackage.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf">
-      <Version>3.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.2.3</Version>
-    </PackageReference>
+    <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
-    <VisualStudioVersion>14.0</VisualStudioVersion>
-  </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

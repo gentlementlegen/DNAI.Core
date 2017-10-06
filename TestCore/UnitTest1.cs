@@ -3,10 +3,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CorePackage.Communication;
 using System.Net.Sockets;
 using System.Net;
-using ProtoBuf;
 using CorePackageNet.Communication;
+using ProtoBuf;
 
-namespace CoreTestNet
+namespace TestCore
 {
     [TestClass]
     public class UnitTest1
@@ -26,7 +26,7 @@ namespace CoreTestNet
             s.Connect(localEndPoint);
 
             var str = new NetworkStream(s);
-                Serializer.SerializeWithLengthPrefix<PacketRegisterEventRequest>(str, new PacketRegisterEventRequest() { Id = 3 }, PrefixStyle.Base128);
+            Serializer.SerializeWithLengthPrefix<PacketRegisterEventRequest>(str, new PacketRegisterEventRequest() { Id = 3 }, PrefixStyle.Base128);
         }
     }
 }
