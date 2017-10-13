@@ -54,26 +54,26 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Represents a boolean type
         /// </summary>
-        public static ScalarType Boolean = new ScalarType((true).GetType());
+        public static ScalarType Boolean = new ScalarType(typeof(bool));
 
         /// <summary>
         /// Represents an integer type
         /// </summary>
-        public static ScalarType Integer = new ScalarType(3.GetType());
+        public static ScalarType Integer = new ScalarType(typeof(int));
 
         /// <summary>
         /// Represents a floating type
         /// </summary>
-        public static ScalarType Floating = new ScalarType((3.14).GetType());
+        public static ScalarType Floating = new ScalarType(typeof(double));
 
         /// <summary>
         /// Represents a character type
         /// </summary>
-        public static ScalarType Character = new ScalarType('c'.GetType());
+        public static ScalarType Character = new ScalarType(typeof(char));
 
         /// <summary>
         /// Represents a string type
         /// </summary>
-        public static ScalarType String = new ScalarType("string".GetType());
+        public static ScalarType String = new ScalarType(typeof(string));
     }
 }
