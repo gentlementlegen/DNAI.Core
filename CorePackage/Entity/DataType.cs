@@ -15,7 +15,7 @@ namespace CorePackage.Entity
         /// Instanciate a dynamic object of the type
         /// </summary>
         /// <returns>A new instance</returns>
-        public abstract dynamic Instanciate();
+        public abstract dynamic Instantiate();
 
         /// <summary>
         /// Checks if a given value corresponds to the type

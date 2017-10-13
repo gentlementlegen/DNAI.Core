@@ -79,8 +79,8 @@ namespace CorePackage.Entity.Type
             get { return privateAttributes; }
         }
 
-        /// <see cref="DataType.Instanciate"/>
-        public override dynamic Instanciate()
+        /// <see cref="DataType.Instantiate"/>
+        public override dynamic Instantiate()
         {
             /*System.Dynamic.ExpandoObject toret = new System.Dynamic.ExpandoObject();
 

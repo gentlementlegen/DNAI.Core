@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CorePackage.Entity.Type
 {
@@ -14,7 +11,7 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Represents the type which will be stored into list
         /// </summary>
-        private DataType stored;
+        private readonly DataType stored;
 
         /// <summary>
         /// Constructor that asks for the type stored
@@ -24,23 +21,25 @@ namespace CorePackage.Entity.Type
         {
             this.stored = stored;
         }
-        
-        /// <see cref="DataType.Instanciate"/>
-        public override dynamic Instanciate()
+
+        /// <summary>
+        /// <see cref="DataType.Instantiate"/>
+        /// </summary>
+        public override dynamic Instantiate()
         {
-            throw new NotImplementedException();
+            return Activator.CreateInstance(typeof(List<>).MakeGenericType(stored.Instantiate().GetType()));
         }
 
         /// <see cref="Global.Definition.IsValid"/>
         public override bool IsValid()
         {
-            throw new NotImplementedException();
+            return stored != null;
         }
 
         /// <see cref="DataType.IsValueOfType(dynamic)"/>
         public override bool IsValueOfType(dynamic value)
         {
-            throw new NotImplementedException();
+            return stored.IsValueOfType(value);
         }
     }
 }

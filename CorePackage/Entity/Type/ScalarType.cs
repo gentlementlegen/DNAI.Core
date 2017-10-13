@@ -14,7 +14,7 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Contains the real C# associated type
         /// </summary>
-        private System.Type real_type;
+        public readonly System.Type real_type;
 
         /// <summary>
         /// Constructor that asks for the real C# type
@@ -25,8 +25,8 @@ namespace CorePackage.Entity.Type
             this.real_type = real_type;
         }
 
-        /// <see cref="DataType.Instanciate"/>
-        public override dynamic Instanciate()
+        /// <see cref="DataType.Instantiate"/>
+        public override dynamic Instantiate()
         {
             if (real_type == typeof(string))
                 return "";
@@ -54,26 +54,26 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Represents a boolean type
         /// </summary>
-        public static ScalarType Boolean = new ScalarType(typeof(bool));
+        public static readonly ScalarType Boolean = new ScalarType(typeof(bool));
 
         /// <summary>
         /// Represents an integer type
         /// </summary>
-        public static ScalarType Integer = new ScalarType(typeof(int));
+        public static readonly ScalarType Integer = new ScalarType(typeof(int));
 
         /// <summary>
         /// Represents a floating type
         /// </summary>
-        public static ScalarType Floating = new ScalarType(typeof(double));
+        public static readonly ScalarType Floating = new ScalarType(typeof(double));
 
         /// <summary>
         /// Represents a character type
         /// </summary>
-        public static ScalarType Character = new ScalarType(typeof(char));
+        public static readonly ScalarType Character = new ScalarType(typeof(char));
 
         /// <summary>
         /// Represents a string type
         /// </summary>
-        public static ScalarType String = new ScalarType(typeof(string));
+        public static readonly ScalarType String = new ScalarType(typeof(string));
     }
 }

@@ -30,7 +30,7 @@ namespace CorePackage.Entity
         {
             this.type = type;
             if (value == null)
-                this.Value = type.Instanciate();
+                this.Value = type.Instantiate();
             else
                 this.Value = value;
         }
@@ -57,7 +57,9 @@ namespace CorePackage.Entity
                     this.value = value;
                 }
                 else
-                    throw new ArgumentException("Trying to set a value of a type inconcistant with " + this.type.GetType().ToString() + ": " + value.ToString());
+                {
+                    throw new ArgumentException("Trying to set a value of a type inconsistant with " + this.type.GetType() + ": " + value.ToString());
+                }
             }
         }
 

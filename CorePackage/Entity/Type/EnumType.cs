@@ -42,8 +42,8 @@ namespace CorePackage.Entity.Type
             this.values[name] = new Global.Declaration<Variable> { name = name, definition = definition };
         }
 
-        /// <see cref="DataType.Instanciate"/>
-        public override dynamic Instanciate()
+        /// <see cref="DataType.Instantiate"/>
+        public override dynamic Instantiate()
         {
             return values.Values.First().definition.Value;
         }
