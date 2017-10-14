@@ -99,8 +99,8 @@ namespace CoreTest
                 new List<CorePackage.Execution.Operator>
                 {
                     new CorePackage.Execution.Operators.BinaryNot(opType, opType),
-                    new CorePackage.Execution.Operators.Decrement(opType, opType),
-                    new CorePackage.Execution.Operators.Increment(opType, opType),
+                    new CorePackage.Execution.Operators.Decrement(opType, opType), //not sure works
+                    new CorePackage.Execution.Operators.Increment(opType, opType), //not sure works
                     new CorePackage.Execution.Operators.Inverse(opType, opType)
                 },
                 new List<Func<CorePackage.Execution.Instruction, bool>>
@@ -260,6 +260,61 @@ namespace CoreTest
             System.Diagnostics.Debug.Write(test.ToDotFile());
         }
 
+        /// <summary>
+        /// This method test while instruction this duly graph corresponds to the following code
+        /// 
+        /// void whileTester()
+        /// {
+        ///     int i = 0;
+        /// 
+        ///     while (i != 10)
+        ///         i = i + 1;
+        ///     i = 42;
+        /// }
+        /// 
+        /// In the end, test function will check if i is equal to 42
+        /// </summary>
+        [TestMethod]
+        public void Test_while()
+        {
+            CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
+            CorePackage.Entity.Variable i = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 0);
 
+            //while(i != 10)
+            CorePackage.Execution.While loop = new CorePackage.Execution.While();
+
+            CorePackage.Execution.Operators.Different whcondition = new CorePackage.Execution.Operators.Different(CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer);
+
+            whcondition.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(i), "reference");
+            whcondition.SetInputValue("RightOperand", 10);
+
+            loop.GetInput("condition").LinkTo(whcondition, "result");
+
+            //  i = i + 1;
+            CorePackage.Execution.Setter ipp = new CorePackage.Execution.Setter(i);
+
+            CorePackage.Execution.Operators.Add ipone = new CorePackage.Execution.Operators.Add(CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer);
+
+            ipone.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(i), "reference");
+            ipone.SetInputValue("RightOperand", 1);
+
+            ipp.GetInput("value").LinkTo(ipone, "result");
+
+            loop.Do(ipp);
+
+            //i = 42;
+            CorePackage.Execution.Setter finalset = new CorePackage.Execution.Setter(i);
+
+            finalset.SetInputValue("value", 42);
+
+            loop.Done(finalset);
+
+            //===============================
+        
+            whileTester.entrypoint = loop;
+            whileTester.Call();
+
+            Assert.IsTrue(i.Value == 42);
+        }
     }
 }

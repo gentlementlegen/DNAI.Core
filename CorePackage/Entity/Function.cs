@@ -130,6 +130,8 @@ namespace CorePackage.Entity
         {
             Stack<Execution.ExecutionRefreshInstruction> instructions = new Stack<Execution.ExecutionRefreshInstruction>();
 
+            if (entrypoint == null)
+                throw new InvalidOperationException("Function entry point has not been defined yet");
             instructions.Push(entrypoint);
             while (instructions.Count > 0)
             {
