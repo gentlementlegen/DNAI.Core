@@ -92,6 +92,7 @@
     <Compile Include="Execution\ExecRefresh\Setter.cs" />
     <Compile Include="Execution\ExecRefresh\Statement.cs" />
     <Compile Include="Execution\ExecRefresh\Statements\If.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\Foreach.cs" />
     <Compile Include="Execution\ExecRefresh\Statements\While.cs" />
     <Compile Include="Execution\ExecutionRefreshInstruction.cs" />
     <Compile Include="Execution\FieldAccess.cs" />

@@ -316,5 +316,61 @@ namespace CoreTest
 
             Assert.IsTrue(i.Value == 42);
         }
+
+        /// <summary>
+        /// This method test foreach instruction this duly graph corresponds to the following code
+        /// 
+        /// void TestForeach()
+        /// {
+        ///     List<int> l = new List<int> {1, 2, 3};
+        /// 
+        ///     foreach (var v in l)
+        ///         v = 42;
+        /// }
+        /// 
+        /// </summary>
+        [TestMethod]
+        public void TestForeach()
+        {
+            CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Integer));//, new List<int> { 1, 2, 3 });
+
+            //while(i != 10)
+            CorePackage.Execution.Foreach loop = new CorePackage.Execution.Foreach();
+
+            //CorePackage.Execution.Operators.Different whcondition = new CorePackage.Execution.Operators.Different(CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer);
+
+            //whcondition.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(i), "reference");
+            //whcondition.SetInputValue("RightOperand", 10);
+
+            //loop.GetInput("condition").LinkTo(whcondition, "result");
+            loop.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
+
+            ////  i = i + 1;
+            //CorePackage.Execution.Setter ipp = new CorePackage.Execution.Setter(i);
+
+            //CorePackage.Execution.Operators.Add ipone = new CorePackage.Execution.Operators.Add(CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer);
+
+            //ipone.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(i), "reference");
+            //ipone.SetInputValue("RightOperand", 1);
+
+            //ipp.GetInput("value").LinkTo(ipone, "result");
+
+            //loop.Do(ipp);
+
+            ////i = 42;
+            //CorePackage.Execution.Setter finalset = new CorePackage.Execution.Setter(i);
+
+            //finalset.SetInputValue("value", 42);
+
+            //loop.Done(finalset);
+
+            ////===============================
+
+            //whileTester.entrypoint = loop;
+            //whileTester.Call();
+
+            //Assert.IsTrue(i.Value == 42);
+        }
     }
 }
