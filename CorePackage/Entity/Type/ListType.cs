@@ -11,7 +11,7 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Represents the type which will be stored into list
         /// </summary>
-        private readonly DataType stored;
+        public DataType Stored { get; private set; }
 
         private System.Type _listType;
 
@@ -21,7 +21,7 @@ namespace CorePackage.Entity.Type
         /// <param name="stored"></param>
         public ListType(DataType stored)
         {
-            this.stored = stored;
+            this.Stored = stored;
             _listType = typeof(List<>).MakeGenericType(stored.Instantiate().GetType());
         }
 
@@ -36,7 +36,7 @@ namespace CorePackage.Entity.Type
         /// <see cref="Global.Definition.IsValid"/>
         public override bool IsValid()
         {
-            return stored != null;
+            return Stored != null;
         }
 
         /// <summary>

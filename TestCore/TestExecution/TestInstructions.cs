@@ -333,7 +333,7 @@ namespace CoreTest
         public void TestForeach()
         {
             CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
-            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Integer), new List<int> { 1, 2, 3 });
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Integer), new List<int> { 1, 2, 42 });
 
             //while(i != 10)
             CorePackage.Execution.Foreach loop = new CorePackage.Execution.Foreach();
@@ -347,7 +347,10 @@ namespace CoreTest
             loop.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
 
             ////  i = i + 1;
-            //CorePackage.Execution.Setter ipp = new CorePackage.Execution.Setter(i);
+            CorePackage.Entity.Variable i = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer);
+            CorePackage.Entity.Variable j = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer);
+            CorePackage.Execution.Setter ipp = new CorePackage.Execution.Setter(i);
+            CorePackage.Execution.Setter ipp2 = new CorePackage.Execution.Setter(j);
 
             //CorePackage.Execution.Operators.Add ipone = new CorePackage.Execution.Operators.Add(CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer);
 
@@ -355,9 +358,11 @@ namespace CoreTest
             //ipone.SetInputValue("RightOperand", 1);
 
             //ipp.GetInput("value").LinkTo(ipone, "result");
+            ipp.GetInput("value").LinkTo(loop, "index");
+            ipp2.GetInput("value").LinkTo(loop, "element");
 
             //loop.Do(ipp);
-            loop.Do(null);
+            loop.Do(ipp);
 
             ////i = 42;
             //CorePackage.Execution.Setter finalset = new CorePackage.Execution.Setter(i);
@@ -371,7 +376,8 @@ namespace CoreTest
             whileTester.entrypoint = loop;
             whileTester.Call();
 
-            //Assert.IsTrue(i.Value == 42);
+            Assert.IsTrue(i.Value == 3);
+            //Assert.IsTrue(j.Value == 42);
         }
     }
 }

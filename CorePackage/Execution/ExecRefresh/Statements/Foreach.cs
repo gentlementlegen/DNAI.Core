@@ -1,9 +1,5 @@
 ﻿using CorePackage.Entity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CorePackage.Execution
 {
@@ -17,46 +13,74 @@ namespace CorePackage.Execution
         private enum ForeachIndexes
         {
             OUTLOOP = 0,
-            INLOOP = 1
+            INLOOP = 1,
         }
 
+        private int _index;
         /// <summary>
         /// Current index in the collection.
         /// </summary>
-        public int Index { get; private set; }
+        public int Index
+        {
+            get { return _index; }
+            private set
+            {
+                _index = value;
+                outputs["index"].Value.definition.Value = value;
+            }
+        }
 
+        private dynamic _element;
         /// <summary>
         /// Current element in the collection.
         /// </summary>
-        public dynamic Element { get; private set; }
+        public dynamic Element
+        {
+            get { return _element; }
+            private set
+            {
+                _element = value;
+                outputs["element"].Value.definition.Value = value;
+            }
+        }
 
         /// <summary>
-        /// Default constructor that initialises input "condition" as array and set 2 outpoints capacity
+        /// True if node finished its job and should reset on next call.
+        /// </summary>
+        private bool _shouldReset;
+
+        /// <summary>
+        /// Default constructor that initialises input "array" as array and set 2 outpoints capacity
         /// </summary>
         public Foreach() :
             base(new Dictionary<string, Variable> { { "array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)) } }, 2)
         {
+            AddOutput("index", new Variable(Entity.Type.Scalar.Integer));
+            AddOutput("element", new Variable(Entity.Type.Scalar.Integer));
         }
 
         public override ExecutionRefreshInstruction[] GetNextInstructions()
         {
             var currList = GetInputValue("array");
+            if (_shouldReset)
+            {
+                Index = 0;
+                Element = 0;
+            }
             if (currList?.Count > 0 && Index < currList.Count) //if foreach condition is true
             {
-                //you'll have to execute recursively the nodes linked to the "in loop" index
-                //then you'll have to reexecute the while
-                //
-                //order is reverse here because execution is performed with a stack
+                _shouldReset = false;
                 nextToExecute[0] = this;
-                nextToExecute[1] = this.OutPoints[(int)ForeachIndexes.INLOOP];
+                nextToExecute[1] = OutPoints[(int)ForeachIndexes.INLOOP];
                 Element = currList[Index];
                 Index++;
             }
             else //if foreach condition is false
             {
                 //you only have to execute the code "out loop"
-                nextToExecute[0] = this.OutPoints[(int)ForeachIndexes.OUTLOOP];
+                nextToExecute[0] = OutPoints[(int)ForeachIndexes.OUTLOOP];
                 nextToExecute[1] = null;
+                _shouldReset = true;
             }
             return this.nextToExecute;
         }
