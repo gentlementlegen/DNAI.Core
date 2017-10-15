@@ -333,10 +333,11 @@ namespace CoreTest
         public void TestForeach()
         {
             CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
-            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Integer), new List<int> { 1, 2, 42 });
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
 
             //while(i != 10)
             CorePackage.Execution.Foreach loop = new CorePackage.Execution.Foreach();
+            loop.ContainerType = CorePackage.Entity.Type.Scalar.Floating;
 
             //CorePackage.Execution.Operators.Different whcondition = new CorePackage.Execution.Operators.Different(CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer);
 
@@ -348,7 +349,7 @@ namespace CoreTest
 
             ////  i = i + 1;
             CorePackage.Entity.Variable i = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer);
-            CorePackage.Entity.Variable j = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer);
+            CorePackage.Entity.Variable j = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Floating);
             CorePackage.Execution.Setter ipp = new CorePackage.Execution.Setter(i);
             CorePackage.Execution.Setter ipp2 = new CorePackage.Execution.Setter(j);
 
@@ -374,6 +375,7 @@ namespace CoreTest
             ////===============================
 
             whileTester.entrypoint = loop;
+            whileTester.Call();
             whileTester.Call();
 
             Assert.IsTrue(i.Value == 3);

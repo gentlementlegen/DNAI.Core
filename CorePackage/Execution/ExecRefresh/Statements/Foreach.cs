@@ -1,4 +1,5 @@
 ﻿using CorePackage.Entity;
+using System;
 using System.Collections.Generic;
 
 namespace CorePackage.Execution
@@ -44,6 +45,21 @@ namespace CorePackage.Execution
             }
         }
 
+        private DataType _containerType = Entity.Type.Scalar.Integer;
+        /// <summary>
+        /// The type of the container to iterate in.
+        /// </summary>
+        public DataType ContainerType
+        {
+            get { return _containerType; }
+            set
+            {
+                AddOutput("element", new Variable(value));
+                AddInput("array", new Variable(new Entity.Type.ListType(value)));
+                _containerType = value;
+            }
+        }
+
         /// <summary>
         /// True if node finished its job and should reset on next call.
         /// </summary>
@@ -65,7 +81,7 @@ namespace CorePackage.Execution
             if (_shouldReset)
             {
                 Index = 0;
-                Element = 0;
+                Element = ContainerType.Instantiate();
             }
             if (currList?.Count > 0 && Index < currList.Count) //if foreach condition is true
             {
