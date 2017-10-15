@@ -40,8 +40,8 @@ namespace CorePackage.Execution
 
         public override ExecutionRefreshInstruction[] GetNextInstructions()
         {
-            var currElem = GetInput("array");
-            if (this.GetInputValue("array")) //if foreach condition is true
+            var currList = GetInputValue("array");
+            if (currList?.Count > 0 && Index < currList.Count) //if foreach condition is true
             {
                 //you'll have to execute recursively the nodes linked to the "in loop" index
                 //then you'll have to reexecute the while
@@ -49,6 +49,7 @@ namespace CorePackage.Execution
                 //order is reverse here because execution is performed with a stack
                 nextToExecute[0] = this;
                 nextToExecute[1] = this.OutPoints[(int)ForeachIndexes.INLOOP];
+                Element = currList[Index];
                 Index++;
             }
             else //if foreach condition is false

@@ -13,6 +13,8 @@ namespace CorePackage.Entity.Type
         /// </summary>
         private readonly DataType stored;
 
+        private System.Type _listType;
+
         /// <summary>
         /// Constructor that asks for the type stored
         /// </summary>
@@ -20,6 +22,7 @@ namespace CorePackage.Entity.Type
         public ListType(DataType stored)
         {
             this.stored = stored;
+            _listType = typeof(List<>).MakeGenericType(stored.Instantiate().GetType());
         }
 
         /// <summary>
@@ -27,7 +30,7 @@ namespace CorePackage.Entity.Type
         /// </summary>
         public override dynamic Instantiate()
         {
-            return Activator.CreateInstance(typeof(List<>).MakeGenericType(stored.Instantiate().GetType()));
+            return Activator.CreateInstance(_listType);
         }
 
         /// <see cref="Global.Definition.IsValid"/>
@@ -36,10 +39,12 @@ namespace CorePackage.Entity.Type
             return stored != null;
         }
 
+        /// <summary>
         /// <see cref="DataType.IsValueOfType(dynamic)"/>
+        /// </summary>
         public override bool IsValueOfType(dynamic value)
         {
-            return stored.IsValueOfType(value);
+            return _listType == value.GetType();
         }
     }
 }

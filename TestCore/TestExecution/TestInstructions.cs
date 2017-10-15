@@ -333,7 +333,7 @@ namespace CoreTest
         public void TestForeach()
         {
             CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
-            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Integer));//, new List<int> { 1, 2, 3 });
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Integer), new List<int> { 1, 2, 3 });
 
             //while(i != 10)
             CorePackage.Execution.Foreach loop = new CorePackage.Execution.Foreach();
@@ -357,6 +357,7 @@ namespace CoreTest
             //ipp.GetInput("value").LinkTo(ipone, "result");
 
             //loop.Do(ipp);
+            loop.Do(null);
 
             ////i = 42;
             //CorePackage.Execution.Setter finalset = new CorePackage.Execution.Setter(i);
@@ -367,8 +368,8 @@ namespace CoreTest
 
             ////===============================
 
-            //whileTester.entrypoint = loop;
-            //whileTester.Call();
+            whileTester.entrypoint = loop;
+            whileTester.Call();
 
             //Assert.IsTrue(i.Value == 42);
         }
