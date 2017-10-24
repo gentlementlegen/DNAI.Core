@@ -401,5 +401,30 @@ namespace CoreTest
             whileTester.Call();
             Assert.IsTrue(n.definition.Value == 4);
         }
+
+        [TestMethod]
+        public void TestInsert()
+        {
+            CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
+
+            CorePackage.Entity.Variable j = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Floating);
+            CorePackage.Entity.Variable idx = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 2);
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
+
+            CorePackage.Execution.Insert insert = new CorePackage.Execution.Insert
+            {
+                ContainerType = CorePackage.Entity.Type.Scalar.Floating
+            };
+
+            insert.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
+            insert.GetInput("element").LinkTo(new CorePackage.Execution.Getter(j), "reference");
+            insert.GetInput("index").LinkTo(new CorePackage.Execution.Getter(idx), "reference");
+
+            var n = insert.GetOutput("count").Value;
+
+            whileTester.entrypoint = insert;
+            whileTester.Call();
+            Assert.IsTrue(n.definition.Value == 4);
+        }
     }
 }
