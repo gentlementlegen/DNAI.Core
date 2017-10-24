@@ -86,6 +86,7 @@
     <Compile Include="Execution\AccessRefresh\Operators\Unary\Increment.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Unary\Inverse.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Unary\Not.cs" />
+    <Compile Include="Execution\ExecRefresh\Add.cs" />
     <Compile Include="Execution\ExecRefresh\Debug.cs" />
     <Compile Include="Execution\ExecRefresh\Formula.cs" />
     <Compile Include="Execution\ExecRefresh\FunctionCall.cs" />
