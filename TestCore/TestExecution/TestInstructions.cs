@@ -426,5 +426,26 @@ namespace CoreTest
             whileTester.Call();
             Assert.IsTrue(n.definition.Value == 4);
         }
+
+        [TestMethod]
+        public void TestSize()
+        {
+            CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
+
+            CorePackage.Entity.Variable idx = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer);
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
+
+            CorePackage.Execution.Size size = new CorePackage.Execution.Size();
+
+            size.ContainerType = CorePackage.Entity.Type.Scalar.Floating;
+
+            size.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
+
+            var n = size.GetOutput("count").Value;
+
+            whileTester.entrypoint = size;
+            whileTester.Call();
+            Assert.IsTrue(n.definition.Value == 3);
+        }
     }
 }
