@@ -447,5 +447,51 @@ namespace CoreTest
             whileTester.Call();
             Assert.IsTrue(n.definition.Value == 3);
         }
+
+        [TestMethod]
+        public void TestRemove()
+        {
+            CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
+
+            CorePackage.Entity.Variable idx = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Floating, 42.0);
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
+
+            CorePackage.Execution.Remove remove = new CorePackage.Execution.Remove
+            {
+                ContainerType = CorePackage.Entity.Type.Scalar.Floating
+            };
+
+            remove.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
+            remove.GetInput("element").LinkTo(new CorePackage.Execution.Getter(idx), "reference");
+
+            var n = remove.GetOutput("removed").Value;
+
+            whileTester.entrypoint = remove;
+            whileTester.Call();
+            Assert.IsTrue(n.definition.Value);
+        }
+
+        [TestMethod]
+        public void TestRemoveIndex()
+        {
+            CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
+
+            CorePackage.Entity.Variable idx = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 1);
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
+
+            CorePackage.Execution.RemoveIndex remove = new CorePackage.Execution.RemoveIndex
+            {
+                ContainerType = CorePackage.Entity.Type.Scalar.Floating
+            };
+
+            remove.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
+            remove.GetInput("index").LinkTo(new CorePackage.Execution.Getter(idx), "reference");
+
+            var n = remove.GetOutput("removed").Value;
+
+            whileTester.entrypoint = remove;
+            whileTester.Call();
+            Assert.IsTrue(n.definition.Value);
+        }
     }
 }
