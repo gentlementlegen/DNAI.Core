@@ -72,7 +72,7 @@ namespace CorePackage.Execution
         /// <param name="definition">Variable definition of the input</param>
         public void AddInput(string name, Entity.Variable definition)
         {
-            AddInput(scope.AddExternal(name, definition));
+            AddInput(new Global.Declaration<Entity.Variable>{name = name, definition = scope.Declare(definition, name, Global.AccessMode.EXTERNAL)});
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace CorePackage.Execution
         /// <param name="definition">Variable definition of the output</param>
         public void AddOutput(string name, Entity.Variable definition)
         {
-            AddOutput(scope.AddExternal(name, definition));
+            AddOutput(new Global.Declaration<Entity.Variable> { name = name, definition = scope.Declare(definition, name, Global.AccessMode.EXTERNAL) });
         }
 
         /// <summary>

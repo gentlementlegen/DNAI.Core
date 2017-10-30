@@ -54,8 +54,8 @@ namespace CorePackage.Execution
             get { return _containerType; }
             set
             {
-                AddOutput("element", new Variable(value));
-                AddInput("array", new Variable(new Entity.Type.ListType(value)));
+                ((Entity.Type.ListType)GetInput("array").Value.definition.Type).Stored = value;
+                GetOutput("element").Value.definition.Type = value;
                 _containerType = value;
             }
         }
@@ -68,11 +68,20 @@ namespace CorePackage.Execution
         /// <summary>
         /// Default constructor that initialises input "array" as array and set 2 outpoints capacity
         /// </summary>
-        public Foreach() :
-            base(new Dictionary<string, Variable> { { "array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)) } }, 2)
+        public Foreach(DataType stored = null) :
+            base(
+                new Dictionary<string, Variable>
+                {
+                    { "array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)) }
+                },
+                new Dictionary<string, Variable>
+                {
+                    { "index", new Variable(Entity.Type.Scalar.Integer) },
+                    { "element", new Variable() }
+                }, 2)
         {
-            AddOutput("index", new Variable(Entity.Type.Scalar.Integer));
-            AddOutput("element", new Variable(Entity.Type.Scalar.Integer));
+            if (stored != null)
+                ContainerType = stored;
         }
 
         public override ExecutionRefreshInstruction[] GetNextInstructions()

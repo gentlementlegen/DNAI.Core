@@ -4,15 +4,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
-using StorageDeclarator = CorePackage.Global.Declarator<CorePackage.Entity.Variable>;
+using CorePackage.Global;
 
 namespace CorePackage.Entity
 {
     /// <summary>
     /// Class that represents a function definition
     /// </summary>
-    public class Function : Global.Definition
+    public class Function : Global.Definition, Global.IDeclarator<Variable>
     {
         /// <summary>
         /// Enumeration that represents function variables role
@@ -29,27 +28,29 @@ namespace CorePackage.Entity
         /// <summary>
         /// A function has an internal scope in which you can declare variables
         /// </summary>
-        private StorageDeclarator scope = new StorageDeclarator();
+        private Global.Declarator<Variable> scope = new Global.Declarator<Variable>();
 
         /// <summary>
         /// Contains function parameters which references variables declared in "scope" attribute
         /// </summary>
-        private Dictionary<string, Global.Declaration<Variable>> parameters = new Dictionary<string, Global.Declaration<Variable>>();
+        private Dictionary<string, Variable> parameters = new Dictionary<string, Variable>();
 
         /// <summary>
         /// Contains function returns which references variables declared in "scope" attribute
         /// </summary>
-        private Dictionary<string, Global.Declaration<Variable>> returns = new Dictionary<string, Global.Declaration<Variable>>();
+        private Dictionary<string, Variable> returns = new Dictionary<string, Variable>();
 
         /// <summary>
         /// Contained instructions to process
         /// </summary>
-        public List<Execution.Instruction> instructions = new List<Execution.Instruction>();
+        private Dictionary<UInt32, Execution.Instruction> instructions = new Dictionary<uint, Execution.Instruction>();
+
+        private UInt32 currentIndex;
 
         /// <summary>
         /// First instruction to execute. Reference an instruction from <c>instructions</c> parameter
         /// </summary>
-        public Execution.ExecutionRefreshInstruction entrypoint;
+        private Execution.ExecutionRefreshInstruction entrypoint;
 
         /// <summary>
         /// Allow user to add a new variable in the function
@@ -58,23 +59,23 @@ namespace CorePackage.Entity
         /// <param name="definition">Definition of the variable</param>
         /// <param name="role">Variable role in the function</param>
         /// <returns>Declaration of the variable</returns>
-        public Global.Declaration<Variable>  AddVariable(string name, Entity.Variable definition, VariableRole role)
+        public Variable  SetVariableAs(string name, VariableRole role)
         {
-            Global.AccessMode mode = (role == VariableRole.INTERNAL ? Global.AccessMode.INTERNAL : Global.AccessMode.EXTERNAL);
-            Global.Declaration<Variable> variable = this.scope.Add(name, definition, mode);
+            Variable real = scope.Find(name, AccessMode.EXTERNAL);
+            
             if (role == VariableRole.PARAMETER)
-                this.parameters[name] = variable;
+                this.parameters[name] = real;
             else if (role == VariableRole.RETURN)
-                this.returns[name] = variable;
-            return variable;
+                this.returns[name] = real;
+            return real;
         }
 
         /// <summary>
         /// Make paremeters attributes publics in read only
         /// </summary>
-        public List<Global.Declaration<Variable>> Parameters
+        public Dictionary<string, Variable> Parameters
         {
-            get { return this.parameters.Values.ToList(); }
+            get { return this.parameters; }
         }
 
         /// <summary>
@@ -84,10 +85,7 @@ namespace CorePackage.Entity
         /// <param name="value">Value to set</param>
         public void SetParameterValue(string name, dynamic value)
         {
-            if (this.parameters.Keys.Contains(name))
-                this.parameters[name].definition.Value = value;
-            else
-                throw new KeyNotFoundException("Function: No such parameter named \"" + name + "\"");
+            GetParameter(name).Value = value;
         }
 
         /// <summary>
@@ -100,15 +98,15 @@ namespace CorePackage.Entity
         {
             if (!this.parameters.ContainsKey(name))
                 throw new KeyNotFoundException("Function: No such parameter named \"" + name + "\"");
-            return this.parameters[name].definition;
+            return this.parameters[name];
         }
 
         /// <summary>
         /// Make returns attributes public in read only
         /// </summary>
-        public List<Global.Declaration<Variable>> Returns
+        public Dictionary<string, Variable> Returns
         {
-            get { return this.returns.Values.ToList(); }
+            get { return this.returns; }
         }
 
         /// <summary>
@@ -120,7 +118,37 @@ namespace CorePackage.Entity
         {
             if (!this.returns.ContainsKey(name))
                 throw new KeyNotFoundException("Function: No such return named \"" + name + "\"");
-            return this.returns[name].definition;
+            return this.returns[name];
+        }
+
+        public dynamic GetReturnValue(string name)
+        {
+            return GetReturn(name).Value;
+        }
+
+        public UInt32 addInstruction(Execution.Instruction toadd)
+        {
+            instructions[currentIndex] = toadd;
+            return currentIndex++;
+        }
+
+        public void removeInstruction(UInt32 instructionID)
+        {
+            if (!instructions.ContainsKey(instructionID))
+                throw new KeyNotFoundException("No such instruction with the given id");
+            instructions.Remove(instructionID);
+        }
+
+        public T findInstruction<T>(UInt32 instructionID) where T : Execution.Instruction
+        {
+            if (!instructions.ContainsKey(instructionID))
+                throw new KeyNotFoundException("No such instruction with the given id");
+            return (T)instructions[instructionID];
+        }
+
+        public void setEntryPoint(UInt32 instructionID)
+        {
+            entrypoint = findInstruction<Execution.ExecutionRefreshInstruction>(instructionID);
         }
 
         /// <summary>
@@ -267,6 +295,36 @@ namespace CorePackage.Entity
             text += "}";
 
             return text;
+        }
+
+        public Variable Declare(Variable entity, string name, AccessMode visibility)
+        {
+            return scope.Declare(entity, name, visibility);
+        }
+
+        public Variable Pop(string name)
+        {
+            return scope.Pop(name);
+        }
+
+        public Variable Find(string name, AccessMode visibility)
+        {
+            return scope.Find(name, visibility);
+        }
+
+        public Variable Rename(string lastName, string newName)
+        {
+            return scope.Rename(lastName, newName);
+        }
+
+        public Variable ChangeVisibility(string name, AccessMode newVisibility)
+        {
+            return scope.ChangeVisibility(name, newVisibility);
+        }
+
+        public Variable GetVisibilityOf(string name, ref AccessMode visibility)
+        {
+            return scope.ChangeVisibility(name, visibility);
         }
     }
 }

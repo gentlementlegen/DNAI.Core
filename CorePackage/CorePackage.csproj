@@ -102,6 +102,8 @@
     <Compile Include="Global\Declaration.cs" />
     <Compile Include="Global\Declarator.cs" />
     <Compile Include="Global\Definition.cs" />
+    <Compile Include="Global\IContext.cs" />
+    <Compile Include="Global\IDeclarator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

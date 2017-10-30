@@ -65,9 +65,9 @@ namespace CoreTest.TestEntities
         {
             CorePackage.Entity.Type.ObjectType type = new CorePackage.Entity.Type.ObjectType(null);
 
-            type.AddPublicAttribute("x", CorePackage.Entity.Type.Scalar.Integer);
-            type.AddPublicAttribute("y", CorePackage.Entity.Type.Scalar.Integer);
-            type.AddPublicAttribute("z", CorePackage.Entity.Type.Scalar.Integer);
+            type.AddAttribute("x", CorePackage.Entity.Type.Scalar.Integer, CorePackage.Global.AccessMode.EXTERNAL);
+            type.AddAttribute("y", CorePackage.Entity.Type.Scalar.Integer, CorePackage.Global.AccessMode.EXTERNAL);
+            type.AddAttribute("z", CorePackage.Entity.Type.Scalar.Integer, CorePackage.Global.AccessMode.EXTERNAL);
             
             //show fields
 

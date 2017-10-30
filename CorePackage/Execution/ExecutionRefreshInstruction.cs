@@ -53,7 +53,16 @@ namespace CorePackage.Execution
         /// <param name="outPoint">Instruction to link</param>
         public void LinkTo(uint index, ExecutionRefreshInstruction outPoint)
         {
+            if (index > outPoints.Count())
+                throw new InvalidOperationException("Given index is to hight");
             this.outPoints[index] = outPoint;
+        }
+
+        public void Unlink(uint index)
+        {
+            if (index > outPoints.Count())
+                throw new InvalidOperationException("Given index is to hight");
+            this.outPoints[index] = null;
         }
     }
 }

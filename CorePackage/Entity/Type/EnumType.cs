@@ -15,18 +15,24 @@ namespace CorePackage.Entity.Type
         /// Contains enumeration values which are variable declarations
         /// Those variables can be of any type
         /// </summary>
-        private Dictionary<string, Global.Declaration<Variable>> values = new Dictionary<string, Global.Declaration<Variable>>();
+        private Dictionary<string, Variable> values = new Dictionary<string, Variable>();
 
         /// <summary>
         /// Contains the type of the variables stored in the enumeration
         /// </summary>
         private DataType stored;
 
+        public DataType Stored
+        {
+            get { return stored; }
+            set { stored = value; }
+        }
+
         /// <summary>
         /// Constructor that forces to given the enumeration values' type
         /// </summary>
         /// <param name="stored">Type of the stored enumeration values</param>
-        public EnumType(DataType stored)
+        public EnumType(DataType stored = null)
         {
             this.stored = stored;
         }
@@ -36,25 +42,25 @@ namespace CorePackage.Entity.Type
         /// </summary>
         /// <param name="name">Represents the name of the value</param>
         /// <param name="definition">Represents the variable definition of the value</param>
-        public void AddValue(string name, Entity.Variable definition)
+        public void SetValue(string name, Entity.Variable definition)
         {
             //check given definition validity
-            this.values[name] = new Global.Declaration<Variable> { name = name, definition = definition };
+            this.values[name] = definition;
         }
 
         /// <see cref="DataType.Instantiate"/>
         public override dynamic Instantiate()
         {
-            return values.Values.First().definition.Value;
+            return values.Values.First().Value;
         }
 
         /// <see cref="Global.Definition.IsValid"/>
         public override bool IsValid()
         {
             //incohérence des types stockés par rapport à celui défini
-            foreach (Global.Declaration<Variable> curr in values.Values)
+            foreach (Variable curr in values.Values)
             {
-                if (curr.definition.Type != this.stored)
+                if (curr.Value.Type != this.stored)
                     return false;
             }
             return true;
@@ -64,11 +70,11 @@ namespace CorePackage.Entity.Type
         public override bool IsValueOfType(dynamic value)
         {
             //return value.GetType() != typeof(string) && values.Keys.Contains((string)value);
-            if (value.GetType() != values.First().Value.definition.Value.GetType())
+            if (value.GetType() != values.Values.First().Value.GetType())
                 return false;
-            foreach (Global.Declaration<Entity.Variable> curr in values.Values)
+            foreach (Variable curr in values.Values)
             {
-                if (curr.definition.Value == value)
+                if (curr.Value == value)
                     return true;
             }
             return false;
@@ -81,7 +87,17 @@ namespace CorePackage.Entity.Type
         /// <returns>Variable corresponding to the enum value</returns>
         public Variable GetValue(string name)
         {
-            return values[name].definition;
+            if (!values.ContainsKey(name))
+                throw new KeyNotFoundException("No such value named \"" + name + "\" in enumeration");
+            return values[name];
+        }
+
+        public void RemoveValue(string name)
+        {
+            if (!values.ContainsKey(name))
+                throw new KeyNotFoundException("No such value named \"" + name + "\" in enumeration");
+
+            values.Remove(name);
         }
     }
 }

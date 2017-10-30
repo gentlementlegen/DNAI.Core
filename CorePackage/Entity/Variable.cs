@@ -26,13 +26,16 @@ namespace CorePackage.Entity
         /// </summary>
         /// <param name="type">Type of the variable</param>
         /// <param name="value">Value of the variable</param>
-        public Variable(DataType type, dynamic value = null)
+        public Variable(DataType type = null, dynamic value = null)
         {
-            this.type = type;
-            if (value == null)
-                this.Value = type.Instantiate();
-            else
-                this.Value = value;
+            if (type != null)
+            {
+                this.type = type;
+                if (value == null)
+                    this.Value = type.Instantiate();
+                else
+                    this.Value = value;
+            }
         }
 
         /// <summary>
@@ -41,6 +44,7 @@ namespace CorePackage.Entity
         public DataType Type
         {
             get { return type; }
+            set { type = value; }
         }
 
         /// <summary>

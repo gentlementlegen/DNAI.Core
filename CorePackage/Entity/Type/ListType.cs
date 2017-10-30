@@ -8,10 +8,23 @@ namespace CorePackage.Entity.Type
     /// </summary>
     public class ListType : DataType
     {
+        private DataType stored;
+
         /// <summary>
         /// Represents the type which will be stored into list
         /// </summary>
-        public DataType Stored { get; private set; }
+        public DataType Stored
+        {
+            get { return stored; }
+            set
+            {
+                if (value != null)
+                {
+                    _listType = typeof(List<>).MakeGenericType(value.Instantiate().GetType());
+                    stored = value;
+                }
+            }
+        }
 
         private System.Type _listType;
 
@@ -19,10 +32,9 @@ namespace CorePackage.Entity.Type
         /// Constructor that asks for the type stored
         /// </summary>
         /// <param name="stored"></param>
-        public ListType(DataType stored)
+        public ListType(DataType stored = null)
         {
             this.Stored = stored;
-            _listType = typeof(List<>).MakeGenericType(stored.Instantiate().GetType());
         }
 
         /// <summary>

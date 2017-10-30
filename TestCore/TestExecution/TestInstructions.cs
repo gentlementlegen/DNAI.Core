@@ -220,7 +220,7 @@ namespace CoreTest
             CorePackage.Execution.Setter true_change = new CorePackage.Execution.Setter(witness);
             true_change.SetInputValue("value", 84);
             print_hello.LinkTo(0, true_change);
-            say_hello.entrypoint = print_hello;
+            say_hello.setEntryPoint(say_hello.addInstruction(print_hello));
 
             //If the condition is true, then do print_hello
             f_cond.Then(new CorePackage.Execution.FunctionCall(say_hello));
@@ -232,13 +232,13 @@ namespace CoreTest
             CorePackage.Execution.Setter false_change = new CorePackage.Execution.Setter(witness);
             false_change.SetInputValue("value", 0);
             print_goodbye.LinkTo(0, false_change);
-            say_bye.entrypoint = print_goodbye;
+            say_bye.setEntryPoint(say_bye.addInstruction(print_goodbye));
 
             //Else, do print_goodbye
             f_cond.Else(new CorePackage.Execution.FunctionCall(say_bye));
 
             //Set the function entry point before calling it
-            test.entrypoint = f_cond;
+            test.setEntryPoint(test.addInstruction(f_cond));
 
             //In this call, it will check that 4 is equal to 5, then it will execute print_goodbye and false_change
             test.Call();
@@ -311,7 +311,7 @@ namespace CoreTest
 
             //===============================
         
-            whileTester.entrypoint = loop;
+            whileTester.setEntryPoint(whileTester.addInstruction(loop));
             whileTester.Call();
 
             Assert.IsTrue(i.Value == 42);
@@ -374,7 +374,7 @@ namespace CoreTest
 
             ////===============================
 
-            whileTester.entrypoint = loop;
+            whileTester.setEntryPoint(whileTester.addInstruction(loop));
             whileTester.Call();
             whileTester.Call();
 
