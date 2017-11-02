@@ -1,6 +1,6 @@
 ﻿using ProtoBuf;
 
-namespace CorePackageNet.Communication
+namespace EventServerClient.Communication
 {
     [ProtoContract]
     public class PacketBase

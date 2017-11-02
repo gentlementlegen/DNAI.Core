@@ -1,12 +1,11 @@
-﻿using CorePackageNet.Communication;
-using ProtoBuf;
+﻿using ProtoBuf;
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CorePackage.Communication
+namespace EventServerClient.Communication
 {
     public class TcpManager
     {

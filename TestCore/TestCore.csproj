@@ -58,7 +58,6 @@
     <Compile Include="TestEntities\TestScalarTypes.cs" />
     <Compile Include="TestExecution\TestInstructions.cs" />
     <Compile Include="TestExecution\UnitTest.cs" />
-    <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

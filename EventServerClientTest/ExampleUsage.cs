@@ -1,14 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CorePackage.Communication;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net.Sockets;
 using System.Net;
-using CorePackageNet.Communication;
+using EventServerClient.Communication;
 using ProtoBuf;
 
 namespace TestCore
 {
-    [TestClass]
+    //[TestClass]
     public class UnitTest1
     {
         //[TestMethod]
