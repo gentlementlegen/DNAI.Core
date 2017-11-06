@@ -381,5 +381,117 @@ namespace CoreTest
             Assert.IsTrue(i.Value == 3);
             //Assert.IsTrue(j.Value == 42);
         }
+
+        [TestMethod]
+        public void TestAdd()
+        {
+            CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
+
+            CorePackage.Entity.Variable j = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Floating);
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
+
+            CorePackage.Execution.Add add = new CorePackage.Execution.Add();
+            add.ContainerType = CorePackage.Entity.Type.Scalar.Floating;
+
+            add.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
+            add.GetInput("element").LinkTo(new CorePackage.Execution.Getter(j), "reference");
+            var n = add.GetOutput("count").Value;
+
+            whileTester.entrypoint = add;
+            whileTester.Call();
+            Assert.IsTrue(n.definition.Value == 4);
+        }
+
+        [TestMethod]
+        public void TestInsert()
+        {
+            CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
+
+            CorePackage.Entity.Variable j = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Floating);
+            CorePackage.Entity.Variable idx = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 2);
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
+
+            CorePackage.Execution.Insert insert = new CorePackage.Execution.Insert
+            {
+                ContainerType = CorePackage.Entity.Type.Scalar.Floating
+            };
+
+            insert.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
+            insert.GetInput("element").LinkTo(new CorePackage.Execution.Getter(j), "reference");
+            insert.GetInput("index").LinkTo(new CorePackage.Execution.Getter(idx), "reference");
+
+            var n = insert.GetOutput("count").Value;
+
+            whileTester.entrypoint = insert;
+            whileTester.Call();
+            Assert.IsTrue(n.definition.Value == 4);
+        }
+
+        [TestMethod]
+        public void TestSize()
+        {
+            CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
+
+            CorePackage.Entity.Variable idx = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer);
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
+
+            CorePackage.Execution.Size size = new CorePackage.Execution.Size();
+
+            size.ContainerType = CorePackage.Entity.Type.Scalar.Floating;
+
+            size.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
+
+            var n = size.GetOutput("count").Value;
+
+            whileTester.entrypoint = size;
+            whileTester.Call();
+            Assert.IsTrue(n.definition.Value == 3);
+        }
+
+        [TestMethod]
+        public void TestRemove()
+        {
+            CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
+
+            CorePackage.Entity.Variable idx = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Floating, 42.0);
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
+
+            CorePackage.Execution.Remove remove = new CorePackage.Execution.Remove
+            {
+                ContainerType = CorePackage.Entity.Type.Scalar.Floating
+            };
+
+            remove.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
+            remove.GetInput("element").LinkTo(new CorePackage.Execution.Getter(idx), "reference");
+
+            var n = remove.GetOutput("removed").Value;
+
+            whileTester.entrypoint = remove;
+            whileTester.Call();
+            Assert.IsTrue(n.definition.Value);
+        }
+
+        [TestMethod]
+        public void TestRemoveIndex()
+        {
+            CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
+
+            CorePackage.Entity.Variable idx = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 1);
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
+
+            CorePackage.Execution.RemoveIndex remove = new CorePackage.Execution.RemoveIndex
+            {
+                ContainerType = CorePackage.Entity.Type.Scalar.Floating
+            };
+
+            remove.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
+            remove.GetInput("index").LinkTo(new CorePackage.Execution.Getter(idx), "reference");
+
+            var n = remove.GetOutput("removed").Value;
+
+            whileTester.entrypoint = remove;
+            whileTester.Call();
+            Assert.IsTrue(n.definition.Value);
+        }
     }
 }
