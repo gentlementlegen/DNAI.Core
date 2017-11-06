@@ -157,6 +157,16 @@ namespace CorePackage.Execution
             return this.GetOutput(name).Value.definition.Value;
         }
 
+        public bool HasOutput(string name)
+        {
+            return (outputs.ContainsKey(name));
+        }
+
+        public bool HasInput(string name)
+        {
+            return inputs.ContainsKey(name);
+        }
+
         /// <summary>
         /// Abstract method used to execute the instruction
         /// </summary>

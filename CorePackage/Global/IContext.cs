@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CorePackage.Global
 {
-    public interface IContext : IDeclarator<IContext>, IDeclarator<Variable>, IDeclarator<DataType>, IDeclarator<Function>
+    public interface IContext : IDeclarator<IContext>, IDeclarator<Variable>, IDeclarator<DataType>, IDeclarator<Function>, Definition
     {
         void SetParent(IContext parent);
     }

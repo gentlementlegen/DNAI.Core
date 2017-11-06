@@ -20,7 +20,7 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Contains the type of the variables stored in the enumeration
         /// </summary>
-        private DataType stored;
+        private DataType stored = Scalar.Integer;
 
         public DataType Stored
         {
@@ -28,11 +28,21 @@ namespace CorePackage.Entity.Type
             set { stored = value; }
         }
 
+        public Dictionary<string, Variable> Values
+        {
+            get { return values; }
+        }
+
+        public EnumType()
+        {
+
+        }
+
         /// <summary>
         /// Constructor that forces to given the enumeration values' type
         /// </summary>
         /// <param name="stored">Type of the stored enumeration values</param>
-        public EnumType(DataType stored = null)
+        public EnumType(DataType stored)
         {
             this.stored = stored;
         }

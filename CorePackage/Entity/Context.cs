@@ -11,12 +11,12 @@ namespace CorePackage.Entity
     /// <summary>
     /// A context is an entity in which you can declare variables, types, functions and other contexts
     /// </summary>
-    public class Context : Definition, IContext
+    public class Context : IContext
     {
         /// <summary>
         /// A reference on its parent create a contexte access network
         /// </summary>
-        private IContext parent;
+        private IContext parent = null;
 
         /// <summary>
         /// Each context knows who are their children to be able
@@ -39,17 +39,22 @@ namespace CorePackage.Entity
         /// </summary>
         private Declarator<Function> methods = new Declarator<Function>();
 
+        public Context()
+        {
+
+        }
+        
         /// <summary>
         /// Constructor ask for its parent context
         /// </summary>
         /// <param name="parent">Parent context of the new one</param>
-        public Context(IContext parent = null)
+        public Context(IContext parent)
         {
             this.parent = parent;
         }
 
         /// <see cref="Global.Definition"/>
-        public override bool IsValid()
+        public bool IsValid()
         {
             throw new NotImplementedException();
         }

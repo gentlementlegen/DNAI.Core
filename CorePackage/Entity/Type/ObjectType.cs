@@ -17,17 +17,22 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// The context of an object in which you can declare method, static attributes, nested types and other contexts
         /// </summary>
-        private IContext context;
+        private IContext context = new Context();
 
         private Declarator<DataType> attributes = new Declarator<DataType>();
+
+        public ObjectType()
+        {
+
+        }
 
         /// <summary>
         /// Constructor that asks for the object parent context in order to link his internal context
         /// </summary>
         /// <param name="parent">Parent context of the object</param>
-        public ObjectType(IContext parent = null)
+        public ObjectType(IContext parent)
         {
-            this.context = new Context(parent);
+            this.context.SetParent(parent);
         }
         
         public void AddAttribute(string name, DataType attrType, Global.AccessMode visibility)

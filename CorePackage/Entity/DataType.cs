@@ -23,5 +23,7 @@ namespace CorePackage.Entity
         /// <param name="value">Value to check type correspondance</param>
         /// <returns>True if value type match, false either</returns>
         public abstract bool IsValueOfType(dynamic value);
+
+        public abstract bool IsValid();
     }
 }

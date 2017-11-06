@@ -18,9 +18,14 @@ namespace CoreControl
         //For a class, if you want to focus static variables, focus its internal context
         //Declaring a function into a context just create it, adding into a class add a 'this' argument to the function
 
-        private T findDefinitionOfType<T>(UInt32 id)
+        private T findDefinitionOfType<T>(UInt32 id) where T : class
         {
-            return (T)Convert.ChangeType(entity_factory.find(id), typeof(T));
+            CorePackage.Global.Definition to_find = entity_factory.find(id);
+            T to_ret = to_find as T;
+
+            if (to_ret == null)
+                throw new InvalidCastException("Unable to cast entity with id " + id.ToString() + " (of type " + to_find.GetType().ToString() + ") into " + typeof(T).ToString());
+            return to_ret;
         }
 
         private CorePackage.Global.IDeclarator<T> getDeclaratorOf<T>(UInt32 id)
@@ -28,10 +33,18 @@ namespace CoreControl
             return findDefinitionOfType<CorePackage.Global.IDeclarator<T>>(id);
         }
 
-        public UInt32 declare<T>(UInt32 containerID, string name, CorePackage.Global.AccessMode visibility) where T : CorePackage.Global.Definition
+        public UInt32 declare<Entity, Declarator>(UInt32 containerID, string name, CorePackage.Global.AccessMode visibility)
+            where Declarator : CorePackage.Global.Definition
+            where Entity : Declarator
         {
-            getDeclaratorOf<T>(containerID).Declare(entity_factory.create<T>(), name, visibility);
-            return entity_factory.CurrentID - 1;
+            getDeclaratorOf<Declarator>(containerID).Declare(entity_factory.create<Entity>(), name, visibility);
+            return entity_factory.LastID;
+        }
+
+        public UInt32 declare<Entity>(UInt32 containerID, string name, CorePackage.Global.AccessMode visibility) where Entity : CorePackage.Global.Definition
+        {
+            getDeclaratorOf<Entity>(containerID).Declare(entity_factory.create<Entity>(), name, visibility);
+            return entity_factory.LastID;
         }
 
         public void remove<T>(UInt32 containerID, string name) where T : CorePackage.Global.Definition
@@ -122,6 +135,11 @@ namespace CoreControl
             findDefinitionOfType<CorePackage.Entity.Variable>(variableID).Type = findDefinitionOfType<CorePackage.Entity.DataType>(typeID);
         }
 
+        public dynamic getVariableValue(UInt32 variableID)
+        {
+            return findDefinitionOfType<CorePackage.Entity.Variable>(variableID).Value;
+        }
+
         public void setContextParent(UInt32 contextID, UInt32 parentID)
         {
             findDefinitionOfType<CorePackage.Global.IContext>(contextID).SetParent(findDefinitionOfType<CorePackage.Global.IContext>(parentID));
@@ -134,7 +152,14 @@ namespace CoreControl
 
         public void setEnumerationValue(UInt32 enumID, string name, dynamic value)
         {
-            findDefinitionOfType<CorePackage.Entity.Type.EnumType>(enumID).SetValue(name, value);
+            CorePackage.Entity.Type.EnumType to_find = findDefinitionOfType<CorePackage.Entity.Type.EnumType>(enumID);
+            CorePackage.Entity.Variable var = new CorePackage.Entity.Variable(to_find.Stored, value);
+            to_find.SetValue(name, var);
+        }
+
+        public dynamic getEnumerationValue(UInt32 enumID, string name)
+        {
+            return findDefinitionOfType<CorePackage.Entity.Type.EnumType>(enumID).GetValue(name).Value;
         }
 
         public void removeEnumerationValue(UInt32 enumID, string name)
@@ -171,6 +196,25 @@ namespace CoreControl
         public void setListType(UInt32 listID, UInt32 typeID)
         {
             findDefinitionOfType<CorePackage.Entity.Type.ListType>(listID).Stored = findDefinitionOfType<CorePackage.Entity.DataType>(typeID);
+        }
+
+        public Dictionary<string, dynamic> callFunction(UInt32 funcID, Dictionary<string, dynamic> parameters)
+        {
+            Dictionary<string, dynamic> returns = new Dictionary<string, dynamic>();
+
+            CorePackage.Entity.Function to_call = findDefinitionOfType<CorePackage.Entity.Function>(funcID);
+
+            foreach (KeyValuePair<string, dynamic> param in parameters)
+            {
+                to_call.SetParameterValue(param.Key, param.Value);
+            }
+            to_call.Call();
+
+            foreach (KeyValuePair<string, CorePackage.Entity.Variable> ret in to_call.Returns)
+            {
+                returns[ret.Key] = ret.Value.Value;
+            }
+            return returns;
         }
 
         public void setFunctionParameter(UInt32 funcID, string externalVarName)
@@ -240,7 +284,7 @@ namespace CoreControl
 
         public void unlinkInstructionInput(UInt32 functionID, UInt32 instruction, string inputname)
         {
-            findDefinitionOfType<CorePackage.Entity.Function>(functionID).findInstruction<CorePackage.Execution.Instruction>(instruction).GetInput("inputname").Unlink();
+            findDefinitionOfType<CorePackage.Entity.Function>(functionID).findInstruction<CorePackage.Execution.Instruction>(instruction).GetInput(inputname).Unlink();
         }
     }
 }

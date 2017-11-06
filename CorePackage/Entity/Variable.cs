@@ -14,28 +14,28 @@ namespace CorePackage.Entity
         /// <summary>
         /// A variable must have an associated type
         /// </summary>
-        private DataType type;
+        private DataType type = null;
 
         /// <summary>
         /// Represents a variable value
         /// </summary>
-        private dynamic value;
+        private dynamic value = null;
+
+        public Variable()
+        {
+
+        }
 
         /// <summary>
         /// Constructor that asks for type and value
         /// </summary>
         /// <param name="type">Type of the variable</param>
         /// <param name="value">Value of the variable</param>
-        public Variable(DataType type = null, dynamic value = null)
+        public Variable(DataType type, dynamic value = null)
         {
-            if (type != null)
-            {
-                this.type = type;
-                if (value == null)
-                    this.Value = type.Instantiate();
-                else
-                    this.Value = value;
-            }
+            Type = type;
+            if (value != null)
+                Value = value;
         }
 
         /// <summary>
@@ -44,7 +44,11 @@ namespace CorePackage.Entity
         public DataType Type
         {
             get { return type; }
-            set { type = value; }
+            set {
+                type = value;
+                if (Type != null && Value == null)
+                    Value = type.Instantiate();
+            }
         }
 
         /// <summary>
@@ -68,7 +72,7 @@ namespace CorePackage.Entity
         }
 
         /// <see cref="Global.Definition.IsValid"/>
-        public override bool IsValid()
+        public bool IsValid()
         {
             return this.value != null && this.type != null && this.type.IsValueOfType(this.value);
         }

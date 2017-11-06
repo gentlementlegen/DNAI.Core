@@ -72,6 +72,8 @@ namespace CorePackage.Execution
         /// <param name="outputname">Output name of the instruction to link</param>
         public void LinkTo(Instruction linked, string outputname)
         {
+            if (!linked.HasOutput(outputname))
+                throw new KeyNotFoundException("Input.LinkTo : Input " + value.name + " : No such output named " + outputname);
             this.linkedInstruction = linked;
             this.linkedOutputName = outputname;
         }

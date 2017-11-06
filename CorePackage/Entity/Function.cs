@@ -136,6 +136,8 @@ namespace CorePackage.Entity
         {
             if (!instructions.ContainsKey(instructionID))
                 throw new KeyNotFoundException("No such instruction with the given id");
+            if (instructions[instructionID] == entrypoint)
+                entrypoint = null;
             instructions.Remove(instructionID);
         }
 
@@ -178,7 +180,7 @@ namespace CorePackage.Entity
         }
 
         /// <see cref="Global.Definition.IsValid"/>
-        public override bool IsValid()
+        public bool IsValid()
         {
             throw new NotImplementedException();
         }
@@ -304,6 +306,10 @@ namespace CorePackage.Entity
 
         public Variable Pop(string name)
         {
+            if (parameters.ContainsKey(name))
+                parameters.Remove(name);
+            else if (returns.ContainsKey(name))
+                returns.Remove(name);
             return scope.Pop(name);
         }
 

@@ -8,7 +8,7 @@ namespace CorePackage.Entity.Type
     /// </summary>
     public class ListType : DataType
     {
-        private DataType stored;
+        private DataType stored = null;
 
         /// <summary>
         /// Represents the type which will be stored into list
@@ -28,11 +28,16 @@ namespace CorePackage.Entity.Type
 
         private System.Type _listType;
 
+        public ListType()
+        {
+
+        }
+
         /// <summary>
         /// Constructor that asks for the type stored
         /// </summary>
         /// <param name="stored"></param>
-        public ListType(DataType stored = null)
+        public ListType(DataType stored)
         {
             this.Stored = stored;
         }
