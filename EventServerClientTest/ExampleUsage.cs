@@ -27,5 +27,40 @@ namespace TestCore
         //    var str = new NetworkStream(s);
         //    Serializer.SerializeWithLengthPrefix<PacketRegisterEventRequest>(str, new PacketRegisterEventRequest() { Id = 3 }, PrefixStyle.Base128);
         //}
+
+        [TestMethod]
+        public void TestClient()
+        {
+            TcpManager tcp = new TcpManager();
+            TcpListener server = new TcpListener(4242);
+            server.Start();
+
+            server.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), server);
+            tcp.Connect("127.0.0.1", 4242);
+            tcp.Disconnect();
+            server.Stop();
+        }
+
+        private void DoAcceptTcpClientCallback(IAsyncResult ar)
+        {
+            // Get the listener that handles the client request.
+            TcpListener listener = (TcpListener)ar.AsyncState;
+
+            // End the operation and display the received data on
+            // the console.
+            TcpClient client = listener.EndAcceptTcpClient(ar);
+
+            // Process the connection here. (Add the client to a
+            // server table, read data, etc.)
+            Console.WriteLine("Client connected completed");
+
+            var s = client.GetStream();
+
+            Serializer.SerializeWithLengthPrefix<PacketRegisterEventRequest>(s, new PacketRegisterEventRequest { Id = 3 }, PrefixStyle.Base128);
+
+            s.Close();
+
+            // Signal the calling thread to continue.
+        }
     }
 }
