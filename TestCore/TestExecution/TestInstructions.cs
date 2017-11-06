@@ -390,14 +390,14 @@ namespace CoreTest
             CorePackage.Entity.Variable j = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Floating);
             CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
 
-            CorePackage.Execution.Add add = new CorePackage.Execution.Add();
+            CorePackage.Execution.Append add = new CorePackage.Execution.Append();
             add.ContainerType = CorePackage.Entity.Type.Scalar.Floating;
 
             add.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
             add.GetInput("element").LinkTo(new CorePackage.Execution.Getter(j), "reference");
             var n = add.GetOutput("count").Value;
 
-            whileTester.entrypoint = add;
+            whileTester.setEntryPoint(whileTester.addInstruction(add));
             whileTester.Call();
             Assert.IsTrue(n.definition.Value == 4);
         }
@@ -422,7 +422,7 @@ namespace CoreTest
 
             var n = insert.GetOutput("count").Value;
 
-            whileTester.entrypoint = insert;
+            whileTester.setEntryPoint(whileTester.addInstruction(insert));
             whileTester.Call();
             Assert.IsTrue(n.definition.Value == 4);
         }
@@ -443,7 +443,7 @@ namespace CoreTest
 
             var n = size.GetOutput("count").Value;
 
-            whileTester.entrypoint = size;
+            whileTester.setEntryPoint(whileTester.addInstruction(size));
             whileTester.Call();
             Assert.IsTrue(n.definition.Value == 3);
         }
@@ -466,7 +466,7 @@ namespace CoreTest
 
             var n = remove.GetOutput("removed").Value;
 
-            whileTester.entrypoint = remove;
+            whileTester.setEntryPoint(whileTester.addInstruction(remove));
             whileTester.Call();
             Assert.IsTrue(n.definition.Value);
         }
@@ -489,7 +489,7 @@ namespace CoreTest
 
             var n = remove.GetOutput("removed").Value;
 
-            whileTester.entrypoint = remove;
+            whileTester.setEntryPoint(whileTester.addInstruction(remove));
             whileTester.Call();
             Assert.IsTrue(n.definition.Value);
         }

@@ -12,8 +12,8 @@ namespace CorePackage.Execution
             get { return _containerType; }
             set
             {
-                AddInput("array", new Variable(new Entity.Type.ListType(value)));
-                AddInput("element", new Variable(value));
+                GetInput("array").Value.definition.Type = new Entity.Type.ListType(value);
+                GetInput("element").Value.definition.Type = value;
                 _containerType = value;
             }
         }

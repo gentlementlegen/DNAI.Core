@@ -2,7 +2,7 @@
 
 namespace CorePackage.Execution
 {
-    public class Insert : Add
+    public class Insert : Append
     {
         public Insert()
         {
