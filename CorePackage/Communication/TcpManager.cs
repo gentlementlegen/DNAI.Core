@@ -10,66 +10,76 @@ namespace CorePackage.Communication
 {
     public class TcpManager
     {
-        private readonly TcpListener _tcpListener;
-        public static ManualResetEvent _tcpClientConnected = new ManualResetEvent(false);
+        //private readonly TcpListener _tcpListener;
+        private readonly TcpClient _tcpClient;
+        //public static ManualResetEvent _tcpClientConnected = new ManualResetEvent(false);
 
-        public TcpManager(int port)
+        //public TcpManager(int port)
+        //{
+        //    IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
+        //    IPAddress ipAddress = ipHostInfo.AddressList[0];
+        //    IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
+
+        //    _tcpListener = new TcpListener(localEndPoint);
+        //}
+
+        public TcpManager()
         {
-            IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
-
-            _tcpListener = new TcpListener(localEndPoint);
+            _tcpClient = new TcpClient();
         }
 
-        public void StartListening()
+        public void Connect(string address, int port)
         {
             try
             {
-                _tcpListener.Start();
-                _tcpClientConnected.Reset();
+                //_tcpListener.Start();
+                //_tcpClientConnected.Reset();
 
-                _tcpListener.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), _tcpListener);
+                //_tcpListener.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), _tcpListener);
 
                 // Wait until a connection is made and processed before
                 // continuing.
-                _tcpClientConnected.WaitOne();
+                //_tcpClientConnected.WaitOne();
+
+                _tcpClient.Connect(address, port);
+                ReadData(_tcpClient);
             }
             catch
             {
             }
         }
 
-        public Task StartListeningAsync()
+        public Task ConnectAsync(string address, int port)
         {
             return Task.Run(() =>
             {
-                StartListening();
+                Connect(address, port);
             });
         }
 
-        public void StopListening()
+        public void Disconnect()
         {
-            _tcpListener.Stop();
+            _tcpClient.Close();
+            //_tcpListener.Stop();
         }
 
-        private void DoAcceptTcpClientCallback(IAsyncResult ar)
-        {
-            // Get the listener that handles the client request.
-            TcpListener listener = (TcpListener)ar.AsyncState;
+        //private void DoAcceptTcpClientCallback(IAsyncResult ar)
+        //{
+        //    // Get the listener that handles the client request.
+        //    TcpListener listener = (TcpListener)ar.AsyncState;
 
-            // End the operation and display the received data on
-            // the console.
-            TcpClient client = listener.EndAcceptTcpClient(ar);
+        //    // End the operation and display the received data on
+        //    // the console.
+        //    TcpClient client = listener.EndAcceptTcpClient(ar);
 
-            // Process the connection here. (Add the client to a
-            // server table, read data, etc.)
-            Console.WriteLine("Client connected completed");
-            ReadData(client);
+        //    // Process the connection here. (Add the client to a
+        //    // server table, read data, etc.)
+        //    Console.WriteLine("Client connected completed");
+        //    ReadData(client);
 
-            // Signal the calling thread to continue.
-            _tcpClientConnected.Set();
-        }
+        //    // Signal the calling thread to continue.
+        //    _tcpClientConnected.Set();
+        //}
 
         private void ReadData(TcpClient client)
         {
