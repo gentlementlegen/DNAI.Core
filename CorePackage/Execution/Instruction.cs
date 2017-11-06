@@ -106,12 +106,13 @@ namespace CorePackage.Execution
         /// <summary>
         /// Allow to get an input from its name
         /// </summary>
+        /// <remarks>Throws an Error.NotFoundException is not found</remarks>
         /// <param name="name">Name of the input to get</param>
         /// <returns>The input associated with the name</returns>
         public Input GetInput(string name)
         {
             if (!this.inputs.ContainsKey(name))
-                throw new KeyNotFoundException("No such input named: " + name);
+                throw new Error.NotFoundException("No such input named: " + name);
             return this.inputs[name];
         }
 
@@ -119,11 +120,12 @@ namespace CorePackage.Execution
         /// Allow to get an output from its name
         /// </summary>
         /// <param name="name">Name of the output to get</param>
+        /// <remarks>Throws an Error.NotFoundException is not found</remarks>
         /// <returns>The output associated with the name</returns>
         public virtual Output GetOutput(string name)
         {
             if (!this.outputs.ContainsKey(name))
-                throw new KeyNotFoundException("No such output named: " + name);
+                throw new Error.NotFoundException("No such output named: " + name);
             return this.outputs[name];
         }
 
@@ -157,11 +159,21 @@ namespace CorePackage.Execution
             return this.GetOutput(name).Value.definition.Value;
         }
 
+        /// <summary>
+        /// Checks if an output exists in instruction
+        /// </summary>
+        /// <param name="name">Output name to check existance</param>
+        /// <returns>True if output exists, false either</returns>
         public bool HasOutput(string name)
         {
             return (outputs.ContainsKey(name));
         }
 
+        /// <summary>
+        /// Checks if an input exists in instruction
+        /// </summary>
+        /// <param name="name">Input name to check existance</param>
+        /// <returns>True if input exists, false either</returns>
         public bool HasInput(string name)
         {
             return inputs.ContainsKey(name);

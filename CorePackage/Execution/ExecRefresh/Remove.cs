@@ -7,6 +7,9 @@ namespace CorePackage.Execution
     /// </summary>
     public class Remove : ARemove
     {
+        /// <summary>
+        /// Represents the list contained type
+        /// </summary>
         new public DataType ContainerType
         {
             get { return _containerType; }
@@ -18,11 +21,15 @@ namespace CorePackage.Execution
             }
         }
 
+        /// <summary>
+        /// Basic default constructor which will add an integer 'element' input
+        /// </summary>
         public Remove()
         {
             AddInput("element", new Entity.Variable(Entity.Type.Scalar.Integer));
         }
 
+        /// <see cref="ARemove.RemoveElement"/>
         protected override bool RemoveElement()
         {
             var array = inputs["array"].Value.definition.Value;

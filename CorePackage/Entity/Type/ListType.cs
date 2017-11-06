@@ -8,10 +8,13 @@ namespace CorePackage.Entity.Type
     /// </summary>
     public class ListType : DataType
     {
+        /// <summary>
+        /// Attribute that represents the internal list stored type
+        /// </summary>
         private DataType stored = null;
 
         /// <summary>
-        /// Represents the type which will be stored into list
+        /// Basic getter and Advanced setter for stored type
         /// </summary>
         public DataType Stored
         {
@@ -26,8 +29,14 @@ namespace CorePackage.Entity.Type
             }
         }
 
+        /// <summary>
+        /// Represents the real type of the list
+        /// </summary>
         private System.Type _listType;
 
+        /// <summary>
+        /// Basic default constructor which is necessary for factory
+        /// </summary>
         public ListType()
         {
 
@@ -36,7 +45,7 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Constructor that asks for the type stored
         /// </summary>
-        /// <param name="stored"></param>
+        /// <param name="stored">List stored type</param>
         public ListType(DataType stored)
         {
             this.Stored = stored;

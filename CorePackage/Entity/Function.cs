@@ -45,6 +45,9 @@ namespace CorePackage.Entity
         /// </summary>
         private Dictionary<UInt32, Execution.Instruction> instructions = new Dictionary<uint, Execution.Instruction>();
 
+        /// <summary>
+        /// Represents the current internal instruction index
+        /// </summary>
         private UInt32 currentIndex;
 
         /// <summary>
@@ -90,14 +93,14 @@ namespace CorePackage.Entity
 
         /// <summary>
         /// Allow user to get the parameters that corresponds to the given name
-        /// Throws a KeyNotFoundException if doesn't exists
         /// </summary>
+        /// <remarks>Throws an Error.NotFoundException if doesn't exists</remarks>
         /// <param name="name">Name of the parameter to find</param>
         /// <returns>Variable definition that corresponds to the parameter</returns>
         public Variable GetParameter(string name)
         {
             if (!this.parameters.ContainsKey(name))
-                throw new KeyNotFoundException("Function: No such parameter named \"" + name + "\"");
+                throw new Error.NotFoundException("Function: No such parameter named \"" + name + "\"");
             return this.parameters[name];
         }
 
@@ -112,42 +115,67 @@ namespace CorePackage.Entity
         /// <summary>
         /// Allow to get a return value from its name
         /// </summary>
+        /// <remarks>Throws an Error.NotFoundException is not found</remarks>
         /// <param name="name">Name of the return</param>
         /// <returns>Value to find or null</returns>
         public Variable GetReturn(string name)
         {
             if (!this.returns.ContainsKey(name))
-                throw new KeyNotFoundException("Function: No such return named \"" + name + "\"");
+                throw new Error.NotFoundException("Function: No such return named \"" + name + "\"");
             return this.returns[name];
         }
 
+        /// <summary>
+        /// Allow user to get function return value
+        /// </summary>
+        /// <param name="name">Name of the return value to get</param>
+        /// <returns></returns>
         public dynamic GetReturnValue(string name)
         {
             return GetReturn(name).Value;
         }
 
+        /// <summary>
+        /// Allow user to add an instruction into the function
+        /// </summary>
+        /// <param name="toadd">Instruction to add</param>
+        /// <returns>Instruction uid which will be used to retreive instruction</returns>
         public UInt32 addInstruction(Execution.Instruction toadd)
         {
             instructions[currentIndex] = toadd;
             return currentIndex++;
         }
 
+        /// <summary>
+        /// Allow user to remove an instruction from its uid
+        /// </summary>
+        /// <param name="instructionID">Indentifier of the instruction to remove</param>
         public void removeInstruction(UInt32 instructionID)
         {
             if (!instructions.ContainsKey(instructionID))
-                throw new KeyNotFoundException("No such instruction with the given id");
+                throw new Error.NotFoundException("No such instruction with the given id");
             if (instructions[instructionID] == entrypoint)
                 entrypoint = null;
             instructions.Remove(instructionID);
         }
 
+        /// <summary>
+        /// Allow user to find an instruction from its uid with a given instruction type
+        /// </summary>
+        /// <typeparam name="T">Type of the instruction to retreive</typeparam>
+        /// <param name="instructionID">Identifier of the instruction to retreive</param>
+        /// <returns>Instruction identified by the given id with the given type</returns>
         public T findInstruction<T>(UInt32 instructionID) where T : Execution.Instruction
         {
             if (!instructions.ContainsKey(instructionID))
-                throw new KeyNotFoundException("No such instruction with the given id");
+                throw new Error.NotFoundException("No such instruction with the given id");
             return (T)instructions[instructionID];
         }
 
+        /// <summary>
+        /// Allow user to set function entry point from internal instruction identifier
+        /// </summary>
+        /// <param name="instructionID">Indentifier of the instruction to set as entry point</param>
         public void setEntryPoint(UInt32 instructionID)
         {
             entrypoint = findInstruction<Execution.ExecutionRefreshInstruction>(instructionID);
@@ -299,11 +327,13 @@ namespace CorePackage.Entity
             return text;
         }
 
+        ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
         public Variable Declare(Variable entity, string name, AccessMode visibility)
         {
             return scope.Declare(entity, name, visibility);
         }
 
+        ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
         public Variable Pop(string name)
         {
             if (parameters.ContainsKey(name))
@@ -313,21 +343,25 @@ namespace CorePackage.Entity
             return scope.Pop(name);
         }
 
+        ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
         public Variable Find(string name, AccessMode visibility)
         {
             return scope.Find(name, visibility);
         }
 
+        ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
         public Variable Rename(string lastName, string newName)
         {
             return scope.Rename(lastName, newName);
         }
 
+        ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
         public Variable ChangeVisibility(string name, AccessMode newVisibility)
         {
             return scope.ChangeVisibility(name, newVisibility);
         }
 
+        ///<see cref="IDeclarator{definitionType}.GetVisibilityOf(string, ref AccessMode)"/>
         public Variable GetVisibilityOf(string name, ref AccessMode visibility)
         {
             return scope.ChangeVisibility(name, visibility);

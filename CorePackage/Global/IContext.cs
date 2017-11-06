@@ -7,8 +7,15 @@ using System.Threading.Tasks;
 
 namespace CorePackage.Global
 {
+    /// <summary>
+    /// Represents the way that a context works
+    /// </summary>
     public interface IContext : IDeclarator<IContext>, IDeclarator<Variable>, IDeclarator<DataType>, IDeclarator<Function>, Definition
     {
+        /// <summary>
+        /// Allow to set internal parent context
+        /// </summary>
+        /// <param name="parent">parent context to set</param>
         void SetParent(IContext parent);
     }
 }

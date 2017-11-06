@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CorePackage.Entity.Type
 {
     /// <summary>
-    /// This class represents an enumeration type used
+    /// This class represents an enumeration type
     /// </summary>
     public class EnumType : DataType
     {
@@ -22,17 +22,29 @@ namespace CorePackage.Entity.Type
         /// </summary>
         private DataType stored = Scalar.Integer;
 
+        /// <summary>
+        /// Basic Getter and Setter for internal stored type
+        /// </summary>
         public DataType Stored
         {
             get { return stored; }
             set { stored = value; }
         }
 
+        /// <summary>
+        /// Getter for Internal enum values
+        /// </summary>
         public Dictionary<string, Variable> Values
         {
             get { return values; }
         }
 
+        /// <summary>
+        /// Basic default constructor to default instanciate the type
+        /// </summary>
+        /// <remarks>
+        /// Important for the factory because it must found a constructor with no arguments (default arguments value doesn't count)
+        /// </remarks>
         public EnumType()
         {
 
@@ -93,19 +105,25 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Returns the variable that corresponds to the given name
         /// </summary>
+        /// <remarks>Throws an Error.NotFoundException if given name is not in enumeration</remarks>
         /// <param name="name">Name of the enum value to return</param>
         /// <returns>Variable corresponding to the enum value</returns>
         public Variable GetValue(string name)
         {
             if (!values.ContainsKey(name))
-                throw new KeyNotFoundException("No such value named \"" + name + "\" in enumeration");
+                throw new Error.NotFoundException("No such value named \"" + name + "\" in enumeration");
             return values[name];
         }
 
+        /// <summary>
+        /// Allow user to remove an internal enumeration value
+        /// </summary>
+        /// <remarks>Throws an Error.NotFoundException if given name is not in enumeration</remarks>
+        /// <param name="name">Name of the value to remove</param>
         public void RemoveValue(string name)
         {
             if (!values.ContainsKey(name))
-                throw new KeyNotFoundException("No such value named \"" + name + "\" in enumeration");
+                throw new Error.NotFoundException("No such value named \"" + name + "\" in enumeration");
 
             values.Remove(name);
         }

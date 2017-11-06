@@ -50,6 +50,9 @@ namespace CorePackage.Execution
 
         }
 
+        /// <summary>
+        /// Will append an element to the given list
+        /// </summary>
         public override void Execute()
         {
             var val = inputs["array"].Value.definition.Value;

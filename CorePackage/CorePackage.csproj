@@ -54,6 +54,7 @@
     <Compile Include="Entity\Type\ObjectType.cs" />
     <Compile Include="Entity\Type\ScalarType.cs" />
     <Compile Include="Entity\Variable.cs" />
+    <Compile Include="Error\NotFoundException.cs" />
     <Compile Include="Execution\AccessRefreshInstruction.cs" />
     <Compile Include="Execution\AccessRefresh\EnumSplitter.cs" />
     <Compile Include="Execution\AccessRefresh\Getter.cs" />

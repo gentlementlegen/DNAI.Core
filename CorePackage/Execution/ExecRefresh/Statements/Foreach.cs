@@ -11,12 +11,15 @@ namespace CorePackage.Execution
         /// </summary>
         private readonly ExecutionRefreshInstruction[] nextToExecute = new ExecutionRefreshInstruction[2];
 
+        /// <summary>
+        /// Represents the outPoints indexes of the instruction
+        /// </summary>
         private enum ForeachIndexes
         {
             OUTLOOP = 0,
             INLOOP = 1,
         }
-
+        
         private int _index;
         /// <summary>
         /// Current index in the collection.
@@ -84,6 +87,7 @@ namespace CorePackage.Execution
                 ContainerType = stored;
         }
 
+        ///<see cref="ExecutionRefreshInstruction.GetNextInstructions"/>
         public override ExecutionRefreshInstruction[] GetNextInstructions()
         {
             var currList = GetInputValue("array");

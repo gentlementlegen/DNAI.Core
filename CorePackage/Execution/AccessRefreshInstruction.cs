@@ -13,10 +13,7 @@ namespace CorePackage.Execution
     {
         /// <see cref="Instruction"/>
         public AccessRefreshInstruction(Dictionary<string, Entity.Variable> inputs, Dictionary<string, Entity.Variable> outputs) :
-            base(
-                inputs,
-                outputs
-            )
+            base(inputs, outputs)
         {
 
         }

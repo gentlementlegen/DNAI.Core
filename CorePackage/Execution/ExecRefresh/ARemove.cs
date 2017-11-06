@@ -8,6 +8,9 @@ namespace CorePackage.Execution
     /// </summary>
     public abstract class ARemove : ExecutionRefreshInstruction
     {
+        /// <summary>
+        /// Represents the type which is contained in the list
+        /// </summary>
         protected DataType _containerType = Entity.Type.Scalar.Integer;
 
         /// <summary>
@@ -23,6 +26,9 @@ namespace CorePackage.Execution
             }
         }
 
+        /// <summary>
+        /// Default constructor which will add a list 'array' input and a boolean 'removed' output
+        /// </summary>
         protected ARemove() : base(
             new Dictionary<string, Variable>
             {
@@ -39,13 +45,21 @@ namespace CorePackage.Execution
                 }
             })
         {
+
         }
 
+        /// <summary>
+        /// Will call the abstract method RemoveElement and set the output to true or false
+        /// </summary>
         public override void Execute()
         {
             outputs["removed"].Value.definition.Value = RemoveElement();
         }
 
+        /// <summary>
+        /// Will remove an element and tell if the element was quite removed
+        /// </summary>
+        /// <returns>True if element was removed, false either</returns>
         protected abstract bool RemoveElement();
     }
 }

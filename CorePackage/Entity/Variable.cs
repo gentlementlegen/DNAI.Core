@@ -21,6 +21,9 @@ namespace CorePackage.Entity
         /// </summary>
         private dynamic value = null;
 
+        /// <summary>
+        /// Basic default construction which is needed by factory
+        /// </summary>
         public Variable()
         {
 

@@ -8,6 +8,9 @@ namespace CorePackage.Execution
     /// </summary>
     public class Size : ExecutionRefreshInstruction
     {
+        /// <summary>
+        /// Type contained in the list
+        /// </summary>
         private DataType _containerType = Entity.Type.Scalar.Integer;
 
         /// <summary>
@@ -23,6 +26,9 @@ namespace CorePackage.Execution
             }
         }
 
+        /// <summary>
+        /// Basic default constructor that add a list 'array' input and an integer 'count' output
+        /// </summary>
         public Size() : base(
             new Dictionary<string, Variable>
             {
@@ -42,6 +48,9 @@ namespace CorePackage.Execution
 
         }
 
+        /// <summary>
+        /// Will update the count output in function of the given list size
+        /// </summary>
         public override void Execute()
         {
             outputs["count"].Value.definition.Value = inputs["array"].Value.definition.Value.Count;

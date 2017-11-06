@@ -24,6 +24,7 @@ namespace CorePackage.Entity
         /// <returns>True if value type match, false either</returns>
         public abstract bool IsValueOfType(dynamic value);
 
+        ///<see cref="Global.Definition.IsValid"/>
         public abstract bool IsValid();
     }
 }
