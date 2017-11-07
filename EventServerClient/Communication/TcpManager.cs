@@ -9,42 +9,43 @@ namespace EventServerClient.Communication
 {
     public class TcpManager
     {
-        //private readonly TcpListener _tcpListener;
         private readonly TcpClient _tcpClient;
-        //public static ManualResetEvent _tcpClientConnected = new ManualResetEvent(false);
+        private readonly CreatePackage _createPackage;
+        private byte[] _dataStorage;
+        private ValidatePackage _validatePackage;
+        private System.Collections.Generic.Dictionary<string, Func<byte[], int>> _mapPtr;
 
-        //public TcpManager(int port)
-        //{
-        //    IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
-        //    IPAddress ipAddress = ipHostInfo.AddressList[0];
-        //    IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
-
-        //    _tcpListener = new TcpListener(localEndPoint);
-        //}
 
         public TcpManager()
         {
             _tcpClient = new TcpClient();
+            _createPackage = new CreatePackage();
+            _dataStorage = null;
+            _validatePackage = new ValidatePackage();
+            _mapPtr = new System.Collections.Generic.Dictionary<string, Func<byte[], int>>();
         }
 
         public void Connect(string address, int port)
         {
             try
             {
-                //_tcpListener.Start();
-                //_tcpClientConnected.Reset();
-
-                //_tcpListener.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), _tcpListener);
-
-                // Wait until a connection is made and processed before
-                // continuing.
-                //_tcpClientConnected.WaitOne();
 
                 _tcpClient.Connect(address, port);
-                ReadData(_tcpClient);
+               // CreatePackage createPackage = new CreatePackage();
+
+                Byte[] data = _createPackage.AuthenticatePackage("YOLO fernand");
+                _tcpClient.GetStream().Write(data, 0, data.Length);
+
+               // Byte[] dataRegisterEvent = _createPackage.EventRegisterPackage("POPOLE", 0, true);
+               // _tcpClient.GetStream().Write(dataRegisterEvent, 0, dataRegisterEvent.Length);
+
+                Byte[] zerodata = new byte[0];
+                Byte[] dataSendEvent = _createPackage.EventSendPackage("POPOLE", zerodata);
+                _tcpClient.GetStream().Write(dataSendEvent, 0, dataSendEvent.Length);
             }
             catch
             {
+                Console.Write("failed");
             }
         }
 
@@ -59,50 +60,100 @@ namespace EventServerClient.Communication
         public void Disconnect()
         {
             _tcpClient.Close();
-            //_tcpListener.Stop();
         }
 
-        //private void DoAcceptTcpClientCallback(IAsyncResult ar)
-        //{
-        //    // Get the listener that handles the client request.
-        //    TcpListener listener = (TcpListener)ar.AsyncState;
+        public void RegisterEvent(string eventName, Func<byte[], int> func, uint size) {
+            Byte[] dataRegisterEvent = _createPackage.EventRegisterPackage(eventName, size, true);
+            _tcpClient.GetStream().Write(dataRegisterEvent, 0, dataRegisterEvent.Length);
+            _mapPtr.Add(eventName, func);
+        }
 
-        //    // End the operation and display the received data on
-        //    // the console.
-        //    TcpClient client = listener.EndAcceptTcpClient(ar);
+        public void SendEvent(string eventName, byte[] data) {
+            byte[] dataSend = _createPackage.EventSendPackage(eventName, data);
+            _tcpClient.GetStream().Write(dataSend, 0, dataSend.Length);
+        }
 
-        //    // Process the connection here. (Add the client to a
-        //    // server table, read data, etc.)
-        //    Console.WriteLine("Client connected completed");
-        //    ReadData(client);
+        private byte[] ReadData() {
+            // Server Reply
+            var networkStream = _tcpClient.GetStream();
+            byte[] readBuffer = null;
 
-        //    // Signal the calling thread to continue.
-        //    _tcpClientConnected.Set();
-        //}
-
-        private void ReadData(TcpClient client)
-        {
-            byte[] buffer = new byte[8192];
-            var stream = client.GetStream();
-            PacketBase t;
-            while ((t = Serializer.DeserializeWithLengthPrefix<PacketBase>(stream, PrefixStyle.Base128)) != null)
+            if (networkStream.CanRead)
             {
-                switch (t.Id)
+                // Buffer to store the response bytes.
+                readBuffer = new byte[_tcpClient.ReceiveBufferSize];
+               // string fullServerReply = null;
+                using (var writer = new System.IO.MemoryStream())
                 {
-                    case 1:
-                        Console.WriteLine("1.");
-                        break;
+                    while (networkStream.DataAvailable)
+                    {
+                        int numberOfBytesRead = networkStream.Read(readBuffer, 0, readBuffer.Length);
+                        if (numberOfBytesRead <= 0)
+                        {
+                            break;
+                        }
+                        writer.Write(readBuffer, 0, numberOfBytesRead);
+                    }
+                  //  fullServerReply = System.Text.Encoding.UTF8.GetString(writer.ToArray());
+                }
+            }
+            return readBuffer;
+        }
 
-                    case 2:
-                        Console.WriteLine("2.");
-                        break;
+        private byte[] Combine(byte[] first, byte[] second)
+        {
+            byte[] ret = new byte[first.Length + second.Length];
+            Buffer.BlockCopy(first, 0, ret, 0, first.Length);
+            Buffer.BlockCopy(second, 0, ret, first.Length, second.Length);
+            return ret;
+        }
 
-                    case 3:
-                        Console.WriteLine("3.");
-                        var x = Serializer.DeserializeWithLengthPrefix<PacketRegisterEventRequest>(stream, PrefixStyle.Base128);
-                        break;
+        private void DataCompute(byte[] data) {
+            if (_dataStorage != null) {
+                _dataStorage = Combine(_dataStorage, data);
+            } else {
+                _dataStorage = data;
+            }
+
+
+            while (true)
+            {
+                ValidatePackage.Header head = _validatePackage.GetHeader(_dataStorage);
+                if (head != null)
+                {
+                    if (head.id == 3)
+                    {
+                        ValidatePackage.ReceiveEvent receiveEvent = _validatePackage.GetReceivePackage(head, _dataStorage);
+                        if (receiveEvent != null)
+                        {
+                            if (_mapPtr.ContainsKey(receiveEvent.eventName))
+                            {
+                                _mapPtr[receiveEvent.eventName](receiveEvent.data);
+
+                                byte[] newArray = new byte[_dataStorage.Length - (12 + head.size)];
+                                Buffer.BlockCopy(_dataStorage, (int)(12 + head.size), newArray, 0, newArray.Length);
+                                _dataStorage = newArray;
+                            }
+                        }
+                    }
+                }
+                else if (_dataStorage.Length >= 12)
+                {
+                    _dataStorage = null;
+                    break;
+                } else {
+                    break;
                 }
             }
         }
+
+        public void Update() {
+            byte[] data = ReadData();
+            if (data != null)
+            {
+                DataCompute(data);
+            }
+        }
+
     }
 }
