@@ -9,12 +9,12 @@ namespace CorePackage.Global
     /// <summary>
     /// Represents a definition object
     /// </summary>
-    public abstract class Definition
+    public interface Definition
     {
         /// <summary>
         /// Checks if a definition content is valid
         /// </summary>
         /// <returns>True if it's valid, false either</returns>
-        public abstract bool IsValid();
+        bool IsValid();
     }
 }

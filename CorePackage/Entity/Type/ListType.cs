@@ -9,20 +9,46 @@ namespace CorePackage.Entity.Type
     public class ListType : DataType
     {
         /// <summary>
-        /// Represents the type which will be stored into list
+        /// Attribute that represents the internal list stored type
         /// </summary>
-        public DataType Stored { get; private set; }
+        private DataType stored = null;
 
+        /// <summary>
+        /// Basic getter and Advanced setter for stored type
+        /// </summary>
+        public DataType Stored
+        {
+            get { return stored; }
+            set
+            {
+                if (value != null)
+                {
+                    _listType = typeof(List<>).MakeGenericType(value.Instantiate().GetType());
+                    stored = value;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Represents the real type of the list
+        /// </summary>
         private System.Type _listType;
+
+        /// <summary>
+        /// Basic default constructor which is necessary for factory
+        /// </summary>
+        public ListType()
+        {
+
+        }
 
         /// <summary>
         /// Constructor that asks for the type stored
         /// </summary>
-        /// <param name="stored"></param>
+        /// <param name="stored">List stored type</param>
         public ListType(DataType stored)
         {
             this.Stored = stored;
-            _listType = typeof(List<>).MakeGenericType(stored.Instantiate().GetType());
         }
 
         /// <summary>

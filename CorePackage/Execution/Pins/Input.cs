@@ -68,10 +68,13 @@ namespace CorePackage.Execution
         /// <summary>
         /// Link the input to an instruction at a specific output
         /// </summary>
+        /// <remarks>Throws an Error.NotFoundException is not found</remarks>
         /// <param name="linked">Instruction to link</param>
         /// <param name="outputname">Output name of the instruction to link</param>
         public void LinkTo(Instruction linked, string outputname)
         {
+            if (!linked.HasOutput(outputname))
+                throw new Error.NotFoundException("Input.LinkTo : Input " + value.name + " : No such output named " + outputname);
             this.linkedInstruction = linked;
             this.linkedOutputName = outputname;
         }

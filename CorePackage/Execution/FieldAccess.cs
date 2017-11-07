@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CorePackage.Execution
 {
+    /// <summary>
+    /// Not yet implemented : used to access each public field of an object
+    /// </summary>
     public class FieldAccess : AccessRefreshInstruction
     {
         public FieldAccess(Entity.Variable toget) :

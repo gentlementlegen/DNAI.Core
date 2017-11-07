@@ -24,14 +24,14 @@ namespace CorePackage.Execution
         /// <param name="overload">Overload function</param>
         public OverloadableUnaryOperator(Entity.Function overload) :
             base(
-                overload.Parameters[0].definition.Type,
+                overload.GetParameter("Operand").Type,
                 delegate(dynamic op)
                 {
-                    overload.Parameters[0].definition.Value = op;
+                    overload.SetParameterValue("Operand", op);
                     overload.Call();
-                    return overload.Returns[0].definition.Value;
+                    return overload.GetReturnValue("result");
                 },
-                overload.Returns[0].definition.Type)
+                overload.GetReturn("result").Type)
         {
 
         }

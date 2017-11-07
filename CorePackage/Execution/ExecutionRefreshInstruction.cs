@@ -49,11 +49,26 @@ namespace CorePackage.Execution
         /// <summary>
         /// Links an executable instruction at a specific index
         /// </summary>
+        /// <remarks>Throws an InvalidOperationException if index is to high</remarks>
         /// <param name="index">Index of the pin on which link the instruction</param>
         /// <param name="outPoint">Instruction to link</param>
         public void LinkTo(uint index, ExecutionRefreshInstruction outPoint)
         {
+            if (index > outPoints.Count())
+                throw new InvalidOperationException("Given index is to hight");
             this.outPoints[index] = outPoint;
+        }
+
+        /// <summary>
+        /// Unlink specific execution pin
+        /// </summary>
+        /// <remarks>Throws an InvalidOperationException if index is to high</remarks>
+        /// <param name="index">Index of the execution pin to unlink</param>
+        public void Unlink(uint index)
+        {
+            if (index > outPoints.Count())
+                throw new InvalidOperationException("Given index is to hight");
+            this.outPoints[index] = null;
         }
     }
 }

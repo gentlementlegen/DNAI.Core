@@ -28,14 +28,14 @@ namespace CorePackage.Execution
                 null
             )
         {
-            foreach (Global.Declaration<Entity.Variable> curr in tocall.Parameters)
+            foreach (KeyValuePair<string, Entity.Variable> curr in tocall.Parameters)
             {
-                AddInput(curr);
+                AddInput(curr.Key, curr.Value);
             }
 
-            foreach (Global.Declaration<Entity.Variable> curr in tocall.Returns)
+            foreach (KeyValuePair<string, Entity.Variable> curr in tocall.Returns)
             {
-                AddOutput(curr);
+                AddOutput(curr.Key, curr.Value);
             }
 
             this.tocall = tocall;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CorePackage.Global;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,72 +12,73 @@ namespace CorePackage.Entity.Type
     /// <summary>
     /// Represents a Object definition type
     /// </summary>
-    public class ObjectType : DataType
+    public class ObjectType : DataType, IContext
     {
         /// <summary>
         /// The context of an object in which you can declare method, static attributes, nested types and other contexts
         /// </summary>
-        private Context context;
+        private IContext context = new Context();
 
         /// <summary>
-        /// Used to represent object public attributes 
+        /// Represents the objects attributes through a declarator of DataType
         /// </summary>
-        private Dictionary<string, DataType> publicAttributes;
+        private Declarator<DataType> attributes = new Declarator<DataType>();
 
         /// <summary>
-        /// Used to represent object private attributes
+        /// Basic default constructor which is necessary for factory
         /// </summary>
-        private Dictionary<string, DataType> privateAttributes;
+        public ObjectType()
+        {
+
+        }
 
         /// <summary>
         /// Constructor that asks for the object parent context in order to link his internal context
         /// </summary>
         /// <param name="parent">Parent context of the object</param>
-        public ObjectType(Context parent)
+        public ObjectType(IContext parent)
         {
-            this.context = new Context(parent);
-            publicAttributes = new Dictionary<string, DataType>();
-            privateAttributes = new Dictionary<string, DataType>();
+            this.context.SetParent(parent);
         }
-
+        
         /// <summary>
-        /// Make internal context visible in read only
+        /// Allow user to add an attribute with a name, a type and a visibility
         /// </summary>
-        public Context Context
+        /// <param name="name">Name of the attribute to add</param>
+        /// <param name="attrType">Type of the attribute to add</param>
+        /// <param name="visibility">Visibility of the attribute (INTERNAL, EXTERNAL)</param>
+        public void AddAttribute(string name, DataType attrType, Global.AccessMode visibility)
         {
-            get { return context; }
+            attributes.Declare(attrType, name, visibility);
         }
 
         /// <summary>
-        /// Allow to add a public attribute to the object
+        /// Allow user to remove an internal attribute with a specific name
+        /// </summary>
+        /// <param name="name">Name of the attribute to remove</param>
+        public void RemoveAttribute(string name)
+        {
+            attributes.Pop(name);
+        }
+
+        /// <summary>
+        /// Allow user to change an attribute visibility
         /// </summary>
         /// <param name="name">Name of the attribute</param>
-        /// <param name="definition">Variable definition of the attribute</param>
-        /// <returns>Freshly created declaration from name and definition</returns>
-        public void AddPublicAttribute(string name, DataType attrType)
+        /// <param name="visibility">Visibility to set</param>
+        public void ChangeAttributeVisibility(string name, Global.AccessMode visibility)
         {
-            this.publicAttributes[name] = attrType;
+            attributes.ChangeVisibility(name, visibility);
         }
 
         /// <summary>
-        /// Allow to add a private attribute to the object
+        /// Allow user to rename an attribute
         /// </summary>
-        /// <param name="name">Name of the attribute</param>
-        /// <param name="definition">Variable definition of the attribute</param>
-        /// <returns>Freshly created declaration from name and definition</returns>
-        public void AddPrivateAttribute(string name, DataType attrType)
+        /// <param name="lastName">Current name of the attribute</param>
+        /// <param name="newName">New name to set to the attribute</param>
+        public void RenameAttribute(string lastName, string newName)
         {
-            this.privateAttributes[name] = attrType;
-        }
-
-        Dictionary<string, DataType> PublicAttributes
-        {
-            get { return publicAttributes; }
-        }
-
-        Dictionary<string, DataType> PrivateAttributes
-        {
-            get { return privateAttributes; }
+            attributes.Rename(lastName, newName);
         }
 
         /// <see cref="DataType.Instantiate"/>
@@ -101,6 +103,159 @@ namespace CorePackage.Entity.Type
         public override bool IsValid()
         {
             throw new NotImplementedException();
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
+        public IContext Declare(IContext entity, string name, AccessMode visibility)
+        {
+            return ((IDeclarator<IContext>)context).Declare(entity, name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
+        public IContext Pop(string name)
+        {
+            return ((IDeclarator<IContext>)context).Pop(name);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
+        public IContext Find(string name, AccessMode visibility)
+        {
+            return ((IDeclarator<IContext>)context).Find(name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
+        public IContext Rename(string lastName, string newName)
+        {
+            return ((IDeclarator<IContext>)context).Rename(lastName, newName);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.GetVisibilityOf(string, ref AccessMode)"/>
+        public IContext GetVisibilityOf(string name, ref AccessMode visibility)
+        {
+            return ((IDeclarator<IContext>)context).GetVisibilityOf(name, ref visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
+        public IContext ChangeVisibility(string name, AccessMode newVisibility)
+        {
+            return ((IDeclarator<IContext>)context).ChangeVisibility(name, newVisibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
+        public Variable Declare(Variable entity, string name, AccessMode visibility)
+        {
+            return ((IDeclarator<Variable>)context).Declare(entity, name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
+        Variable IDeclarator<Variable>.Pop(string name)
+        {
+            return ((IDeclarator<Variable>)context).Pop(name);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
+        Variable IDeclarator<Variable>.Find(string name, AccessMode visibility)
+        {
+            return ((IDeclarator<Variable>)context).Find(name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
+        Variable IDeclarator<Variable>.Rename(string lastName, string newName)
+        {
+            return ((IDeclarator<Variable>)context).Rename(lastName, newName);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.GetVisibilityOf(string, ref AccessMode)"/>
+        Variable IDeclarator<Variable>.GetVisibilityOf(string name, ref AccessMode visibility)
+        {
+            return ((IDeclarator<Variable>)context).GetVisibilityOf(name, ref visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
+        Variable IDeclarator<Variable>.ChangeVisibility(string name, AccessMode newVisibility)
+        {
+            return ((IDeclarator<Variable>)context).ChangeVisibility(name, newVisibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
+        public DataType Declare(DataType entity, string name, AccessMode visibility)
+        {
+            return ((IDeclarator<DataType>)context).Declare(entity, name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
+        DataType IDeclarator<DataType>.Pop(string name)
+        {
+            return ((IDeclarator<DataType>)context).Pop(name);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
+        DataType IDeclarator<DataType>.Find(string name, AccessMode visibility)
+        {
+            return ((IDeclarator<DataType>)context).Find(name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
+        DataType IDeclarator<DataType>.Rename(string lastName, string newName)
+        {
+            return ((IDeclarator<DataType>)context).Rename(lastName, newName);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.GetVisibilityOf(string, ref AccessMode)"/>
+        DataType IDeclarator<DataType>.GetVisibilityOf(string name, ref AccessMode visibility)
+        {
+            return ((IDeclarator<DataType>)context).GetVisibilityOf(name, ref visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
+        DataType IDeclarator<DataType>.ChangeVisibility(string name, AccessMode newVisibility)
+        {
+            return ((IDeclarator<DataType>)context).ChangeVisibility(name, newVisibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
+        public Function Declare(Function entity, string name, AccessMode visibility)
+        {
+            return ((IDeclarator<Function>)context).Declare(entity, name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
+        Function IDeclarator<Function>.Pop(string name)
+        {
+            return ((IDeclarator<Function>)context).Pop(name);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
+        Function IDeclarator<Function>.Find(string name, AccessMode visibility)
+        {
+            return ((IDeclarator<Function>)context).Find(name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
+        Function IDeclarator<Function>.Rename(string lastName, string newName)
+        {
+            return ((IDeclarator<Function>)context).Rename(lastName, newName);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.GetVisibilityOf(string, ref AccessMode)"/>
+        Function IDeclarator<Function>.GetVisibilityOf(string name, ref AccessMode visibility)
+        {
+            return ((IDeclarator<Function>)context).GetVisibilityOf(name, ref visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
+        Function IDeclarator<Function>.ChangeVisibility(string name, AccessMode newVisibility)
+        {
+            return ((IDeclarator<Function>)context).ChangeVisibility(name, newVisibility);
+        }
+
+        /// <summary>
+        /// Set parent context
+        /// </summary>
+        /// <param name="parent">Parent context to set</param>
+        public void SetParent(IContext parent)
+        {
+            context.SetParent(parent);
         }
     }
 }

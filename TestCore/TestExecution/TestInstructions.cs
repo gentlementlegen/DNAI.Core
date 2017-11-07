@@ -220,7 +220,7 @@ namespace CoreTest
             CorePackage.Execution.Setter true_change = new CorePackage.Execution.Setter(witness);
             true_change.SetInputValue("value", 84);
             print_hello.LinkTo(0, true_change);
-            say_hello.entrypoint = print_hello;
+            say_hello.setEntryPoint(say_hello.addInstruction(print_hello));
 
             //If the condition is true, then do print_hello
             f_cond.Then(new CorePackage.Execution.FunctionCall(say_hello));
@@ -232,13 +232,13 @@ namespace CoreTest
             CorePackage.Execution.Setter false_change = new CorePackage.Execution.Setter(witness);
             false_change.SetInputValue("value", 0);
             print_goodbye.LinkTo(0, false_change);
-            say_bye.entrypoint = print_goodbye;
+            say_bye.setEntryPoint(say_bye.addInstruction(print_goodbye));
 
             //Else, do print_goodbye
             f_cond.Else(new CorePackage.Execution.FunctionCall(say_bye));
 
             //Set the function entry point before calling it
-            test.entrypoint = f_cond;
+            test.setEntryPoint(test.addInstruction(f_cond));
 
             //In this call, it will check that 4 is equal to 5, then it will execute print_goodbye and false_change
             test.Call();
@@ -311,7 +311,7 @@ namespace CoreTest
 
             //===============================
         
-            whileTester.entrypoint = loop;
+            whileTester.setEntryPoint(whileTester.addInstruction(loop));
             whileTester.Call();
 
             Assert.IsTrue(i.Value == 42);
@@ -374,7 +374,7 @@ namespace CoreTest
 
             ////===============================
 
-            whileTester.entrypoint = loop;
+            whileTester.setEntryPoint(whileTester.addInstruction(loop));
             whileTester.Call();
             whileTester.Call();
 
@@ -390,14 +390,14 @@ namespace CoreTest
             CorePackage.Entity.Variable j = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Floating);
             CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
 
-            CorePackage.Execution.Add add = new CorePackage.Execution.Add();
+            CorePackage.Execution.Append add = new CorePackage.Execution.Append();
             add.ContainerType = CorePackage.Entity.Type.Scalar.Floating;
 
             add.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
             add.GetInput("element").LinkTo(new CorePackage.Execution.Getter(j), "reference");
             var n = add.GetOutput("count").Value;
 
-            whileTester.entrypoint = add;
+            whileTester.setEntryPoint(whileTester.addInstruction(add));
             whileTester.Call();
             Assert.IsTrue(n.definition.Value == 4);
         }
@@ -422,7 +422,7 @@ namespace CoreTest
 
             var n = insert.GetOutput("count").Value;
 
-            whileTester.entrypoint = insert;
+            whileTester.setEntryPoint(whileTester.addInstruction(insert));
             whileTester.Call();
             Assert.IsTrue(n.definition.Value == 4);
         }
@@ -443,7 +443,7 @@ namespace CoreTest
 
             var n = size.GetOutput("count").Value;
 
-            whileTester.entrypoint = size;
+            whileTester.setEntryPoint(whileTester.addInstruction(size));
             whileTester.Call();
             Assert.IsTrue(n.definition.Value == 3);
         }
@@ -466,7 +466,7 @@ namespace CoreTest
 
             var n = remove.GetOutput("removed").Value;
 
-            whileTester.entrypoint = remove;
+            whileTester.setEntryPoint(whileTester.addInstruction(remove));
             whileTester.Call();
             Assert.IsTrue(n.definition.Value);
         }
@@ -489,7 +489,7 @@ namespace CoreTest
 
             var n = remove.GetOutput("removed").Value;
 
-            whileTester.entrypoint = remove;
+            whileTester.setEntryPoint(whileTester.addInstruction(remove));
             whileTester.Call();
             Assert.IsTrue(n.definition.Value);
         }

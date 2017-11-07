@@ -6,7 +6,7 @@ namespace CorePackage.Execution
     /// <summary>
     /// Appends element to a collection.
     /// </summary>
-    public class Add : ExecutionRefreshInstruction
+    public class Append : ExecutionRefreshInstruction
     {
         private DataType _containerType = Entity.Type.Scalar.Integer;
 
@@ -18,8 +18,8 @@ namespace CorePackage.Execution
             get { return _containerType; }
             set
             {
-                AddInput("element", new Variable(value));
-                AddInput("array", new Variable(new Entity.Type.ListType(value)));
+                GetInput("element").Value.definition.Type = value;
+                GetInput("array").Value.definition.Type = new Entity.Type.ListType(value);
                 _containerType = value;
             }
         }
@@ -27,13 +27,32 @@ namespace CorePackage.Execution
         /// <summary>
         /// The Add node has two inputs : the collection and the element to add.
         /// </summary>
-        public Add() : base(new Dictionary<string, Variable> {
-            { "array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)) },
-            { "element", new Variable(Entity.Type.Scalar.Integer) } })
+        public Append() : base(
+            new Dictionary<string, Variable>
+            {
+                {
+                    "array",
+                    new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer))
+                },
+                {
+                    "element",
+                    new Variable(Entity.Type.Scalar.Integer)
+                }
+            },
+            new Dictionary<string, Variable>
+            {
+                {
+                    "count",
+                    new Variable(Entity.Type.Scalar.Integer)
+                }
+            })
         {
-            AddOutput("count", new Variable(Entity.Type.Scalar.Integer));
+
         }
 
+        /// <summary>
+        /// Will append an element to the given list
+        /// </summary>
         public override void Execute()
         {
             var val = inputs["array"].Value.definition.Value;

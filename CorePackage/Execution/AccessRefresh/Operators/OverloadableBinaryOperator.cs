@@ -24,16 +24,16 @@ namespace CorePackage.Execution
         /// <param name="overload">Overload function</param>
         public OverloadableBinaryOperator(Entity.Function overload) :
             base(
-                overload.Parameters[0].definition.Type,      //left
-                overload.Parameters[1].definition.Type,      //right
+                overload.GetParameter("LeftOperand").Type,      //left
+                overload.GetParameter("RightOperand").Type,      //right
                 delegate (dynamic left, dynamic right)   //operation
                 {
-                    overload.Parameters[0].definition.Value = left;
-                    overload.Parameters[0].definition.Value = right;
+                    overload.SetParameterValue("LeftOperand", left);
+                    overload.SetParameterValue("RightOperand", right);
                     overload.Call();
-                    return overload.Returns[0].definition.Value;
+                    return overload.GetReturnValue("result");
                 },
-                overload.Returns[0].definition.Type)         //return
+                overload.GetReturn("result").Type)         //return
         {
 
         }

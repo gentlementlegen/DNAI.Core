@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CorePackage.Entity.Type
 {
     /// <summary>
-    /// This class represents an enumeration type used
+    /// This class represents an enumeration type
     /// </summary>
     public class EnumType : DataType
     {
@@ -15,12 +15,40 @@ namespace CorePackage.Entity.Type
         /// Contains enumeration values which are variable declarations
         /// Those variables can be of any type
         /// </summary>
-        private Dictionary<string, Global.Declaration<Variable>> values = new Dictionary<string, Global.Declaration<Variable>>();
+        private Dictionary<string, Variable> values = new Dictionary<string, Variable>();
 
         /// <summary>
         /// Contains the type of the variables stored in the enumeration
         /// </summary>
-        private DataType stored;
+        private DataType stored = Scalar.Integer;
+
+        /// <summary>
+        /// Basic Getter and Setter for internal stored type
+        /// </summary>
+        public DataType Stored
+        {
+            get { return stored; }
+            set { stored = value; }
+        }
+
+        /// <summary>
+        /// Getter for Internal enum values
+        /// </summary>
+        public Dictionary<string, Variable> Values
+        {
+            get { return values; }
+        }
+
+        /// <summary>
+        /// Basic default constructor to default instanciate the type
+        /// </summary>
+        /// <remarks>
+        /// Important for the factory because it must found a constructor with no arguments (default arguments value doesn't count)
+        /// </remarks>
+        public EnumType()
+        {
+
+        }
 
         /// <summary>
         /// Constructor that forces to given the enumeration values' type
@@ -36,25 +64,25 @@ namespace CorePackage.Entity.Type
         /// </summary>
         /// <param name="name">Represents the name of the value</param>
         /// <param name="definition">Represents the variable definition of the value</param>
-        public void AddValue(string name, Entity.Variable definition)
+        public void SetValue(string name, Entity.Variable definition)
         {
             //check given definition validity
-            this.values[name] = new Global.Declaration<Variable> { name = name, definition = definition };
+            this.values[name] = definition;
         }
 
         /// <see cref="DataType.Instantiate"/>
         public override dynamic Instantiate()
         {
-            return values.Values.First().definition.Value;
+            return values.Values.First().Value;
         }
 
         /// <see cref="Global.Definition.IsValid"/>
         public override bool IsValid()
         {
             //incohérence des types stockés par rapport à celui défini
-            foreach (Global.Declaration<Variable> curr in values.Values)
+            foreach (Variable curr in values.Values)
             {
-                if (curr.definition.Type != this.stored)
+                if (curr.Value.Type != this.stored)
                     return false;
             }
             return true;
@@ -64,11 +92,11 @@ namespace CorePackage.Entity.Type
         public override bool IsValueOfType(dynamic value)
         {
             //return value.GetType() != typeof(string) && values.Keys.Contains((string)value);
-            if (value.GetType() != values.First().Value.definition.Value.GetType())
+            if (value.GetType() != values.Values.First().Value.GetType())
                 return false;
-            foreach (Global.Declaration<Entity.Variable> curr in values.Values)
+            foreach (Variable curr in values.Values)
             {
-                if (curr.definition.Value == value)
+                if (curr.Value == value)
                     return true;
             }
             return false;
@@ -77,11 +105,27 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Returns the variable that corresponds to the given name
         /// </summary>
+        /// <remarks>Throws an Error.NotFoundException if given name is not in enumeration</remarks>
         /// <param name="name">Name of the enum value to return</param>
         /// <returns>Variable corresponding to the enum value</returns>
         public Variable GetValue(string name)
         {
-            return values[name].definition;
+            if (!values.ContainsKey(name))
+                throw new Error.NotFoundException("No such value named \"" + name + "\" in enumeration");
+            return values[name];
+        }
+
+        /// <summary>
+        /// Allow user to remove an internal enumeration value
+        /// </summary>
+        /// <remarks>Throws an Error.NotFoundException if given name is not in enumeration</remarks>
+        /// <param name="name">Name of the value to remove</param>
+        public void RemoveValue(string name)
+        {
+            if (!values.ContainsKey(name))
+                throw new Error.NotFoundException("No such value named \"" + name + "\" in enumeration");
+
+            values.Remove(name);
         }
     }
 }

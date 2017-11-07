@@ -4,155 +4,215 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using ContextDeclarator = CorePackage.Global.Declarator<CorePackage.Entity.Context>;
-using StorageDeclarator = CorePackage.Global.Declarator<CorePackage.Entity.Variable>;
-using TypesDeclarator = CorePackage.Global.Declarator<CorePackage.Entity.DataType>;
-using MethodsDeclarator = CorePackage.Global.Declarator<CorePackage.Entity.Function>;
+using CorePackage.Global;
 
 namespace CorePackage.Entity
 {
     /// <summary>
     /// A context is an entity in which you can declare variables, types, functions and other contexts
     /// </summary>
-    public class Context : Global.Definition
+    public class Context : IContext
     {
         /// <summary>
         /// A reference on its parent create a contexte access network
         /// </summary>
-        private Context parent;
+        private IContext parent = null;
 
         /// <summary>
         /// Each context knows who are their children to be able
         /// to retreive children's externals items 
         /// </summary>
-        private ContextDeclarator children;
+        private Declarator<IContext> children = new Declarator<IContext>();
 
         /// <summary>
         /// Declare and define variables
         /// </summary>
-        private StorageDeclarator storage;
+        private Declarator<Variable> storage = new Declarator<Variable>();
 
         /// <summary>
         /// Declare and define nested types
         /// </summary>
-        private TypesDeclarator types;
+        private Declarator<DataType> types = new Declarator<DataType>();
 
         /// <summary>
         /// Declare and define methods
         /// </summary>
-        private MethodsDeclarator methods;
+        private Declarator<Function> methods = new Declarator<Function>();
 
+        /// <summary>
+        /// Basic default constructor which is necessary for factory
+        /// </summary>
+        public Context()
+        {
+
+        }
+        
         /// <summary>
         /// Constructor ask for its parent context
         /// </summary>
         /// <param name="parent">Parent context of the new one</param>
-        public Context(Context parent = null)
+        public Context(IContext parent)
         {
             this.parent = parent;
-            this.children = new ContextDeclarator();
-            this.storage = new StorageDeclarator();
-            this.types = new TypesDeclarator();
-            this.methods = new MethodsDeclarator();
-        }
-
-        /// <summary>
-        /// Allow user to declare a new context
-        /// </summary>
-        /// <param name="name">Represents the name of the declared context</param>
-        /// <param name="definition">Represents the definition of the context</param>
-        /// <param name="mode">Represents the access mode of the context</param>
-        /// <returns>Declaration of the new context</returns>
-        public Global.Declaration<Context> DeclareNewContext(string name, Context definition = null, Global.AccessMode mode = Global.AccessMode.EXTERNAL)
-        {
-            if (definition != null)
-                definition = new Context(this);
-            return this.children.Add(name, definition, mode);
-        }
-
-        /// <summary>
-        /// Allow user to declare a new function
-        /// </summary>
-        /// <param name="name">Represents the name of the declared function</param>
-        /// <param name="definition">Represents the definition of the function</param>
-        /// <param name="mode">Represents the access mode of the function</param>
-        /// <returns>Declaration of the new function</returns>
-        public Global.Declaration<Function> DeclareNewMethod(string name, Function definition = null, Global.AccessMode mode = Global.AccessMode.EXTERNAL)
-        {
-            if (definition != null)
-                definition = new Function();
-            return this.methods.Add(name, definition, mode);
-        }
-
-        /// <summary>
-        /// Allow user to declare a new type
-        /// </summary>
-        /// <param name="name">Represents the name of the declared type</param>
-        /// <param name="definition">Represents the definition of the type</param>
-        /// <param name="mode">Represents the access mode of the type</param>
-        /// <returns>Declaration of the new type</returns>
-        public Global.Declaration<DataType> DeclareNewType(string name, DataType definition, Global.AccessMode mode = Global.AccessMode.EXTERNAL)
-        {
-            if (definition.GetType() == typeof(Type.ObjectType))
-                this.DeclareNewContext(name, (definition as Type.ObjectType).Context, mode);
-            return this.types.Add(name, definition, mode);
-        }
-
-        /// <summary>
-        /// Allow user to declare a new variable
-        /// </summary>
-        /// <param name="name">Represents the name of the declarated variable</param>
-        /// <param name="definition">Represents the definition of the type</param>
-        /// <param name="mode">Represents the access mode of the type</param>
-        /// <returns>Declaration of the new variable</returns>
-        public Global.Declaration<Variable> DeclareNewVariable(string name, Variable definition, Global.AccessMode mode = Global.AccessMode.EXTERNAL)
-        {
-            return this.storage.Add(name, definition, mode);
-        }
-
-        /// <summary>
-        /// Allow user to find a context from its name
-        /// </summary>
-        /// <param name="name">Name of the context to find</param>
-        /// <returns>Context associated to the given name or null</returns>
-        public Global.Declaration<Context> FindContextFrom(string name)
-        {
-            return this.children.FindFrom(name);
-        }
-
-        /// <summary>
-        /// Allow user to find a function from its name
-        /// </summary>
-        /// <param name="name">Name of the function to find</param>
-        /// <returns>Function associated to the given name or null</returns>
-        public Global.Declaration<Function> FindMethodFrom(string name)
-        {
-            return this.methods.FindFrom(name);
-        }
-
-        /// <summary>
-        /// Allow user to find a type from its name
-        /// </summary>
-        /// <param name="name">Name of the type to find</param>
-        /// <returns>Type associated to the given name or null</returns>
-        public Global.Declaration<DataType> FindTypeFrom(string name)
-        {
-            return this.types.FindFrom(name);
-        }
-
-        /// <summary>
-        /// Allow user to find a variable from its name
-        /// </summary>
-        /// <param name="name">Nmae of the variable to find</param>
-        /// <returns>Variable associated to the given name or null</returns>
-        public Global.Declaration<Variable> FindVariableFrom(string name, Global.AccessMode access = Global.AccessMode.EXTERNAL)
-        {
-            return this.storage.FindFrom(name, access);
         }
 
         /// <see cref="Global.Definition"/>
-        public override bool IsValid()
+        public bool IsValid()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Allow to set parent context
+        /// </summary>
+        /// <param name="parent">parent context to set</param>
+        public void SetParent(IContext parent)
+        {
+            this.parent = parent;
+        }
+
+        ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
+        IContext IDeclarator<IContext>.ChangeVisibility(string name, AccessMode newVisibility)
+        {
+            return children.ChangeVisibility(name, newVisibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
+        IContext IDeclarator<IContext>.Declare(IContext entity, string name, AccessMode visibility)
+        {
+            return children.Declare(entity, name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
+        IContext IDeclarator<IContext>.Find(string name, AccessMode visibility)
+        {
+            return children.Find(name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
+        IContext IDeclarator<IContext>.Pop(string name)
+        {
+            return children.Pop(name);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
+        IContext IDeclarator<IContext>.Rename(string lastName, string newName)
+        {
+            return children.Rename(lastName, newName);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.GetVisibilityOf(string, ref AccessMode)"/>
+        IContext IDeclarator<IContext>.GetVisibilityOf(string name, ref AccessMode visibility)
+        {
+            return children.GetVisibilityOf(name, ref visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
+        Variable IDeclarator<Variable>.ChangeVisibility(string name, AccessMode newVisibility)
+        {
+            return storage.ChangeVisibility(name, newVisibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
+        Variable IDeclarator<Variable>.Declare(Variable entity, string name, AccessMode visibility)
+        {
+            return storage.Declare(entity, name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
+        Variable IDeclarator<Variable>.Find(string name, AccessMode visibility)
+        {
+            return storage.Find(name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
+        Variable IDeclarator<Variable>.Pop(string name)
+        {
+            return storage.Pop(name);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
+        Variable IDeclarator<Variable>.Rename(string lastName, string newName)
+        {
+            return storage.Rename(lastName, newName);
+        }
+        
+        ///<see cref="IDeclarator{definitionType}.GetVisibilityOf(string, ref AccessMode)"/>
+        Variable IDeclarator<Variable>.GetVisibilityOf(string name, ref AccessMode visibility)
+        {
+            return storage.GetVisibilityOf(name, ref visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
+        DataType IDeclarator<DataType>.Declare(DataType entity, string name, AccessMode visibility)
+        {
+            return types.Declare(entity, name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
+        DataType IDeclarator<DataType>.Pop(string name)
+        {
+            return types.Pop(name);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
+        DataType IDeclarator<DataType>.Find(string name, AccessMode visibility)
+        {
+            return types.Find(name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
+        DataType IDeclarator<DataType>.Rename(string lastName, string newName)
+        {
+            return types.Rename(lastName, newName);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
+        DataType IDeclarator<DataType>.ChangeVisibility(string name, AccessMode newVisibility)
+        {
+            return types.ChangeVisibility(name, newVisibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.GetVisibilityOf(string, ref AccessMode)"/>
+        DataType IDeclarator<DataType>.GetVisibilityOf(string name, ref AccessMode visibility)
+        {
+            return types.GetVisibilityOf(name, ref visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
+        Function IDeclarator<Function>.Declare(Function entity, string name, AccessMode visibility)
+        {
+            return methods.Declare(entity, name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
+        Function IDeclarator<Function>.Pop(string name)
+        {
+            return methods.Pop(name);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
+        Function IDeclarator<Function>.Find(string name, AccessMode visibility)
+        {
+            return methods.Find(name, visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
+        Function IDeclarator<Function>.Rename(string lastName, string newName)
+        {
+            return methods.Rename(lastName, newName);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
+        Function IDeclarator<Function>.ChangeVisibility(string name, AccessMode newVisibility)
+        {
+            return methods.ChangeVisibility(name, newVisibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.GetVisibilityOf(string, ref AccessMode)"/>
+        Function IDeclarator<Function>.GetVisibilityOf(string name, ref AccessMode visibility)
+        {
+            return methods.GetVisibilityOf(name, ref visibility);
         }
     }
 }

@@ -2,6 +2,9 @@
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
+using CorePackage.Global;
+using CorePackage.Entity;
+using CorePackage.Entity.Type;
 
 namespace CoreTest
 {
@@ -11,36 +14,46 @@ namespace CoreTest
         [TestMethod]
         public void moreOrLess()
         {
-            CorePackage.Entity.Context moreOrLessCtx = new CorePackage.Entity.Context();
+            Context moreOrLessCtx = new Context();
 
-            CorePackage.Entity.Type.EnumType cmp = new CorePackage.Entity.Type.EnumType(CorePackage.Entity.Type.Scalar.Integer);
-            cmp.AddValue("MORE", new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 0));
-            cmp.AddValue("LESS", new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 1));
-            cmp.AddValue("NONE", new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 2));
+            EnumType cmp = new EnumType(Scalar.Integer);
+            cmp.SetValue("MORE", new Variable(Scalar.Integer, 0));
+            cmp.SetValue("LESS", new Variable(Scalar.Integer, 1));
+            cmp.SetValue("NONE", new Variable(Scalar.Integer, 2));
 
-            moreOrLessCtx.DeclareNewType("COMPARISON", cmp);
-            moreOrLessCtx.DeclareNewVariable("min", new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 0), CorePackage.Global.AccessMode.INTERNAL);
-            moreOrLessCtx.DeclareNewVariable("max", new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 100), CorePackage.Global.AccessMode.INTERNAL);
-            moreOrLessCtx.DeclareNewVariable("lastGiven", new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, -1), CorePackage.Global.AccessMode.INTERNAL);
+            Variable ctx_min = new Variable(Scalar.Integer, 0);
+            Variable ctx_max = new Variable(Scalar.Integer, 100);
+            Variable ctx_lastGiven = new Variable(Scalar.Integer, -1);
 
-            CorePackage.Entity.Function play = new CorePackage.Entity.Function();
+            ((IDeclarator<DataType>)moreOrLessCtx).Declare(cmp, "COMPARISON", AccessMode.EXTERNAL);
+            ((IDeclarator<Variable>)moreOrLessCtx).Declare(ctx_min, "min", AccessMode.INTERNAL);
+            ((IDeclarator<Variable>)moreOrLessCtx).Declare(ctx_max, "max", AccessMode.INTERNAL);
+            ((IDeclarator<Variable>)moreOrLessCtx).Declare(ctx_lastGiven, "lastGiven", AccessMode.INTERNAL);
 
-            moreOrLessCtx.DeclareNewMethod("Play", play);
+            Function play = new Function();
 
-            play.AddVariable("lastResult", new CorePackage.Entity.Variable(cmp, cmp.GetValue("NONE").Value), CorePackage.Entity.Function.VariableRole.PARAMETER);
-            play.AddVariable("number", new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, -1), CorePackage.Entity.Function.VariableRole.RETURN);
+            ((IDeclarator<Function>)moreOrLessCtx).Declare(play, "Play", AccessMode.EXTERNAL);
+
+            play.Declare(new Variable(cmp, cmp.GetValue("NONE").Value), "lastResult", AccessMode.EXTERNAL);
+            play.SetVariableAs("lastResult", Function.VariableRole.PARAMETER);
+
+            play.Declare(new Variable(Scalar.Integer, -1), "number", AccessMode.EXTERNAL);
+            play.SetVariableAs("number", Function.VariableRole.RETURN);
 
             //if (lastResult == MORE)
             CorePackage.Execution.Operators.Equal lastResEqqMore = new CorePackage.Execution.Operators.Equal(cmp, cmp);
             lastResEqqMore.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(cmp.GetValue("MORE")), "reference");
             lastResEqqMore.GetInput("RightOperand").LinkTo(new CorePackage.Execution.Getter(play.GetParameter("lastResult")), "reference");
-            play.entrypoint = new CorePackage.Execution.If();
-            play.entrypoint.GetInput("condition").LinkTo(lastResEqqMore, "result");
+
+            CorePackage.Execution.If play_entrypoint = new CorePackage.Execution.If();
+
+            play.setEntryPoint(play.addInstruction(play_entrypoint));
+            play_entrypoint.GetInput("condition").LinkTo(lastResEqqMore, "result");
 
                 //min = lastGiven
-                CorePackage.Execution.Setter minEqLastGiven = new CorePackage.Execution.Setter(moreOrLessCtx.FindVariableFrom("min", CorePackage.Global.AccessMode.INTERNAL).definition);
-                minEqLastGiven.GetInput("value").LinkTo(new CorePackage.Execution.Getter(moreOrLessCtx.FindVariableFrom("lastGiven", CorePackage.Global.AccessMode.INTERNAL).definition), "reference");
-                play.entrypoint.LinkTo(0, minEqLastGiven); //"set" if true
+                CorePackage.Execution.Setter minEqLastGiven = new CorePackage.Execution.Setter(ctx_min);
+                minEqLastGiven.GetInput("value").LinkTo(new CorePackage.Execution.Getter(ctx_lastGiven), "reference");
+                play_entrypoint.LinkTo(0, minEqLastGiven); //"set" if true
 
                 //if (lastResult == LESS)
                 CorePackage.Execution.Operators.Equal lastResEqqLess = new CorePackage.Execution.Operators.Equal(cmp, cmp);
@@ -48,11 +61,11 @@ namespace CoreTest
                 lastResEqqLess.GetInput("RightOperand").LinkTo(new CorePackage.Execution.Getter(cmp.GetValue("LESS")), "reference");
                 CorePackage.Execution.If condition = new CorePackage.Execution.If();
                 condition.GetInput("condition").LinkTo(lastResEqqLess, "result");
-                play.entrypoint.LinkTo(1, condition); //"if" if false
+                play_entrypoint.LinkTo(1, condition); //"if" if false
             
                     //max = lastGiven
-                    CorePackage.Execution.Setter maxEqLastGiven = new CorePackage.Execution.Setter(moreOrLessCtx.FindVariableFrom("max", CorePackage.Global.AccessMode.INTERNAL).definition);
-                    maxEqLastGiven.GetInput("value").LinkTo(new CorePackage.Execution.Getter(moreOrLessCtx.FindVariableFrom("lastGiven", CorePackage.Global.AccessMode.INTERNAL).definition), "reference");
+                    CorePackage.Execution.Setter maxEqLastGiven = new CorePackage.Execution.Setter(ctx_max);
+                    maxEqLastGiven.GetInput("value").LinkTo(new CorePackage.Execution.Getter(ctx_lastGiven), "reference");
                     condition.LinkTo(0, maxEqLastGiven);
 
             //number = min/2 + max / 2
@@ -61,25 +74,25 @@ namespace CoreTest
             condition.LinkTo(1, numCalculation);
 
             CorePackage.Execution.Operators.Add bigOp = new CorePackage.Execution.Operators.Add(
-                CorePackage.Entity.Type.Scalar.Integer,
-                CorePackage.Entity.Type.Scalar.Integer,
-                CorePackage.Entity.Type.Scalar.Integer);
+                Scalar.Integer,
+                Scalar.Integer,
+                Scalar.Integer);
 
             //min / 2
                 CorePackage.Execution.Operators.Divide minmid = new CorePackage.Execution.Operators.Divide(
-                    CorePackage.Entity.Type.Scalar.Integer,
-                    CorePackage.Entity.Type.Scalar.Integer,
-                    CorePackage.Entity.Type.Scalar.Integer);
-                minmid.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(moreOrLessCtx.FindVariableFrom("min", CorePackage.Global.AccessMode.INTERNAL).definition), "reference");
+                    Scalar.Integer,
+                    Scalar.Integer,
+                    Scalar.Integer);
+                minmid.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(ctx_min), "reference");
                 minmid.SetInputValue("RightOperand", 2);
                 bigOp.GetInput("LeftOperand").LinkTo(minmid, "result");
 
             //max / 2
                 CorePackage.Execution.Operators.Divide maxmid = new CorePackage.Execution.Operators.Divide(
-                    CorePackage.Entity.Type.Scalar.Integer,
-                    CorePackage.Entity.Type.Scalar.Integer,
-                    CorePackage.Entity.Type.Scalar.Integer);
-                maxmid.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(moreOrLessCtx.FindVariableFrom("max", CorePackage.Global.AccessMode.INTERNAL).definition), "reference");
+                    Scalar.Integer,
+                    Scalar.Integer,
+                    Scalar.Integer);
+                maxmid.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(ctx_max), "reference");
                 maxmid.SetInputValue("RightOperand", 2);
                 bigOp.GetInput("RightOperand").LinkTo(maxmid, "result");
 
@@ -87,18 +100,16 @@ namespace CoreTest
 
             //if (number == lastGiven)
             condition = new CorePackage.Execution.If();
-            CorePackage.Execution.Operators.Equal numberEqqLastGiven = new CorePackage.Execution.Operators.Equal(
-                CorePackage.Entity.Type.Scalar.Integer,
-                CorePackage.Entity.Type.Scalar.Integer);
+            CorePackage.Execution.Operators.Equal numberEqqLastGiven = new CorePackage.Execution.Operators.Equal(Scalar.Integer, Scalar.Integer);
             numberEqqLastGiven.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(play.GetReturn("number")), "reference");
-            numberEqqLastGiven.GetInput("RightOperand").LinkTo(new CorePackage.Execution.Getter(moreOrLessCtx.FindVariableFrom("lastGiven", CorePackage.Global.AccessMode.INTERNAL).definition), "reference");
+            numberEqqLastGiven.GetInput("RightOperand").LinkTo(new CorePackage.Execution.Getter(ctx_lastGiven), "reference");
             condition.GetInput("condition").LinkTo(numberEqqLastGiven, "result");
 
             maxEqLastGiven.LinkTo(0, numCalculation);
             numCalculation.LinkTo(0, condition);
             
             //lastGiven = number
-            CorePackage.Execution.Setter lastGivenEqNumber = new CorePackage.Execution.Setter(moreOrLessCtx.FindVariableFrom("lastGiven", CorePackage.Global.AccessMode.INTERNAL).definition);
+            CorePackage.Execution.Setter lastGivenEqNumber = new CorePackage.Execution.Setter(ctx_lastGiven);
             lastGivenEqNumber.GetInput("value").LinkTo(new CorePackage.Execution.Getter(play.GetReturn("number")), "reference");
             condition.LinkTo(1, lastGivenEqNumber);
 
@@ -111,10 +122,7 @@ namespace CoreTest
                 //number += 1
                 CorePackage.Execution.Setter numberPlusOne = new CorePackage.Execution.Setter(play.GetReturn("number"));
 
-                CorePackage.Execution.Operators.Add numAddOne = new CorePackage.Execution.Operators.Add(
-                    CorePackage.Entity.Type.Scalar.Integer,
-                    CorePackage.Entity.Type.Scalar.Integer,
-                    CorePackage.Entity.Type.Scalar.Integer);
+                CorePackage.Execution.Operators.Add numAddOne = new CorePackage.Execution.Operators.Add(Scalar.Integer, Scalar.Integer, Scalar.Integer);
                 numAddOne.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(play.GetReturn("number")), "reference");
                 numAddOne.SetInputValue("RightOperand", 1);
                 numberPlusOne.GetInput("value").LinkTo(numAddOne, "result");
@@ -123,10 +131,7 @@ namespace CoreTest
                 //number -= 1
                 CorePackage.Execution.Setter numberMinusOne = new CorePackage.Execution.Setter(play.GetReturn("number"));
 
-                CorePackage.Execution.Operators.Substract numMinOne = new CorePackage.Execution.Operators.Substract(
-                    CorePackage.Entity.Type.Scalar.Integer,
-                    CorePackage.Entity.Type.Scalar.Integer,
-                    CorePackage.Entity.Type.Scalar.Integer);
+                CorePackage.Execution.Operators.Substract numMinOne = new CorePackage.Execution.Operators.Substract(Scalar.Integer, Scalar.Integer, Scalar.Integer);
                 numMinOne.GetInput("LeftOperand").LinkTo(new CorePackage.Execution.Getter(play.GetReturn("number")), "reference");
                 numMinOne.SetInputValue("RightOperand", 1);
                 numberMinusOne.GetInput("value").LinkTo(numMinOne, "result");

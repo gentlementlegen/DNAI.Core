@@ -49,7 +49,9 @@
     <Compile Include="Entity\Type\ObjectType.cs" />
     <Compile Include="Entity\Type\ScalarType.cs" />
     <Compile Include="Entity\Variable.cs" />
+    <Compile Include="Error\NotFoundException.cs" />
     <Compile Include="Execution\AccessRefreshInstruction.cs" />
+    <Compile Include="Execution\AccessRefresh\EnumSplitter.cs" />
     <Compile Include="Execution\AccessRefresh\Getter.cs" />
     <Compile Include="Execution\AccessRefresh\Operator.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\BinaryOperator.cs" />
@@ -81,7 +83,7 @@
     <Compile Include="Execution\AccessRefresh\Operators\Unary\Increment.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Unary\Inverse.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Unary\Not.cs" />
-    <Compile Include="Execution\ExecRefresh\Add.cs" />
+    <Compile Include="Execution\ExecRefresh\Append.cs" />
     <Compile Include="Execution\ExecRefresh\ARemove.cs" />
     <Compile Include="Execution\ExecRefresh\Debug.cs" />
     <Compile Include="Execution\ExecRefresh\Formula.cs" />
@@ -103,6 +105,8 @@
     <Compile Include="Global\Declaration.cs" />
     <Compile Include="Global\Declarator.cs" />
     <Compile Include="Global\Definition.cs" />
+    <Compile Include="Global\IContext.cs" />
+    <Compile Include="Global\IDeclarator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
