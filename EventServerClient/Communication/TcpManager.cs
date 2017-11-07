@@ -116,7 +116,7 @@ namespace EventServerClient.Communication
             }
 
 
-            while (true)
+            while (_dataStorage.Length >= 12)
             {
                 ValidatePackage.Header head = _validatePackage.GetHeader(_dataStorage);
                 if (head != null)
@@ -130,11 +130,13 @@ namespace EventServerClient.Communication
                             {
                                 _mapPtr[receiveEvent.eventName](receiveEvent.data);
 
-                                byte[] newArray = new byte[_dataStorage.Length - (12 + head.size)];
-                                Buffer.BlockCopy(_dataStorage, (int)(12 + head.size), newArray, 0, newArray.Length);
-                                _dataStorage = newArray;
                             }
+                            byte[] newArray = new byte[_dataStorage.Length - (12 + head.size)];
+                            Buffer.BlockCopy(_dataStorage, (int)(12 + head.size), newArray, 0, newArray.Length);
+                            _dataStorage = newArray;
                         }
+                    } else {
+                        _dataStorage = null;
                     }
                 }
                 else if (_dataStorage.Length >= 12)
