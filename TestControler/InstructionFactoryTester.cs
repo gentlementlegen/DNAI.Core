@@ -13,6 +13,9 @@ namespace TestControler
     [TestClass]
     public class InstructionFactoryTester
     {
+        /// <summary>
+        /// Unit test to handle instruction instanciation coverage
+        /// </summary>
         [TestMethod]
         public void TestInstructionInstanciation()
         {

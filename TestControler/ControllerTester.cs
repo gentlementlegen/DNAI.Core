@@ -6,12 +6,16 @@ using CorePackage.Entity.Type;
 using static CoreControl.InstructionFactory;
 using System.Collections.Generic;
 using CorePackage.Execution;
+using static CoreControl.Controler;
 
 namespace TestControler
 {
     [TestClass]
     public class ControllerTester
     {
+        /// <summary>
+        /// Test of the moreOrLess game built with a controller
+        /// </summary>
         [TestMethod]
         public void ControllerMoreOrLess()
         {
@@ -20,36 +24,36 @@ namespace TestControler
             uint integer = (uint)CoreControl.EntityFactory.BASE_ID.INTEGER_TYPE;
 
             //declaring moreOrLess context in global context
-            uint ctx = controller.declare<Context, IContext>(0, "moreOrLess", AccessMode.EXTERNAL);
+            uint ctx = controller.declare(ENTITY.CONTEXT, 0, "moreOrLess", VISIBILITY.PUBLIC);
 
             //declaring global variables min, max and lastGiven in moreOrLess context
-            uint min = controller.declare<Variable>(ctx, "min", AccessMode.INTERNAL);
+            uint min = controller.declare(ENTITY.VARIABLE, ctx, "min", VISIBILITY.PRIVATE);
             controller.setVariableType(min, integer);
             controller.setVariableValue(min, 0);
-            uint max = controller.declare<Variable>(ctx, "max", AccessMode.INTERNAL);
+            uint max = controller.declare(ENTITY.VARIABLE, ctx, "max", VISIBILITY.PRIVATE);
             controller.setVariableType(max, integer);
             controller.setVariableValue(max, 100);
-            uint lastGiven = controller.declare<Variable>(ctx, "lastGiven", AccessMode.INTERNAL);
+            uint lastGiven = controller.declare(ENTITY.VARIABLE, ctx, "lastGiven", VISIBILITY.PRIVATE);
             controller.setVariableType(lastGiven, integer);
             controller.setVariableValue(lastGiven, -1);
 
             //declaring enumeration COMPARISON in moreOrLess context
-            uint COMPARISON = controller.declare<EnumType, DataType>(ctx, "COMPARISON", AccessMode.EXTERNAL);
+            uint COMPARISON = controller.declare(ENTITY.ENUM_TYPE, ctx, "COMPARISON", VISIBILITY.PUBLIC);
             controller.setEnumerationValue(COMPARISON, "MORE", 0);
             controller.setEnumerationValue(COMPARISON, "LESS", 1);
             controller.setEnumerationValue(COMPARISON, "NONE", 2);
 
             //declaring function play in moreOrLess context
-            uint play = controller.declare<Function>(ctx, "Play", AccessMode.EXTERNAL);
+            uint play = controller.declare(ENTITY.FUNCTION, ctx, "Play", VISIBILITY.PUBLIC);
 
             //declaring parameter lastResult in play function
-            uint play_lastResult = controller.declare<Variable>(play, "lastResult", AccessMode.EXTERNAL);
+            uint play_lastResult = controller.declare(ENTITY.VARIABLE, play, "lastResult", VISIBILITY.PUBLIC);
             controller.setFunctionParameter(play, "lastResult");
             controller.setVariableType(play_lastResult, COMPARISON);
             controller.setVariableValue(play_lastResult, controller.getEnumerationValue(COMPARISON, "NONE"));
 
             //declaring return result in play function
-            uint play_result = controller.declare<Variable>(play, "result", AccessMode.EXTERNAL);
+            uint play_result = controller.declare(ENTITY.VARIABLE, play, "result", VISIBILITY.PUBLIC);
             controller.setFunctionReturn(play, "result");
             controller.setVariableType(play_result, integer);
 
@@ -233,6 +237,9 @@ namespace TestControler
                 System.Diagnostics.Debug.Write("AI found the mystery number: " + mystery_number.ToString());
         }
 
+        /// <summary>
+        /// Unit test to handle controller coverage
+        /// </summary>
         [TestMethod]
         public void TestCoverage()
         {
@@ -240,12 +247,12 @@ namespace TestControler
             uint integer = (uint)CoreControl.EntityFactory.BASE_ID.INTEGER_TYPE;
             uint floating = (uint)CoreControl.EntityFactory.BASE_ID.FLOATING_TYPE;
 
-            uint ctx = controller.declare<Context, IContext>(0, "toto", AccessMode.INTERNAL);
-            uint fnt = controller.declare<Function>(0, "toto", AccessMode.INTERNAL);
-            uint var = controller.declare<Variable>(0, "toto", AccessMode.INTERNAL);
-            uint enu = controller.declare<EnumType, DataType>(0, "toto", AccessMode.INTERNAL);
-            uint obj = controller.declare<ObjectType, DataType>(0, "tata", AccessMode.INTERNAL);
-            uint lst = controller.declare<ListType, DataType>(0, "tutu", AccessMode.INTERNAL);
+            uint ctx = controller.declare(ENTITY.CONTEXT, 0, "toto", VISIBILITY.PRIVATE);
+            uint fnt = controller.declare(ENTITY.FUNCTION, 0, "toto", VISIBILITY.PRIVATE);
+            uint var = controller.declare(ENTITY.VARIABLE, 0, "toto", VISIBILITY.PRIVATE);
+            uint enu = controller.declare(ENTITY.ENUM_TYPE, 0, "toto", VISIBILITY.PRIVATE);
+            uint obj = controller.declare(ENTITY.OBJECT_TYPE, 0, "tata", VISIBILITY.PRIVATE);
+            uint lst = controller.declare(ENTITY.LIST_TYPE, 0, "tutu", VISIBILITY.PRIVATE);
 
             //variable
 
@@ -261,8 +268,8 @@ namespace TestControler
 
             //class
 
-            controller.addClassAttribute(obj, "posX", integer, AccessMode.EXTERNAL);
-            controller.addClassAttribute(obj, "posY", integer, AccessMode.EXTERNAL);
+            controller.addClassAttribute(obj, "posX", integer, VISIBILITY.PUBLIC);
+            controller.addClassAttribute(obj, "posY", integer, VISIBILITY.PUBLIC);
             controller.renameClassAttribute(obj, "posX", "posZ");
             controller.removeClassAttribute(obj, "posY");
 
@@ -285,7 +292,7 @@ namespace TestControler
 
             Assert.IsTrue(controller.getVariableValue(var) == 3.14);
 
-            uint val = controller.declare<Variable>(fnt, "value", AccessMode.EXTERNAL);
+            uint val = controller.declare(ENTITY.VARIABLE, fnt, "value", VISIBILITY.PUBLIC);
             controller.setFunctionParameter(fnt, "value");
             controller.setVariableType(val, floating);
 
@@ -296,7 +303,7 @@ namespace TestControler
 
             Assert.IsTrue(controller.getVariableValue(var) == 42.3);
 
-            uint res = controller.declare<Variable>(fnt, "res", AccessMode.EXTERNAL);
+            uint res = controller.declare(ENTITY.VARIABLE, fnt, "res", VISIBILITY.PUBLIC);
             controller.setFunctionReturn(fnt, "res");
             controller.setVariableType(res, floating);
 
@@ -331,34 +338,34 @@ namespace TestControler
 
             Assert.IsTrue(controller.getVariableValue(res) == 71.2);
 
-            controller.changeVisibility<IContext>(0, "toto", AccessMode.INTERNAL);
-            controller.changeVisibility<Variable>(0, "toto", AccessMode.INTERNAL);
-            controller.changeVisibility<Function>(0, "toto", AccessMode.INTERNAL);
-            controller.changeVisibility<DataType>(0, "toto", AccessMode.INTERNAL);
-            controller.changeVisibility<DataType>(0, "tata", AccessMode.INTERNAL);
-            controller.changeVisibility<DataType>(0, "tutu", AccessMode.INTERNAL);
+            controller.changeVisibility(ENTITY.CONTEXT, 0, "toto", VISIBILITY.PUBLIC);
+            controller.changeVisibility(ENTITY.VARIABLE, 0, "toto", VISIBILITY.PUBLIC);
+            controller.changeVisibility(ENTITY.FUNCTION, 0, "toto", VISIBILITY.PUBLIC);
+            controller.changeVisibility(ENTITY.DATA_TYPE, 0, "toto", VISIBILITY.PUBLIC);
+            controller.changeVisibility(ENTITY.DATA_TYPE, 0, "tata", VISIBILITY.PUBLIC);
+            controller.changeVisibility(ENTITY.DATA_TYPE, 0, "tutu", VISIBILITY.PUBLIC);
 
-            uint cnt = controller.declare<Context, IContext>(0, "Container", AccessMode.EXTERNAL);
-            controller.move<IContext>(0, cnt, "toto");
-            controller.move<Variable>(0, cnt, "toto");
-            controller.move<Function>(0, cnt, "toto");
-            controller.move<DataType>(0, cnt, "toto");
-            controller.move<DataType>(0, cnt, "tata");
-            controller.move<DataType>(0, cnt, "tutu");
+            uint cnt = controller.declare(ENTITY.CONTEXT, 0, "Container", VISIBILITY.PUBLIC);
+            controller.move(ENTITY.CONTEXT, 0, cnt, "toto");
+            controller.move(ENTITY.VARIABLE, 0, cnt, "toto");
+            controller.move(ENTITY.FUNCTION, 0, cnt, "toto");
+            controller.move(ENTITY.DATA_TYPE, 0, cnt, "toto");
+            controller.move(ENTITY.DATA_TYPE, 0, cnt, "tata");
+            controller.move(ENTITY.DATA_TYPE, 0, cnt, "tutu");
 
-            controller.rename<IContext>(cnt, "toto", "titi");
-            controller.rename<Variable>(cnt, "toto", "titi");
-            controller.rename<Function>(cnt, "toto", "titi");
-            controller.rename<DataType>(cnt, "toto", "titi");
-            controller.rename<DataType>(cnt, "tata", "toto");
-            controller.rename<DataType>(cnt, "tutu", "tata");
+            controller.rename(ENTITY.CONTEXT, cnt, "toto", "titi");
+            controller.rename(ENTITY.VARIABLE, cnt, "toto", "titi");
+            controller.rename(ENTITY.FUNCTION, cnt, "toto", "titi");
+            controller.rename(ENTITY.DATA_TYPE, cnt, "toto", "titi");
+            controller.rename(ENTITY.DATA_TYPE, cnt, "tata", "toto");
+            controller.rename(ENTITY.DATA_TYPE, cnt, "tutu", "tata");
 
-            controller.remove<IContext>(cnt, "titi");
-            controller.remove<Variable>(cnt, "titi");
-            controller.remove<Function>(cnt, "titi");
-            controller.remove<DataType>(cnt, "titi");
-            controller.remove<DataType>(cnt, "toto");
-            controller.remove<DataType>(cnt, "tata");
+            controller.remove(ENTITY.CONTEXT, cnt, "titi");
+            controller.remove(ENTITY.VARIABLE, cnt, "titi");
+            controller.remove(ENTITY.FUNCTION, cnt, "titi");
+            controller.remove(ENTITY.DATA_TYPE, cnt, "titi");
+            controller.remove(ENTITY.DATA_TYPE, cnt, "toto");
+            controller.remove(ENTITY.DATA_TYPE, cnt, "tata");
         }
     }
 }

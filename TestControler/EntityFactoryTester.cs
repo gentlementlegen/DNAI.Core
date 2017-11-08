@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CorePackage.Entity;
 using CorePackage.Entity.Type;
+using CorePackage.Global;
 
 namespace TestControler
 {
@@ -21,6 +22,9 @@ namespace TestControler
             }
         }
 
+        /// <summary>
+        /// Unit test to handle EntityFactory coverage
+        /// </summary>
         [TestMethod]
         public void TestCreateFindRemove()
         {
@@ -64,31 +68,68 @@ namespace TestControler
             Assert.IsTrue(factory.find(lst).GetType() == typeof(ListType));
             Assert.IsTrue(factory.find(obj).GetType() == typeof(ObjectType));
 
-            factory.remove(ctx);
-            factory.remove(fnt);
-            factory.remove(var);
-            factory.remove(enu);
-            factory.remove(lst);
-            factory.remove(obj);
+            factory.remove_entity(ctx);
+            factory.remove_entity(fnt);
+            factory.remove_entity(var);
+            factory.remove_entity(enu);
+            factory.remove_entity(lst);
+            factory.remove_entity(obj);
 
             Assert.IsTrue(did_call_throw(() => {
-                factory.remove((uint)CoreControl.EntityFactory.BASE_ID.GLOBAL_CTX);
+                factory.remove_entity((uint)CoreControl.EntityFactory.BASE_ID.GLOBAL_CTX);
             }));
             Assert.IsTrue(did_call_throw(() => {
-                factory.remove((uint)CoreControl.EntityFactory.BASE_ID.BOOLEAN_TYPE);
+                factory.remove_entity((uint)CoreControl.EntityFactory.BASE_ID.BOOLEAN_TYPE);
             }));
             Assert.IsTrue(did_call_throw(() => {
-                factory.remove((uint)CoreControl.EntityFactory.BASE_ID.INTEGER_TYPE);
+                factory.remove_entity((uint)CoreControl.EntityFactory.BASE_ID.INTEGER_TYPE);
             }));
             Assert.IsTrue(did_call_throw(() => {
-                factory.remove((uint)CoreControl.EntityFactory.BASE_ID.FLOATING_TYPE);
+                factory.remove_entity((uint)CoreControl.EntityFactory.BASE_ID.FLOATING_TYPE);
             }));
             Assert.IsTrue(did_call_throw(() => {
-                factory.remove((uint)CoreControl.EntityFactory.BASE_ID.CHARACTER_TYPE);
+                factory.remove_entity((uint)CoreControl.EntityFactory.BASE_ID.CHARACTER_TYPE);
             }));
             Assert.IsTrue(did_call_throw(() => {
-                factory.remove((uint)CoreControl.EntityFactory.BASE_ID.STRING_TYPE);
+                factory.remove_entity((uint)CoreControl.EntityFactory.BASE_ID.STRING_TYPE);
             }));
+
+            ctx = factory.declare<Context, IContext>(0, "toto", AccessMode.INTERNAL);
+            fnt = factory.declare<Function>(0, "toto", AccessMode.INTERNAL);
+            var = factory.declare<Variable>(0, "toto", AccessMode.INTERNAL);
+            enu = factory.declare<EnumType, DataType>(0, "toto", AccessMode.INTERNAL);
+            obj = factory.declare<ObjectType, DataType>(0, "tata", AccessMode.INTERNAL);
+            lst = factory.declare<ListType, DataType>(0, "tutu", AccessMode.INTERNAL);
+
+            factory.rename<IContext>(0, "toto", "titi");
+            factory.rename<Function>(0, "toto", "titi");
+            factory.rename<Variable>(0, "toto", "titi");
+            factory.rename<DataType>(0, "toto", "titi");
+            factory.rename<DataType>(0, "tata", "toto");
+            factory.rename<DataType>(0, "tutu", "tata");
+
+            uint cnt = factory.declare<Context, IContext>(0, "container", AccessMode.EXTERNAL);
+
+            factory.move<IContext>(0, cnt, "titi");
+            factory.move<Function>(0, cnt, "titi");
+            factory.move<Variable>(0, cnt, "titi");
+            factory.move<DataType>(0, cnt, "titi");
+            factory.move<DataType>(0, cnt, "toto");
+            factory.move<DataType>(0, cnt, "tata");
+
+            factory.changeVisibility<IContext>(cnt, "titi", AccessMode.INTERNAL);
+            factory.changeVisibility<Function>(cnt, "titi", AccessMode.INTERNAL);
+            factory.changeVisibility<Variable>(cnt, "titi", AccessMode.INTERNAL);
+            factory.changeVisibility<DataType>(cnt, "titi", AccessMode.INTERNAL);
+            factory.changeVisibility<DataType>(cnt, "toto", AccessMode.INTERNAL);
+            factory.changeVisibility<DataType>(cnt, "tata", AccessMode.INTERNAL);
+
+            factory.remove<IContext>(cnt, "titi");
+            factory.remove<Function>(cnt, "titi");
+            factory.remove<Variable>(cnt, "titi");
+            factory.remove<DataType>(cnt, "titi");
+            factory.remove<DataType>(cnt, "toto");
+            factory.remove<DataType>(cnt, "tata");
         }
     }
 }
