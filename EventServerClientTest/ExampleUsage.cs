@@ -1,14 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CorePackage.Communication;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net.Sockets;
 using System.Net;
-using CorePackageNet.Communication;
+using EventServerClient.Communication;
 using ProtoBuf;
 
 namespace TestCore
 {
-    [TestClass]
+    //[TestClass]
     public class UnitTest1
     {
         //[TestMethod]
@@ -29,7 +28,7 @@ namespace TestCore
         //    Serializer.SerializeWithLengthPrefix<PacketRegisterEventRequest>(str, new PacketRegisterEventRequest() { Id = 3 }, PrefixStyle.Base128);
         //}
 
-        [TestMethod]
+       /* [TestMethod]
         public void TestClient()
         {
             TcpManager tcp = new TcpManager();
@@ -62,6 +61,6 @@ namespace TestCore
             s.Close();
 
             // Signal the calling thread to continue.
-        }
+        }*/
     }
 }
