@@ -107,6 +107,12 @@ namespace CorePackage.Entity
             return children.GetVisibilityOf(name, ref visibility);
         }
 
+        ///<see cref="IDeclarator{definitionType}.Clear"/>
+        public List<IContext> Clear()
+        {
+            return children.Clear();
+        }
+
         ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
         Variable IDeclarator<Variable>.ChangeVisibility(string name, AccessMode newVisibility)
         {
@@ -141,6 +147,12 @@ namespace CorePackage.Entity
         Variable IDeclarator<Variable>.GetVisibilityOf(string name, ref AccessMode visibility)
         {
             return storage.GetVisibilityOf(name, ref visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Clear"/>
+        List<Variable> IDeclarator<Variable>.Clear()
+        {
+            return storage.Clear();
         }
 
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
@@ -179,6 +191,12 @@ namespace CorePackage.Entity
             return types.GetVisibilityOf(name, ref visibility);
         }
 
+        ///<see cref="IDeclarator{definitionType}.Clear"/>
+        List<DataType> IDeclarator<DataType>.Clear()
+        {
+            return types.Clear();
+        }
+
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
         Function IDeclarator<Function>.Declare(Function entity, string name, AccessMode visibility)
         {
@@ -213,6 +231,12 @@ namespace CorePackage.Entity
         Function IDeclarator<Function>.GetVisibilityOf(string name, ref AccessMode visibility)
         {
             return methods.GetVisibilityOf(name, ref visibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Clear"/>
+        List<Function> IDeclarator<Function>.Clear()
+        {
+            return methods.Clear();
         }
     }
 }

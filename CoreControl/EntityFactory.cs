@@ -166,6 +166,18 @@ namespace CoreControl
         }
 
         /// <summary>
+        /// Returns the id of an entity in the internal dicitonaries
+        /// </summary>
+        /// <param name="entity">Entity for which find the id</param>
+        /// <returns>Id of the given entity</returns>
+        public UInt32 getEntityID(CorePackage.Global.Definition entity)
+        {
+            if (ids.ContainsKey(entity))
+                return ids[entity];
+            throw new KeyNotFoundException("EntityFactory.getEntityID : No such id for the given entity");
+        }
+
+        /// <summary>
         /// Find a definition of a specific type
         /// </summary>
         /// <remarks>Throws an InvalidCastException if the type doesn't match</remarks>
@@ -231,18 +243,40 @@ namespace CoreControl
         /// <typeparam name="T">Type of the entity used in the declarator</typeparam>
         /// <param name="containerID">Identifier of the container from which remove the entity</param>
         /// <param name="name">Name of the entity to remove</param>
-        public void remove<T>(UInt32 containerID, string name) where T : CorePackage.Global.Definition
+        /// <returns>List of all removed entities' id</returns>
+        public List<UInt32> remove<T>(UInt32 containerID, string name) where T : CorePackage.Global.Definition
         {
             T entity = getDeclaratorOf<T>(containerID).Pop(name);
-
-            //need to remove internal declared entities from indexes
-            //checks :
-            //      - IContext => handle contexts and classes
-            //      - Function
+            List<UInt32> removed = new List<uint> { getEntityID(entity) };
 
             remove_entity(entity);
+            
+            CorePackage.Global.IContext ctx = entity as CorePackage.Global.IContext;
 
-            //could be nice to return removed ids
+            if (ctx != null)
+            {
+                List<CorePackage.Global.IContext> ctxs = ((CorePackage.Global.IDeclarator<CorePackage.Global.IContext>)ctx).Clear();
+                List<CorePackage.Entity.Function> fnts = ((CorePackage.Global.IDeclarator<CorePackage.Entity.Function>)ctx).Clear();
+                List<CorePackage.Entity.Variable> vars = ((CorePackage.Global.IDeclarator<CorePackage.Entity.Variable>)ctx).Clear();
+                List<CorePackage.Entity.DataType> types = ((CorePackage.Global.IDeclarator<CorePackage.Entity.DataType>)ctx).Clear();
+
+                foreach (CorePackage.Global.IContext curr in ctxs) { removed.Add(getEntityID(curr)); }
+                foreach (CorePackage.Entity.Function curr in fnts) { removed.Add(getEntityID(curr)); }
+                foreach (CorePackage.Entity.Variable curr in vars) { removed.Add(getEntityID(curr)); }
+                foreach (CorePackage.Entity.DataType curr in types) { removed.Add(getEntityID(curr)); }
+            }
+            else
+            {
+                CorePackage.Entity.Function fnt = entity as CorePackage.Entity.Function;
+
+                if (fnt != null)
+                {
+                    List<CorePackage.Entity.Variable> vars = fnt.Clear();
+
+                    foreach (CorePackage.Entity.Variable curr in vars) { removed.Add(getEntityID(curr)); }
+                }
+            }
+            return removed;
         }
 
         /// <summary>

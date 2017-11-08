@@ -68,5 +68,11 @@ namespace CorePackage.Global
         /// <param name="newVisibility">New visibility of the declaration</param>
         /// <returns>Entity changed</returns>
         definitionType ChangeVisibility(string name, AccessMode newVisibility);
+
+        /// <summary>
+        /// Remove all declared entities
+        /// </summary>
+        /// <returns>A list of removed entities</returns>
+        List<definitionType> Clear();
     }
 }

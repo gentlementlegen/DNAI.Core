@@ -111,38 +111,34 @@ namespace CoreControl
         /// <summary>
         /// Associates an EntityFactory.erase function to a specific ENTITY key
         /// </summary>
-        static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, string, bool>> erasers = new Dictionary<ENTITY, Func<EntityFactory, uint, string, bool>>
+        static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, string, List<UInt32>>> erasers = new Dictionary<ENTITY, Func<EntityFactory, uint, string, List<UInt32>>>
         {
             {
                 ENTITY.CONTEXT,
                 (EntityFactory factory, UInt32 containerID, string name) =>
                 {
-                    factory.remove<CorePackage.Global.IContext>(containerID, name);
-                    return true;
+                    return factory.remove<CorePackage.Global.IContext>(containerID, name);
                 }
             },
             {
                 ENTITY.VARIABLE,
                 (EntityFactory factory, UInt32 containerID, string name) =>
                 {
-                    factory.remove<CorePackage.Entity.Variable>(containerID, name);
-                    return true;
+                    return factory.remove<CorePackage.Entity.Variable>(containerID, name);
                 }
             },
             {
                 ENTITY.FUNCTION,
                 (EntityFactory factory, UInt32 containerID, string name) =>
                 {
-                    factory.remove<CorePackage.Entity.Function>(containerID, name);
-                    return true;
+                    return factory.remove<CorePackage.Entity.Function>(containerID, name);
                 }
             },
             {
                 ENTITY.DATA_TYPE,
                 (EntityFactory factory, UInt32 containerID, string name) =>
                 {
-                    factory.remove<CorePackage.Entity.DataType>(containerID, name);
-                    return true;
+                    return factory.remove<CorePackage.Entity.DataType>(containerID, name);
                 }
             }
         };
@@ -153,12 +149,12 @@ namespace CoreControl
         /// <param name="to_remove">Type of entity contained in the declarator</param>
         /// <param name="containerID">Identifier of the container in which entity is declared</param>
         /// <param name="name">Name of the entity to remove in the container</param>
-        public void remove(ENTITY to_remove, UInt32 containerID, string name)
+        /// <returns>List of all removed entities' id</returns>
+        public List<UInt32> remove(ENTITY to_remove, UInt32 containerID, string name)
         {
             if (!erasers.ContainsKey(to_remove))
                 throw new KeyNotFoundException("No such eraser for ENTITY: " + to_remove.ToString());
-            erasers[to_remove].Invoke(entity_factory, containerID, name);
-            //could be nice to return list of cascade removed instructions
+            return erasers[to_remove].Invoke(entity_factory, containerID, name);
         }
 
         /// <summary>

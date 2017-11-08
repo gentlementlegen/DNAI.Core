@@ -141,6 +141,12 @@ namespace CorePackage.Entity.Type
             return ((IDeclarator<IContext>)context).ChangeVisibility(name, newVisibility);
         }
 
+        ///<see cref="IDeclarator{definitionType}.Clear"/>
+        public List<IContext> Clear()
+        {
+            return ((IDeclarator<IContext>)context).Clear();
+        }
+
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
         public Variable Declare(Variable entity, string name, AccessMode visibility)
         {
@@ -175,6 +181,12 @@ namespace CorePackage.Entity.Type
         Variable IDeclarator<Variable>.ChangeVisibility(string name, AccessMode newVisibility)
         {
             return ((IDeclarator<Variable>)context).ChangeVisibility(name, newVisibility);
+        }
+        
+        ///<see cref="IDeclarator{definitionType}.Clear"/>
+        List<Variable> IDeclarator<Variable>.Clear()
+        {
+            return ((IDeclarator<Variable>)context).Clear();
         }
 
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
@@ -213,6 +225,12 @@ namespace CorePackage.Entity.Type
             return ((IDeclarator<DataType>)context).ChangeVisibility(name, newVisibility);
         }
 
+        ///<see cref="IDeclarator{definitionType}.Clear"/>
+        List<DataType> IDeclarator<DataType>.Clear()
+        {
+            return ((IDeclarator<DataType>)context).Clear();
+        }
+
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
         public Function Declare(Function entity, string name, AccessMode visibility)
         {
@@ -247,6 +265,12 @@ namespace CorePackage.Entity.Type
         Function IDeclarator<Function>.ChangeVisibility(string name, AccessMode newVisibility)
         {
             return ((IDeclarator<Function>)context).ChangeVisibility(name, newVisibility);
+        }
+
+        ///<see cref="IDeclarator{definitionType}.Clear"/>
+        List<Function> IDeclarator<Function>.Clear()
+        {
+            return ((IDeclarator<Function>)context).Clear();
         }
 
         /// <summary>

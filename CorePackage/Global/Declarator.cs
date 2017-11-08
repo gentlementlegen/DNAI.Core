@@ -108,5 +108,18 @@ namespace CorePackage.Global
             visibility = toret.visibility;
             return toret.definition;
         }
+
+        ///<see cref="IDeclarator{definitionType}.Clear"/>
+        public List<DefinitionType> Clear()
+        {
+            List<DefinitionType> to_ret = new List<DefinitionType>();
+
+            foreach (Declaration curr in defined.Values)
+            {
+                to_ret.Add(curr.definition);
+            }
+            defined.Clear();
+            return to_ret;
+        }
     }
 }

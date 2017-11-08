@@ -366,5 +366,11 @@ namespace CorePackage.Entity
         {
             return scope.ChangeVisibility(name, visibility);
         }
+
+        ///<see cref="IDeclarator{definitionType}.Clear"/>
+        public List<Variable> Clear()
+        {
+            return scope.Clear();
+        }
     }
 }
