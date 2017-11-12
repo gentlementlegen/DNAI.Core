@@ -7,6 +7,7 @@ using static CoreControl.InstructionFactory;
 using System.Collections.Generic;
 using CorePackage.Execution;
 using static CoreControl.Controler;
+using static CoreControl.EntityFactory;
 
 namespace TestControler
 {

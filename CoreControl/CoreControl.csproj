@@ -7,8 +7,8 @@
     <ProjectGuid>{DD2B786E-17B1-443B-A449-49199B6A46A8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CoreCtrl</RootNamespace>
-    <AssemblyName>CoreCtrl</AssemblyName>
+    <RootNamespace>CoreControl</RootNamespace>
+    <AssemblyName>CoreControl</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="protobuf-net, Version=2.3.2.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <HintPath>..\packages\protobuf-net.2.3.2\lib\net40\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net">
@@ -44,16 +47,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\Default.cs" />
+    <Compile Include="Command\Remove.cs" />
     <Compile Include="Controler.cs" />
     <Compile Include="EntityFactory.cs" />
     <Compile Include="InstructionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Command\Declare.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CorePackage\CorePackage.csproj">
       <Project>{dc0c6fc8-7d9d-4ac6-9b64-c8e3c39ca105}</Project>
       <Name>CorePackage</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

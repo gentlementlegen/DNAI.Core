@@ -14,306 +14,65 @@ namespace CoreControl
         /// </summary>
         private EntityFactory entity_factory = new EntityFactory();
 
-        //on entity removed
-
-        //on instruction unlinked flow
-
-        //on instruction unlinked data
-
-        /// <summary>
-        /// Enumeration that represents an entity visibility at declaration
-        /// </summary>
-        /// <remarks>Makes a transition in order to hide CorePackage.Global.AccessMode enum</remarks>
-        public enum VISIBILITY
-        {
-            PUBLIC = CorePackage.Global.AccessMode.EXTERNAL,
-            PRIVATE = CorePackage.Global.AccessMode.INTERNAL
-        }
-
-        /// <summary>
-        /// Enumeration that represents a declarable entity
-        /// </summary>
-        public enum ENTITY
-        {
-            CONTEXT,
-            VARIABLE,
-            FUNCTION,
-            DATA_TYPE,
-            ENUM_TYPE,
-            OBJECT_TYPE,
-            LIST_TYPE
-        }
-        
-        /// <summary>
-        /// Associates a EntityFactory.declare function to a specific ENTITY key
-        /// </summary>
-        static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, string, VISIBILITY, UInt32>> declarators = new Dictionary<ENTITY, Func<EntityFactory, uint, string, VISIBILITY, uint>>
-        {
-            {
-                ENTITY.CONTEXT,
-                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
-                {
-                    return factory.declare<CorePackage.Entity.Context, CorePackage.Global.IContext>(containerID, name, (CorePackage.Global.AccessMode)visibility);
-                }
-            },
-            {
-                ENTITY.VARIABLE,
-                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
-                {
-                    return factory.declare<CorePackage.Entity.Variable>(containerID, name, (CorePackage.Global.AccessMode)visibility);
-                }
-            },
-            {
-                ENTITY.FUNCTION,
-                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
-                {
-                    return factory.declare<CorePackage.Entity.Function>(containerID, name, (CorePackage.Global.AccessMode)visibility);
-                }
-            },
-            {
-                ENTITY.ENUM_TYPE,
-                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
-                {
-                    return factory.declare<CorePackage.Entity.Type.EnumType, CorePackage.Entity.DataType>(containerID, name, (CorePackage.Global.AccessMode)visibility);
-                }
-            },
-            {
-                ENTITY.OBJECT_TYPE,
-                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
-                {
-                    return factory.declare<CorePackage.Entity.Type.ObjectType, CorePackage.Entity.DataType>(containerID, name, (CorePackage.Global.AccessMode)visibility);
-                }
-            },
-            {
-                ENTITY.LIST_TYPE,
-                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
-                {
-                    return factory.declare<CorePackage.Entity.Type.ListType, CorePackage.Entity.DataType>(containerID, name, (CorePackage.Global.AccessMode)visibility);
-                }
-            }
-        };
-
         /// <summary>
         /// Will declare an entity in a container with a specific name and visibility
         /// </summary>
-        /// <param name="to_declare">Type of the entity to declare</param>
+        /// <param name="entity_type">Type of the entity to declare</param>
         /// <param name="containerID">Identifier of the container in which declare the entity</param>
         /// <param name="name">Name of the declared entity</param>
         /// <param name="visibility">Visibility of the declared entity</param>
         /// <returns>Identifier of the freshly declared entity</returns>
-        public UInt32 declare(ENTITY to_declare, UInt32 containerID, string name, VISIBILITY visibility)
+        public UInt32 declare(EntityFactory.ENTITY entity_type, UInt32 containerID, string name, EntityFactory.VISIBILITY visibility)
         {
-            if (declarators.ContainsKey(to_declare))
-                return declarators[to_declare].Invoke(entity_factory, containerID, name, visibility);
-            throw new KeyNotFoundException("No such declarator for ENTITY: " + to_declare.ToString());
+            return entity_factory.declare(entity_type, containerID, name, visibility);
         }
-
-        /// <summary>
-        /// Associates an EntityFactory.erase function to a specific ENTITY key
-        /// </summary>
-        static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, string, List<UInt32>>> erasers = new Dictionary<ENTITY, Func<EntityFactory, uint, string, List<UInt32>>>
-        {
-            {
-                ENTITY.CONTEXT,
-                (EntityFactory factory, UInt32 containerID, string name) =>
-                {
-                    return factory.remove<CorePackage.Global.IContext>(containerID, name);
-                }
-            },
-            {
-                ENTITY.VARIABLE,
-                (EntityFactory factory, UInt32 containerID, string name) =>
-                {
-                    return factory.remove<CorePackage.Entity.Variable>(containerID, name);
-                }
-            },
-            {
-                ENTITY.FUNCTION,
-                (EntityFactory factory, UInt32 containerID, string name) =>
-                {
-                    return factory.remove<CorePackage.Entity.Function>(containerID, name);
-                }
-            },
-            {
-                ENTITY.DATA_TYPE,
-                (EntityFactory factory, UInt32 containerID, string name) =>
-                {
-                    return factory.remove<CorePackage.Entity.DataType>(containerID, name);
-                }
-            }
-        };
 
         /// <summary>
         /// Remove an entity declared in a container
         /// </summary>
-        /// <param name="to_remove">Type of entity contained in the declarator</param>
+        /// <param name="entity_type">Type of entity contained in the declarator</param>
         /// <param name="containerID">Identifier of the container in which entity is declared</param>
         /// <param name="name">Name of the entity to remove in the container</param>
         /// <returns>List of all removed entities' id</returns>
-        public List<UInt32> remove(ENTITY to_remove, UInt32 containerID, string name)
+        public List<UInt32> remove(EntityFactory.ENTITY entity_type, UInt32 containerID, string name)
         {
-            if (!erasers.ContainsKey(to_remove))
-                throw new KeyNotFoundException("No such eraser for ENTITY: " + to_remove.ToString());
-            return erasers[to_remove].Invoke(entity_factory, containerID, name);
+            return entity_factory.remove(entity_type, containerID, name);
         }
-
-        /// <summary>
-        /// Associates an EntityFactory.rename function to a specific ENTITY key
-        /// </summary>
-        static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, string, string, bool>> renamers = new Dictionary<ENTITY, Func<EntityFactory, uint, string, string, bool>>
-        {
-            {
-                ENTITY.CONTEXT,
-                (EntityFactory factory, UInt32 containerID, string lastName, string newName) =>
-                {
-                    factory.rename<CorePackage.Global.IContext>(containerID, lastName, newName);
-                    return true;
-                }
-            },
-            {
-                ENTITY.VARIABLE,
-                (EntityFactory factory, UInt32 containerID, string lastName, string newName) =>
-                {
-                    factory.rename<CorePackage.Entity.Variable>(containerID, lastName, newName);
-                    return true;
-                }
-            },
-            {
-                ENTITY.FUNCTION,
-                (EntityFactory factory, UInt32 containerID, string lastName, string newName) =>
-                {
-                    factory.rename<CorePackage.Entity.Function>(containerID, lastName, newName);
-                    return true;
-                }
-            },
-            {
-                ENTITY.DATA_TYPE,
-                (EntityFactory factory, UInt32 containerID, string lastName, string newName) =>
-                {
-                    factory.rename<CorePackage.Entity.DataType>(containerID, lastName, newName);
-                    return true;
-                }
-            }
-        };
 
         /// <summary>
         /// Rename an entity declared in a container
         /// </summary>
-        /// <param name="to_rename">Type of the entity contained in the declarator</param>
+        /// <param name="entity_type">Type of the entity contained in the declarator</param>
         /// <param name="containerID">Identifier of the container in which entity is declared</param>
         /// <param name="lastName">Current name of the entity</param>
         /// <param name="newName">New name to set</param>
-        public void rename(ENTITY to_rename, UInt32 containerID, string lastName, string newName)
+        public void rename(EntityFactory.ENTITY entity_type, UInt32 containerID, string lastName, string newName)
         {
-            if (!renamers.ContainsKey(to_rename))
-                throw new KeyNotFoundException("No such renamer for ENTITY: " + to_rename.ToString());
-            renamers[to_rename].Invoke(entity_factory, containerID, lastName, newName);
+            entity_factory.rename(entity_type, containerID, lastName, newName);
         }
-
-        /// <summary>
-        /// Associates an EntityFactory.move function to a specific ENTITY key
-        /// </summary>
-        static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, UInt32, string, bool>> movers = new Dictionary<ENTITY, Func<EntityFactory, uint, uint, string, bool>>
-        {
-            {
-                ENTITY.CONTEXT,
-                (EntityFactory factory, UInt32 fromID, UInt32 toID, string name) =>
-                {
-                    factory.move<CorePackage.Global.IContext>(fromID, toID, name);
-                    return true;
-                }
-            },
-            {
-                ENTITY.VARIABLE,
-                (EntityFactory factory, UInt32 fromID, UInt32 toID, string name) =>
-                {
-                    factory.move<CorePackage.Entity.Variable>(fromID, toID, name);
-                    return true;
-                }
-            },
-            {
-                ENTITY.FUNCTION,
-                (EntityFactory factory, UInt32 fromID, UInt32 toID, string name) =>
-                {
-                    factory.move<CorePackage.Entity.Function>(fromID, toID, name);
-                    return true;
-                }
-            },
-            {
-                ENTITY.DATA_TYPE,
-                (EntityFactory factory, UInt32 fromID, UInt32 toID, string name) =>
-                {
-                    factory.move<CorePackage.Entity.DataType>(fromID, toID, name);
-                    return true;
-                }
-            }
-        };
 
         /// <summary>
         /// Move an entity from a specific container to another
         /// </summary>
-        /// <param name="to_move">Type of the entity contained in the declarator</param>
+        /// <param name="entity_type">Type of the entity contained in the declarator</param>
         /// <param name="fromID">Identifier of the entity declared in the container</param>
         /// <param name="toID">Identifier of the declarator in which move the entity</param>
         /// <param name="name">Name of the entity to move</param>
-        public void move(ENTITY to_move, UInt32 fromID, UInt32 toID, string name)
+        public void move(EntityFactory.ENTITY entity_type, UInt32 fromID, UInt32 toID, string name)
         {
-            if (!movers.ContainsKey(to_move))
-                throw new KeyNotFoundException("No such mover for ENTITY: " + to_move.ToString());
-            movers[to_move].Invoke(entity_factory, fromID, toID, name);
+            entity_factory.move(entity_type, fromID, toID, name);
         }
-
-        /// <summary>
-        /// Associates an EntityFactory.changeVisibility function to a specific ENTITY key
-        /// </summary>
-        Dictionary<ENTITY, Func<EntityFactory, UInt32, string, VISIBILITY, bool>> visi_modifiers = new Dictionary<ENTITY, Func<EntityFactory, uint, string, VISIBILITY, bool>>
-        {
-            {
-                ENTITY.CONTEXT,
-                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY newVisi) =>
-                {
-                    factory.changeVisibility<CorePackage.Global.IContext>(containerID, name, (CorePackage.Global.AccessMode)newVisi);
-                    return true;
-                }
-            },
-            {
-                ENTITY.VARIABLE,
-                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY newVisi) =>
-                {
-                    factory.changeVisibility<CorePackage.Entity.Variable>(containerID, name, (CorePackage.Global.AccessMode)newVisi);
-                    return true;
-                }
-            },
-            {
-                ENTITY.FUNCTION,
-                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY newVisi) =>
-                {
-                    factory.changeVisibility<CorePackage.Entity.Function>(containerID, name, (CorePackage.Global.AccessMode)newVisi);
-                    return true;
-                }
-            },
-            {
-                ENTITY.DATA_TYPE,
-                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY newVisi) =>
-                {
-                    factory.changeVisibility<CorePackage.Entity.DataType>(containerID, name, (CorePackage.Global.AccessMode)newVisi);
-                    return true;
-                }
-            }
-        };
 
         /// <summary>
         /// Change an entity visibility declared in a specific container
         /// </summary>
-        /// <param name="to_change_visi">Type of the entity to change visibility</param>
+        /// <param name="entity_type">Type of the entity to change visibility</param>
         /// <param name="containerID">Identifier of the container in which entity is declared</param>
         /// <param name="name">Name of the declared entity in the container</param>
         /// <param name="newVisi">New visibility of the declared entity</param>
-        public void changeVisibility(ENTITY to_change_visi, UInt32 containerID, string name, VISIBILITY newVisi)
+        public void changeVisibility(EntityFactory.ENTITY entity_type, UInt32 containerID, string name, EntityFactory.VISIBILITY newVisi)
         {
-            if (!visi_modifiers.ContainsKey(to_change_visi))
-                throw new KeyNotFoundException("No such visibility modifier for ENTITY: " + to_change_visi.ToString());
-            visi_modifiers[to_change_visi].Invoke(entity_factory, containerID, name, newVisi);
+            entity_factory.changeVisibility(entity_type, containerID, name, newVisi);
         }
 
         /// <summary>
@@ -407,7 +166,7 @@ namespace CoreControl
         /// <param name="name">Name of the attribute to add</param>
         /// <param name="typeID">Identifier of the attribute type to add</param>
         /// <param name="visibility">Visibility of the attribute to add</param>
-        public void addClassAttribute(UInt32 classID, string name, UInt32 typeID, VISIBILITY visibility)
+        public void addClassAttribute(UInt32 classID, string name, UInt32 typeID, EntityFactory.VISIBILITY visibility)
         {
             entity_factory.findDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID).AddAttribute(name, entity_factory.findDefinitionOfType<CorePackage.Entity.DataType>(typeID), (CorePackage.Global.AccessMode)visibility);
         }
@@ -441,7 +200,7 @@ namespace CoreControl
         /// <param name="name">Name of the method to add</param>
         /// <param name="visibility">Visibility of the method to add</param>
         /// <returns>Identifier of the new function added</returns>
-        public UInt32 addClassMemberFunction(UInt32 classID, string name, VISIBILITY visibility)
+        public UInt32 addClassMemberFunction(UInt32 classID, string name, EntityFactory.VISIBILITY visibility)
         {
             UInt32 funcID = entity_factory.declare<CorePackage.Entity.Function>(classID, name, (CorePackage.Global.AccessMode)visibility);
             CorePackage.Entity.Type.ObjectType obj = entity_factory.findDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID);

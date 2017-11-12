@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CorePackage.Entity;
 using CorePackage.Entity.Type;
 using CorePackage.Global;
+using static CoreControl.EntityFactory;
 
 namespace TestControler
 {
@@ -130,6 +131,43 @@ namespace TestControler
             factory.remove<DataType>(cnt, "titi");
             factory.remove<DataType>(cnt, "toto");
             factory.remove<DataType>(cnt, "tata");
+            factory.remove<IContext>(0, "container");
+
+            ctx = factory.declare(ENTITY.CONTEXT, 0, "toto", VISIBILITY.PRIVATE);
+            fnt = factory.declare(ENTITY.FUNCTION, 0, "toto", VISIBILITY.PRIVATE);
+            var = factory.declare(ENTITY.VARIABLE, 0, "toto", VISIBILITY.PRIVATE);
+            enu = factory.declare(ENTITY.ENUM_TYPE, 0, "toto", VISIBILITY.PRIVATE);
+            obj = factory.declare(ENTITY.OBJECT_TYPE, 0, "tata", VISIBILITY.PRIVATE);
+            lst = factory.declare(ENTITY.LIST_TYPE, 0, "tutu", VISIBILITY.PRIVATE);
+
+            factory.changeVisibility(ENTITY.CONTEXT, 0, "toto", VISIBILITY.PUBLIC);
+            factory.changeVisibility(ENTITY.VARIABLE, 0, "toto", VISIBILITY.PUBLIC);
+            factory.changeVisibility(ENTITY.FUNCTION, 0, "toto", VISIBILITY.PUBLIC);
+            factory.changeVisibility(ENTITY.DATA_TYPE, 0, "toto", VISIBILITY.PUBLIC);
+            factory.changeVisibility(ENTITY.DATA_TYPE, 0, "tata", VISIBILITY.PUBLIC);
+            factory.changeVisibility(ENTITY.DATA_TYPE, 0, "tutu", VISIBILITY.PUBLIC);
+
+            cnt = factory.declare(ENTITY.CONTEXT, 0, "Container", VISIBILITY.PUBLIC);
+            factory.move(ENTITY.CONTEXT, 0, cnt, "toto");
+            factory.move(ENTITY.VARIABLE, 0, cnt, "toto");
+            factory.move(ENTITY.FUNCTION, 0, cnt, "toto");
+            factory.move(ENTITY.DATA_TYPE, 0, cnt, "toto");
+            factory.move(ENTITY.DATA_TYPE, 0, cnt, "tata");
+            factory.move(ENTITY.DATA_TYPE, 0, cnt, "tutu");
+
+            factory.rename(ENTITY.CONTEXT, cnt, "toto", "titi");
+            factory.rename(ENTITY.VARIABLE, cnt, "toto", "titi");
+            factory.rename(ENTITY.FUNCTION, cnt, "toto", "titi");
+            factory.rename(ENTITY.DATA_TYPE, cnt, "toto", "titi");
+            factory.rename(ENTITY.DATA_TYPE, cnt, "tata", "toto");
+            factory.rename(ENTITY.DATA_TYPE, cnt, "tutu", "tata");
+
+            factory.remove(ENTITY.CONTEXT, cnt, "titi");
+            factory.remove(ENTITY.VARIABLE, cnt, "titi");
+            factory.remove(ENTITY.FUNCTION, cnt, "titi");
+            factory.remove(ENTITY.DATA_TYPE, cnt, "titi");
+            factory.remove(ENTITY.DATA_TYPE, cnt, "toto");
+            factory.remove(ENTITY.DATA_TYPE, cnt, "tata");
         }
     }
 }
