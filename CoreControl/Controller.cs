@@ -6,12 +6,12 @@ namespace CoreControl
     /// <summary>
     /// Class that is used to control the core model without having to access to any type of it
     /// </summary>
-    public class Controler
+    public class Controller
     {
         /// <summary>
         /// Entity factory used to manage entities
         /// </summary>
-        private EntityFactory entity_factory = new EntityFactory();
+        private readonly EntityFactory entity_factory = new EntityFactory();
 
         /// <summary>
         /// Will declare an entity in a container with a specific name and visibility

@@ -6,7 +6,7 @@ using CorePackage.Entity.Type;
 using static CoreControl.InstructionFactory;
 using System.Collections.Generic;
 using CorePackage.Execution;
-using static CoreControl.Controler;
+using static CoreControl.Controller;
 using static CoreControl.EntityFactory;
 
 namespace TestControler
@@ -20,7 +20,7 @@ namespace TestControler
         [TestMethod]
         public void ControllerMoreOrLess()
         {
-            CoreControl.Controler controller = new CoreControl.Controler();
+            CoreControl.Controller controller = new CoreControl.Controller();
             List<uint> empty = new List<uint>();
             uint integer = (uint)CoreControl.EntityFactory.BASE_ID.INTEGER_TYPE;
 
@@ -244,7 +244,7 @@ namespace TestControler
         [TestMethod]
         public void TestCoverage()
         {
-            CoreControl.Controler controller = new CoreControl.Controler();
+            CoreControl.Controller controller = new CoreControl.Controller();
             uint integer = (uint)CoreControl.EntityFactory.BASE_ID.INTEGER_TYPE;
             uint floating = (uint)CoreControl.EntityFactory.BASE_ID.FLOATING_TYPE;
 
