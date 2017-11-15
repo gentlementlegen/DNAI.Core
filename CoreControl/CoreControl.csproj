@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="Command\Default.cs" />
     <Compile Include="Command\Remove.cs" />
-    <Compile Include="Controler.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="EntityFactory.cs" />
     <Compile Include="InstructionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

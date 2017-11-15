@@ -14,7 +14,7 @@ namespace CoreControl
     /// <summary>
     /// Class that is used to instanciate instructions
     /// </summary>
-    public class InstructionFactory
+    public static class InstructionFactory
     {
         /// <summary>
         /// Enumeration for each possible instruction
@@ -54,7 +54,7 @@ namespace CoreControl
         /// <summary>
         /// Dictionary that associates an instruction to the number of arguments that takes its constructor
         /// </summary>
-        private static Dictionary<INSTRUCTION_ID, uint> number_of_arguments = new Dictionary<INSTRUCTION_ID, uint>
+        private static readonly Dictionary<INSTRUCTION_ID, uint> number_of_arguments = new Dictionary<INSTRUCTION_ID, uint>
         {
             { INSTRUCTION_ID.AND, 0 },
             { INSTRUCTION_ID.OR, 0 },
@@ -89,7 +89,7 @@ namespace CoreControl
         /// <summary>
         /// Dictionary that associates an instruction to its creator delegate
         /// </summary>
-        private static Dictionary<INSTRUCTION_ID, Func<List<Definition>, Instruction>> creators = new Dictionary<INSTRUCTION_ID, Func<List<CorePackage.Global.Definition>, CorePackage.Execution.Instruction>>
+        private static readonly Dictionary<INSTRUCTION_ID, Func<List<Definition>, Instruction>> creators = new Dictionary<INSTRUCTION_ID, Func<List<CorePackage.Global.Definition>, CorePackage.Execution.Instruction>>
         {
             {
                 INSTRUCTION_ID.AND, (List<Definition> arguments) =>
@@ -288,7 +288,7 @@ namespace CoreControl
         /// <param name="to_create">Type of the instruction to create</param>
         /// <param name="arguments">List of arguments to pass to the instruction at construction</param>
         /// <returns>An instruction of type represented by the give id</returns>
-        public static Instruction create_instruction(INSTRUCTION_ID to_create, List<Definition> arguments)
+        public static Instruction CreateInstruction(INSTRUCTION_ID to_create, List<Definition> arguments)
         {
             if (!number_of_arguments.ContainsKey(to_create) || !creators.ContainsKey(to_create))
                 throw new KeyNotFoundException("Given instruction isn't referenced in factory");
