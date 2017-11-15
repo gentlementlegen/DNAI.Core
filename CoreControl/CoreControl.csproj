@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandWatcher.cs" />
+    <Compile Include="Command\AddInstruction.cs" />
     <Compile Include="Command\Default.cs" />
     <Compile Include="Command\Remove.cs" />
     <Compile Include="Controller.cs" />
