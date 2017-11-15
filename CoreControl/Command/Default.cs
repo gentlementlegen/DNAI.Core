@@ -9,4 +9,13 @@
         [ProtoBuf.ProtoMember(2)]
         public Remove Remove { get { return new Remove(); } }
     }
+
+    [ProtoBuf.ProtoContract]
+    [ProtoBuf.ProtoInclude(500, typeof(Declare))]
+    [ProtoBuf.ProtoInclude(501, typeof(Remove))]
+    public class BaseAction
+    {
+        [ProtoBuf.ProtoMember(1)]
+        public string Name { get; set; }
+    }
 }
