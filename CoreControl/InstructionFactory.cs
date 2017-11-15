@@ -6,8 +6,6 @@ using CorePackage.Global;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoreControl
 {
@@ -292,7 +290,7 @@ namespace CoreControl
         {
             if (!number_of_arguments.ContainsKey(to_create) || !creators.ContainsKey(to_create))
                 throw new KeyNotFoundException("Given instruction isn't referenced in factory");
-            if (arguments.Count() < number_of_arguments[to_create])
+            if (arguments.Count < number_of_arguments[to_create])
                 throw new InvalidProgramException("Not enought arguments to construct intruction");
             return creators[to_create](arguments);
         }
