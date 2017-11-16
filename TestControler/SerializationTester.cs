@@ -36,7 +36,7 @@ namespace TestControler
 
             watcher.AddCommand(() =>
             {
-                return new AddInstruction { Name = "And", InstructionId = InstructionFactory.INSTRUCTION_ID.AND, Id = 3 };
+                return new AddInstruction { Name = "And", InstructionId = InstructionFactory.INSTRUCTION_ID.AND, Id = 8 };
             });
 
             watcher.SerializeCommandsToFile();
