@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\ChangeVisibility.cs" />
+    <Compile Include="CommandWatcher.cs" />
+    <Compile Include="Command\AddInstruction.cs" />
     <Compile Include="Command\Default.cs" />
     <Compile Include="Command\Move.cs" />
     <Compile Include="Command\Remove.cs" />
