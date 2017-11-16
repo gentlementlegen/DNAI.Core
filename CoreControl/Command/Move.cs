@@ -7,15 +7,18 @@ using System.Threading.Tasks;
 namespace CoreControl.Command
 {
     [ProtoBuf.ProtoContract]
-    public class Default
+    public class Move
     {
         [ProtoBuf.ProtoMember(1)]
-        public Declare Declare { get { return new Declare(); } }
+        EntityFactory.ENTITY EntityType { get; set; }
 
         [ProtoBuf.ProtoMember(2)]
-        public Remove Remove { get { return new Remove(); } }
+        UInt32 FromID { get; set; }
 
         [ProtoBuf.ProtoMember(3)]
-        public SetVariableValue SetVariableValue { get { return new SetVariableValue(); } }
+        UInt32 ToID { get; set; }
+
+        [ProtoBuf.ProtoMember(4)]
+        string Name { get; set; }
     }
 }

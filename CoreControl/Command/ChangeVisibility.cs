@@ -7,15 +7,18 @@ using System.Threading.Tasks;
 namespace CoreControl.Command
 {
     [ProtoBuf.ProtoContract]
-    public class Default
+    public class ChangeVisibility
     {
         [ProtoBuf.ProtoMember(1)]
-        public Declare Declare { get { return new Declare(); } }
+        EntityFactory.ENTITY EntityType { get; set; }
 
         [ProtoBuf.ProtoMember(2)]
-        public Remove Remove { get { return new Remove(); } }
+        UInt32 ContainerID { get; set; }
 
         [ProtoBuf.ProtoMember(3)]
-        public SetVariableValue SetVariableValue { get { return new SetVariableValue(); } }
+        string Name { get; set; }
+
+        [ProtoBuf.ProtoMember(4)]
+        EntityFactory.VISIBILITY NewVisi { get; set; }
     }
 }

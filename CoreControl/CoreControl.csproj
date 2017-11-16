@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\CoreControl.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,8 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\ChangeVisibility.cs" />
     <Compile Include="Command\Default.cs" />
+    <Compile Include="Command\Move.cs" />
     <Compile Include="Command\Remove.cs" />
+    <Compile Include="Command\Rename.cs" />
+    <Compile Include="Command\SetVariableValue.cs" />
     <Compile Include="Controler.cs" />
     <Compile Include="EntityFactory.cs" />
     <Compile Include="InstructionFactory.cs" />
