@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandDispatcher.cs" />
     <Compile Include="Command\ChangeVisibility.cs" />
     <Compile Include="CommandWatcher.cs" />
     <Compile Include="Command\AddInstruction.cs" />
