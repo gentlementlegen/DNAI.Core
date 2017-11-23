@@ -31,17 +31,10 @@ namespace EventServerClient.Communication
             {
 
                 _tcpClient.Connect(address, port);
-               // CreatePackage createPackage = new CreatePackage();
-
+              
                 Byte[] data = _createPackage.AuthenticatePackage("YOLO fernand");
                 _tcpClient.GetStream().Write(data, 0, data.Length);
-
-               // Byte[] dataRegisterEvent = _createPackage.EventRegisterPackage("POPOLE", 0, true);
-               // _tcpClient.GetStream().Write(dataRegisterEvent, 0, dataRegisterEvent.Length);
-
-                Byte[] zerodata = new byte[0];
-                Byte[] dataSendEvent = _createPackage.EventSendPackage("POPOLE", zerodata);
-                _tcpClient.GetStream().Write(dataSendEvent, 0, dataSendEvent.Length);
+                
             }
             catch
             {
@@ -129,7 +122,6 @@ namespace EventServerClient.Communication
                             if (_mapPtr.ContainsKey(receiveEvent.eventName))
                             {
                                 _mapPtr[receiveEvent.eventName](receiveEvent.data);
-
                             }
                             byte[] newArray = new byte[_dataStorage.Length - (12 + head.size)];
                             Buffer.BlockCopy(_dataStorage, (int)(12 + head.size), newArray, 0, newArray.Length);

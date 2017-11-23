@@ -22,6 +22,30 @@ namespace CoreControl
         }
 
         /// <summary>
+        /// Enumeration that represents an entity visibility at declaration
+        /// </summary>
+        /// <remarks>Makes a transition in order to hide CorePackage.Global.AccessMode enum</remarks>
+        public enum VISIBILITY
+        {
+            PUBLIC = CorePackage.Global.AccessMode.EXTERNAL,
+            PRIVATE = CorePackage.Global.AccessMode.INTERNAL
+        }
+
+        /// <summary>
+        /// Enumeration that represents a declarable entity
+        /// </summary>
+        public enum ENTITY
+        {
+            CONTEXT,
+            VARIABLE,
+            FUNCTION,
+            DATA_TYPE,
+            ENUM_TYPE,
+            OBJECT_TYPE,
+            LIST_TYPE
+        }
+
+        /// <summary>
         /// Associates an id to its entity definition
         /// </summary>
         private Dictionary<UInt32, CorePackage.Global.Definition> definitions = new Dictionary<uint, CorePackage.Global.Definition>();
@@ -35,29 +59,29 @@ namespace CoreControl
         /// Represents the id of the next entity that will be declared
         /// </summary>
         private UInt32 current_uid = 0;
-        
+
         /// <summary>
         /// Default constructor that add default entities (global context and scalar types)
         /// </summary>
         public EntityFactory()
         {
             //global context is in 0
-            add_entity(new CorePackage.Entity.Context());
+            AddEntity(new CorePackage.Entity.Context());
 
             //boolean type is in 1
-            add_entity(CorePackage.Entity.Type.Scalar.Boolean);
+            AddEntity(CorePackage.Entity.Type.Scalar.Boolean);
 
             //integer type is in 2
-            add_entity(CorePackage.Entity.Type.Scalar.Integer);
+            AddEntity(CorePackage.Entity.Type.Scalar.Integer);
 
             //floating type is in 3
-            add_entity(CorePackage.Entity.Type.Scalar.Floating);
+            AddEntity(CorePackage.Entity.Type.Scalar.Floating);
 
             //character type is in 4
-            add_entity(CorePackage.Entity.Type.Scalar.Character);
+            AddEntity(CorePackage.Entity.Type.Scalar.Character);
 
             //string type is in 5
-            add_entity(CorePackage.Entity.Type.Scalar.String);
+            AddEntity(CorePackage.Entity.Type.Scalar.String);
         }
 
         /// <summary>
@@ -81,11 +105,11 @@ namespace CoreControl
         /// </summary>
         /// <typeparam name="T">Type of the entity to declare</typeparam>
         /// <returns>Freshly instanciated entity</returns>
-        public T create<T>() where T : CorePackage.Global.Definition
+        public T Create<T>() where T : CorePackage.Global.Definition
         {
-            T toadd = (T)Activator.CreateInstance(typeof(T)); ;
+            T toadd = (T)Activator.CreateInstance(typeof(T));
 
-            add_entity(toadd);
+            AddEntity(toadd);
             return toadd;
         }
 
@@ -93,7 +117,7 @@ namespace CoreControl
         /// Add an entity to the internal dictionnaries and increment current_id
         /// </summary>
         /// <param name="entity">Entity to add</param>
-        private void add_entity(CorePackage.Global.Definition entity)
+        private void AddEntity(CorePackage.Global.Definition entity)
         {
             definitions[current_uid] = entity;
             ids[entity] = current_uid++;
@@ -107,7 +131,7 @@ namespace CoreControl
         /// Throws a KeyNotFoundException if an entity is not identified by the given id
         /// </remarks>
         /// <param name="definition_uid">Identifier of the entity to remove</param>
-        public void remove_entity(UInt32 definition_uid)
+        public void RemoveEntity(UInt32 definition_uid)
         {
             if (definition_uid <= 5)
                 throw new InvalidOperationException("EntityFactory.remove : cannot remove base entities");
@@ -127,7 +151,7 @@ namespace CoreControl
         /// Throws an InvalidOperationException if the given entity is a default added entity
         /// </remarks>
         /// <param name="entity">Entity to remove</param>
-        public void remove_entity(CorePackage.Global.Definition entity)
+        public void RemoveEntity(CorePackage.Global.Definition entity)
         {
             if (!ids.ContainsKey(entity))
                 throw new KeyNotFoundException("EntityFactory.remove : given definition uid hasn't been found");
@@ -147,7 +171,7 @@ namespace CoreControl
         /// <remarks>Throws a KeyNotFoundException if entity hasn't been found</remarks>
         /// <param name="definition_uid">Identifier of an entity</param>
         /// <returns>The entity to find</returns>
-        public CorePackage.Global.Definition find(UInt32 definition_uid)
+        public CorePackage.Global.Definition Find(UInt32 definition_uid)
         {
             if (!definitions.ContainsKey(definition_uid))
                 throw new KeyNotFoundException("EntityFactory.find : given definition uid hasn't been found");
@@ -160,9 +184,9 @@ namespace CoreControl
         /// </summary>
         /// <param name="definition_uid">Identifier of the basic entity</param>
         /// <returns>Basic entity to find</returns>
-        public CorePackage.Global.Definition find(BASE_ID definition_uid)
+        public CorePackage.Global.Definition Find(BASE_ID definition_uid)
         {
-            return find((uint)definition_uid);
+            return Find((uint)definition_uid);
         }
 
         /// <summary>
@@ -170,7 +194,7 @@ namespace CoreControl
         /// </summary>
         /// <param name="entity">Entity for which find the id</param>
         /// <returns>Id of the given entity</returns>
-        public UInt32 getEntityID(CorePackage.Global.Definition entity)
+        public UInt32 GetEntityID(CorePackage.Global.Definition entity)
         {
             if (ids.ContainsKey(entity))
                 return ids[entity];
@@ -184,9 +208,9 @@ namespace CoreControl
         /// <typeparam name="T">Type of the entity to find</typeparam>
         /// <param name="id">Identifier of the entity to find</param>
         /// <returns>The entity to find</returns>
-        public T findDefinitionOfType<T>(UInt32 id) where T : class
+        public T FindDefinitionOfType<T>(UInt32 id) where T : class
         {
-            CorePackage.Global.Definition to_find = find(id);
+            CorePackage.Global.Definition to_find = Find(id);
             T to_ret = to_find as T;
 
             if (to_ret == null)
@@ -200,9 +224,9 @@ namespace CoreControl
         /// <typeparam name="T">Type of the entity used in the declarators</typeparam>
         /// <param name="id">Identifier of the declarator to find</param>
         /// <returns>The declarator to find</returns>
-        public CorePackage.Global.IDeclarator<T> getDeclaratorOf<T>(UInt32 id)
+        public CorePackage.Global.IDeclarator<T> GetDeclaratorOf<T>(UInt32 id)
         {
-            return findDefinitionOfType<CorePackage.Global.IDeclarator<T>>(id);
+            return FindDefinitionOfType<CorePackage.Global.IDeclarator<T>>(id);
         }
 
         /// <summary>
@@ -214,11 +238,11 @@ namespace CoreControl
         /// <param name="name">Name of the entity to declare</param>
         /// <param name="visibility">Visibility of the entity to declare</param>
         /// <returns>The identifier of the freshly declared entity</returns>
-        public UInt32 declare<Entity, Declarator>(UInt32 containerID, string name, CorePackage.Global.AccessMode visibility)
+        public UInt32 Declare<Entity, Declarator>(UInt32 containerID, string name, CorePackage.Global.AccessMode visibility)
             where Declarator : CorePackage.Global.Definition
             where Entity : Declarator
         {
-            getDeclaratorOf<Declarator>(containerID).Declare(create<Entity>(), name, visibility);
+            GetDeclaratorOf<Declarator>(containerID).Declare(Create<Entity>(), name, visibility);
             return LastID;
         }
 
@@ -231,9 +255,9 @@ namespace CoreControl
         /// <param name="name">Name of the entity to declare</param>
         /// <param name="visibility">Visibility of the entity to declare</param>
         /// <returns>Identifier of the freshly declared entity</returns>
-        public UInt32 declare<Entity>(UInt32 containerID, string name, CorePackage.Global.AccessMode visibility) where Entity : CorePackage.Global.Definition
+        public UInt32 Declare<Entity>(UInt32 containerID, string name, CorePackage.Global.AccessMode visibility) where Entity : CorePackage.Global.Definition
         {
-            getDeclaratorOf<Entity>(containerID).Declare(create<Entity>(), name, visibility);
+            GetDeclaratorOf<Entity>(containerID).Declare(Create<Entity>(), name, visibility);
             return LastID;
         }
 
@@ -244,13 +268,13 @@ namespace CoreControl
         /// <param name="containerID">Identifier of the container from which remove the entity</param>
         /// <param name="name">Name of the entity to remove</param>
         /// <returns>List of all removed entities' id</returns>
-        public List<UInt32> remove<T>(UInt32 containerID, string name) where T : CorePackage.Global.Definition
+        public List<UInt32> Remove<T>(UInt32 containerID, string name) where T : CorePackage.Global.Definition
         {
-            T entity = getDeclaratorOf<T>(containerID).Pop(name);
-            List<UInt32> removed = new List<uint> { getEntityID(entity) };
+            T entity = GetDeclaratorOf<T>(containerID).Pop(name);
+            List<UInt32> removed = new List<uint> { GetEntityID(entity) };
 
-            remove_entity(entity);
-            
+            RemoveEntity(entity);
+
             CorePackage.Global.IContext ctx = entity as CorePackage.Global.IContext;
 
             if (ctx != null)
@@ -260,10 +284,10 @@ namespace CoreControl
                 List<CorePackage.Entity.Variable> vars = ((CorePackage.Global.IDeclarator<CorePackage.Entity.Variable>)ctx).Clear();
                 List<CorePackage.Entity.DataType> types = ((CorePackage.Global.IDeclarator<CorePackage.Entity.DataType>)ctx).Clear();
 
-                foreach (CorePackage.Global.IContext curr in ctxs) { removed.Add(getEntityID(curr)); }
-                foreach (CorePackage.Entity.Function curr in fnts) { removed.Add(getEntityID(curr)); }
-                foreach (CorePackage.Entity.Variable curr in vars) { removed.Add(getEntityID(curr)); }
-                foreach (CorePackage.Entity.DataType curr in types) { removed.Add(getEntityID(curr)); }
+                foreach (CorePackage.Global.IContext curr in ctxs) { removed.Add(GetEntityID(curr)); }
+                foreach (CorePackage.Entity.Function curr in fnts) { removed.Add(GetEntityID(curr)); }
+                foreach (CorePackage.Entity.Variable curr in vars) { removed.Add(GetEntityID(curr)); }
+                foreach (CorePackage.Entity.DataType curr in types) { removed.Add(GetEntityID(curr)); }
             }
             else
             {
@@ -273,7 +297,7 @@ namespace CoreControl
                 {
                     List<CorePackage.Entity.Variable> vars = fnt.Clear();
 
-                    foreach (CorePackage.Entity.Variable curr in vars) { removed.Add(getEntityID(curr)); }
+                    foreach (CorePackage.Entity.Variable curr in vars) { removed.Add(GetEntityID(curr)); }
                 }
             }
             return removed;
@@ -286,9 +310,9 @@ namespace CoreControl
         /// <param name="containerID">Identifier of the container in which rename the entity</param>
         /// <param name="lastName">Current name of the entity to rename</param>
         /// <param name="newName">Name to set to the entity</param>
-        public void rename<T>(UInt32 containerID, string lastName, string newName) where T : CorePackage.Global.Definition
+        public void Rename<T>(UInt32 containerID, string lastName, string newName) where T : CorePackage.Global.Definition
         {
-            getDeclaratorOf<T>(containerID).Rename(lastName, newName);
+            GetDeclaratorOf<T>(containerID).Rename(lastName, newName);
         }
 
         /// <summary>
@@ -298,10 +322,10 @@ namespace CoreControl
         /// <param name="fromID">Identifier of the declarator that contains the entity</param>
         /// <param name="toID">Identifier of the declarator to which move the entity</param>
         /// <param name="name">Name of the entity to move</param>
-        public void move<T>(UInt32 fromID, UInt32 toID, string name)
+        public void Move<T>(UInt32 fromID, UInt32 toID, string name)
         {
-            CorePackage.Global.IDeclarator<T> from = getDeclaratorOf<T>(fromID);
-            CorePackage.Global.IDeclarator<T> to = getDeclaratorOf<T>(toID);
+            CorePackage.Global.IDeclarator<T> from = GetDeclaratorOf<T>(fromID);
+            CorePackage.Global.IDeclarator<T> to = GetDeclaratorOf<T>(toID);
 
             CorePackage.Global.AccessMode visibility = new CorePackage.Global.AccessMode();
             T definition = from.GetVisibilityOf(name, ref visibility);
@@ -316,9 +340,281 @@ namespace CoreControl
         /// <param name="containerID">Identifier of the declarator in which change entity visibility</param>
         /// <param name="name">Name of the entity to which change visibility</param>
         /// <param name="newVisi">New visibility to set</param>
-        public void changeVisibility<T>(UInt32 containerID, string name, CorePackage.Global.AccessMode newVisi)
+        public void ChangeVisibility<T>(UInt32 containerID, string name, CorePackage.Global.AccessMode newVisi)
         {
-            getDeclaratorOf<T>(containerID).ChangeVisibility(name, newVisi);
+            GetDeclaratorOf<T>(containerID).ChangeVisibility(name, newVisi);
+        }
+
+        /// <summary>
+        /// Associates a EntityFactory.declare function to a specific ENTITY key
+        /// </summary>
+        static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, string, VISIBILITY, UInt32>> declarators = new Dictionary<ENTITY, Func<EntityFactory, uint, string, VISIBILITY, uint>>
+        {
+            {
+                ENTITY.CONTEXT,
+                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
+                {
+                    return factory.Declare<CorePackage.Entity.Context, CorePackage.Global.IContext>(containerID, name, (CorePackage.Global.AccessMode)visibility);
+                }
+            },
+            {
+                ENTITY.VARIABLE,
+                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
+                {
+                    return factory.Declare<CorePackage.Entity.Variable>(containerID, name, (CorePackage.Global.AccessMode)visibility);
+                }
+            },
+            {
+                ENTITY.FUNCTION,
+                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
+                {
+                    return factory.Declare<CorePackage.Entity.Function>(containerID, name, (CorePackage.Global.AccessMode)visibility);
+                }
+            },
+            {
+                ENTITY.ENUM_TYPE,
+                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
+                {
+                    return factory.Declare<CorePackage.Entity.Type.EnumType, CorePackage.Entity.DataType>(containerID, name, (CorePackage.Global.AccessMode)visibility);
+                }
+            },
+            {
+                ENTITY.OBJECT_TYPE,
+                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
+                {
+                    return factory.Declare<CorePackage.Entity.Type.ObjectType, CorePackage.Entity.DataType>(containerID, name, (CorePackage.Global.AccessMode)visibility);
+                }
+            },
+            {
+                ENTITY.LIST_TYPE,
+                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
+                {
+                    return factory.Declare<CorePackage.Entity.Type.ListType, CorePackage.Entity.DataType>(containerID, name, (CorePackage.Global.AccessMode)visibility);
+                }
+            }
+        };
+
+        /// <summary>
+        /// Will declare an entity in a container with a specific name and visibility
+        /// </summary>
+        /// <param name="to_declare">Type of the entity to declare</param>
+        /// <param name="containerID">Identifier of the container in which declare the entity</param>
+        /// <param name="name">Name of the declared entity</param>
+        /// <param name="visibility">Visibility of the declared entity</param>
+        /// <returns>Identifier of the freshly declared entity</returns>
+        public UInt32 Declare(ENTITY to_declare, UInt32 containerID, string name, VISIBILITY visibility)
+        {
+            if (declarators.ContainsKey(to_declare))
+                return declarators[to_declare].Invoke(this, containerID, name, visibility);
+            throw new KeyNotFoundException("No such declarator for ENTITY: " + to_declare.ToString());
+        }
+
+        /// <summary>
+        /// Associates an EntityFactory.erase function to a specific ENTITY key
+        /// </summary>
+        static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, string, List<UInt32>>> erasers = new Dictionary<ENTITY, Func<EntityFactory, uint, string, List<UInt32>>>
+        {
+            {
+                ENTITY.CONTEXT,
+                (EntityFactory factory, UInt32 containerID, string name) =>
+                {
+                    return factory.Remove<CorePackage.Global.IContext>(containerID, name);
+                }
+            },
+            {
+                ENTITY.VARIABLE,
+                (EntityFactory factory, UInt32 containerID, string name) =>
+                {
+                    return factory.Remove<CorePackage.Entity.Variable>(containerID, name);
+                }
+            },
+            {
+                ENTITY.FUNCTION,
+                (EntityFactory factory, UInt32 containerID, string name) =>
+                {
+                    return factory.Remove<CorePackage.Entity.Function>(containerID, name);
+                }
+            },
+            {
+                ENTITY.DATA_TYPE,
+                (EntityFactory factory, UInt32 containerID, string name) =>
+                {
+                    return factory.Remove<CorePackage.Entity.DataType>(containerID, name);
+                }
+            }
+        };
+
+        /// <summary>
+        /// Remove an entity declared in a container
+        /// </summary>
+        /// <param name="to_remove">Type of entity contained in the declarator</param>
+        /// <param name="containerID">Identifier of the container in which entity is declared</param>
+        /// <param name="name">Name of the entity to remove in the container</param>
+        /// <returns>List of all removed entities' id</returns>
+        public List<UInt32> Remove(ENTITY to_remove, UInt32 containerID, string name)
+        {
+            if (!erasers.ContainsKey(to_remove))
+                throw new KeyNotFoundException("No such eraser for ENTITY: " + to_remove.ToString());
+            return erasers[to_remove].Invoke(this, containerID, name);
+        }
+
+        /// <summary>
+        /// Associates an EntityFactory.rename function to a specific ENTITY key
+        /// </summary>
+        static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, string, string, bool>> renamers = new Dictionary<ENTITY, Func<EntityFactory, uint, string, string, bool>>
+        {
+            {
+                ENTITY.CONTEXT,
+                (EntityFactory factory, UInt32 containerID, string lastName, string newName) =>
+                {
+                    factory.Rename<CorePackage.Global.IContext>(containerID, lastName, newName);
+                    return true;
+                }
+            },
+            {
+                ENTITY.VARIABLE,
+                (EntityFactory factory, UInt32 containerID, string lastName, string newName) =>
+                {
+                    factory.Rename<CorePackage.Entity.Variable>(containerID, lastName, newName);
+                    return true;
+                }
+            },
+            {
+                ENTITY.FUNCTION,
+                (EntityFactory factory, UInt32 containerID, string lastName, string newName) =>
+                {
+                    factory.Rename<CorePackage.Entity.Function>(containerID, lastName, newName);
+                    return true;
+                }
+            },
+            {
+                ENTITY.DATA_TYPE,
+                (EntityFactory factory, UInt32 containerID, string lastName, string newName) =>
+                {
+                    factory.Rename<CorePackage.Entity.DataType>(containerID, lastName, newName);
+                    return true;
+                }
+            }
+        };
+
+        /// <summary>
+        /// Rename an entity declared in a container
+        /// </summary>
+        /// <param name="to_rename">Type of the entity contained in the declarator</param>
+        /// <param name="containerID">Identifier of the container in which entity is declared</param>
+        /// <param name="lastName">Current name of the entity</param>
+        /// <param name="newName">New name to set</param>
+        public void Rename(ENTITY to_rename, UInt32 containerID, string lastName, string newName)
+        {
+            if (!renamers.ContainsKey(to_rename))
+                throw new KeyNotFoundException("No such renamer for ENTITY: " + to_rename.ToString());
+            renamers[to_rename].Invoke(this, containerID, lastName, newName);
+        }
+
+        /// <summary>
+        /// Associates an EntityFactory.move function to a specific ENTITY key
+        /// </summary>
+        static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, UInt32, string, bool>> movers = new Dictionary<ENTITY, Func<EntityFactory, uint, uint, string, bool>>
+        {
+            {
+                ENTITY.CONTEXT,
+                (EntityFactory factory, UInt32 fromID, UInt32 toID, string name) =>
+                {
+                    factory.Move<CorePackage.Global.IContext>(fromID, toID, name);
+                    return true;
+                }
+            },
+            {
+                ENTITY.VARIABLE,
+                (EntityFactory factory, UInt32 fromID, UInt32 toID, string name) =>
+                {
+                    factory.Move<CorePackage.Entity.Variable>(fromID, toID, name);
+                    return true;
+                }
+            },
+            {
+                ENTITY.FUNCTION,
+                (EntityFactory factory, UInt32 fromID, UInt32 toID, string name) =>
+                {
+                    factory.Move<CorePackage.Entity.Function>(fromID, toID, name);
+                    return true;
+                }
+            },
+            {
+                ENTITY.DATA_TYPE,
+                (EntityFactory factory, UInt32 fromID, UInt32 toID, string name) =>
+                {
+                    factory.Move<CorePackage.Entity.DataType>(fromID, toID, name);
+                    return true;
+                }
+            }
+        };
+
+        /// <summary>
+        /// Move an entity from a specific container to another
+        /// </summary>
+        /// <param name="to_move">Type of the entity contained in the declarator</param>
+        /// <param name="fromID">Identifier of the entity declared in the container</param>
+        /// <param name="toID">Identifier of the declarator in which move the entity</param>
+        /// <param name="name">Name of the entity to move</param>
+        public void Move(ENTITY to_move, UInt32 fromID, UInt32 toID, string name)
+        {
+            if (!movers.ContainsKey(to_move))
+                throw new KeyNotFoundException("No such mover for ENTITY: " + to_move.ToString());
+            movers[to_move].Invoke(this, fromID, toID, name);
+        }
+
+        /// <summary>
+        /// Associates an EntityFactory.changeVisibility function to a specific ENTITY key
+        /// </summary>
+        private Dictionary<ENTITY, Func<EntityFactory, UInt32, string, VISIBILITY, bool>> visi_modifiers = new Dictionary<ENTITY, Func<EntityFactory, uint, string, VISIBILITY, bool>>
+        {
+            {
+                ENTITY.CONTEXT,
+                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY newVisi) =>
+                {
+                    factory.ChangeVisibility<CorePackage.Global.IContext>(containerID, name, (CorePackage.Global.AccessMode)newVisi);
+                    return true;
+                }
+            },
+            {
+                ENTITY.VARIABLE,
+                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY newVisi) =>
+                {
+                    factory.ChangeVisibility<CorePackage.Entity.Variable>(containerID, name, (CorePackage.Global.AccessMode)newVisi);
+                    return true;
+                }
+            },
+            {
+                ENTITY.FUNCTION,
+                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY newVisi) =>
+                {
+                    factory.ChangeVisibility<CorePackage.Entity.Function>(containerID, name, (CorePackage.Global.AccessMode)newVisi);
+                    return true;
+                }
+            },
+            {
+                ENTITY.DATA_TYPE,
+                (EntityFactory factory, UInt32 containerID, string name, VISIBILITY newVisi) =>
+                {
+                    factory.ChangeVisibility<CorePackage.Entity.DataType>(containerID, name, (CorePackage.Global.AccessMode)newVisi);
+                    return true;
+                }
+            }
+        };
+
+        /// <summary>
+        /// Change an entity visibility declared in a specific container
+        /// </summary>
+        /// <param name="to_change_visi">Type of the entity to change visibility</param>
+        /// <param name="containerID">Identifier of the container in which entity is declared</param>
+        /// <param name="name">Name of the declared entity in the container</param>
+        /// <param name="newVisi">New visibility of the declared entity</param>
+        public void ChangeVisibility(ENTITY to_change_visi, UInt32 containerID, string name, VISIBILITY newVisi)
+        {
+            if (!visi_modifiers.ContainsKey(to_change_visi))
+                throw new KeyNotFoundException("No such visibility modifier for ENTITY: " + to_change_visi.ToString());
+            visi_modifiers[to_change_visi].Invoke(this, containerID, name, newVisi);
         }
     }
 }
