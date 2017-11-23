@@ -13,7 +13,7 @@ namespace EventServerClient.Communication
         private readonly CreatePackage _createPackage;
         private byte[] _dataStorage;
         private ValidatePackage _validatePackage;
-        private System.Collections.Generic.Dictionary<string, Func<byte[], int>> _mapPtr;
+        private System.Collections.Generic.Dictionary<string, Action<byte[]>> _mapPtr;
 
 
         public TcpManager()
@@ -22,7 +22,7 @@ namespace EventServerClient.Communication
             _createPackage = new CreatePackage();
             _dataStorage = null;
             _validatePackage = new ValidatePackage();
-            _mapPtr = new System.Collections.Generic.Dictionary<string, Func<byte[], int>>();
+            _mapPtr = new System.Collections.Generic.Dictionary<string, Action<byte[]>>();
         }
 
         public void Connect(string address, int port)
@@ -55,7 +55,7 @@ namespace EventServerClient.Communication
             _tcpClient.Close();
         }
 
-        public void RegisterEvent(string eventName, Func<byte[], int> func, uint size) {
+        public void RegisterEvent(string eventName, Action<byte[]> func, uint size) {
             Byte[] dataRegisterEvent = _createPackage.EventRegisterPackage(eventName, size, true);
             _tcpClient.GetStream().Write(dataRegisterEvent, 0, dataRegisterEvent.Length);
             _mapPtr.Add(eventName, func);
