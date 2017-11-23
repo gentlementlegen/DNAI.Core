@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoreControl.Command
+namespace CoreCommand.Command
 {
     [ProtoBuf.ProtoContract]
     public class SetVariableValue

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using static CoreControl.InstructionFactory;
 
-namespace CoreControl.Command
+namespace CoreCommand.Command
 {
     [ProtoBuf.ProtoContract]
     public class AddInstruction : BaseAction
