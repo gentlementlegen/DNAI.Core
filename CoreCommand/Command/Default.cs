@@ -14,17 +14,4 @@ namespace CoreCommand.Command
         [ProtoBuf.ProtoMember(3)]
         public SetVariableValue SetVariableValue { get { return new SetVariableValue(); } }
     }
-
-    [ProtoBuf.ProtoContract]
-    //[ProtoBuf.ProtoInclude(500, typeof(Declare))]
-    [ProtoBuf.ProtoInclude(501, typeof(Remove))]
-    [ProtoBuf.ProtoInclude(502, typeof(AddInstruction))]
-    public class BaseAction
-    {
-        /*[ProtoBuf.ProtoMember(1)]
-        public string Name { get; set; }
-
-        [ProtoBuf.ProtoMember(2)]
-        public INSTRUCTION_ID InstructionId { get; set; }*/
-    }
 }

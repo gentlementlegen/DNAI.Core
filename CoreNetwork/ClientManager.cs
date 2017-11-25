@@ -2,6 +2,7 @@
 using EventServerClient.Communication;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -45,7 +46,7 @@ namespace CoreNetwork
         /// </summary>
         public void RegisterEvents()
         {
-            //eventProtocolClient.RegisterEvent("DECLARE", this.DeclareEvent, );
+            eventProtocolClient.RegisterEvent("DECLARE", this.DeclareEvent, 0);
         }
 
         /// <summary>
@@ -54,6 +55,15 @@ namespace CoreNetwork
         public void Update()
         {
             eventProtocolClient.Update();
+        }
+
+        /// <summary>
+        /// Tells if the client is still connected
+        /// </summary>
+        /// <returns>True if the client is connected, false either</returns>
+        public bool isConnected()
+        {
+            return eventProtocolClient.isConnected();
         }
 
         /// <summary>
@@ -79,7 +89,8 @@ namespace CoreNetwork
         /// <param name="data">Declare command body</param>
         private void DeclareEvent(byte[] data)
         {
-            HandleEvent(data, commandManager.onDeclare, "EntityDeclared");
+            Debug.WriteLine("Declaring data");
+            HandleEvent(data, commandManager.onDeclare, "ENTITY_DECLARED");
         }
     }
 }

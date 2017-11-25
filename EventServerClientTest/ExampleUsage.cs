@@ -2,8 +2,6 @@
 //using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net.Sockets;
 using System.Net;
-using EventServerClient.Communication;
-using ProtoBuf;
 
 namespace TestCore
 {

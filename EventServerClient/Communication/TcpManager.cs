@@ -149,5 +149,9 @@ namespace EventServerClient.Communication
             }
         }
 
+        public bool isConnected()
+        {
+            return _tcpClient.Connected;
+        }
     }
 }

@@ -5,13 +5,15 @@ using static CoreControl.InstructionFactory;
 namespace CoreCommand.Command
 {
     [ProtoBuf.ProtoContract]
-    public class AddInstruction : BaseAction
+    public class AddInstruction
     {
+        [ProtoBuf.ProtoMember(1)]
+        public UInt32 FunctionID { get; set; }
 
-        [ProtoBuf.ProtoMember(5)]
-        public uint Id { get; set; }
+        [ProtoBuf.ProtoMember(2)]
+        public INSTRUCTION_ID ToCreate { get; set; }
 
-        [ProtoBuf.ProtoMember(6)]
-        public List<uint> Arguments { get; set; } = new List<uint>();
+        [ProtoBuf.ProtoMember(3)]
+        public List<UInt32> Arguments { get; set; } = new List<UInt32>();
     }
 }
