@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{43E1DE0E-2E05-4FBB-B19D-26D41C060716}</ProjectGuid>
+    <ProjectGuid>{17546F12-066E-4435-AFD1-22DC480FA744}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>EventServerClientTest</RootNamespace>
-    <AssemblyName>EventServerClientTest</AssemblyName>
+    <RootNamespace>CoreDaemon</RootNamespace>
+    <AssemblyName>CoreDaemon</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="protobuf-net, Version=2.3.2.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.2.3.2\lib\net40\protobuf-net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,16 +45,18 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ExampleUsage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EventServerClient\EventServerClient.csproj">
-      <Project>{2c4dee9a-8b97-449b-9839-0cbd35a5306e}</Project>
-      <Name>EventServerClient</Name>
+    <ProjectReference Include="..\CoreCommand\CoreCommand.csproj">
+      <Project>{022ffc42-784d-4d25-8598-3e356dc7b7db}</Project>
+      <Name>CoreCommand</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreNetwork\CoreNetwork.csproj">
+      <Project>{4bdcaf42-5631-40f4-a497-6d8410085579}</Project>
+      <Name>CoreNetwork</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
