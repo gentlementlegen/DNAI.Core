@@ -188,7 +188,7 @@ namespace CoreCommand
                     {
                         Command = message,
                         Removed = _controller.Remove(message.EntityType, message.ContainerID, message.Name)
-                };
+                    };
                 });
         }
 
@@ -279,43 +279,99 @@ namespace CoreCommand
                     {
                         Command = message,
                         Value = _controller.GetEnumerationValue(message.EnumId, message.Name)
-                };
+                    };
                 });
         }
 
         public void OnRemoveEnumerationValue(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.RemoveEnumerationValue message) =>
+                {
+                    _controller.RemoveEnumerationValue(message.EnumId, message.Name);
+                    return new Reply.RemoveEnumerationValue
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnAddClassAttribute(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.AddClassAttribute message) =>
+                {
+                    _controller.AddClassAttribute(message.ClassId, message.Name, message.TypeId, message.Visibility);
+                    return new Reply.AddClassAttribute
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnRenameClassAttribute(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.RenameClassAttribute message) =>
+                {
+                    _controller.RenameClassAttribute(message.ClassId, message.LastName, message.NewName);
+                    return new Reply.RenameClassAttribute
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnRemoveClassAttribute(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.RemoveClassAttribute message) =>
+                {
+                    _controller.RemoveClassAttribute(message.ClassId, message.Name);
+                    return new Reply.RemoveClassAttribute
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnAddClassMemberFunction(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.AddClassMemberFunction message) =>
+                {
+                    return new Reply.AddClassMemberFunction
+                    {
+                        Command = message,
+                        Value = _controller.AddClassMemberFunction(message.ClassId, message.Name, message.Visibility)
+                    };
+                });
         }
 
         public void OnSetListType(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.SetListType message) =>
+                {
+                    _controller.SetListType(message.ListId, message.TypeId);
+                    return new Reply.SetListType
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnCallFunction(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.CallFunction message) =>
+                {
+                    return new Reply.CallFunction
+                    {
+                        Command = message,
+                        Value = _controller.CallFunction(message.FuncId, message.Parameters)
+                    };
+                });
         }
 
         public void OnSetFunctionParameter(Stream inStream, Stream outStream)
