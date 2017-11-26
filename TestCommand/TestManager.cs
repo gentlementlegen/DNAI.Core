@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.IO;
 
 namespace TestCommand
@@ -71,11 +71,82 @@ namespace TestCommand
                     Value = "42"
                 },
                 dispatcher.OnSetVariableValue,
-                (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) => 
+                (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
                 {
                     Assert.IsTrue(
                         message.VariableID == reply.Command.VariableID
                         && message.Value == reply.Command.Value
+                        );
+                });
+
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.ChangeVisibility
+                {
+                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
+                    ContainerID = 0,
+                    Name = "toto",
+                    NewVisi = CoreControl.EntityFactory.VISIBILITY.PUBLIC
+                },
+                dispatcher.OnChangeVisibility,
+                (CoreCommand.Command.ChangeVisibility message, CoreCommand.Reply.ChangeVisibility reply) =>
+                {
+                    Assert.IsTrue(
+                        message.Name == reply.Command.Name
+                        && message.ContainerID == reply.Command.ContainerID
+                        && message.EntityType == reply.Command.EntityType
+                        && message.NewVisi == reply.Command.NewVisi
+                        );
+                });
+
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.GetVariableValue
+                {
+                    VariableId = 6
+                },
+                dispatcher.OnGetVariableValue,
+                (CoreCommand.Command.GetVariableValue message, CoreCommand.Reply.GetVariableValue reply) =>
+                {
+                    Assert.IsTrue(
+                        message.VariableId == reply.Command.VariableId
+                        );
+                });
+            //testCommand(
+            //    dispatcher,
+            //    new CoreCommand.Command.Move
+            //    {
+            //        EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
+            //        Name = "toto",
+            //        FromID = 6,
+            //        ToID = 6
+            //    },
+            //    dispatcher.OnMove,
+            //    (CoreCommand.Command.Move message, CoreCommand.Reply.Move reply) =>
+            //    {
+            //        Assert.IsTrue(
+            //            message.Name == reply.Command.Name
+            //            && message.FromID == reply.Command.FromID
+            //            && message.EntityType == reply.Command.EntityType
+            //            && message.ToID == reply.Command.ToID
+            //            );
+            //    });
+
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.Remove
+                {
+                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
+                    ContainerID = 0,
+                    Name = "toto"
+                },
+                dispatcher.OnRemove,
+                (CoreCommand.Command.Remove message, CoreCommand.Reply.Remove reply) =>
+                {
+                    Assert.IsTrue(
+                        message.Name == reply.Command.Name
+                        && message.ContainerID == reply.Command.ContainerID
+                        && message.EntityType == reply.Command.EntityType
                         );
                 });
 

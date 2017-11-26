@@ -131,7 +131,7 @@ namespace CoreCommand
                     }
                     catch
                     {
-                        Console.WriteLine($"Could not Invoke the Command Callback (does the method <On${t.Name}> exists ?)");
+                        Console.WriteLine($"Could not Invoke the Command Callback (does the method <On{t.Name}> exists ?)");
                     }
                 }
             }
@@ -181,27 +181,67 @@ namespace CoreCommand
 
         public void OnRemove(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.Remove message) =>
+                {
+                    _controller.Remove(message.EntityType, message.ContainerID, message.Name);
+                    return new Reply.Remove
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnMove(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.Move message) =>
+                {
+                    _controller.Move(message.EntityType, message.FromID, message.ToID, message.Name);
+                    return new Reply.Move
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnChangeVisibility(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.ChangeVisibility message) =>
+                {
+                    _controller.ChangeVisibility(message.EntityType, message.ContainerID, message.Name, message.NewVisi);
+                    return new Reply.ChangeVisibility
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnGetVariableValue(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.GetVariableValue message) =>
+                {
+                    _controller.GetVariableValue(message.VariableId);
+                    return new Reply.GetVariableValue
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnSetContextParent(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.SetContextParent message) =>
+                {
+                    _controller.SetContextParent(message.ContextId, message.ParentId);
+                    return new Reply.SetContextParent
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnSetEnumerationType(Stream inStream, Stream outStream)

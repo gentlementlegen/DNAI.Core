@@ -11,15 +11,15 @@ namespace CoreCommand.Command
     public class Move
     {
         [ProtoBuf.ProtoMember(1)]
-        EntityFactory.ENTITY EntityType { get; set; }
+        public EntityFactory.ENTITY EntityType { get; set; }
 
         [ProtoBuf.ProtoMember(2)]
-        UInt32 FromID { get; set; }
+        public UInt32 FromID { get; set; }
 
         [ProtoBuf.ProtoMember(3)]
-        UInt32 ToID { get; set; }
+        public UInt32 ToID { get; set; }
 
         [ProtoBuf.ProtoMember(4)]
-        string Name { get; set; }
+        public string Name { get; set; }
     }
 }

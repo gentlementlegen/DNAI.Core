@@ -11,15 +11,15 @@ namespace CoreCommand.Command
     public class ChangeVisibility
     {
         [ProtoBuf.ProtoMember(1)]
-        EntityFactory.ENTITY EntityType { get; set; }
+        public EntityFactory.ENTITY EntityType { get; set; }
 
         [ProtoBuf.ProtoMember(2)]
-        UInt32 ContainerID { get; set; }
+        public UInt32 ContainerID { get; set; }
 
         [ProtoBuf.ProtoMember(3)]
-        string Name { get; set; }
+        public string Name { get; set; }
 
         [ProtoBuf.ProtoMember(4)]
-        EntityFactory.VISIBILITY NewVisi { get; set; }
+        public EntityFactory.VISIBILITY NewVisi { get; set; }
     }
 }

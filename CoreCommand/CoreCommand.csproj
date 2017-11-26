@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\GetVariableValue.cs" />
+    <Compile Include="Command\SetContextParent.cs" />
     <Compile Include="Command\SetVariableType.cs" />
     <Compile Include="ProtobufManager.cs" />
     <Compile Include="Command\AddInstruction.cs" />
@@ -59,7 +61,12 @@
     <Compile Include="Command\SetVariableValue.cs" />
     <Compile Include="IManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reply\ChangeVisibility.cs" />
     <Compile Include="Reply\EntityDeclared.cs" />
+    <Compile Include="Reply\GetVariableValue.cs" />
+    <Compile Include="Reply\Move.cs" />
+    <Compile Include="Reply\Remove.cs" />
+    <Compile Include="Reply\SetContextParent.cs" />
     <Compile Include="Reply\VariableTypeSet.cs" />
     <Compile Include="Reply\VariableValueSet.cs" />
   </ItemGroup>
