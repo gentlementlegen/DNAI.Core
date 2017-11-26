@@ -6,6 +6,6 @@
         [ProtoBuf.ProtoMember(1)]
         public uint FuncId { get; set; }
         [ProtoBuf.ProtoMember(2)]
-        public System.Collections.Generic.Dictionary<string, dynamic> Parameters { get; set; }
+        public System.Collections.Generic.Dictionary<string, string> Parameters { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace TestNetwork
 
             CoreCommand.Command.Declare tosend = new CoreCommand.Command.Declare {
                 ContainerID = 0,
-                EntityType = CoreControl.EntityFactory.ENTITY.CONTEXT,
+                EntityType = CoreControl.EntityFactory.ENTITY.CONTEXT_D,
                 Name = "testCoverage",
                 Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
             };
@@ -35,7 +35,7 @@ namespace TestNetwork
             {
                 MemoryStream stream = new MemoryStream(data);
 
-                CoreCommand.Reply.EntityDeclared reply = ProtoBuf.Serializer.DeserializeWithLengthPrefix<CoreCommand.Reply.EntityDeclared>(stream, ProtoBuf.PrefixStyle.Base128);
+                CoreCommand.Reply.EntityDeclared reply = ProtoBuf.Serializer.Deserialize<CoreCommand.Reply.EntityDeclared>(stream);
 
                 Debug.WriteLine("Reply: { {" + reply.Command.ContainerID + ", " + reply.Command.EntityType + ", \"" + reply.Command.Name + "\", " + reply.Command.Visibility + "}, " + reply.EntityID + "}");
                 Assert.IsTrue(
@@ -49,7 +49,7 @@ namespace TestNetwork
 
             MemoryStream sendstream = new MemoryStream();
 
-            ProtoBuf.Serializer.SerializeWithLengthPrefix(sendstream, tosend, ProtoBuf.PrefixStyle.Base128);
+            ProtoBuf.Serializer.Serialize(sendstream, tosend);
 
             guiSide.SendEvent("DECLARE", sendstream.GetBuffer());
 

@@ -59,6 +59,11 @@ namespace CoreCommand
             return Newtonsoft.Json.JsonConvert.DeserializeObject(serial);
         }
 
+        private string GetSerialFrom(dynamic value)
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(value);
+        }
+
         /// <summary>
         /// Deserialize a protobuf message from an input stream and save it in history
         /// </summary>
@@ -67,7 +72,8 @@ namespace CoreCommand
         /// <returns>The deserialized message</returns>
         private T GetMessage<T>(Stream inStream)
         {
-            T message = ProtoBuf.Serializer.DeserializeWithLengthPrefix<T>(inStream, _prefix);
+            T message = ProtoBuf.Serializer.Deserialize<T>(inStream);
+            //T message = ProtoBuf.Serializer.DeserializeWithLengthPrefix<T>(inStream, _prefix);
 
             if (message == null)
             {
@@ -91,7 +97,7 @@ namespace CoreCommand
             Reply reply = callback(message);
 
             if (outStream != null)
-                ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, reply, _prefix);
+                ProtoBuf.Serializer.Serialize(outStream, reply);
         }
 
         ///<see cref="IManager.SaveCommandsTo(string)"/>
@@ -226,7 +232,7 @@ namespace CoreCommand
                     return new Reply.GetVariableValue
                     {
                         Command = message,
-                        Value = _controller.GetVariableValue(message.VariableId)
+                        Value = GetSerialFrom(_controller.GetVariableValue(message.VariableId))
                     };
                 });
         }
@@ -278,7 +284,7 @@ namespace CoreCommand
                     return new Reply.GetEnumerationValue
                     {
                         Command = message,
-                        Value = _controller.GetEnumerationValue(message.EnumId, message.Name)
+                        Value = GetSerialFrom(_controller.GetEnumerationValue(message.EnumId, message.Name))
                     };
                 });
         }
@@ -363,15 +369,17 @@ namespace CoreCommand
 
         public void OnCallFunction(Stream inStream, Stream outStream)
         {
-            ResolveCommand(inStream, outStream,
+            throw new NotImplementedException("Not finished yet");
+            /*ResolveCommand(inStream, outStream,
                 (Command.CallFunction message) =>
                 {
                     return new Reply.CallFunction
                     {
                         Command = message,
-                        Value = _controller.CallFunction(message.FuncId, message.Parameters)
+                        //change map<string, string> into map<string, dynamic>
+                        //Value = _controller.CallFunction(message.FuncId, message.Parameters)
                     };
-                });
+                });*/
         }
 
         public void OnSetFunctionParameter(Stream inStream, Stream outStream)
@@ -470,7 +478,7 @@ namespace CoreCommand
             ResolveCommand(inStream, outStream,
                 (Command.SetInstructionInputValue message) =>
                 {
-                    _controller.SetInstructionInputValue(message.FunctionID, message.Instruction, message.InputName, message.InputValue);
+                    _controller.SetInstructionInputValue(message.FunctionID, message.Instruction, message.InputName, GetValueFrom(message.InputValue));
                     return new Reply.SetInstructionInputValue
                     {
                         Command = message

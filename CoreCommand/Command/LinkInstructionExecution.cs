@@ -1,7 +1,7 @@
 ﻿namespace CoreCommand.Command
 {
     [ProtoBuf.ProtoContract]
-    internal class LinkInstructionExecution
+    public class LinkInstructionExecution
     {
         [ProtoBuf.ProtoMember(1)]
         public uint FunctionID { get; set; }

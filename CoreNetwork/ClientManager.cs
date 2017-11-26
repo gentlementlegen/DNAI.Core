@@ -89,8 +89,9 @@ namespace CoreNetwork
         /// <param name="data">Declare command body</param>
         private void DeclareEvent(byte[] data)
         {
-            Debug.WriteLine("Declaring data");
+            Console.WriteLine("Declaring data");
             HandleEvent(data, commandManager.OnDeclare, "ENTITY_DECLARED");
+            Console.WriteLine("Data declared");
         }
     }
 }

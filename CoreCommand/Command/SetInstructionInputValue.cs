@@ -9,7 +9,8 @@
         public uint Instruction { get; set; }
         [ProtoBuf.ProtoMember(3)]
         public string InputName { get; set; }
+
         [ProtoBuf.ProtoMember(4)]
-        public dynamic InputValue { get; set; }
+        public string InputValue { get; set; }
     }
 }

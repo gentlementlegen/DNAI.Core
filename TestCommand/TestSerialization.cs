@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace TestCommand
 {
-    class TestSerialization
+    [TestClass]
+    public class TestSerialization
     {
         // Check for simple IOC
         [TestMethod]
@@ -17,7 +18,7 @@ namespace TestCommand
         {
             Console.Write(ProtoBuf.Serializer.GetProto<CoreCommand.Command.Default>(ProtoBuf.Meta.ProtoSyntax.Proto3));
 
-            Controller controller = new Controller();
+            //Controller controller = new Controller();
 
             /*CommandWatcher watcher = new CommandWatcher();
 
@@ -56,7 +57,7 @@ namespace TestCommand
                 }
             }*/
 
-            SetVariableValue test = new SetVariableValue { VariableID = 42, Value = "toto" };
+            /*SetVariableValue test = new SetVariableValue { VariableID = 42, Value = "toto" };
             //Declare test = new Declare { ContainerID = 42, EntityType = ENTITY.CONTEXT, Name = "toto", Visibility = VISIBILITY.PRIVATE };
 
             System.IO.MemoryStream to_wr = new System.IO.MemoryStream();
@@ -67,7 +68,7 @@ namespace TestCommand
 
             SetVariableValue deser = ProtoBuf.Serializer.DeserializeWithLengthPrefix<SetVariableValue>(to_wr, ProtoBuf.PrefixStyle.Base128);
 
-            Assert.IsFalse(deser == null);
+            Assert.IsFalse(deser == null);*/
 
             //Assert.IsTrue(deser.VariableID == 42 && deser.Value == "toto");
         }

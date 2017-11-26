@@ -36,7 +36,7 @@ namespace CoreControl
         /// </summary>
         public enum ENTITY
         {
-            CONTEXT,
+            CONTEXT_D,
             VARIABLE,
             FUNCTION,
             DATA_TYPE,
@@ -351,7 +351,7 @@ namespace CoreControl
         static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, string, VISIBILITY, UInt32>> declarators = new Dictionary<ENTITY, Func<EntityFactory, uint, string, VISIBILITY, uint>>
         {
             {
-                ENTITY.CONTEXT,
+                ENTITY.CONTEXT_D,
                 (EntityFactory factory, UInt32 containerID, string name, VISIBILITY visibility) =>
                 {
                     return factory.Declare<CorePackage.Entity.Context, CorePackage.Global.IContext>(containerID, name, (CorePackage.Global.AccessMode)visibility);
@@ -415,7 +415,7 @@ namespace CoreControl
         static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, string, List<UInt32>>> erasers = new Dictionary<ENTITY, Func<EntityFactory, uint, string, List<UInt32>>>
         {
             {
-                ENTITY.CONTEXT,
+                ENTITY.CONTEXT_D,
                 (EntityFactory factory, UInt32 containerID, string name) =>
                 {
                     return factory.Remove<CorePackage.Global.IContext>(containerID, name);
@@ -464,7 +464,7 @@ namespace CoreControl
         static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, string, string, bool>> renamers = new Dictionary<ENTITY, Func<EntityFactory, uint, string, string, bool>>
         {
             {
-                ENTITY.CONTEXT,
+                ENTITY.CONTEXT_D,
                 (EntityFactory factory, UInt32 containerID, string lastName, string newName) =>
                 {
                     factory.Rename<CorePackage.Global.IContext>(containerID, lastName, newName);
@@ -517,7 +517,7 @@ namespace CoreControl
         static private readonly Dictionary<ENTITY, Func<EntityFactory, UInt32, UInt32, string, bool>> movers = new Dictionary<ENTITY, Func<EntityFactory, uint, uint, string, bool>>
         {
             {
-                ENTITY.CONTEXT,
+                ENTITY.CONTEXT_D,
                 (EntityFactory factory, UInt32 fromID, UInt32 toID, string name) =>
                 {
                     factory.Move<CorePackage.Global.IContext>(fromID, toID, name);
@@ -570,7 +570,7 @@ namespace CoreControl
         private Dictionary<ENTITY, Func<EntityFactory, UInt32, string, VISIBILITY, bool>> visi_modifiers = new Dictionary<ENTITY, Func<EntityFactory, uint, string, VISIBILITY, bool>>
         {
             {
-                ENTITY.CONTEXT,
+                ENTITY.CONTEXT_D,
                 (EntityFactory factory, UInt32 containerID, string name, VISIBILITY newVisi) =>
                 {
                     factory.ChangeVisibility<CorePackage.Global.IContext>(containerID, name, (CorePackage.Global.AccessMode)newVisi);
