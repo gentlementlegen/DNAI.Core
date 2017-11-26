@@ -11,7 +11,7 @@ namespace CoreControl
         /// <summary>
         /// Entity factory used to manage entities
         /// </summary>
-        private readonly EntityFactory entity_factory = new EntityFactory();
+        private EntityFactory entity_factory = new EntityFactory();
 
         /// <summary>
         /// Will declare an entity in a container with a specific name and visibility
@@ -92,6 +92,14 @@ namespace CoreControl
         public void SetVariableType(UInt32 variableID, UInt32 typeID)
         {
             entity_factory.FindDefinitionOfType<CorePackage.Entity.Variable>(variableID).Type = entity_factory.FindDefinitionOfType<CorePackage.Entity.DataType>(typeID);
+        }
+
+        /// <summary>
+        /// Resets the controller state to initial values.
+        /// </summary>
+        public void Reset()
+        {
+            entity_factory = new EntityFactory();
         }
 
         /// <summary>

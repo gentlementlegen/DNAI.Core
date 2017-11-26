@@ -37,7 +37,7 @@ namespace TestCommand
                     Name = "toto",
                     Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
                 },
-                dispatcher.onDeclare,
+                dispatcher.OnDeclare,
                 (CoreCommand.Command.Declare command, CoreCommand.Reply.EntityDeclared reply) =>
                 {
                     Assert.IsTrue(
@@ -55,7 +55,7 @@ namespace TestCommand
                     VariableID = 6,
                     TypeID = 2
                 },
-                dispatcher.onSetVariableType,
+                dispatcher.OnSetVariableType,
                 (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
                 {
                     Assert.IsTrue(
@@ -70,7 +70,7 @@ namespace TestCommand
                     VariableID = 6,
                     Value = "42"
                 },
-                dispatcher.onSetVariableValue,
+                dispatcher.OnSetVariableValue,
                 (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) => 
                 {
                     Assert.IsTrue(
@@ -78,6 +78,9 @@ namespace TestCommand
                         && message.Value == reply.Command.Value
                         );
                 });
+
+            dispatcher.SaveCommandsTo("test.duly");
+            dispatcher.LoadCommandsFrom("test.duly");
         }
     }
 }

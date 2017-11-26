@@ -90,7 +90,7 @@ namespace CoreNetwork
         private void DeclareEvent(byte[] data)
         {
             Debug.WriteLine("Declaring data");
-            HandleEvent(data, commandManager.onDeclare, "ENTITY_DECLARED");
+            HandleEvent(data, commandManager.OnDeclare, "ENTITY_DECLARED");
         }
     }
 }

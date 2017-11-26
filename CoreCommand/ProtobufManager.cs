@@ -9,7 +9,7 @@ namespace CoreCommand
     /// Dispatcher that handles the command events, updating the watcher accordingly.
     /// </summary>
     public class ProtobufManager : IManager
-    {        
+    {
         /// <summary>
         /// Controller on which dispatch command
         /// </summary>
@@ -26,18 +26,25 @@ namespace CoreCommand
         private ProtoBuf.PrefixStyle _prefix = ProtoBuf.PrefixStyle.Base128;
 
         /// <summary>
+        /// Dictionary for matching classes Guid to handling callbacks.
+        /// </summary>
+        //private readonly Dictionary<Guid, Action<Stream, Stream>> _actions = new Dictionary<Guid, Action<Stream, Stream>>();
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public ProtobufManager()
         {
-
+            //_actions.Add(typeof(Command.Declare).GUID, OnDeclare);
+            //_actions.Add(typeof(Command.SetVariableType).GUID, OnSetVariableType);
+            //_actions.Add(typeof(Command.SetVariableValue).GUID, OnSetVariableValue);
         }
-        
+
         /// <summary>
         /// Constructor to customize protobuf prefix
         /// </summary>
         /// <param name="prefix">Serialisation prefix for protobuf</param>
-        public ProtobufManager(ProtoBuf.PrefixStyle prefix)
+        public ProtobufManager(ProtoBuf.PrefixStyle prefix) : this()
         {
             _prefix = prefix;
         }
@@ -64,7 +71,7 @@ namespace CoreCommand
 
             if (message == null)
             {
-                throw new InvalidDataException("ProtobufDispatcher.GetMessage<" + typeof(T).ToString() + ">: Unable to deserialize data");
+                throw new InvalidDataException("ProtobufDispatcher.GetMessage<" + typeof(T) + ">: Unable to deserialize data");
             }
             _commands.Add(message);
             return message;
@@ -90,30 +97,48 @@ namespace CoreCommand
         ///<see cref="IManager.SaveCommandsTo(string)"/>
         public void SaveCommandsTo(string filename)
         {
-            List<COMMANDS> index = new List<COMMANDS>();
+            //List<COMMANDS> index = new List<COMMANDS>();
+            var types = new List<string>();
 
-            //fill index with commands
-
-            //serialise the index in the file
-            //serialise each command in the file
-
-            throw new NotImplementedException();
+            using (var stream = File.Create(filename))
+            {
+                foreach (var command in _commands)
+                {
+                    types.Add(command.GetType().AssemblyQualifiedName);
+                }
+                ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, types, _prefix);
+                foreach (var command in _commands)
+                {
+                    ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, command, _prefix);
+                }
+            }
         }
 
         ///<see cref="IManager.LoadCommandsFrom(string)"/>
         public void LoadCommandsFrom(string filename)
         {
-            StreamReader file = new StreamReader(filename);
-            List<COMMANDS> index = ProtoBuf.Serializer.DeserializeWithLengthPrefix<List<COMMANDS>>(file.BaseStream, _prefix);
+            using (var file = new StreamReader(filename))
+            {
+                _controller.Reset();
+                //List<COMMANDS> index = ProtoBuf.Serializer.DeserializeWithLengthPrefix<List<COMMANDS>>(file.BaseStream, _prefix);
 
-            //for each COMMAND in the index
-            //  call the right callback with file.Basestream as inStream and null as outStream
-
-            throw new NotImplementedException();
+                foreach (var command in ProtoBuf.Serializer.DeserializeWithLengthPrefix<List<string>>(file.BaseStream, _prefix))
+                {
+                    var t = Type.GetType(command);
+                    try
+                    {
+                        GetType().GetMethod("On" + t.Name).Invoke(this, new object[] { file.BaseStream, null });
+                    }
+                    catch
+                    {
+                        Console.WriteLine($"Could not Invoke the Command Callback (does the method <On${t.Name}> exists ?)");
+                    }
+                }
+            }
         }
 
-        ///<see cref="IManager.onDeclare(Stream, Stream)"/>
-        public void onDeclare(Stream inStream, Stream outStream)
+        ///<see cref="IManager.OnDeclare(Stream, Stream)"/>
+        public void OnDeclare(Stream inStream, Stream outStream)
         {
             ResolveCommand(inStream, outStream,
                 (Command.Declare message) =>
@@ -126,8 +151,8 @@ namespace CoreCommand
                 });
         }
 
-        ///<see cref="IManager.onSetVariableValue(Stream, Stream)"/>
-        public void onSetVariableValue(Stream inStream, Stream outStream)
+        ///<see cref="IManager.OnSetVariableValue(Stream, Stream)"/>
+        public void OnSetVariableValue(Stream inStream, Stream outStream)
         {
             ResolveCommand(inStream, outStream,
                 (Command.SetVariableValue message) =>
@@ -140,8 +165,8 @@ namespace CoreCommand
                 });
         }
 
-        ///<see cref="IManager.onSetVariableType(Stream, Stream)"/>
-        public void onSetVariableType(Stream inStream, Stream outStream)
+        ///<see cref="IManager.OnSetVariableType(Stream, Stream)"/>
+        public void OnSetVariableType(Stream inStream, Stream outStream)
         {
             ResolveCommand(inStream, outStream,
                 (Command.SetVariableType message) =>
