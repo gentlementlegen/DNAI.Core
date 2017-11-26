@@ -179,127 +179,127 @@ namespace CoreCommand
                 });
         }
 
-        public void onRemove(Stream inStream, Stream outStream)
+        public void OnRemove(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onMove(Stream inStream, Stream outStream)
+        public void OnMove(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onChangeVisibility(Stream inStream, Stream outStream)
+        public void OnChangeVisibility(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onGetVariableValue(Stream inStream, Stream outStream)
+        public void OnGetVariableValue(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onSetContextParent(Stream inStream, Stream outStream)
+        public void OnSetContextParent(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onSetEnumerationType(Stream inStream, Stream outStream)
+        public void OnSetEnumerationType(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onSetEnumerationValue(Stream inStream, Stream outStream)
+        public void OnSetEnumerationValue(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onGetEnumerationValue(Stream inStream, Stream outStream)
+        public void OnGetEnumerationValue(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onRemoveEnumerationValue(Stream inStream, Stream outStream)
+        public void OnRemoveEnumerationValue(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onAddClassAttribute(Stream inStream, Stream outStream)
+        public void OnAddClassAttribute(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onRenameClassAttribute(Stream inStream, Stream outStream)
+        public void OnRenameClassAttribute(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onRemoveClassAttribute(Stream inStream, Stream outStream)
+        public void OnRemoveClassAttribute(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onAddClassMemberFunction(Stream inStream, Stream outStream)
+        public void OnAddClassMemberFunction(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onSetListType(Stream inStream, Stream outStream)
+        public void OnSetListType(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onCallFunction(Stream inStream, Stream outStream)
+        public void OnCallFunction(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onSetFunctionParameter(Stream inStream, Stream outStream)
+        public void OnSetFunctionParameter(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onSetFunctionReturn(Stream inStream, Stream outStream)
+        public void OnSetFunctionReturn(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onSetFunctionEntryPoint(Stream inStream, Stream outStream)
+        public void OnSetFunctionEntryPoint(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onRemoveFunctionInstruction(Stream inStream, Stream outStream)
+        public void OnRemoveFunctionInstruction(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onAddInstruction(Stream inStream, Stream outStream)
+        public void OnAddInstruction(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onLinkInstructionExecution(Stream inStream, Stream outStream)
+        public void OnLinkInstructionExecution(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onLinkInstructionData(Stream inStream, Stream outStream)
+        public void OnLinkInstructionData(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onSetInstructionInputValue(Stream inStream, Stream outStream)
+        public void OnSetInstructionInputValuO(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onUnlinkInstructionFlow(Stream inStream, Stream outStream)
+        public void OnUnlinkInstructionFlow(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
 
-        public void onUnlinkInstructionInput(Stream inStream, Stream outStream)
+        public void OnUnlinkInstructionInput(Stream inStream, Stream outStream)
         {
             throw new NotImplementedException();
         }
