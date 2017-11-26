@@ -32,5 +32,19 @@ namespace CoreCommand
         /// <param name="inStream">Input stream from which read the command</param>
         /// <param name="outStream">Output stream on which write the reply</param>
         void onDeclare(Stream inStream, Stream outStream);
+
+        /// <summary>
+        /// Method to handle CoreControl.Controller.SetVariableValue call
+        /// </summary>
+        /// <param name="inStream">Input stream from which read the command</param>
+        /// <param name="outStream">Output stream on which write the reply</param>
+        void onSetVariableValue(Stream inStream, Stream outStream);
+
+        /// <summary>
+        /// Method to handle CoreControl.Controller.SetVariableType call
+        /// </summary>
+        /// <param name="inStream">Input stream from which read the command</param>
+        /// <param name="outStream">Output stream on which write the reply</param>
+        void onSetVariableType(Stream inStream, Stream outStream);
     }
 }

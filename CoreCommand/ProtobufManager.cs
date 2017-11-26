@@ -32,7 +32,7 @@ namespace CoreCommand
         {
 
         }
-
+        
         /// <summary>
         /// Constructor to customize protobuf prefix
         /// </summary>
@@ -40,6 +40,16 @@ namespace CoreCommand
         public ProtobufManager(ProtoBuf.PrefixStyle prefix)
         {
             _prefix = prefix;
+        }
+
+        /// <summary>
+        /// Convert a JSON value to a dynamic object
+        /// </summary>
+        /// <param name="serial">JSON serialized value</param>
+        /// <returns>Dynamic resulting object</returns>
+        private dynamic GetValueFrom(string serial)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject(serial);
         }
 
         /// <summary>
@@ -112,6 +122,34 @@ namespace CoreCommand
                     {
                         Command = message,
                         EntityID = _controller.Declare(message.EntityType, message.ContainerID, message.Name, message.Visibility)
+                    };
+                });
+        }
+
+        ///<see cref="IManager.onSetVariableValue(Stream, Stream)"/>
+        public void onSetVariableValue(Stream inStream, Stream outStream)
+        {
+            ResolveCommand(inStream, outStream,
+                (Command.SetVariableValue message) =>
+                {
+                    _controller.SetVariableValue(message.VariableID, GetValueFrom(message.Value));
+                    return new Reply.VariableValueSet
+                    {
+                        Command = message
+                    };
+                });
+        }
+
+        ///<see cref="IManager.onSetVariableType(Stream, Stream)"/>
+        public void onSetVariableType(Stream inStream, Stream outStream)
+        {
+            ResolveCommand(inStream, outStream,
+                (Command.SetVariableType message) =>
+                {
+                    _controller.SetVariableType(message.VariableID, message.TypeID);
+                    return new Reply.VariableTypeSet
+                    {
+                        Command = message
                     };
                 });
         }
