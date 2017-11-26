@@ -1,9 +1,9 @@
 ﻿namespace CoreCommand.Reply
 {
     [ProtoBuf.ProtoContract]
-    public class VariableTypeSet
+    public class SetEnumerationType
     {
         [ProtoBuf.ProtoMember(1)]
-        public Command.SetVariableType Command { get; set; }
+        public Command.SetEnumerationType Command { get; set; }
     }
 }

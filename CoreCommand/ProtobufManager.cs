@@ -184,11 +184,11 @@ namespace CoreCommand
             ResolveCommand(inStream, outStream,
                 (Command.Remove message) =>
                 {
-                    _controller.Remove(message.EntityType, message.ContainerID, message.Name);
                     return new Reply.Remove
                     {
-                        Command = message
-                    };
+                        Command = message,
+                        Removed = _controller.Remove(message.EntityType, message.ContainerID, message.Name)
+                };
                 });
         }
 
@@ -223,10 +223,10 @@ namespace CoreCommand
             ResolveCommand(inStream, outStream,
                 (Command.GetVariableValue message) =>
                 {
-                    _controller.GetVariableValue(message.VariableId);
                     return new Reply.GetVariableValue
                     {
-                        Command = message
+                        Command = message,
+                        Value = _controller.GetVariableValue(message.VariableId)
                     };
                 });
         }
@@ -246,17 +246,41 @@ namespace CoreCommand
 
         public void OnSetEnumerationType(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.SetEnumerationType message) =>
+                {
+                    _controller.SetEnumerationType(message.EnumId, message.TypeId);
+                    return new Reply.SetEnumerationType
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnSetEnumerationValue(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.SetEnumerationValue message) =>
+                {
+                    _controller.SetEnumerationValue(message.EnumId, message.Name, message.Value);
+                    return new Reply.SetEnumerationValue
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnGetEnumerationValue(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.GetEnumerationValue message) =>
+                {
+                    return new Reply.GetEnumerationValue
+                    {
+                        Command = message,
+                        Value = _controller.GetEnumerationValue(message.EnumId, message.Name)
+                };
+                });
         }
 
         public void OnRemoveEnumerationValue(Stream inStream, Stream outStream)

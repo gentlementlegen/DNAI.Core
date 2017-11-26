@@ -218,6 +218,11 @@ namespace CoreControl
             return funcID;
         }
 
+        public dynamic GetEnumerationValue(object enumId, object name)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Set a type to a specific list
         /// </summary>
