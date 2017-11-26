@@ -178,5 +178,130 @@ namespace CoreCommand
                     };
                 });
         }
+
+        public void onRemove(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onMove(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onChangeVisibility(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onGetVariableValue(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onSetContextParent(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onSetEnumerationType(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onSetEnumerationValue(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onGetEnumerationValue(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onRemoveEnumerationValue(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onAddClassAttribute(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onRenameClassAttribute(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onRemoveClassAttribute(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onAddClassMemberFunction(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onSetListType(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onCallFunction(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onSetFunctionParameter(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onSetFunctionReturn(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onSetFunctionEntryPoint(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onRemoveFunctionInstruction(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onAddInstruction(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onLinkInstructionExecution(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onLinkInstructionData(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onSetInstructionInputValue(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onUnlinkInstructionFlow(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void onUnlinkInstructionInput(Stream inStream, Stream outStream)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

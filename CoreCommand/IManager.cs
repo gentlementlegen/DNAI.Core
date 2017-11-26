@@ -31,20 +31,70 @@ namespace CoreCommand
         /// </summary>
         /// <param name="inStream">Input stream from which read the command</param>
         /// <param name="outStream">Output stream on which write the reply</param>
-        void OnDeclare(Stream inStream, Stream outStream);
+        void onDeclare(Stream inStream, Stream outStream);
+
+        void onRemove(Stream inStream, Stream outStream);
+
+        void onMove(Stream inStream, Stream outStream);
+
+        void onChangeVisibility(Stream inStream, Stream outStream);
 
         /// <summary>
         /// Method to handle CoreControl.Controller.SetVariableValue call
         /// </summary>
         /// <param name="inStream">Input stream from which read the command</param>
         /// <param name="outStream">Output stream on which write the reply</param>
-        void OnSetVariableValue(Stream inStream, Stream outStream);
+        void onSetVariableValue(Stream inStream, Stream outStream);
 
         /// <summary>
         /// Method to handle CoreControl.Controller.SetVariableType call
         /// </summary>
         /// <param name="inStream">Input stream from which read the command</param>
         /// <param name="outStream">Output stream on which write the reply</param>
-        void OnSetVariableType(Stream inStream, Stream outStream);
+        void onSetVariableType(Stream inStream, Stream outStream);
+
+        void onGetVariableValue(Stream inStream, Stream outStream);
+
+        void onSetContextParent(Stream inStream, Stream outStream);
+
+        void onSetEnumerationType(Stream inStream, Stream outStream);
+
+        void onSetEnumerationValue(Stream inStream, Stream outStream);
+
+        void onGetEnumerationValue(Stream inStream, Stream outStream);
+
+        void onRemoveEnumerationValue(Stream inStream, Stream outStream);
+
+        void onAddClassAttribute(Stream inStream, Stream outStream);
+
+        void onRenameClassAttribute(Stream inStream, Stream outStream);
+
+        void onRemoveClassAttribute(Stream inStream, Stream outStream);
+
+        void onAddClassMemberFunction(Stream inStream, Stream outStream);
+
+        void onSetListType(Stream inStream, Stream outStream);
+
+        void onCallFunction(Stream inStream, Stream outStream);
+
+        void onSetFunctionParameter(Stream inStream, Stream outStream);
+
+        void onSetFunctionReturn(Stream inStream, Stream outStream);
+
+        void onSetFunctionEntryPoint(Stream inStream, Stream outStream);
+
+        void onRemoveFunctionInstruction(Stream inStream, Stream outStream);
+
+        void onAddInstruction(Stream inStream, Stream outStream);
+
+        void onLinkInstructionExecution(Stream inStream, Stream outStream);
+
+        void onLinkInstructionData(Stream inStream, Stream outStream);
+
+        void onSetInstructionInputValue(Stream inStream, Stream outStream);
+
+        void onUnlinkInstructionFlow(Stream inStream, Stream outStream);
+
+        void onUnlinkInstructionInput(Stream inStream, Stream outStream);
     }
 }
