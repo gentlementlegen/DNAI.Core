@@ -376,52 +376,132 @@ namespace CoreCommand
 
         public void OnSetFunctionParameter(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.SetFunctionParameter message) =>
+                {
+                    _controller.SetFunctionParameter(message.FuncId, message.ExternalVarName);
+                    return new Reply.SetFunctionParameter
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnSetFunctionReturn(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.SetFunctionReturn message) =>
+                {
+                    _controller.SetFunctionReturn(message.FuncId, message.ExternalVarName);
+                    return new Reply.SetFunctionReturn
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnSetFunctionEntryPoint(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.SetFunctionEntryPoint message) =>
+                {
+                    _controller.SetFunctionEntryPoint(message.FunctionId, message.Instruction);
+                    return new Reply.SetFunctionEntryPoint
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnRemoveFunctionInstruction(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.RemoveFunctionInstruction message) =>
+                {
+                    _controller.RemoveFunctionInstruction(message.FunctionId, message.Instruction);
+                    return new Reply.RemoveFunctionInstruction
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnAddInstruction(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.AddInstruction message) =>
+                {
+                    return new Reply.AddInstruction
+                    {
+                        Command = message,
+                        Value = _controller.AddInstruction(message.FunctionID, message.ToCreate, message.Arguments)
+                    };
+                });
         }
 
         public void OnLinkInstructionExecution(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.LinkInstructionExecution message) =>
+                {
+                    _controller.LinkInstructionExecution(message.FunctionID, message.FromId, message.OutIndex, message.ToId);
+                    return new Reply.LinkInstructionExecution
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnLinkInstructionData(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.LinkInstructionData message) =>
+                {
+                    _controller.LinkInstructionData(message.FunctionID, message.FromId, message.OutputName, message.ToId, message.InputName);
+                    return new Reply.LinkInstructionData
+                    {
+                        Command = message
+                    };
+                });
         }
 
-        public void OnSetInstructionInputValuO(Stream inStream, Stream outStream)
+        public void OnSetInstructionInputValue(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.SetInstructionInputValue message) =>
+                {
+                    _controller.SetInstructionInputValue(message.FunctionID, message.Instruction, message.InputName, message.InputValue);
+                    return new Reply.SetInstructionInputValue
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnUnlinkInstructionFlow(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.UnlinkInstructionFlow message) =>
+                {
+                    _controller.UnlinkInstructionFlow(message.FunctionID, message.Instruction, message.OutIndex);
+                    return new Reply.UnlinkInstructionFlow
+                    {
+                        Command = message
+                    };
+                });
         }
 
         public void OnUnlinkInstructionInput(Stream inStream, Stream outStream)
         {
-            throw new NotImplementedException();
+            ResolveCommand(inStream, outStream,
+                (Command.UnlinkInstructionInput message) =>
+                {
+                    _controller.UnlinkInstructionInput(message.FunctionID, message.Instruction, message.InputName);
+                    return new Reply.UnlinkInstructionInput
+                    {
+                        Command = message
+                    };
+                });
         }
     }
 }

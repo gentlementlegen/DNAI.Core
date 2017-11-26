@@ -86,7 +86,7 @@ namespace CoreCommand
 
         void OnLinkInstructionData(Stream inStream, Stream outStream);
 
-        void OnSetInstructionInputValuO(Stream inStream, Stream outStream);
+        void OnSetInstructionInputValue(Stream inStream, Stream outStream);
 
         void OnUnlinkInstructionFlow(Stream inStream, Stream outStream);
 
