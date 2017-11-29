@@ -23,7 +23,7 @@ namespace TestCommand
             check(toserial, reply);
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void ManagerCoverage()
         {
             CoreCommand.IManager dispatcher = new CoreCommand.ProtobufManager();
@@ -106,7 +106,7 @@ namespace TestCommand
                     VariableId = 6
                 },
                 dispatcher.OnGetVariableValue,
-                (CoreCommand.Command.GetVariableValue message, CoreCommand.Reply.GetVariableValue reply) =>
+                (CoreCommand.Command.GetVariableValue message, CoreCommand.Reply.VariableValueGet reply) =>
                 {
                     Assert.IsTrue(
                         message.VariableId == reply.Command.VariableId

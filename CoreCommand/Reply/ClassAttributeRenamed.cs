@@ -1,9 +1,9 @@
 ﻿namespace CoreCommand.Reply
 {
     [ProtoBuf.ProtoContract]
-    public class SetListType
+    public class ClassAttributeRenamed
     {
         [ProtoBuf.ProtoMember(1)]
-        public Command.SetListType Command { get; set; }
+        public Command.RenameClassAttribute Command { get; set; }
     }
 }

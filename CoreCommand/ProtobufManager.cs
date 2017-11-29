@@ -238,7 +238,7 @@ namespace CoreCommand
             ResolveCommand(inStream, outStream,
                 (Command.GetVariableValue message) =>
                 {
-                    return new Reply.GetVariableValue
+                    return new Reply.VariableValueGet
                     {
                         Command = message,
                         Value = GetSerialFrom(_controller.GetVariableValue(message.VariableId))
@@ -252,7 +252,7 @@ namespace CoreCommand
                 (Command.SetContextParent message) =>
                 {
                     _controller.SetContextParent(message.ContextId, message.ParentId);
-                    return new Reply.SetContextParent
+                    return new Reply.ParentContextSet
                     {
                         Command = message
                     };
@@ -265,7 +265,7 @@ namespace CoreCommand
                 (Command.SetEnumerationType message) =>
                 {
                     _controller.SetEnumerationType(message.EnumId, message.TypeId);
-                    return new Reply.SetEnumerationType
+                    return new Reply.EnumerationTypeSet
                     {
                         Command = message
                     };
@@ -278,7 +278,7 @@ namespace CoreCommand
                 (Command.SetEnumerationValue message) =>
                 {
                     _controller.SetEnumerationValue(message.EnumId, message.Name, message.Value);
-                    return new Reply.SetEnumerationValue
+                    return new Reply.EnumerationValueSet
                     {
                         Command = message
                     };
@@ -290,7 +290,7 @@ namespace CoreCommand
             ResolveCommand(inStream, outStream,
                 (Command.GetEnumerationValue message) =>
                 {
-                    return new Reply.GetEnumerationValue
+                    return new Reply.EnumerationValueGet
                     {
                         Command = message,
                         Value = GetSerialFrom(_controller.GetEnumerationValue(message.EnumId, message.Name))
@@ -304,7 +304,7 @@ namespace CoreCommand
                 (Command.RemoveEnumerationValue message) =>
                 {
                     _controller.RemoveEnumerationValue(message.EnumId, message.Name);
-                    return new Reply.RemoveEnumerationValue
+                    return new Reply.EnumerationValueRemoved
                     {
                         Command = message
                     };
@@ -317,7 +317,7 @@ namespace CoreCommand
                 (Command.AddClassAttribute message) =>
                 {
                     _controller.AddClassAttribute(message.ClassId, message.Name, message.TypeId, message.Visibility);
-                    return new Reply.AddClassAttribute
+                    return new Reply.ClassAttributeAdded
                     {
                         Command = message
                     };
@@ -330,7 +330,7 @@ namespace CoreCommand
                 (Command.RenameClassAttribute message) =>
                 {
                     _controller.RenameClassAttribute(message.ClassId, message.LastName, message.NewName);
-                    return new Reply.RenameClassAttribute
+                    return new Reply.ClassAttributeRenamed
                     {
                         Command = message
                     };
@@ -355,7 +355,7 @@ namespace CoreCommand
             ResolveCommand(inStream, outStream,
                 (Command.AddClassMemberFunction message) =>
                 {
-                    return new Reply.AddClassMemberFunction
+                    return new Reply.ClassMemberFunctionAdded
                     {
                         Command = message,
                         Value = _controller.AddClassMemberFunction(message.ClassId, message.Name, message.Visibility)
@@ -369,7 +369,7 @@ namespace CoreCommand
                 (Command.SetListType message) =>
                 {
                     _controller.SetListType(message.ListId, message.TypeId);
-                    return new Reply.SetListType
+                    return new Reply.ListTypeSet
                     {
                         Command = message
                     };

@@ -1,7 +1,7 @@
 ﻿namespace CoreCommand.Reply
 {
     [ProtoBuf.ProtoContract]
-    public class CallFunction
+    public class FunctionCalled
     {
         [ProtoBuf.ProtoMember(1)]
         public Command.CallFunction Command { get; set; }

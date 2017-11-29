@@ -1,7 +1,7 @@
 ﻿namespace CoreCommand.Reply
 {
     [ProtoBuf.ProtoContract]
-    public class GetVariableValue
+    public class VariableValueGet
     {
         [ProtoBuf.ProtoMember(1)]
         public Command.GetVariableValue Command { get; set; }

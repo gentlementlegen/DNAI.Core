@@ -3,7 +3,7 @@
 namespace CoreCommand.Reply
 {
     [ProtoBuf.ProtoContract]
-    public class SetEnumerationValue
+    public class EnumerationValueSet
     {
         [ProtoBuf.ProtoMember(1)]
         public Command.SetEnumerationValue Command { get; set; }

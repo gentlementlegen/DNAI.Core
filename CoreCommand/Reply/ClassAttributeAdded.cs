@@ -1,9 +1,9 @@
 ﻿namespace CoreCommand.Reply
 {
     [ProtoBuf.ProtoContract]
-    public class SetEnumerationType
+    internal class ClassAttributeAdded
     {
         [ProtoBuf.ProtoMember(1)]
-        public Command.SetEnumerationType Command { get; set; }
+        public Command.AddClassAttribute Command { get; set; }
     }
 }

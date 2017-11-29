@@ -1,9 +1,9 @@
 ﻿namespace CoreCommand.Reply
 {
     [ProtoBuf.ProtoContract]
-    internal class SetContextParent
+    public class EnumerationValueRemoved
     {
         [ProtoBuf.ProtoMember(1)]
-        public Command.SetContextParent Command { get; set; }
+        public Command.RemoveEnumerationValue Command { get; set; }
     }
 }
