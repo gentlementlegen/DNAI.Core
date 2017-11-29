@@ -13,7 +13,7 @@ namespace CoreDaemon
         {
             CoreNetwork.ClientManager client = new CoreNetwork.ClientManager(new CoreCommand.ProtobufManager());
 
-            client.Connect("10.248.18.70", 7777);
+            client.Connect("10.248.84.63", 7777);
             //client.Connect("127.0.0.1", 8765);
 
             if (!client.isConnected())

@@ -3,7 +3,7 @@
 namespace CoreCommand.Command
 {
     [ProtoBuf.ProtoContract]
-    public class Default
+    public class Commands
     {
         [ProtoBuf.ProtoMember(1)]
         public Declare Declare { get { return new Declare(); } }

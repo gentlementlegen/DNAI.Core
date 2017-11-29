@@ -77,9 +77,8 @@ namespace CoreNetwork
         {
             MemoryStream inStream = new MemoryStream(data);
             MemoryStream outStream = new MemoryStream();
-
+            
             callback(inStream, outStream);
-
             eventProtocolClient.SendEvent(replyEventName, outStream.GetBuffer());
         }
 

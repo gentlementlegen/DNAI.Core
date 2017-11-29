@@ -12,13 +12,13 @@ namespace TestCommand
             Stream instream = new MemoryStream();
             Stream outStream = new MemoryStream();
 
-            ProtoBuf.Serializer.Serialize(instream, toserial);
+            ProtoBuf.Serializer.SerializeWithLengthPrefix(instream, toserial, ProtoBuf.PrefixStyle.Base128);
             instream.Position = 0;
 
             toCall(instream, outStream);
 
             outStream.Position = 0;
-            Reply reply = ProtoBuf.Serializer.Deserialize<Reply>(outStream);
+            Reply reply = ProtoBuf.Serializer.DeserializeWithLengthPrefix<Reply>(outStream, ProtoBuf.PrefixStyle.Base128);
 
             check(toserial, reply);
         }

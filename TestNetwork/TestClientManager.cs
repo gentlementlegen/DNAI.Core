@@ -35,7 +35,7 @@ namespace TestNetwork
             {
                 MemoryStream stream = new MemoryStream(data);
 
-                CoreCommand.Reply.EntityDeclared reply = ProtoBuf.Serializer.Deserialize<CoreCommand.Reply.EntityDeclared>(stream);
+                CoreCommand.Reply.EntityDeclared reply = ProtoBuf.Serializer.DeserializeWithLengthPrefix<CoreCommand.Reply.EntityDeclared>(stream, ProtoBuf.PrefixStyle.Base128);
 
                 Debug.WriteLine("Reply: { {" + reply.Command.ContainerID + ", " + reply.Command.EntityType + ", \"" + reply.Command.Name + "\", " + reply.Command.Visibility + "}, " + reply.EntityID + "}");
                 Assert.IsTrue(
@@ -49,7 +49,7 @@ namespace TestNetwork
 
             MemoryStream sendstream = new MemoryStream();
 
-            ProtoBuf.Serializer.Serialize(sendstream, tosend);
+            ProtoBuf.Serializer.SerializeWithLengthPrefix(sendstream, tosend, ProtoBuf.PrefixStyle.Base128);
 
             guiSide.SendEvent("DECLARE", sendstream.GetBuffer());
 

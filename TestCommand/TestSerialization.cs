@@ -16,7 +16,7 @@ namespace TestCommand
         [TestMethod]
         public void SerializeParameters()
         {
-            Console.Write(ProtoBuf.Serializer.GetProto<CoreCommand.Command.Default>(ProtoBuf.Meta.ProtoSyntax.Proto3));
+            Console.Write(ProtoBuf.Serializer.GetProto<CoreCommand.ProtoData>(ProtoBuf.Meta.ProtoSyntax.Proto3));
 
             //Controller controller = new Controller();
 

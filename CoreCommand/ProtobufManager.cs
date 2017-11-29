@@ -72,7 +72,7 @@ namespace CoreCommand
         /// <returns>The deserialized message</returns>
         private T GetMessage<T>(Stream inStream)
         {
-            T message = ProtoBuf.Serializer.Deserialize<T>(inStream);
+            T message = ProtoBuf.Serializer.Deserialize<T>(inStream/*, ProtoBuf.PrefixStyle.Base128*/);// Deserialize<T>(inStream);
             //T message = ProtoBuf.Serializer.DeserializeWithLengthPrefix<T>(inStream, _prefix);
 
             if (message == null)
@@ -94,10 +94,19 @@ namespace CoreCommand
         private void ResolveCommand<Command, Reply>(Stream inStream, Stream outStream, Func<Command, Reply> callback)
         {
             Command message = GetMessage<Command>(inStream);
-            Reply reply = callback(message);
 
-            if (outStream != null)
-                ProtoBuf.Serializer.Serialize(outStream, reply);
+            try
+            {
+                Reply reply = callback(message);
+
+                if (outStream != null)
+                    ProtoBuf.Serializer.Serialize(outStream, reply/*, ProtoBuf.PrefixStyle.Base128*/);
+            }
+            catch (Exception error)
+            {
+                if (outStream != null)
+                    ProtoBuf.Serializer.Serialize<String>(outStream, error.Message);
+            }
         }
 
         ///<see cref="IManager.SaveCommandsTo(string)"/>
