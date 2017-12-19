@@ -57,4 +57,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetPath)" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
