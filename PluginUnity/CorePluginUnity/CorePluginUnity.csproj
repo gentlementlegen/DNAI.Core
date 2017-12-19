@@ -55,9 +55,41 @@
     <Compile Include="Editor\ScriptManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\CoreCommand\CoreCommand.csproj">
+      <Project>{022FFC42-784D-4D25-8598-3E356DC7B7DB}</Project>
+      <Name>CoreCommand</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CoreControl\CoreControl.csproj">
+      <Project>{dd2b786e-17b1-443b-a449-49199b6a46a8}</Project>
+      <Name>CoreControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CoreNetwork\CoreNetwork.csproj">
+      <Project>{4bdcaf42-5631-40f4-a497-6d8410085579}</Project>
+      <Name>CoreNetwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CorePackage\CorePackage.csproj">
+      <Project>{dc0c6fc8-7d9d-4ac6-9b64-c8e3c39ca105}</Project>
+      <Name>CorePackage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EventServerClient\EventServerClient.csproj">
+      <Project>{2c4dee9a-8b97-449b-9839-0cbd35a5306e}</Project>
+      <Name>EventServerClient</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetPath)" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins"</PostBuildEvent>
+    <PostBuildEvent>"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetPath)" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreCommand.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreControl.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CorePackage.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreNetwork.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)EventServerClient.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)protobuf-net.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>

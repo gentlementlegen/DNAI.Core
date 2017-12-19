@@ -21,6 +21,10 @@ using UnityEngine;
 // de texte pour mettre le path à la place du truc pour selectionner les objets, et au bout un bouton load.
 // Si le fichier est bien load, ça montre tous les behaviours disponibles en dessous.
 
+// Note : pour unity, si la .dll référence d'autres .dll cela provoque un crash au runtime. Deux solutions :
+// soit copier toutes les .dll dans le dossier plugin, soit utiliser un utilitaire de merge de librairies
+// cf : https://github.com/Microsoft/ILMerge/blob/master/ilmerge-manual.md
+
 namespace Core.Plugin.Editor
 {
     /// <summary>

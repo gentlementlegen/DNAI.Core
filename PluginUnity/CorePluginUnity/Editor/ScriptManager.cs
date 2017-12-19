@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreCommand;
+using System;
 using System.Collections.Generic;
 
 namespace Core.Plugin.Editor
@@ -24,8 +25,10 @@ namespace Core.Plugin.Editor
         /// The list of IA references contained in the Duly file.
         public List<KeyValuePair<string, Type>> iaList = new List<KeyValuePair<string, Type>>();
 
+        /// <summary>
         /// A reference to a file loader, able to manage loading of Duly files.
-        //private XmlLoader fileLoader = new XmlLoader();
+        /// </summary>
+        private readonly IManager _manager = new ProtobufManager();
 
         public ScriptManager(string filePath = "", string fileName = "")
         {
@@ -50,7 +53,7 @@ namespace Core.Plugin.Editor
         /// </summary>
         public void LoadScript()
         {
-            if (FilePath == "")
+            if (FilePath?.Length == 0)
             {
                 ProcessingStatus = "No file selected.";
                 return;
@@ -58,6 +61,7 @@ namespace Core.Plugin.Editor
             ProcessingStatus = "Reading file...";
             //Thread t = new Thread (() => fileLoader.LoadFile(FilePath));
             //t.Start ();
+            _manager.LoadCommandsFrom(FilePath);
         }
 
         /// <summary>
