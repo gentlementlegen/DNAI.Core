@@ -45,6 +45,16 @@ namespace CoreControl
             LIST_TYPE
         }
 
+        public struct Entity
+        {
+            public EntityFactory.ENTITY Type { get; set; }
+
+            public string Name { get; set; }
+
+            public UInt32 Id { get; set; }
+
+        }
+
         /// <summary>
         /// Associates an id to its entity definition
         /// </summary>
@@ -344,6 +354,25 @@ namespace CoreControl
         {
             GetDeclaratorOf<T>(containerID).ChangeVisibility(name, newVisi);
         }
+        
+        /// <summary>
+        /// Get the list of entities of a speficic type in a specific container
+        /// </summary>
+        /// <typeparam name="T">Type of entities to find in container</typeparam>
+        /// <param name="containerID">Identifier of the container</param>
+        /// <returns>List of declared entities</returns>
+        public Dictionary<string, dynamic> GetEntitiesOfType<T>(UInt32 containerID)
+            where T : CorePackage.Global.Definition
+        {
+            Dictionary<string, T> real = GetDeclaratorOf<T>(containerID).GetEntities(CorePackage.Global.AccessMode.EXTERNAL);
+            Dictionary<string, dynamic> to_ret = new Dictionary<string, dynamic>();
+
+            foreach (KeyValuePair<string, T> curr in real)
+            {
+                to_ret.Add(curr.Key, curr.Value);
+            }
+            return to_ret;
+        }
 
         /// <summary>
         /// Associates a EntityFactory.declare function to a specific ENTITY key
@@ -615,6 +644,67 @@ namespace CoreControl
             if (!visi_modifiers.ContainsKey(to_change_visi))
                 throw new KeyNotFoundException("No such visibility modifier for ENTITY: " + to_change_visi.ToString());
             visi_modifiers[to_change_visi].Invoke(this, containerID, name, newVisi);
+        }
+
+        /// <summary>
+        /// Dictionnary used to define each type to use on GetEntitiesOfType method
+        /// </summary>
+        private Dictionary<ENTITY, Func<EntityFactory, UInt32, Dictionary<string, dynamic>>> entities_getters = new Dictionary<ENTITY, Func<EntityFactory, UInt32, Dictionary<string, dynamic>>>
+        {
+            {
+                ENTITY.CONTEXT_D,
+                (EntityFactory factory, UInt32 id) =>
+                {
+                    return factory.GetEntitiesOfType<CorePackage.Global.IContext>(id);
+                }
+            },
+            {
+                ENTITY.DATA_TYPE,
+                (EntityFactory factory, UInt32 id) =>
+                {
+                    return factory.GetEntitiesOfType<CorePackage.Entity.DataType>(id);
+                }
+            },
+            {
+                ENTITY.FUNCTION,
+                (EntityFactory factory, UInt32 id) =>
+                {
+                    return factory.GetEntitiesOfType<CorePackage.Entity.Function>(id);
+                }
+            },
+            {
+                ENTITY.VARIABLE,
+                (EntityFactory factory, UInt32 id) =>
+                {
+                    return factory.GetEntitiesOfType<CorePackage.Entity.Variable>(id);
+                }
+            }
+        };
+
+        /// <summary>
+        /// Method to get entities of a specific type in a given container
+        /// </summary>
+        /// <param name="entities_type">Type of the entities to return</param>
+        /// <param name="containerID">Identifier of the container in which entities are declared</param>
+        /// <returns>List of declared entities</returns>
+        public List<Entity> GetEntitiesOfType(ENTITY entities_type, UInt32 containerID)
+        {
+            if (!entities_getters.ContainsKey(entities_type))
+                throw new KeyNotFoundException("No such entity getter for ENTITY : " + entities_type.ToString());
+
+            Dictionary<string, dynamic> entities = entities_getters[entities_type].Invoke(this, containerID);
+            List<Entity> to_ret = new List<Entity>();
+
+            foreach (KeyValuePair<string, dynamic> curr in entities)
+            {
+                to_ret.Add(new Entity
+                {
+                    Id = GetEntityID(curr.Value),
+                    Name = curr.Key,
+                    Type = entities_type
+                });
+            }
+            return to_ret;
         }
     }
 }

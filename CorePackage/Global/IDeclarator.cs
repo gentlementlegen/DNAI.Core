@@ -74,5 +74,11 @@ namespace CorePackage.Global
         /// </summary>
         /// <returns>A list of removed entities</returns>
         List<definitionType> Clear();
+
+        /// <summary>
+        /// Allow to expose entities with a specific visibility
+        /// </summary>
+        /// <returns>List of entities with the given visibility</returns>
+        Dictionary<string, definitionType> GetEntities(AccessMode visibility);
     }
 }
