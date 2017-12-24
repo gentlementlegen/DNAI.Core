@@ -161,6 +161,7 @@ namespace Core.Plugin.Drawing
             {
                 listIA[index].scriptManager.FilePath = EditorUtility.OpenFilePanel("Select a script to load", "Documents", Constants.iaFileExtension);
                 listIA[index].scriptManager.LoadScript();
+                AssetDatabase.Refresh();
                 _editorWindow.Focus();
             }
 

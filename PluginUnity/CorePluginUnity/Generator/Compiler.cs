@@ -18,7 +18,7 @@ namespace Core.Plugin.Unity.Generator
         private readonly CSharpCodeProvider _provider = new CSharpCodeProvider();
         private readonly CompilerParameters _parameters = new CompilerParameters();
 
-        private readonly string code = @"
+        private string code = @"
     using System;
 
     namespace First
@@ -34,6 +34,12 @@ namespace Core.Plugin.Unity.Generator
         }
     }
 ";
+
+        internal void Compile(string code)
+        {
+            this.code = code;
+            Compile();
+        }
 
         internal Compiler()
         {

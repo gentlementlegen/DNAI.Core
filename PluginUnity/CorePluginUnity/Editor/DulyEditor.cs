@@ -61,7 +61,7 @@ namespace Core.Plugin.Editor
         private void DrawWindowTitle()
         {
             GUILayout.FlexibleSpace();
-            GUILayout.Label("Duly Experimental Editor", EditorStyles.largeLabel);
+            GUILayout.Label("Duly Editor V1.0", EditorStyles.largeLabel);
             GUILayout.FlexibleSpace();
         }
 

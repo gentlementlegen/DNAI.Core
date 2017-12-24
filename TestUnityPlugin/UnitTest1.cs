@@ -16,5 +16,23 @@ namespace TestUnityPlugin
             var main = res.CompiledAssembly.GetType("First.Program").GetMethod("Main");
             main.Invoke(null, null);
         }
+
+        [TestMethod]
+        public void TemplateFileTest()
+        {
+            var t = new TemplateReader();
+
+            var content = t.GenerateTemplateContent();
+        }
+
+        [TestMethod]
+        public void GenerationAndCompile()
+        {
+            var c = new Compiler();
+            var t = new TemplateReader();
+
+            var code = t.GenerateTemplateContent();
+            c.Compile(code);
+        }
     }
 }

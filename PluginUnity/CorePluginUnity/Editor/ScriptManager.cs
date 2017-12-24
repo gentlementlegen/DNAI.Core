@@ -1,6 +1,7 @@
 ﻿using CoreCommand;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Core.Plugin.Editor
 {
@@ -61,6 +62,9 @@ namespace Core.Plugin.Editor
             ProcessingStatus = "Reading file...";
             //Thread t = new Thread (() => fileLoader.LoadFile(FilePath));
             //t.Start ();
+            var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "DulyAssets");
+            Directory.CreateDirectory(fileCopyPath);
+            File.Copy(FilePath, Path.Combine(fileCopyPath, Path.GetFileName(FilePath)));
             _manager.LoadCommandsFrom(FilePath);
         }
 
