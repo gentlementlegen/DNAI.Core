@@ -53,6 +53,7 @@
     <Compile Include="Editor\Constants.cs" />
     <Compile Include="Editor\DulyEditor.cs" />
     <Compile Include="Editor\ScriptManager.cs" />
+    <Compile Include="Generator\Compiler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +81,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Generator\exampleXml.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
