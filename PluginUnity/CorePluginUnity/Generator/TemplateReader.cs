@@ -1,21 +1,22 @@
-﻿using EnvDTE;
-using Microsoft.VisualStudio.TextTemplating;
-using Microsoft.VisualStudio.TextTemplating.VSHost;
-using System;
+﻿//using EnvDTE;
+//using Microsoft.VisualStudio.TextTemplating;
+//using Microsoft.VisualStudio.TextTemplating.VSHost;
+//using System;
 using System.Collections.Generic;
 
 namespace Core.Plugin.Unity.Generator
 {
     public partial class GeneratedCodeTemplate
     {
-        public List<string> Entries = new List<string>();
+        public List<string> Inputs = new List<string>();
+        public List<string> Outputs = new List<string>();
     }
 
     internal class TemplateReader
     {
-        private readonly IServiceProvider serviceProvider;
-        private readonly ITextTemplating t4;
-        private readonly ITextTemplatingSessionHost sessionHost;
+        //private readonly IServiceProvider serviceProvider;
+        //private readonly ITextTemplating t4;
+        //private readonly ITextTemplatingSessionHost sessionHost;
 
         private readonly GeneratedCodeTemplate _template = new GeneratedCodeTemplate();
 
@@ -50,8 +51,10 @@ namespace Core.Plugin.Unity.Generator
 
             //// This test code yields a result similar to the following line:
             ////     Test: Hello    07/06/2010 12:37:45    42
-            _template.Entries.Add("var1");
-            _template.Entries.Add("var2");
+            _template.Inputs.Add("input1");
+            _template.Inputs.Add("input2");
+            _template.Outputs.Add("output1");
+            _template.Outputs.Add("output2");
         }
 
         internal string GenerateTemplateContent()

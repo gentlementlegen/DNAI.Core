@@ -1,4 +1,5 @@
-﻿using CoreCommand;
+﻿using Core.Plugin.Unity.Generator;
+using CoreCommand;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -65,7 +66,10 @@ namespace Core.Plugin.Editor
             var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "DulyAssets");
             Directory.CreateDirectory(fileCopyPath);
             File.Copy(FilePath, Path.Combine(fileCopyPath, Path.GetFileName(FilePath)));
+
             _manager.LoadCommandsFrom(FilePath);
+            var codeConverter = new DulyCodeConveter();
+            codeConverter.ConvertCode();
         }
 
         /// <summary>

@@ -9,6 +9,24 @@ using System.Runtime.CompilerServices;
 namespace Core.Plugin.Unity.Generator
 {
     /// <summary>
+    /// Manages code conversion from Duly files to Unity files.
+    /// </summary>
+    public class DulyCodeConveter
+    {
+        private readonly Compiler _compiler = new Compiler();
+        private readonly TemplateReader _template = new TemplateReader();
+
+        /// <summary>
+        /// Transform Duly code to Unity code.
+        /// </summary>
+        public void ConvertCode()
+        {
+            var code = _template.GenerateTemplateContent();
+            _compiler.Compile(code);
+        }
+    }
+
+    /// <summary>
     /// Compiler class that will allow C# code to be compiled at runtime.
     /// Creates a new library according to the supplied source code, and
     /// does not create any temporary code file.
@@ -35,28 +53,30 @@ namespace Core.Plugin.Unity.Generator
     }
 ";
 
-        internal void Compile(string code)
+        internal void Compile(string code, string outputPath = "./")
         {
             this.code = code;
-            Compile();
+            Compile(outputPath);
         }
 
         internal Compiler()
         {
             // Reference to library
-            _parameters.ReferencedAssemblies.Add("UnityEngine.dll");
+            // TODO : change with instllation program
+            _parameters.ReferencedAssemblies.Add(Environment.ExpandEnvironmentVariables("%ProgramW6432%") + @"\Unity\Editor\Data\Managed\UnityEngine.dll");
             // True - memory generation, false - external file generation
             _parameters.GenerateInMemory = true;
             // True - exe file generation, false - dll file generation
             _parameters.GenerateExecutable = false;
-            _parameters.OutputAssembly = "DulyGeneratedAssembly.dll";
+            // TODO : check path existence
+            _parameters.OutputAssembly = "Assets/Plugins/DulyGeneratedAssembly.dll";
         }
 
         /// <summary>
         /// Compiles the code to an assembly. <para/>
         /// Throws <see cref="InvalidOperationException"/> on compilation failure.
         /// </summary>
-        internal CompilerResults Compile()
+        internal CompilerResults Compile(string outputPath = "./")
         {
             CompilerResults results = _provider.CompileAssemblyFromSource(_parameters, code);
 

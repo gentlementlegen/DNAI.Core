@@ -32,7 +32,7 @@ namespace Core.Plugin.Unity.Generator
                     "i = 0;\r\n\t");
             
             #line 12 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
- foreach (var item in Entries)
+ foreach (var item in Inputs)
 	{ 
             
             #line default
@@ -51,7 +51,31 @@ namespace Core.Plugin.Unity.Generator
             
             #line default
             #line hidden
-            this.Write("\r\n\tpublic string Test()\r\n\t{\r\n\t\treturn \"coucou \";\r\n\t}\r\n}");
+            this.Write("\r\n\t");
+            
+            #line 17 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+ foreach (var item in Outputs)
+	{ 
+            
+            #line default
+            #line hidden
+            this.Write("\t\tpublic string ");
+            
+            #line 19 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n\t");
+            
+            #line 20 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\tpublic string Test()\r\n\t{\r\n\t\treturn \"coucou\";\r\n\t}\r\n\r\n\t///<summary>\r\n\t/// Execut" +
+                    "es the Duly Behaviour by calling the created function.\r\n\t/// Updates Outputs acc" +
+                    "ordingly.\r\n\t///</summary>\r\n\tpublic void Execute()\r\n\t{\r\n\t}\r\n}");
             return this.GenerationEnvironment.ToString();
         }
         

@@ -9,13 +9,26 @@ using UnityEngine;
 public class DulyBehaviour : MonoBehaviour
 {
 	public int i = 0;
-	<# foreach (var item in Entries)
+	<# foreach (var item in Inputs)
+	{ #>
+		public string <#=item #>;
+	<# } #>
+
+	<# foreach (var item in Outputs)
 	{ #>
 		public string <#=item #>;
 	<# } #>
 
 	public string Test()
 	{
-		return "coucou ";
+		return "coucou";
+	}
+
+	///<summary>
+	/// Executes the Duly Behaviour by calling the created function.
+	/// Updates Outputs accordingly.
+	///</summary>
+	public void Execute()
+	{
 	}
 }
