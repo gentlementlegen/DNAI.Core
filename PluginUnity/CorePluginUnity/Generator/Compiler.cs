@@ -4,6 +4,8 @@ using System.CodeDom.Compiler;
 using System.Reflection;
 using System.Text;
 using System.Runtime.CompilerServices;
+using System.IO;
+
 [assembly: InternalsVisibleTo("TestUnityPlugin")]
 
 namespace Core.Plugin.Unity.Generator
@@ -53,10 +55,10 @@ namespace Core.Plugin.Unity.Generator
     }
 ";
 
-        internal void Compile(string code, string outputPath = "./")
+        internal CompilerResults Compile(string code, string outputPath = "./")
         {
             this.code = code;
-            Compile(outputPath);
+            return Compile();
         }
 
         internal Compiler()
@@ -69,6 +71,7 @@ namespace Core.Plugin.Unity.Generator
             // True - exe file generation, false - dll file generation
             _parameters.GenerateExecutable = false;
             // TODO : check path existence
+            Directory.CreateDirectory("Assets/Plugins");
             _parameters.OutputAssembly = "Assets/Plugins/DulyGeneratedAssembly.dll";
         }
 
@@ -76,7 +79,7 @@ namespace Core.Plugin.Unity.Generator
         /// Compiles the code to an assembly. <para/>
         /// Throws <see cref="InvalidOperationException"/> on compilation failure.
         /// </summary>
-        internal CompilerResults Compile(string outputPath = "./")
+        internal CompilerResults Compile()
         {
             CompilerResults results = _provider.CompileAssemblyFromSource(_parameters, code);
 

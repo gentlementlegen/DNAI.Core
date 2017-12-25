@@ -1,5 +1,6 @@
 ﻿using Core.Plugin.Unity.Generator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace TestUnityPlugin
 {
@@ -31,8 +32,11 @@ namespace TestUnityPlugin
             var c = new Compiler();
             var t = new TemplateReader();
 
-            var code = t.GenerateTemplateContent();
-            c.Compile(code);
+            string code = t.GenerateTemplateContent();
+            var res = c.Compile(code);
+
+            var type = res.CompiledAssembly.GetType("DulyBehaviour");
+            Assert.IsNotNull(type);
         }
     }
 }

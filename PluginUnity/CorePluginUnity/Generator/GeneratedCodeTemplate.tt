@@ -6,6 +6,9 @@
 <#@parameter type="System.String" name="parameter1" #>
 using UnityEngine;
 
+///<summary>
+/// Base behaviour for Duly IA.
+///</summary>
 public class DulyBehaviour : MonoBehaviour
 {
 	public int i = 0;
