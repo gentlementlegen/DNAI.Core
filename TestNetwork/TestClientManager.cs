@@ -9,7 +9,7 @@ namespace TestNetwork
     [TestClass]
     public class TestClientManager
     {
-        //[TestMethod]
+        [TestMethod]
         public void ClientManagerCoverage()
         {
             CoreNetwork.ClientManager coreSide = new CoreNetwork.ClientManager(new CoreCommand.ProtobufManager());

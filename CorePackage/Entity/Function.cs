@@ -372,5 +372,10 @@ namespace CorePackage.Entity
         {
             return scope.Clear();
         }
+
+        public Dictionary<string, Variable> GetEntities(AccessMode visibility)
+        {
+            return scope.GetEntities(visibility);
+        }
     }
 }
