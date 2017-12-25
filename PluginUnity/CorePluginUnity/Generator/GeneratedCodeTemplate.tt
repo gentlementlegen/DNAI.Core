@@ -6,6 +6,7 @@
 <#@parameter type="System.String" name="parameter1" #>
 using UnityEngine;
 using CoreCommand;
+using System.Collections.Generic;
 
 ///<summary>
 /// Base behaviour for Duly IA.
@@ -43,7 +44,7 @@ public class DulyBehaviour : MonoBehaviour
 		<#}
 		else
 		{ #>
-			_manager.Controller.CallFunction(0, null);
+			_manager.Controller.CallFunction(<#=FunctionId#>, new Dictionary<string, dynamic>());
 			//<#=Function#>;
 		<# } #>
 	}

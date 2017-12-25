@@ -14,6 +14,7 @@ namespace Core.Plugin.Unity.Generator
         public List<string> Outputs = new List<string>();
         public string Function = "";
         public string FilePath = "";
+        public uint FunctionId;
     }
 
     internal class TemplateReader
@@ -82,6 +83,7 @@ namespace Core.Plugin.Unity.Generator
                 _template.Outputs.Clear();
                 foreach (var item in functions)
                 {
+                    _template.FunctionId = item.Id;
                     _template.Function = item.Name + "(";
                     var pars = manager.Controller.GetFunctionParameters(item.Id);
                     for (int i = 0; i < pars.Count; i++)

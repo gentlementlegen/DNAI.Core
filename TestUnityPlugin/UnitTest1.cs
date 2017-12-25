@@ -2,7 +2,6 @@
 using CoreCommand;
 using CorePackage.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
 using static CoreControl.EntityFactory;
 using static CoreControl.InstructionFactory;

@@ -1,4 +1,4 @@
-﻿//#define UNITY_ENGINE
+﻿#define UNITY_ENGINE
 using CoreCommand;
 using Microsoft.CSharp;
 using System;
@@ -86,6 +86,7 @@ namespace Core.Plugin.Unity.Generator
             _parameters.ReferencedAssemblies.Add(Environment.ExpandEnvironmentVariables("%ProgramW6432%") + @"\Unity\Editor\Data\Managed\UnityEngine.dll");
             _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
             _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
+            _parameters.ReferencedAssemblies.Add("System.Core.dll");
             // True - memory generation, false - external file generation
             _parameters.GenerateInMemory = true;
             // True - exe file generation, false - dll file generation

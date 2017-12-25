@@ -221,6 +221,40 @@ namespace TestCommand
                         );
                 });
 
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.AddInstruction
+                {
+                    FunctionID = 8,
+                    Arguments = new System.Collections.Generic.List<uint>(),
+                    ToCreate = CoreControl.InstructionFactory.INSTRUCTION_ID.IF
+                },
+                dispatcher.OnAddInstruction,
+                (CoreCommand.Command.AddInstruction message, CoreCommand.Reply.AddInstruction reply) =>
+                {
+                    Assert.IsTrue(
+                        message.FunctionID == reply.Command.FunctionID
+                        && message.Arguments.Count == reply.Command.Arguments.Count
+                        && message.ToCreate == reply.Command.ToCreate
+                        );
+                });
+
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.SetFunctionEntryPoint
+                {
+                    FunctionId = 8,
+                    Instruction = 0
+                },
+                dispatcher.OnSetFunctionEntryPoint,
+                (CoreCommand.Command.SetFunctionEntryPoint message, CoreCommand.Reply.SetFunctionEntryPoint reply) =>
+                {
+                    Assert.IsTrue(
+                        message.FunctionId == reply.Command.FunctionId
+                        && message.Instruction == reply.Command.Instruction
+                        );
+                });
+
             dispatcher.SaveCommandsTo("test.duly");
             dispatcher.LoadCommandsFrom("test.duly");
         }
