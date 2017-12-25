@@ -38,6 +38,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.1.11\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
@@ -55,6 +56,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CoreCommand\CoreCommand.csproj">
+      <Project>{022FFC42-784D-4D25-8598-3E356DC7B7DB}</Project>
+      <Name>CoreCommand</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreControl\CoreControl.csproj">
+      <Project>{DD2B786E-17B1-443B-A449-49199B6A46A8}</Project>
+      <Name>CoreControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CorePackage\CorePackage.csproj">
+      <Project>{DC0C6FC8-7D9D-4AC6-9B64-C8E3C39CA105}</Project>
+      <Name>CorePackage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PluginUnity\CorePluginUnity\CorePluginUnity.csproj">
       <Project>{12e93799-d3c3-4cc9-b419-8c6930e65d4f}</Project>
       <Name>CorePluginUnity</Name>

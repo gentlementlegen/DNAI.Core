@@ -45,6 +45,16 @@ namespace CoreControl
             LIST_TYPE
         }
 
+        [Flags]
+        public enum EntityType
+        {
+            ALL = 0,
+            PUBLIC = 1,
+            PRIVATE = 2,
+            CONTEXT = 4,
+            FUNCTION = 8
+        }
+
         public struct Entity
         {
             public EntityFactory.ENTITY Type { get; set; }
@@ -58,12 +68,12 @@ namespace CoreControl
         /// <summary>
         /// Associates an id to its entity definition
         /// </summary>
-        private Dictionary<UInt32, CorePackage.Global.Definition> definitions = new Dictionary<uint, CorePackage.Global.Definition>();
+        private readonly Dictionary<UInt32, CorePackage.Global.Definition> definitions = new Dictionary<uint, CorePackage.Global.Definition>();
 
         /// <summary>
         /// Associates an entity definition to its id
         /// </summary>
-        private Dictionary<CorePackage.Global.Definition, UInt32> ids = new Dictionary<CorePackage.Global.Definition, uint>();
+        private readonly Dictionary<CorePackage.Global.Definition, UInt32> ids = new Dictionary<CorePackage.Global.Definition, uint>();
 
         /// <summary>
         /// Represents the id of the next entity that will be declared
@@ -525,6 +535,41 @@ namespace CoreControl
                 }
             }
         };
+
+        /// <summary>
+        /// Retrieves entity ids according to the given filters.
+        /// </summary>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        internal List<uint> GetIds(EntityType flags)
+        {
+            var ret = new List<uint>();
+
+            foreach (var id in ids)
+            {
+                if ((flags & EntityType.CONTEXT) != 0)
+                {
+                    try
+                    {
+                        if (id.Key.GetType() == typeof(CorePackage.Entity.Context))
+                        {
+                            var dec = GetDeclaratorOf<CorePackage.Global.IContext>(id.Value);
+                            // TODO : check acessibility
+                            //if ((flags & EntityType.PUBLIC) != 0)
+                                ret.Add(id.Value);
+                        }
+                    }
+                    catch (CorePackage.Error.NotFoundException)
+                    {
+                    }
+                }
+                if ((flags & EntityType.FUNCTION) != 0 && id.Key.GetType() == typeof(CorePackage.Entity.Function))
+                {
+                    ret.Add(id.Value);
+                }
+            }
+            return ret;
+        }
 
         /// <summary>
         /// Rename an entity declared in a container

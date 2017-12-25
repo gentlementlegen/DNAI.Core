@@ -68,7 +68,7 @@ namespace Core.Plugin.Editor
             File.Copy(FilePath, Path.Combine(fileCopyPath, Path.GetFileName(FilePath)));
 
             _manager.LoadCommandsFrom(FilePath);
-            var codeConverter = new DulyCodeConveter();
+            var codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
             codeConverter.ConvertCode();
         }
 

@@ -437,5 +437,15 @@ namespace CoreControl
         {
             entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID).findInstruction<CorePackage.Execution.Instruction>(instruction).GetInput(inputname).Unlink();
         }
+
+        /// <summary>
+        /// Retrieves ids contained in the controller.
+        /// </summary>
+        /// <param name="flags">Filters for the request.</param>
+        /// <returns>The corresponding ID list.</returns>
+        public List<uint> GetIds(EntityFactory.EntityType flags = EntityFactory.EntityType.ALL)
+        {
+            return entity_factory.GetIds(flags);
+        }
     }
 }

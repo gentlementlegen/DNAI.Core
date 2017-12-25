@@ -50,6 +50,26 @@ namespace TestCommand
 
             testCommand(
                 dispatcher,
+                new CoreCommand.Command.Declare
+                {
+                    ContainerID = 0,
+                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
+                    Name = "MyVariable",
+                    Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
+                },
+                dispatcher.OnDeclare,
+                (CoreCommand.Command.Declare command, CoreCommand.Reply.EntityDeclared reply) =>
+                {
+                    Assert.IsTrue(
+                       reply.Command.ContainerID == command.ContainerID
+                       && reply.Command.EntityType == command.EntityType
+                       && reply.Command.Name == command.Name
+                       && reply.Command.Visibility == command.Visibility
+                       && reply.EntityID == 7);
+                });
+
+            testCommand(
+                dispatcher,
                 new CoreCommand.Command.SetVariableType
                 {
                     VariableID = 6,
@@ -68,6 +88,37 @@ namespace TestCommand
                 new CoreCommand.Command.SetVariableValue
                 {
                     VariableID = 6,
+                    Value = "42"
+                },
+                dispatcher.OnSetVariableValue,
+                (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
+                {
+                    Assert.IsTrue(
+                        message.VariableID == reply.Command.VariableID
+                        && message.Value == reply.Command.Value
+                        );
+                });
+
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableType
+                {
+                    VariableID = 7,
+                    TypeID = 2
+                },
+                dispatcher.OnSetVariableType,
+                (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
+                {
+                    Assert.IsTrue(
+                        reply.Command.VariableID == message.VariableID
+                        && reply.Command.TypeID == message.TypeID);
+                });
+
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableValue
+                {
+                    VariableID = 7,
                     Value = "42"
                 },
                 dispatcher.OnSetVariableValue,

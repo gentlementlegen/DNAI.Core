@@ -1,10 +1,11 @@
-﻿using Microsoft.CSharp;
+﻿using CoreCommand;
+using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
-using System.Reflection;
-using System.Text;
-using System.Runtime.CompilerServices;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Text;
+using static CoreControl.EntityFactory;
 
 [assembly: InternalsVisibleTo("TestUnityPlugin")]
 
@@ -13,17 +14,26 @@ namespace Core.Plugin.Unity.Generator
     /// <summary>
     /// Manages code conversion from Duly files to Unity files.
     /// </summary>
-    public class DulyCodeConveter
+    public class DulyCodeConverter
     {
         private readonly Compiler _compiler = new Compiler();
         private readonly TemplateReader _template = new TemplateReader();
+        private readonly ProtobufManager _manager;
+
+        public DulyCodeConverter(ProtobufManager manager)
+        {
+            _manager = manager;
+        }
 
         /// <summary>
         /// Transform Duly code to Unity code.
         /// </summary>
         public void ConvertCode()
         {
-            var code = _template.GenerateTemplateContent();
+            var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
+            var variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[0]);
+            var functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
+            var code = _template.GenerateTemplateContent(_manager.Controller, variables, functions);
             _compiler.Compile(code);
         }
     }

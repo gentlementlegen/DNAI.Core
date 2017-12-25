@@ -2,6 +2,7 @@
 //using Microsoft.VisualStudio.TextTemplating;
 //using Microsoft.VisualStudio.TextTemplating.VSHost;
 //using System;
+using Core.Plugin.Unity.Extensions;
 using System.Collections.Generic;
 
 namespace Core.Plugin.Unity.Generator
@@ -51,14 +52,26 @@ namespace Core.Plugin.Unity.Generator
 
             //// This test code yields a result similar to the following line:
             ////     Test: Hello    07/06/2010 12:37:45    42
-            _template.Inputs.Add("input1");
-            _template.Inputs.Add("input2");
-            _template.Outputs.Add("output1");
-            _template.Outputs.Add("output2");
+            //_template.Inputs.Add("input1");
+            //_template.Inputs.Add("input2");
+            //_template.Outputs.Add("output1");
+            //_template.Outputs.Add("output2");
         }
 
-        internal string GenerateTemplateContent()
+        internal string GenerateTemplateContent(CoreControl.Controller controller = null, List<CoreControl.EntityFactory.Entity> variables = null, List<CoreControl.EntityFactory.Entity> functions = null)
         {
+            if (variables != null)
+            {
+                _template.Inputs.Clear();
+                foreach (var item in variables)
+                    _template.Inputs.Add(item.ToSerialString(controller));
+            }
+            if (functions != null)
+            {
+                _template.Outputs.Clear();
+                foreach (var item in functions)
+                    _template.Outputs.Add(item.ToSerialString(controller));
+            }
             return _template.TransformText();
         }
     }
