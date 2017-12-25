@@ -99,14 +99,21 @@ namespace Core.Plugin.Unity.Generator
             
             #line default
             #line hidden
-            this.Write(" = ");
+            this.Write(" = _manager.Controller.CallFunction(");
             
             #line 43 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Function));
+            this.Write(this.ToStringHelper.ToStringWithCulture(FunctionId));
             
             #line default
             #line hidden
-            this.Write(";\r\n\t\t");
+            this.Write(", new Dictionary<string, dynamic>{ ");
+            
+            #line 43 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(FunctionArguments));
+            
+            #line default
+            #line hidden
+            this.Write(" });\r\n\t\t");
             
             #line 44 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
 }
@@ -122,16 +129,16 @@ namespace Core.Plugin.Unity.Generator
             
             #line default
             #line hidden
-            this.Write(", new Dictionary<string, dynamic>());\r\n\t\t\t//");
+            this.Write(", new Dictionary<string, dynamic>{ ");
             
-            #line 48 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Function));
+            #line 47 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(FunctionArguments));
             
             #line default
             #line hidden
-            this.Write(";\r\n\t\t");
+            this.Write(" });\r\n\t\t");
             
-            #line 49 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 48 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default

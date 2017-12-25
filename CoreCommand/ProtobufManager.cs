@@ -104,18 +104,19 @@ namespace CoreCommand
         {
             Command message = GetMessage<Command>(inStream);
 
-            try
-            {
+            // TODO : WTF DAT TRY CATCH why would you serialize an error ????
+            //try
+            //{
                 Reply reply = callback(message);
 
                 if (outStream != null)
                     ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, reply, _prefix);
-            }
-            catch (Exception error)
-            {
-                if (outStream != null)
-                    ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, error.Message, _prefix);
-            }
+            //}
+            //catch (Exception error)
+            //{
+            //    if (outStream != null)
+            //        ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, error.Message, _prefix);
+            //}
         }
 
         ///<see cref="IManager.SaveCommandsTo(string)"/>
@@ -124,7 +125,7 @@ namespace CoreCommand
             //List<COMMANDS> index = new List<COMMANDS>();
             var types = new List<string>();
 
-            using (var stream = File.Create(filename))
+            using (var stream = new FileStream(filename, FileMode.Truncate))
             {
                 foreach (var command in _commands)
                 {
@@ -433,7 +434,7 @@ namespace CoreCommand
             ResolveCommand(inStream, outStream,
                 (Command.SetFunctionEntryPoint message) =>
                 {
-                    Controller.SetFunctionEntryPoint(message.FunctionId, message.Instruction);
+                    Controller.SetFunctionEntryPoint((uint)message.FunctionId, (uint)message.Instruction);
                     return new Reply.SetFunctionEntryPoint
                     {
                         Command = message

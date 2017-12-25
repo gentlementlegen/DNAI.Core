@@ -1,7 +1,10 @@
-Ô	
+ö
 _CoreCommand.Command.Declare, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 _CoreCommand.Command.Declare, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 _CoreCommand.Command.Declare, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+_CoreCommand.Command.Declare, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+gCoreCommand.Command.SetVariableType, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+hCoreCommand.Command.SetVariableValue, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 gCoreCommand.Command.SetVariableType, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 hCoreCommand.Command.SetVariableValue, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 gCoreCommand.Command.SetVariableType, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -9,9 +12,11 @@ hCoreCommand.Command.SetVariableValue, CoreCommand, Version=1.0.0.0, Culture=neu
 hCoreCommand.Command.ChangeVisibility, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 hCoreCommand.Command.GetVariableValue, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 ^CoreCommand.Command.Remove, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+lCoreCommand.Command.SetFunctionParameter, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 fCoreCommand.Command.AddInstruction, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 mCoreCommand.Command.SetFunctionEntryPoint, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 toto 
 MyVariable 
-MyFunction 4242
-toto toto
+MyFunction param1 4242		666
+toto toto
+param1

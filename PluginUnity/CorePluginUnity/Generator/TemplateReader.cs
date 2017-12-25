@@ -12,9 +12,9 @@ namespace Core.Plugin.Unity.Generator
     {
         public List<string> Inputs = new List<string>();
         public List<string> Outputs = new List<string>();
-        public string Function = "";
         public string FilePath = "";
         public uint FunctionId;
+        public string FunctionArguments = "";
     }
 
     internal class TemplateReader
@@ -84,11 +84,9 @@ namespace Core.Plugin.Unity.Generator
                 foreach (var item in functions)
                 {
                     _template.FunctionId = item.Id;
-                    _template.Function = item.Name + "(";
                     var pars = manager.Controller.GetFunctionParameters(item.Id);
                     for (int i = 0; i < pars.Count; i++)
-                        _template.Function += manager.Controller.GetVariableValue(pars[i].Id).GetType() + " " + pars[i].Name + (i < pars.Count) ? ", " : "";
-                    _template.Function += ")";
+                        _template.FunctionArguments += $"{{\"{pars[i].Name}\",{manager.Controller.GetVariableValue(pars[i].Id).ToString()}}},";
                     foreach (var ret in manager.Controller.GetFunctionReturns(item.Id))
                         _template.Outputs.Add(ret.ToSerialString(manager.Controller));
                 }

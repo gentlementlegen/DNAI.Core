@@ -40,12 +40,11 @@ public class DulyBehaviour : MonoBehaviour
 	{
 		<# if (Outputs.Count > 0)
 		{#>
-			<#=Outputs[0]#> = <#=Function#>;
+			<#=Outputs[0]#> = _manager.Controller.CallFunction(<#=FunctionId#>, new Dictionary<string, dynamic>{ <#=FunctionArguments#> });
 		<#}
 		else
 		{ #>
-			_manager.Controller.CallFunction(<#=FunctionId#>, new Dictionary<string, dynamic>());
-			//<#=Function#>;
+			_manager.Controller.CallFunction(<#=FunctionId#>, new Dictionary<string, dynamic>{ <#=FunctionArguments#> });
 		<# } #>
 	}
 }

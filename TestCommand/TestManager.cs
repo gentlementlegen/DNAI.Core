@@ -13,12 +13,17 @@ namespace TestCommand
             Stream outStream = new MemoryStream();
 
             ProtoBuf.Serializer.SerializeWithLengthPrefix(instream, toserial, ProtoBuf.PrefixStyle.Base128);
+            instream.Flush();
             instream.Position = 0;
 
             toCall(instream, outStream);
+            //instream.Dispose();
 
             outStream.Position = 0;
+            var t = typeof(Reply);
             Reply reply = ProtoBuf.Serializer.DeserializeWithLengthPrefix<Reply>(outStream, ProtoBuf.PrefixStyle.Base128);
+            outStream.Flush();
+            //outStream.Dispose();
 
             check(toserial, reply);
         }
@@ -90,6 +95,26 @@ namespace TestCommand
 
             testCommand(
                 dispatcher,
+                new CoreCommand.Command.Declare
+                {
+                    ContainerID = 8,
+                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
+                    Name = "param1",
+                    Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
+                },
+                dispatcher.OnDeclare,
+                (CoreCommand.Command.Declare command, CoreCommand.Reply.EntityDeclared reply) =>
+                {
+                    Assert.IsTrue(
+                       reply.Command.ContainerID == command.ContainerID
+                       && reply.Command.EntityType == command.EntityType
+                       && reply.Command.Name == command.Name
+                       && reply.Command.Visibility == command.Visibility
+                       && reply.EntityID == 9);
+                });
+
+            testCommand(
+                dispatcher,
                 new CoreCommand.Command.SetVariableType
                 {
                     VariableID = 6,
@@ -140,6 +165,37 @@ namespace TestCommand
                 {
                     VariableID = 7,
                     Value = "42"
+                },
+                dispatcher.OnSetVariableValue,
+                (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
+                {
+                    Assert.IsTrue(
+                        message.VariableID == reply.Command.VariableID
+                        && message.Value == reply.Command.Value
+                        );
+                });
+
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableType
+                {
+                    VariableID = 9,
+                    TypeID = 2
+                },
+                dispatcher.OnSetVariableType,
+                (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
+                {
+                    Assert.IsTrue(
+                        reply.Command.VariableID == message.VariableID
+                        && reply.Command.TypeID == message.TypeID);
+                });
+
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableValue
+                {
+                    VariableID = 9,
+                    Value = "666"
                 },
                 dispatcher.OnSetVariableValue,
                 (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
@@ -223,10 +279,25 @@ namespace TestCommand
 
             testCommand(
                 dispatcher,
+                new CoreCommand.Command.SetFunctionParameter
+                {
+                    ExternalVarName = "param1",
+                    FuncId = 8
+                },
+                dispatcher.OnSetFunctionParameter,
+                (CoreCommand.Command.SetFunctionParameter command, CoreCommand.Reply.SetFunctionParameter reply) =>
+                {
+                    Assert.IsTrue(
+                       reply.Command.ExternalVarName == command.ExternalVarName
+                       && reply.Command.FuncId == command.FuncId);
+                });
+
+            testCommand(
+                dispatcher,
                 new CoreCommand.Command.AddInstruction
                 {
                     FunctionID = 8,
-                    Arguments = new System.Collections.Generic.List<uint>(),
+                    Arguments = new System.Collections.Generic.List<uint> { 8 },
                     ToCreate = CoreControl.InstructionFactory.INSTRUCTION_ID.IF
                 },
                 dispatcher.OnAddInstruction,
