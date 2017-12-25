@@ -60,7 +60,7 @@ namespace TestUnityPlugin
             functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
             //GenerateMoreOrLess(_manager, out List<Entity> variables, out List<Entity> functions);
 
-            string code = template.GenerateTemplateContent(_manager.Controller, variables, functions);
+            string code = template.GenerateTemplateContent(_manager, variables, functions);
             var res = compiler.Compile(code);
 
             var type = res.CompiledAssembly.GetType("DulyBehaviour");

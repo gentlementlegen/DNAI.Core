@@ -1,4 +1,5 @@
-﻿using CoreCommand;
+﻿//#define UNITY_ENGINE
+using CoreCommand;
 using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
@@ -33,7 +34,7 @@ namespace Core.Plugin.Unity.Generator
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
             var variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[0]);
             var functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
-            var code = _template.GenerateTemplateContent(_manager.Controller, variables, functions);
+            var code = _template.GenerateTemplateContent(_manager, variables, functions);
             _compiler.Compile(code);
         }
     }
@@ -73,16 +74,22 @@ namespace Core.Plugin.Unity.Generator
 
         internal Compiler()
         {
+#if UNITY_ENGINE
+            const string assemblyPath = "Assets/Plugins/";
+#else
+            const string assemblyPath = "";
+#endif
+            Directory.CreateDirectory("Assets/Plugins");
+            _parameters.OutputAssembly = "Assets/Plugins/DulyGeneratedAssembly.dll";
             // Reference to library
             // TODO : change with instllation program
             _parameters.ReferencedAssemblies.Add(Environment.ExpandEnvironmentVariables("%ProgramW6432%") + @"\Unity\Editor\Data\Managed\UnityEngine.dll");
+            _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
+            _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
             // True - memory generation, false - external file generation
             _parameters.GenerateInMemory = true;
             // True - exe file generation, false - dll file generation
             _parameters.GenerateExecutable = false;
-            // TODO : check path existence
-            Directory.CreateDirectory("Assets/Plugins");
-            _parameters.OutputAssembly = "Assets/Plugins/DulyGeneratedAssembly.dll";
         }
 
         /// <summary>

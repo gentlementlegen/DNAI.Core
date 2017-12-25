@@ -4,6 +4,7 @@
 //using System;
 using Core.Plugin.Unity.Extensions;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Core.Plugin.Unity.Generator
 {
@@ -11,6 +12,8 @@ namespace Core.Plugin.Unity.Generator
     {
         public List<string> Inputs = new List<string>();
         public List<string> Outputs = new List<string>();
+        public string Function = "";
+        public string FilePath = "";
     }
 
     internal class TemplateReader
@@ -58,19 +61,35 @@ namespace Core.Plugin.Unity.Generator
             //_template.Outputs.Add("output2");
         }
 
-        internal string GenerateTemplateContent(CoreControl.Controller controller = null, List<CoreControl.EntityFactory.Entity> variables = null, List<CoreControl.EntityFactory.Entity> functions = null)
+        /// <summary>
+        /// Generates the template source code file that will be understood by Unity.
+        /// </summary>
+        /// <param name="manager"></param>
+        /// <param name="variables"></param>
+        /// <param name="functions"></param>
+        /// <returns></returns>
+        internal string GenerateTemplateContent(CoreCommand.ProtobufManager manager = null, List<CoreControl.EntityFactory.Entity> variables = null, List<CoreControl.EntityFactory.Entity> functions = null)
         {
+            _template.FilePath = Path.GetFileName(manager.FilePath);
             if (variables != null)
             {
                 _template.Inputs.Clear();
                 foreach (var item in variables)
-                    _template.Inputs.Add(item.ToSerialString(controller));
+                    _template.Inputs.Add(item.ToSerialString(manager.Controller));
             }
             if (functions != null)
             {
                 _template.Outputs.Clear();
                 foreach (var item in functions)
-                    _template.Outputs.Add(item.ToSerialString(controller));
+                {
+                    _template.Function = item.Name + "(";
+                    var pars = manager.Controller.GetFunctionParameters(item.Id);
+                    for (int i = 0; i < pars.Count; i++)
+                        _template.Function += manager.Controller.GetVariableValue(pars[i].Id).GetType() + " " + pars[i].Name + (i < pars.Count) ? ", " : "";
+                    _template.Function += ")";
+                    foreach (var ret in manager.Controller.GetFunctionReturns(item.Id))
+                        _template.Outputs.Add(ret.ToSerialString(manager.Controller));
+                }
             }
             return _template.TransformText();
         }

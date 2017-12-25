@@ -1,4 +1,5 @@
-œ
+ý
+_CoreCommand.Command.Declare, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 _CoreCommand.Command.Declare, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 _CoreCommand.Command.Declare, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 gCoreCommand.Command.SetVariableType, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -9,5 +10,6 @@ hCoreCommand.Command.ChangeVisibility, CoreCommand, Version=1.0.0.0, Culture=neu
 hCoreCommand.Command.GetVariableValue, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 ^CoreCommand.Command.Remove, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 toto 
-MyVariable 4242
+MyVariable 
+MyFunction 4242
 toto toto

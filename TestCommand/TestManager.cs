@@ -23,7 +23,7 @@ namespace TestCommand
             check(toserial, reply);
         }
 
-        //[TestMethod]
+        [TestMethod]
         public void ManagerCoverage()
         {
             CoreCommand.IManager dispatcher = new CoreCommand.ProtobufManager();
@@ -66,6 +66,26 @@ namespace TestCommand
                        && reply.Command.Name == command.Name
                        && reply.Command.Visibility == command.Visibility
                        && reply.EntityID == 7);
+                });
+
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.Declare
+                {
+                    ContainerID = 0,
+                    EntityType = CoreControl.EntityFactory.ENTITY.FUNCTION,
+                    Name = "MyFunction",
+                    Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
+                },
+                dispatcher.OnDeclare,
+                (CoreCommand.Command.Declare command, CoreCommand.Reply.EntityDeclared reply) =>
+                {
+                    Assert.IsTrue(
+                       reply.Command.ContainerID == command.ContainerID
+                       && reply.Command.EntityType == command.EntityType
+                       && reply.Command.Name == command.Name
+                       && reply.Command.Visibility == command.Visibility
+                       && reply.EntityID == 8);
                 });
 
             testCommand(

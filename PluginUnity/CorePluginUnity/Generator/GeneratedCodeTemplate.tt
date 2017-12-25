@@ -5,6 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@parameter type="System.String" name="parameter1" #>
 using UnityEngine;
+using CoreCommand;
 
 ///<summary>
 /// Base behaviour for Duly IA.
@@ -20,12 +21,14 @@ public class DulyBehaviour : MonoBehaviour
 	//[Header("Output variables")]
 	<# foreach (var item in Outputs)
 	{ #>
-		public <#=item #>;
+		public <#=item #> { get; private set; };
 	<# } #>
 
-	public string Test()
+	private ProtobufManager _manager;
+	public DulyBehaviour()
 	{
-		return "coucou";
+		_manager = new ProtobufManager();
+		_manager.LoadCommandsFrom(@"Assets\DulyAssets\" + "<#=FilePath#>");
 	}
 
 	///<summary>
@@ -34,5 +37,14 @@ public class DulyBehaviour : MonoBehaviour
 	///</summary>
 	public void Execute()
 	{
+		<# if (Outputs.Count > 0)
+		{#>
+			<#=Outputs[0]#> = <#=Function#>;
+		<#}
+		else
+		{ #>
+			_manager.Controller.CallFunction(0, null);
+			//<#=Function#>;
+		<# } #>
 	}
 }

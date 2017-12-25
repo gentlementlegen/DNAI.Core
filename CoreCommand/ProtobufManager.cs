@@ -26,6 +26,16 @@ namespace CoreCommand
         private ProtoBuf.PrefixStyle _prefix = ProtoBuf.PrefixStyle.Base128;
 
         /// <summary>
+        /// Tells if a file currently loaded by the manager.
+        /// </summary>
+        public bool IsFileLoaded { get; private set; }
+
+        /// <summary>
+        /// Path to the loaded file.
+        /// </summary>
+        public string FilePath { get; private set; }
+
+        /// <summary>
         /// Dictionary for matching classes Guid to handling callbacks.
         /// </summary>
         //private readonly Dictionary<Guid, Action<Stream, Stream>> _actions = new Dictionary<Guid, Action<Stream, Stream>>();
@@ -148,6 +158,8 @@ namespace CoreCommand
                         Console.WriteLine($"Could not Invoke the Command Callback (does the method <On{t.Name}> exists ?)");
                     }
                 }
+                IsFileLoaded = true;
+                FilePath = filename;
             }
         }
 
