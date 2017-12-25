@@ -11,12 +11,13 @@ using UnityEngine;
 ///</summary>
 public class DulyBehaviour : MonoBehaviour
 {
-	public int i = 0;
+	[Header("Input variables")]
 	<# foreach (var item in Inputs)
 	{ #>
 		public string <#=item #>;
 	<# } #>
 
+	[Header("Output variables")]
 	<# foreach (var item in Outputs)
 	{ #>
 		public string <#=item #>;

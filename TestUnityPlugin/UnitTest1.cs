@@ -29,11 +29,24 @@ namespace TestUnityPlugin
         [TestMethod]
         public void GenerationAndCompile()
         {
-            var c = new Compiler();
-            var t = new TemplateReader();
+            var compiler = new Compiler();
+            var template = new TemplateReader();
 
-            string code = t.GenerateTemplateContent();
-            var res = c.Compile(code);
+            string code = template.GenerateTemplateContent();
+            var res = compiler.Compile(code);
+
+            var type = res.CompiledAssembly.GetType("DulyBehaviour");
+            Assert.IsNotNull(type);
+        }
+
+        [TestMethod]
+        public void GenerationFromController()
+        {
+            var compiler = new Compiler();
+            var template = new TemplateReader();
+
+            string code = template.GenerateTemplateContent();
+            var res = compiler.Compile(code);
 
             var type = res.CompiledAssembly.GetType("DulyBehaviour");
             Assert.IsNotNull(type);
