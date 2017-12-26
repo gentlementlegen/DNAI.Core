@@ -87,6 +87,7 @@ namespace Core.Plugin.Unity.Generator
             _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
             _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
             _parameters.ReferencedAssemblies.Add("System.Core.dll");
+            _parameters.ReferencedAssemblies.Add("Microsoft.CSharp.dll");
             // True - memory generation, false - external file generation
             _parameters.GenerateInMemory = true;
             // True - exe file generation, false - dll file generation

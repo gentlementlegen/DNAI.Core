@@ -2,7 +2,9 @@
 using CoreCommand;
 using CorePackage.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using static CoreControl.EntityFactory;
 using static CoreControl.InstructionFactory;
 
@@ -51,6 +53,7 @@ namespace TestUnityPlugin
             var _manager = new ProtobufManager();
             var variables = new List<Entity>();
             var functions = new List<Entity>();
+            GenerateDulyFile();
             _manager.LoadCommandsFrom("test.duly");
             //GenerateMoreOrLess(_manager, out variables, out functions);
 
@@ -64,6 +67,374 @@ namespace TestUnityPlugin
 
             var type = res.CompiledAssembly.GetType("DulyBehaviour");
             Assert.IsNotNull(type);
+        }
+
+        private void TestCommand<Command, Reply>(CoreCommand.IManager manager, Command toserial, Action<Stream, Stream> toCall, Action<Command, Reply> check)
+        {
+            Stream instream = new MemoryStream();
+            Stream outStream = new MemoryStream();
+
+            ProtoBuf.Serializer.SerializeWithLengthPrefix(instream, toserial, ProtoBuf.PrefixStyle.Base128);
+            instream.Flush();
+            instream.Position = 0;
+
+            toCall(instream, outStream);
+            //instream.Dispose();
+
+            outStream.Position = 0;
+            var t = typeof(Reply);
+            Reply reply = ProtoBuf.Serializer.DeserializeWithLengthPrefix<Reply>(outStream, ProtoBuf.PrefixStyle.Base128);
+            outStream.Flush();
+            //outStream.Dispose();
+
+            check(toserial, reply);
+        }
+
+        public void GenerateDulyFile()
+        {
+            CoreCommand.IManager dispatcher = new CoreCommand.ProtobufManager();
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.Declare
+                {
+                    ContainerID = 0,
+                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
+                    Name = "toto",
+                    Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
+                },
+                dispatcher.OnDeclare,
+                (CoreCommand.Command.Declare command, CoreCommand.Reply.EntityDeclared reply) =>
+                {
+                    Assert.IsTrue(
+                       reply.Command.ContainerID == command.ContainerID
+                       && reply.Command.EntityType == command.EntityType
+                       && reply.Command.Name == command.Name
+                       && reply.Command.Visibility == command.Visibility
+                       && reply.EntityID == 6);
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.Declare
+                {
+                    ContainerID = 0,
+                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
+                    Name = "MyVariable",
+                    Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
+                },
+                dispatcher.OnDeclare,
+                (CoreCommand.Command.Declare command, CoreCommand.Reply.EntityDeclared reply) =>
+                {
+                    Assert.IsTrue(
+                       reply.Command.ContainerID == command.ContainerID
+                       && reply.Command.EntityType == command.EntityType
+                       && reply.Command.Name == command.Name
+                       && reply.Command.Visibility == command.Visibility
+                       && reply.EntityID == 7);
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.Declare
+                {
+                    ContainerID = 0,
+                    EntityType = CoreControl.EntityFactory.ENTITY.FUNCTION,
+                    Name = "MyFunction",
+                    Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
+                },
+                dispatcher.OnDeclare,
+                (CoreCommand.Command.Declare command, CoreCommand.Reply.EntityDeclared reply) =>
+                {
+                    Assert.IsTrue(
+                       reply.Command.ContainerID == command.ContainerID
+                       && reply.Command.EntityType == command.EntityType
+                       && reply.Command.Name == command.Name
+                       && reply.Command.Visibility == command.Visibility
+                       && reply.EntityID == 8);
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.Declare
+                {
+                    ContainerID = 8,
+                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
+                    Name = "param1",
+                    Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
+                },
+                dispatcher.OnDeclare,
+                (CoreCommand.Command.Declare command, CoreCommand.Reply.EntityDeclared reply) =>
+                {
+                    Assert.IsTrue(
+                       reply.Command.ContainerID == command.ContainerID
+                       && reply.Command.EntityType == command.EntityType
+                       && reply.Command.Name == command.Name
+                       && reply.Command.Visibility == command.Visibility
+                       && reply.EntityID == 9);
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.Declare
+                {
+                    ContainerID = 8,
+                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
+                    Name = "return1",
+                    Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
+                },
+                dispatcher.OnDeclare,
+                (CoreCommand.Command.Declare command, CoreCommand.Reply.EntityDeclared reply) =>
+                {
+                    Assert.IsTrue(
+                        reply.Command.ContainerID == command.ContainerID
+                        && reply.Command.EntityType == command.EntityType
+                        && reply.Command.Name == command.Name
+                        && reply.Command.Visibility == command.Visibility
+                        && reply.EntityID == 10);
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableType
+                {
+                    VariableID = 6,
+                    TypeID = 2
+                },
+                dispatcher.OnSetVariableType,
+                (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
+                {
+                    Assert.IsTrue(
+                        reply.Command.VariableID == message.VariableID
+                        && reply.Command.TypeID == message.TypeID);
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableValue
+                {
+                    VariableID = 6,
+                    Value = "42"
+                },
+                dispatcher.OnSetVariableValue,
+                (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
+                {
+                    Assert.IsTrue(
+                        message.VariableID == reply.Command.VariableID
+                        && message.Value == reply.Command.Value
+                        );
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableType
+                {
+                    VariableID = 7,
+                    TypeID = 2
+                },
+                dispatcher.OnSetVariableType,
+                (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
+                {
+                    Assert.IsTrue(
+                        reply.Command.VariableID == message.VariableID
+                        && reply.Command.TypeID == message.TypeID);
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableValue
+                {
+                    VariableID = 7,
+                    Value = "42"
+                },
+                dispatcher.OnSetVariableValue,
+                (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
+                {
+                    Assert.IsTrue(
+                        message.VariableID == reply.Command.VariableID
+                        && message.Value == reply.Command.Value
+                        );
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableType
+                {
+                    VariableID = 9,
+                    TypeID = 2
+                },
+                dispatcher.OnSetVariableType,
+                (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
+                {
+                    Assert.IsTrue(
+                        reply.Command.VariableID == message.VariableID
+                        && reply.Command.TypeID == message.TypeID);
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableValue
+                {
+                    VariableID = 9,
+                    Value = "666"
+                },
+                dispatcher.OnSetVariableValue,
+                (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
+                {
+                    Assert.IsTrue(
+                        message.VariableID == reply.Command.VariableID
+                        && message.Value == reply.Command.Value
+                        );
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableType
+                {
+                    VariableID = 10,
+                    TypeID = 2
+                },
+                dispatcher.OnSetVariableType,
+                (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
+                {
+                    Assert.IsTrue(
+                        reply.Command.VariableID == message.VariableID
+                        && reply.Command.TypeID == message.TypeID);
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.SetVariableValue
+                {
+                    VariableID = 10,
+                    Value = "-1"
+                },
+                dispatcher.OnSetVariableValue,
+                (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
+                {
+                    Assert.IsTrue(
+                        message.VariableID == reply.Command.VariableID
+                        && message.Value == reply.Command.Value
+                        );
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.ChangeVisibility
+                {
+                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
+                    ContainerID = 0,
+                    Name = "toto",
+                    NewVisi = CoreControl.EntityFactory.VISIBILITY.PUBLIC
+                },
+                dispatcher.OnChangeVisibility,
+                (CoreCommand.Command.ChangeVisibility message, CoreCommand.Reply.ChangeVisibility reply) =>
+                {
+                    Assert.IsTrue(
+                        message.Name == reply.Command.Name
+                        && message.ContainerID == reply.Command.ContainerID
+                        && message.EntityType == reply.Command.EntityType
+                        && message.NewVisi == reply.Command.NewVisi
+                        );
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.GetVariableValue
+                {
+                    VariableId = 6
+                },
+                dispatcher.OnGetVariableValue,
+                (CoreCommand.Command.GetVariableValue message, CoreCommand.Reply.VariableValueGet reply) =>
+                {
+                    Assert.IsTrue(
+                        message.VariableId == reply.Command.VariableId
+                        );
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.Remove
+                {
+                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
+                    ContainerID = 0,
+                    Name = "toto"
+                },
+                dispatcher.OnRemove,
+                (CoreCommand.Command.Remove message, CoreCommand.Reply.Remove reply) =>
+                {
+                    Assert.IsTrue(
+                        message.Name == reply.Command.Name
+                        && message.ContainerID == reply.Command.ContainerID
+                        && message.EntityType == reply.Command.EntityType
+                        );
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.SetFunctionParameter
+                {
+                    ExternalVarName = "param1",
+                    FuncId = 8
+                },
+                dispatcher.OnSetFunctionParameter,
+                (CoreCommand.Command.SetFunctionParameter command, CoreCommand.Reply.SetFunctionParameter reply) =>
+                {
+                    Assert.IsTrue(
+                       reply.Command.ExternalVarName == command.ExternalVarName
+                       && reply.Command.FuncId == command.FuncId);
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.SetFunctionReturn
+                {
+                    ExternalVarName = "return1",
+                    FuncId = 8
+                },
+                dispatcher.OnSetFunctionReturn,
+                (CoreCommand.Command.SetFunctionReturn command, CoreCommand.Reply.SetFunctionReturn reply) =>
+                {
+                    Assert.IsTrue(
+                       reply.Command.ExternalVarName == command.ExternalVarName
+                       && reply.Command.FuncId == command.FuncId);
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.AddInstruction
+                {
+                    FunctionID = 8,
+                    Arguments = new System.Collections.Generic.List<uint> { 8 },
+                    ToCreate = CoreControl.InstructionFactory.INSTRUCTION_ID.IF
+                },
+                dispatcher.OnAddInstruction,
+                (CoreCommand.Command.AddInstruction message, CoreCommand.Reply.AddInstruction reply) =>
+                {
+                    Assert.IsTrue(
+                        message.FunctionID == reply.Command.FunctionID
+                        && message.Arguments.Count == reply.Command.Arguments.Count
+                        && message.ToCreate == reply.Command.ToCreate
+                        );
+                });
+
+            TestCommand(
+                dispatcher,
+                new CoreCommand.Command.SetFunctionEntryPoint
+                {
+                    FunctionId = 8,
+                    Instruction = 0
+                },
+                dispatcher.OnSetFunctionEntryPoint,
+                (CoreCommand.Command.SetFunctionEntryPoint message, CoreCommand.Reply.SetFunctionEntryPoint reply) =>
+                {
+                    Assert.IsTrue(
+                        message.FunctionId == reply.Command.FunctionId
+                        && message.Instruction == reply.Command.Instruction
+                        );
+                });
+
+            dispatcher.SaveCommandsTo("test.duly");
         }
 
         private void GenerateController(ProtobufManager manager, out List<Entity> variables)

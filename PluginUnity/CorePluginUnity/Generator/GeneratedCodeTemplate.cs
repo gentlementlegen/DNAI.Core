@@ -9,10 +9,10 @@
 // ------------------------------------------------------------------------------
 namespace Core.Plugin.Unity.Generator
 {
+    using System;
     using System.Linq;
     using System.Text;
     using System.Collections.Generic;
-    using System;
     
     /// <summary>
     /// Class to produce the template output
@@ -32,7 +32,7 @@ namespace Core.Plugin.Unity.Generator
                     "summary>\r\n/// Base behaviour for Duly IA.\r\n///</summary>\r\npublic class DulyBehav" +
                     "iour : MonoBehaviour\r\n{\r\n\t//[Header(\"Input variables\")]\r\n\t");
             
-            #line 17 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 18 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Inputs)
 	{ 
             
@@ -40,21 +40,21 @@ namespace Core.Plugin.Unity.Generator
             #line hidden
             this.Write("\t\tpublic ");
             
-            #line 19 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 20 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write(";\r\n\t");
             
-            #line 20 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 21 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\n\t//[Header(\"Output variables\")]\r\n\t");
             
-            #line 23 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 24 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Outputs)
 	{ 
             
@@ -62,14 +62,14 @@ namespace Core.Plugin.Unity.Generator
             #line hidden
             this.Write("\t\tpublic ");
             
-            #line 25 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 26 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
-            this.Write(" { get; private set; };\r\n\t");
+            this.Write(" { get; private set; }\r\n\t");
             
-            #line 26 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 27 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
@@ -77,69 +77,66 @@ namespace Core.Plugin.Unity.Generator
             this.Write("\r\n\tprivate ProtobufManager _manager;\r\n\tpublic DulyBehaviour()\r\n\t{\r\n\t\t_manager = n" +
                     "ew ProtobufManager();\r\n\t\t_manager.LoadCommandsFrom(@\"Assets\\DulyAssets\\\" + \"");
             
-            #line 32 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 33 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FilePath));
             
             #line default
             #line hidden
-            this.Write("\");\r\n\t}\r\n\r\n\t///<summary>\r\n\t/// Executes the Duly Behaviour by calling the created" +
-                    " function.\r\n\t/// Updates Outputs accordingly.\r\n\t///</summary>\r\n\tpublic void Exec" +
-                    "ute()\r\n\t{\r\n\t\t");
-            
-            #line 41 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
- if (Outputs.Count > 0)
-		{
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t");
-            
-            #line 43 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Outputs[0]));
-            
-            #line default
-            #line hidden
-            this.Write(" = _manager.Controller.CallFunction(");
-            
-            #line 43 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FunctionId));
-            
-            #line default
-            #line hidden
-            this.Write(", new Dictionary<string, dynamic>{ ");
-            
-            #line 43 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FunctionArguments));
-            
-            #line default
-            #line hidden
-            this.Write(" });\r\n\t\t");
+            this.Write(@""");
+	}
+
+	///<summary>
+	/// Executes the Duly Behaviour by calling the created function.
+	/// Updates Outputs accordingly.
+	///</summary>
+	public void Execute()
+	{
+		var results = new Dictionary<string, dynamic>();
+
+		results = _manager.Controller.CallFunction(");
             
             #line 44 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
-}
-		else
-		{ 
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\t_manager.Controller.CallFunction(");
-            
-            #line 47 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FunctionId));
             
             #line default
             #line hidden
             this.Write(", new Dictionary<string, dynamic>{ ");
             
-            #line 47 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 44 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FunctionArguments));
             
             #line default
             #line hidden
             this.Write(" });\r\n\t\t");
             
-            #line 48 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
- } 
+            #line 45 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+ if (Outputs.Count > 0)
+		{
+			foreach (var output in Outputs)
+			{
+				var varName = output.Split(' ')[1]; 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\t");
+            
+            #line 50 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(varName));
+            
+            #line default
+            #line hidden
+            this.Write(" = results[\"");
+            
+            #line 50 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(varName));
+            
+            #line default
+            #line hidden
+            this.Write("\"];\r\n\t\t\t");
+            
+            #line 51 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+ }
+		} 
             
             #line default
             #line hidden
