@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
     public class VariableValueSet
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Command.SetVariableValue Command { get; set; }
     }
 }

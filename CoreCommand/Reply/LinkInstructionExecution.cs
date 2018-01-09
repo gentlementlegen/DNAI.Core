@@ -1,9 +1,8 @@
 ﻿namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
     internal class LinkInstructionExecution
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Command.LinkInstructionExecution Command { get; set; }
     }
 }

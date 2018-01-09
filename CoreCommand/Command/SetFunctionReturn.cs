@@ -1,11 +1,11 @@
 ﻿namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
     public class SetFunctionReturn
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public uint FuncId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public string ExternalVarName { get; set; }
     }
 }

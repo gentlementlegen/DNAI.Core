@@ -1,9 +1,9 @@
 ﻿namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
+    [BinarySerializer.BinaryFormat]
     internal class ParentContextSet
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Command.SetContextParent Command { get; set; }
     }
 }

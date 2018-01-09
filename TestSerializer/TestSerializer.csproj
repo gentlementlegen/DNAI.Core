@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7FF9E326-5841-4DD3-8840-7B4CD898C5F0}</ProjectGuid>
+    <ProjectGuid>{6BE3A785-BE2A-43A5-BA19-C493F7FC98BE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestCommand</RootNamespace>
-    <AssemblyName>TestCommand</AssemblyName>
+    <RootNamespace>TestSerializer</RootNamespace>
+    <AssemblyName>TestSerializer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -19,7 +19,6 @@
     <TestProjectType>UnitTest</TestProjectType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,12 +46,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestManager.cs" />
+    <Compile Include="Coverage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestSerialization.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -61,14 +58,6 @@
     <ProjectReference Include="..\BinarySerializer\BinarySerializer.csproj">
       <Project>{89733d6e-a3d3-46eb-801d-8c7302308e23}</Project>
       <Name>BinarySerializer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CoreCommand\CoreCommand.csproj">
-      <Project>{022ffc42-784d-4d25-8598-3e356dc7b7db}</Project>
-      <Name>CoreCommand</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CoreControl\CoreControl.csproj">
-      <Project>{dd2b786e-17b1-443b-a449-49199b6a46a8}</Project>
-      <Name>CoreControl</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

@@ -1,11 +1,11 @@
 ﻿namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
     public class SetListType
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public uint ListId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public uint TypeId { get; set; }
     }
 }

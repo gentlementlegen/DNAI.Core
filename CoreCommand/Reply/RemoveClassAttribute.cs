@@ -1,9 +1,8 @@
 ﻿namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
     public class RemoveClassAttribute
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Command.RemoveClassAttribute Command { get; set; }
     }
 }

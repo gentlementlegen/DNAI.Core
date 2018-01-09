@@ -1,15 +1,17 @@
 ﻿using CoreControl;
+using System;
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
     public class AddClassMemberFunction
     {
-        [ProtoBuf.ProtoMember(1)]
-        public uint ClassId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
+        public UInt32 ClassId { get; set; }
+
+        [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
-        [ProtoBuf.ProtoMember(3)]
+
+        [BinarySerializer.BinaryFormat]
         public EntityFactory.VISIBILITY Visibility { get; set; }
     }
 }

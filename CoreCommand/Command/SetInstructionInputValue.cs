@@ -1,16 +1,17 @@
 ﻿namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
     public class SetInstructionInputValue
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public uint FunctionID { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public uint Instruction { get; set; }
-        [ProtoBuf.ProtoMember(3)]
+
+        [BinarySerializer.BinaryFormat]
         public string InputName { get; set; }
 
-        [ProtoBuf.ProtoMember(4)]
+        [BinarySerializer.BinaryFormat]
         public string InputValue { get; set; }
     }
 }

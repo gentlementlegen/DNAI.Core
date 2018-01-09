@@ -2,16 +2,18 @@
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
     public class AddClassAttribute
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public uint ClassId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
-        [ProtoBuf.ProtoMember(3)]
+
+        [BinarySerializer.BinaryFormat]
         public uint TypeId { get; set; }
-        [ProtoBuf.ProtoMember(4)]
+
+        [BinarySerializer.BinaryFormat]
         public EntityFactory.VISIBILITY Visibility { get; set; }
     }
 }

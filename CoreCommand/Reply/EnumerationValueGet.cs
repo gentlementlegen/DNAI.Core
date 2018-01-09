@@ -2,13 +2,12 @@
 
 namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
     internal class EnumerationValueGet
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Command.GetEnumerationValue Command { get; set; }
 
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
         public string Value { get; set; }
     }
 }

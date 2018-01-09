@@ -1,11 +1,11 @@
 ﻿namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
     public class RemoveClassAttribute
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public uint ClassId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
     }
 }

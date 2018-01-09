@@ -1,13 +1,14 @@
 ﻿namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
     public class SetEnumerationValue
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public uint EnumId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
-        [ProtoBuf.ProtoMember(3)]
+
+        [BinarySerializer.BinaryFormat]
         public dynamic Value { get; set; }
     }
 }

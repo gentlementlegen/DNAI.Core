@@ -31,7 +31,7 @@ namespace EventServerClientTest
             TcpManager client = new TcpManager();
             TestReceive test = new TestReceive(4);
             
-            client.Connect("127.0.0.1", 8765);
+            client.Connect("69.159.172.137", 7777);
             client.RegisterEvent("POPOLE", test.OnReceivePopole, 4);
             while (true) {
                 client.Update();

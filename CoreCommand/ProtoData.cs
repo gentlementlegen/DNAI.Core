@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace CoreCommand
 {
-    [ProtoBuf.ProtoContract]
     public class ProtoData
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         Command.Commands Commands { get { return new Command.Commands(); } }
 
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
         Reply.Replies Replies { get { return new Reply.Replies(); } }
     }
 }

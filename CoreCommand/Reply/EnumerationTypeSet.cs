@@ -1,9 +1,8 @@
 ﻿namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
     public class EnumerationTypeSet
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Command.SetEnumerationType Command { get; set; }
     }
 }

@@ -1,9 +1,8 @@
 ﻿namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
     public class ListTypeSet
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Command.SetListType Command { get; set; }
     }
 }

@@ -1,9 +1,8 @@
 ﻿namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
     public class UnlinkInstructionFlow
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Command.UnlinkInstructionFlow Command { get; set; }
     }
 }

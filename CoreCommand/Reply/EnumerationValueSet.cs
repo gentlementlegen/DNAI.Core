@@ -2,10 +2,9 @@
 
 namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
     public class EnumerationValueSet
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Command.SetEnumerationValue Command { get; set; }
     }
 }

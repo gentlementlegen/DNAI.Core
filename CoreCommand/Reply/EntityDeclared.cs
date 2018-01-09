@@ -2,13 +2,12 @@
 
 namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
     public class EntityDeclared
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Command.Declare Command { get; set; }
 
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
         public UInt32 EntityID { get; set; }
     }
 }

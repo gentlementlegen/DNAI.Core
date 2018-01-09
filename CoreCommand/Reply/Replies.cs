@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
     public class Replies
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public EntityDeclared EntityDeclared { get { return new EntityDeclared(); } }
     }
 }

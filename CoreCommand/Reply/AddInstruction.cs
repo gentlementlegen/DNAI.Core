@@ -1,12 +1,11 @@
 ﻿namespace CoreCommand.Reply
 {
-    [ProtoBuf.ProtoContract]
     public class AddInstruction
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Command.AddInstruction Command { get; set; }
 
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
         public uint Value { get; set; }
     }
 }

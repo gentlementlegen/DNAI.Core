@@ -1,17 +1,20 @@
 ﻿namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
     public class LinkInstructionData
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public uint FunctionID { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public uint FromId { get; set; }
-        [ProtoBuf.ProtoMember(3)]
+
+        [BinarySerializer.BinaryFormat]
         public string OutputName { get; set; }
-        [ProtoBuf.ProtoMember(4)]
+
+        [BinarySerializer.BinaryFormat]
         public uint ToId { get; set; }
-        [ProtoBuf.ProtoMember(5)]
+
+        [BinarySerializer.BinaryFormat]
         public string InputName { get; set; }
     }
 }

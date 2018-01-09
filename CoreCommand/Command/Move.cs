@@ -7,19 +7,18 @@ using System.Threading.Tasks;
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
     public class Move
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public EntityFactory.ENTITY EntityType { get; set; }
 
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
         public UInt32 FromID { get; set; }
 
-        [ProtoBuf.ProtoMember(3)]
+        [BinarySerializer.BinaryFormat]
         public UInt32 ToID { get; set; }
 
-        [ProtoBuf.ProtoMember(4)]
+        [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace CoreCommand
         /// <summary>
         /// Protobuf serialisation prefix
         /// </summary>
-        private ProtoBuf.PrefixStyle _prefix = ProtoBuf.PrefixStyle.Base128;
+        //private ProtoBuf.PrefixStyle _prefix = ProtoBuf.PrefixStyle.Base128;
 
         /// <summary>
         /// Dictionary for matching classes Guid to handling callbacks.
@@ -44,10 +44,10 @@ namespace CoreCommand
         /// Constructor to customize protobuf prefix
         /// </summary>
         /// <param name="prefix">Serialisation prefix for protobuf</param>
-        public ProtobufManager(ProtoBuf.PrefixStyle prefix) : this()
+        /*public ProtobufManager(ProtoBuf.PrefixStyle prefix) : this()
         {
             _prefix = prefix;
-        }
+        }*/
 
         /// <summary>
         /// Convert a JSON value to a dynamic object
@@ -72,7 +72,7 @@ namespace CoreCommand
         /// <returns>The deserialized message</returns>
         private T GetMessage<T>(Stream inStream)
         {
-            T message = ProtoBuf.Serializer.DeserializeWithLengthPrefix<T>(inStream, _prefix);
+            T message = BinarySerializer.Serializer.Deserialize<T>(inStream);//ProtoBuf.Serializer.DeserializeWithLengthPrefix<T>(inStream, _prefix);
 
             if (message == null)
             {
@@ -99,12 +99,15 @@ namespace CoreCommand
                 Reply reply = callback(message);
 
                 if (outStream != null)
-                    ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, reply, _prefix);
+                {
+                    BinarySerializer.Serializer.Serialize(reply, outStream);// ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, reply, _prefix);
+                }
             }
             catch (Exception error)
             {
                 if (outStream != null)
-                    ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, error.Message, _prefix);
+                    BinarySerializer.Serializer.Serialize(error.Message, outStream);
+                    //ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, error.Message, _prefix);
             }
         }
 
@@ -120,10 +123,12 @@ namespace CoreCommand
                 {
                     types.Add(command.GetType().AssemblyQualifiedName);
                 }
-                ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, types, _prefix);
+                BinarySerializer.Serializer.Serialize(types, stream);
+                //ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, types, _prefix);
                 foreach (var command in _commands)
                 {
-                    ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, command, _prefix);
+                    BinarySerializer.Serializer.Serialize(command, stream);
+                    //ProtoBuf.Serializer.SerializeWithLengthPrefix(stream, command, _prefix);
                 }
             }
         }
@@ -136,7 +141,7 @@ namespace CoreCommand
                 _controller.Reset();
                 //List<COMMANDS> index = ProtoBuf.Serializer.DeserializeWithLengthPrefix<List<COMMANDS>>(file.BaseStream, _prefix);
 
-                foreach (var command in ProtoBuf.Serializer.DeserializeWithLengthPrefix<List<string>>(file.BaseStream, _prefix))
+                foreach (var command in BinarySerializer.Serializer.Deserialize<List<string>>(file.BaseStream))//ProtoBuf.Serializer.DeserializeWithLengthPrefix<List<string>>(file.BaseStream, _prefix)
                 {
                     var t = Type.GetType(command);
                     try

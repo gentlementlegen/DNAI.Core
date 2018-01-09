@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
     public class SetVariableValue
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public UInt32 VariableID { get; set; }
 
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
         public string Value { get; set; }
     }
 }
