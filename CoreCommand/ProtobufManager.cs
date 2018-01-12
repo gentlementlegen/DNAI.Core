@@ -1,6 +1,7 @@
 ﻿using CoreControl;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace CoreCommand
@@ -94,10 +95,12 @@ namespace CoreCommand
         {
             Command message = GetMessage<Command>(inStream);
 
+            Console.WriteLine("Receiving: " + typeof(Command).ToString());
             try
             {
                 Reply reply = callback(message);
 
+                Console.WriteLine("Replying : " + typeof(Reply).ToString());
                 if (outStream != null)
                 {
                     BinarySerializer.Serializer.Serialize(reply, outStream);// ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, reply, _prefix);
@@ -105,6 +108,7 @@ namespace CoreCommand
             }
             catch (Exception error)
             {
+                Console.WriteLine("Error");
                 if (outStream != null)
                     BinarySerializer.Serializer.Serialize(error.Message, outStream);
                     //ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, error.Message, _prefix);
@@ -162,6 +166,7 @@ namespace CoreCommand
             ResolveCommand(inStream, outStream,
                 (Command.Declare message) =>
                 {
+                    Console.WriteLine("Declaring: {" + message.EntityType.ToString() + ", " + message.ContainerID.ToString() + ", " + message.Name + ", " + message.Visibility.ToString() + "}");
                     return new Reply.EntityDeclared
                     {
                         Command = message,
