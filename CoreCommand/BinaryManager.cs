@@ -42,11 +42,11 @@ namespace CoreCommand
             RegisterCommand<AddClassAttribute, AddClassAttribute.Reply>("ADD_CLASS_ATTRIBUTE", "CLASS_ATTRIBUTE_ADDED");
             RegisterCommand<AddClassMemberFunction, AddClassMemberFunction.Reply>("ADD_CLASS_MEMBER_FUNCTION", "CLASS_MEMBER_FUNCTION_ADDED");
             RegisterCommand<AddInstruction, AddInstruction.Reply>("ADD_INSTRUCTION", "INSTRUCTION_ADDED");
-            RegisterCommand<CallFunction, CallFunction.Reply>("CALL_FUNCTION", "FUNCTION_CALLED");
+            RegisterCommand<CallFunction, CallFunction.Reply>("CALL_FUNCTION", "FUNCTION_CALLED", false);
             RegisterCommand<ChangeVisibility, ChangeVisibility.Reply>("CHANGE_VISIBILITY", "VISIBILITY_CHANGED");
             RegisterCommand<Declare, Declare.Reply>("DECLARE", "ENTITY_DECLARED");
-            RegisterCommand<GetEnumerationValue, GetEnumerationValue.Reply>("GET_ENUMERATION_VALUE", "ENUMERATION_VALUE_GET");
-            RegisterCommand<GetVariableValue, GetVariableValue.Reply>("GET_VARIABLE_VALUE", "VARIABLE_VALUE_GET");
+            RegisterCommand<GetEnumerationValue, GetEnumerationValue.Reply>("GET_ENUMERATION_VALUE", "ENUMERATION_VALUE_GET", false);
+            RegisterCommand<GetVariableValue, GetVariableValue.Reply>("GET_VARIABLE_VALUE", "VARIABLE_VALUE_GET", false);
             RegisterCommand<LinkInstructionData, LinkInstructionData.Reply>("LINK_INSTRUCTION_DATA", "INSTRUCTION_DATA_LINKED");
             RegisterCommand<LinkInstructionExecution, LinkInstructionExecution.Reply>("LINK_INSTRUCTION_EXECUTION", "INSTRUCTION_EXECUTION_LINKED");
             RegisterCommand<Move, Move.Reply>("MOVE", "MOVED");
@@ -68,6 +68,16 @@ namespace CoreCommand
             RegisterCommand<SetVariableValue, SetVariableValue.Reply>("SET_VARIABLE_VALUE", "VARIABLE_VALUE_SET");
             RegisterCommand<UnlinkInstructionFlow, UnlinkInstructionFlow.Reply>("UNLINK_INSTRUCTION_FLOW", "INSTRUCTION_FLOW_UNLINKED");
             RegisterCommand<UnlinkInstructionInput, UnlinkInstructionInput.Reply>("UNLINK_INSTRUCTION_INPUT", "INSTRUCTION_INPUT_UNLINKED");
+            RegisterCommand("SERIALIZE_TO", "SERIALIZED", false, (SerializeTo cmd) =>
+            {
+                SaveCommandsTo(cmd.Filename);
+                return cmd.Resolve(null);
+            });
+            RegisterCommand("LOAD_FROM", "LOADED", false, (LoadFrom cmd) =>
+            {
+                LoadCommandsFrom(cmd.Filename);
+                return cmd.Resolve(null);
+            });
         }
 
         /// <summary>
@@ -96,7 +106,7 @@ namespace CoreCommand
         /// <typeparam name="T">Type of the protobuf message to deserialize</typeparam>
         /// <param name="inStream">Input stream from which deserialize the message</param>
         /// <returns>The deserialized message</returns>
-        private T GetMessage<T>(Stream inStream)
+        private T GetMessage<T>(Stream inStream, bool save)
         {
             T message = BinarySerializer.Serializer.Deserialize<T>(inStream);//ProtoBuf.Serializer.DeserializeWithLengthPrefix<T>(inStream, _prefix);
 
@@ -104,7 +114,8 @@ namespace CoreCommand
             {
                 throw new InvalidDataException("ProtobufDispatcher.GetMessage<" + typeof(T) + ">: Unable to deserialize data");
             }
-            _commands.Add(message);
+            if (save)
+                _commands.Add(message);
             return message;
         }
 
@@ -116,16 +127,16 @@ namespace CoreCommand
         /// <param name="inStream">Input stream on which read the command</param>
         /// <param name="outStream">Output stream on which write the command</param>
         /// <param name="callback">Function that generates a reply from the command</param>
-        private bool ResolveCommand<Command, Reply>(Stream inStream, Stream outStream) where Command : ICommand<Reply>
+        private bool ResolveCommand<Command, Reply>(Stream inStream, Stream outStream, bool save, Func<Command, Reply> callback) where Command : ICommand<Reply>
         {
-            Command message = GetMessage<Command>(inStream);
+            Command message = GetMessage<Command>(inStream, save);
 
-            Console.WriteLine("Receiving : " + typeof(Command).ToString());
+            //Console.WriteLine("Receiving : " + typeof(Command).ToString());
             try
             {
-                Reply reply = message.Resolve(_controller);//  callback(message);
+                Reply reply = callback(message);
 
-                Console.WriteLine("Replying : " + typeof(Reply).ToString());
+                //Console.WriteLine("Replying : " + typeof(Reply).ToString());
                 if (outStream != null)
                 {
                     BinarySerializer.Serializer.Serialize(reply, outStream);// ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, reply, _prefix);
@@ -142,9 +153,17 @@ namespace CoreCommand
             }
         }
 
-        private void RegisterCommand<Command, Reply>(String name, String replyName) where Command : ICommand<Reply>
+        private void RegisterCommand<Command, Reply>(String name, String replyName, bool save = true, Func<Command, Reply> callback = null) where Command : ICommand<Reply>
         {
-            _handledCommands[name] = ResolveCommand<Command, Reply>;
+            if (callback == null)
+                callback = (Command message) =>
+                {
+                    return message.Resolve(_controller);
+                };
+            _handledCommands[name] = (Stream inS, Stream ouS) =>
+            {
+                return ResolveCommand(inS, ouS, save, callback);
+            };
             _commandsType[typeof(Command)] = name;
             _commandsReply[name] = replyName;
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BinarySerializer
 {
-    public class KeyValuePair<_Key, _Value>
+    public class _KeyValuePair<_Key, _Value>
     {
         [BinaryFormat]
         public _Key Key { get; set; }
@@ -19,9 +19,11 @@ namespace BinarySerializer
     public class Map
     {
         [BinaryFormat]
-        public IList Data { get; private set; }
+        public IList Data { get; set; }
 
         private Type _keyvalueType;
+
+        private Type _trueKeyValueType;
 
         private Type _keytype;
 
@@ -31,7 +33,8 @@ namespace BinarySerializer
         {
             _keytype = keytype;
             _valuetype = valueType;
-            _keyvalueType = typeof(KeyValuePair<int, int>).MakeGenericType(new Type[] { keytype, valueType });
+            _keyvalueType = typeof(_KeyValuePair<int, int>).MakeGenericType(new Type[] { keytype, valueType });
+            _trueKeyValueType = typeof(KeyValuePair<int, int>).MakeGenericType(new Type[] { _keytype, _valuetype });
             Data = Activator.CreateInstance(typeof(List<>).MakeGenericType(_keyvalueType)) as IList;
         }
 
@@ -40,27 +43,34 @@ namespace BinarySerializer
             return key == _keytype && value == _valuetype;
         }
 
-        public void FillFrom<Key, Value>(Dictionary<Key, Value> dat)
+        public void FillFrom(IDictionary dat)
         {
-            if (!CheckType(typeof(Key), typeof(Value)))
-                return;
-
             foreach (var item in dat)
             {
-                Data.Add(Activator.CreateInstance(_keyvalueType, new object[] { item.Key, item.Value }));
+                Data.Add(Activator.CreateInstance(_keyvalueType, new object[] {
+                    _trueKeyValueType.GetProperties()[0].GetValue(item),
+                    _trueKeyValueType.GetProperties()[1].GetValue(item)
+                }));
             }
         }
 
-        public Dictionary<Key, Value> ConvertTo<Key, Value>()
+        public IDictionary ToDictionnary()
         {
-            if (!CheckType(typeof(Key), typeof(Value)))
-                return null;
+            /*if (!CheckType(typeof(Key), typeof(Value)))
+                return null;*/
 
-            Dictionary<Key, Value> toret = new Dictionary<Key, Value>();
-
-            foreach (KeyValuePair<Key, Value> item in Data)
+            Type dictType = typeof(Dictionary<int, int>).MakeGenericType(new Type[]
             {
-                toret[item.Key] = item.Value;
+                _keytype,
+                _valuetype
+            });
+            IDictionary toret = (IDictionary)Activator.CreateInstance(dictType, new object[] { });
+
+            //Dictionary<Key, Value> toret = new Dictionary<Key, Value>();
+
+            foreach (var item in Data)
+            {
+                toret[_keyvalueType.GetProperties()[0].GetValue(item)] = _keyvalueType.GetProperties()[1].GetValue(item);
             }
             return toret;
         }

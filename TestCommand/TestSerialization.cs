@@ -81,9 +81,56 @@ namespace TestCommand
 
             BinarySerializer.Serializer.Serialize(tohandle, inp);
             inp.Position = 0;
-            manager.CallCommand(manager.GetCommandName(typeof(Command)), inp, oup);
+            if (!manager.CallCommand(manager.GetCommandName(typeof(Command)), inp, oup))
+            {
+                oup.Position = 0;
+                throw new Exception(BinarySerializer.Serializer.Deserialize<String>(oup));
+            }
             oup.Position = 0;
             return BinarySerializer.Serializer.Deserialize<Reply>(oup);
+        }
+
+        private void MoreOrLessExecuter(CoreCommand.IManager manager, UInt32 funcID)
+        {
+            int mystery_number = 47;
+
+            int i = 0;
+
+            CallFunction command = new CallFunction
+            {
+                FuncId = funcID,
+                Parameters = new Dictionary<string, string>
+                {
+                    { "lastResult", "2" }
+                }
+            };
+            CallFunction.Reply reply;
+            int given;
+
+            do
+            {
+                reply = HandleCommand<CallFunction.Reply, CallFunction>(command, manager);
+
+                given = Int32.Parse(reply.Returns["result"]);
+
+                Console.WriteLine("IA said: " + given.ToString());
+
+                if (given > mystery_number)
+                {
+                    command.Parameters["lastResult"] = "1"; //less
+                    Console.WriteLine("==> It's Less");
+                }
+                else if (given < mystery_number)
+                {
+                    command.Parameters["lastResult"] = "0"; //more
+                    Console.WriteLine("==> It's More");
+                }
+                ++i;
+            } while (given != mystery_number && i < 10);
+
+            Assert.IsTrue(given == mystery_number);
+
+            Console.WriteLine("AI found the mystery number " + mystery_number + " in " + i + " hits");
         }
 
         [TestMethod]
@@ -242,7 +289,7 @@ namespace TestCommand
                 new SetVariableValue
                 {
                     VariableID = play_lastResultVariable.EntityID,
-                    Value = "\"NONE\""
+                    Value = "2"
                 }, manager);
             Declare.Reply play_resultVariable = HandleCommand<Declare.Reply, Declare>(
                 new Declare
@@ -262,7 +309,7 @@ namespace TestCommand
                 new SetVariableType
                 {
                     VariableID = play_resultVariable.EntityID,
-                    TypeID = COMPARISONenum.EntityID
+                    TypeID = integer
                 }, manager);
 
             AddInstruction.Reply splitCOMPARISON = HandleCommand<AddInstruction.Reply, AddInstruction>(
@@ -548,7 +595,7 @@ namespace TestCommand
                 new LinkInstructionData
                 {
                     FunctionID = playFunction.EntityID,
-                    FromId = getLastGiven.InstructionID,
+                    FromId = getResult.InstructionID,
                     OutputName = "reference",
                     ToId = resEqLastGiven.InstructionID,
                     InputName = "RightOperand"
@@ -776,7 +823,7 @@ namespace TestCommand
                     FunctionID = playFunction.EntityID,
                     FromId = setMin.InstructionID,
                     OutIndex = 0,
-                    ToId = if_lr_eq_less.InstructionID
+                    ToId = setResult.InstructionID
                 }, manager);
 
             HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
@@ -871,6 +918,22 @@ namespace TestCommand
                     FunctionId = playFunction.EntityID,
                     Instruction = if_lr_eq_more.InstructionID
                 }, manager);
+
+            MoreOrLessExecuter(manager, playFunction.EntityID);
+
+            HandleCommand<SerializeTo.Reply, SerializeTo>(new SerializeTo
+            {
+                Filename = "moreOrLess.duly"
+            }, manager);
+
+            CoreCommand.IManager witness = new CoreCommand.BinaryManager();
+
+            HandleCommand<LoadFrom.Reply, LoadFrom>(new LoadFrom
+            {
+                Filename = "moreOrLess.duly"
+            }, witness);
+
+            MoreOrLessExecuter(witness, playFunction.EntityID);
         }
     }
 }

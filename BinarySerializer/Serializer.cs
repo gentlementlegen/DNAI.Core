@@ -157,6 +157,22 @@ namespace BinarySerializer
             return true;
         }
 
+        private static bool SerializeMap(IDictionary toSerialize, Stream output)
+        {
+            if (!ChooseSerializer((UInt32)toSerialize.Count, output))
+                return false;
+            foreach (var item in toSerialize)
+            {
+                PropertyInfo keyInfo = item.GetType().GetProperties()[0];
+                PropertyInfo valueInfo = item.GetType().GetProperties()[1];
+
+                if (!ChooseSerializer(keyInfo.GetValue(item), output)
+                    || !ChooseSerializer(valueInfo.GetValue(item), output))
+                    return false;
+            }
+            return true;
+        }
+
         private static bool ChooseSerializer(object toSerialize, Stream output)// byte[] destination, ref int offset
         {
             if (toSerialize.GetType().IsEnum)
@@ -166,6 +182,10 @@ namespace BinarySerializer
             else if (ScalarTypes.Contains(toSerialize.GetType())) //serialize as scalar
             {
                 return SerializeScalar(toSerialize, output);
+            }
+            else if (typeof(IDictionary).IsAssignableFrom(toSerialize.GetType()))
+            {
+                return SerializeMap((IDictionary)toSerialize, output);
             }
             else if ((toSerialize as IEnumerable) != null) //serialize as list
             {
@@ -321,6 +341,20 @@ namespace BinarySerializer
             return data;
         }
 
+        private static object DeserializeMap(Type todeserialize, Stream input)
+        {
+            IDictionary toret = (IDictionary)Activator.CreateInstance(todeserialize);
+            UInt32 count = (UInt32)DeserializeScalar(typeof(UInt32), input);
+            Type keyType = todeserialize.GetGenericArguments()[0];
+            Type valueType = todeserialize.GetGenericArguments()[1];
+
+            for (UInt32 i = 0; i < count; i++)
+            {
+                toret.Add(ChooseDeserializer(keyType, input), ChooseDeserializer(valueType, input));
+            }
+            return toret;
+        }
+
         private static object ChooseDeserializer(Type todeserialize, Stream input)//byte[] source, ref int offset
         {
             if (todeserialize.IsEnum)
@@ -331,10 +365,10 @@ namespace BinarySerializer
             {
                 return DeserializeScalar(todeserialize, input);
             }
-            /*else if (typeof(IDictionary).IsAssignableFrom(todeserialize))
+            else if (typeof(IDictionary).IsAssignableFrom(todeserialize))
             {
-                return 
-            }*/
+                return DeserializeMap(todeserialize, input);
+            }
             else if (typeof(IList).IsAssignableFrom(todeserialize)) //serialize as list
             {
                 return DeserializeList(todeserialize.GetGenericArguments().Single(), input);

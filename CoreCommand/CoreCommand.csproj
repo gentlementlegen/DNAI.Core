@@ -51,10 +51,12 @@
     <Compile Include="Command\GetVariableValue.cs" />
     <Compile Include="Command\LinkInstructionData.cs" />
     <Compile Include="Command\LinkInstructionExecution.cs" />
+    <Compile Include="Command\LoadFrom.cs" />
     <Compile Include="Command\RemoveClassAttribute.cs" />
     <Compile Include="Command\RemoveEnumerationValue.cs" />
     <Compile Include="Command\RemoveFunctionInstruction.cs" />
     <Compile Include="Command\RenameClassAttribute.cs" />
+    <Compile Include="Command\SerializeTo.cs" />
     <Compile Include="Command\SetContextParent.cs" />
     <Compile Include="Command\SetEnumerationType.cs" />
     <Compile Include="Command\SetEnumerationValue.cs" />

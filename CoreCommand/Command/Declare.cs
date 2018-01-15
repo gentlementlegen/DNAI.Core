@@ -28,7 +28,7 @@ namespace CoreCommand.Command
 
         public Reply Resolve(Controller controller)
         {
-            Console.WriteLine("Declaring: {" + EntityType.ToString() + ", " + ContainerID.ToString() + ", " + Name + ", " + Visibility.ToString() + "}");
+            //Console.WriteLine("Declaring: {" + EntityType.ToString() + ", " + ContainerID.ToString() + ", " + Name + ", " + Visibility.ToString() + "}");
             return new Reply
             {
                 Command = this,

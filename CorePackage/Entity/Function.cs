@@ -179,6 +179,7 @@ namespace CorePackage.Entity
         public void setEntryPoint(UInt32 instructionID)
         {
             entrypoint = findInstruction<Execution.ExecutionRefreshInstruction>(instructionID);
+            //Console.Write(ToDotFile());
         }
 
         /// <summary>

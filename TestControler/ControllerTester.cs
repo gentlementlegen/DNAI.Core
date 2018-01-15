@@ -178,7 +178,7 @@ namespace TestControler
             controller.LinkInstructionExecution(play, if_lr_eq_more, (uint)If.ConditionIndexes.OnTrue, set_min);
             controller.LinkInstructionExecution(play, if_lr_eq_more, (uint)If.ConditionIndexes.OnFalse, if_lr_eq_less);
 
-            controller.LinkInstructionExecution(play, set_min, 0, if_lr_eq_less);
+            controller.LinkInstructionExecution(play, set_min, 0, result_calculation);
 
             controller.LinkInstructionExecution(play, if_lr_eq_less, (uint)If.ConditionIndexes.OnTrue, set_max);
             controller.LinkInstructionExecution(play, if_lr_eq_less, (uint)If.ConditionIndexes.OnFalse, result_calculation);
