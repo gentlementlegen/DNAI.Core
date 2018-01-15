@@ -1,7 +1,16 @@
-﻿namespace CoreCommand.Command
+﻿using CoreControl;
+using Newtonsoft.Json;
+
+namespace CoreCommand.Command
 {
-    public class SetEnumerationValue
+    public class SetEnumerationValue : ICommand<SetEnumerationValue.Reply>
     {
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public SetEnumerationValue Command { get; set; }
+        }
+
         [BinarySerializer.BinaryFormat]
         public uint EnumId { get; set; }
 
@@ -9,6 +18,15 @@
         public string Name { get; set; }
 
         [BinarySerializer.BinaryFormat]
-        public dynamic Value { get; set; }
+        public string Value { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.SetEnumerationValue(EnumId, Name, JsonConvert.DeserializeObject(Value));
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

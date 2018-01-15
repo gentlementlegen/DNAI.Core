@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace CoreCommand.Command
 {
-    public class Rename
+    public class Rename : ICommand<Rename.Reply>
     {
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public Rename Command { get; set; }
+        }
+
         [BinarySerializer.BinaryFormat]
         public EntityFactory.ENTITY EntityType { get; set; }
 
@@ -20,5 +26,14 @@ namespace CoreCommand.Command
 
         [BinarySerializer.BinaryFormat]
         public string NewName { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.Rename(EntityType, ContainerID, LastName, NewName);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

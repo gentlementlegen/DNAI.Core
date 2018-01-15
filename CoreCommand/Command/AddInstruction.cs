@@ -1,11 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using CoreControl;
 using static CoreControl.InstructionFactory;
 
 namespace CoreCommand.Command
 {
-    public class AddInstruction
+    public class AddInstruction : ICommand<AddInstruction.Reply>
     {
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public AddInstruction Command { get; set; }
+
+            [BinarySerializer.BinaryFormat]
+            public UInt32 InstructionID { get; set; }
+        }
+
         [BinarySerializer.BinaryFormat]
         public UInt32 FunctionID { get; set; }
 
@@ -14,5 +24,14 @@ namespace CoreCommand.Command
 
         [BinarySerializer.BinaryFormat]
         public List<UInt32> Arguments { get; set; } = new List<UInt32>();
+
+        public Reply Resolve(Controller controller)
+        {
+            return new Reply
+            {
+                Command = this,
+                InstructionID = controller.AddInstruction(FunctionID, ToCreate, Arguments)
+            };
+        }
     }
 }

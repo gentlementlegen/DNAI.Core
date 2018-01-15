@@ -331,6 +331,10 @@ namespace BinarySerializer
             {
                 return DeserializeScalar(todeserialize, input);
             }
+            /*else if (typeof(IDictionary).IsAssignableFrom(todeserialize))
+            {
+                return 
+            }*/
             else if (typeof(IList).IsAssignableFrom(todeserialize)) //serialize as list
             {
                 return DeserializeList(todeserialize.GetGenericArguments().Single(), input);
@@ -350,6 +354,11 @@ namespace BinarySerializer
         public static T Deserialize<T>(Stream input)
         {
             return (T)ChooseDeserializer(typeof(T), input);
+        }
+
+        public static dynamic Deserialize(Type format, Stream input)
+        {
+            return ChooseDeserializer(format, input);
         }
     }
 }
