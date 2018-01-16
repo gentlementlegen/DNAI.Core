@@ -1,17 +1,37 @@
-﻿namespace CoreCommand.Command
+﻿using CoreControl;
+
+namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class LinkInstructionData
+    public class LinkInstructionData : ICommand<LinkInstructionData.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public LinkInstructionData Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public uint FunctionID { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public uint FromId { get; set; }
-        [ProtoBuf.ProtoMember(3)]
+
+        [BinarySerializer.BinaryFormat]
         public string OutputName { get; set; }
-        [ProtoBuf.ProtoMember(4)]
+
+        [BinarySerializer.BinaryFormat]
         public uint ToId { get; set; }
-        [ProtoBuf.ProtoMember(5)]
+
+        [BinarySerializer.BinaryFormat]
         public string InputName { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.LinkInstructionData(FunctionID, FromId, OutputName, ToId, InputName);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

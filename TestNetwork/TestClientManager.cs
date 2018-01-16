@@ -12,7 +12,7 @@ namespace TestNetwork
         [TestMethod]
         public void ClientManagerCoverage()
         {
-            CoreNetwork.ClientManager coreSide = new CoreNetwork.ClientManager(new CoreCommand.ProtobufManager());
+            CoreNetwork.ClientManager coreSide = new CoreNetwork.ClientManager(new CoreCommand.BinaryManager());
             EventServerClient.Communication.TcpManager guiSide = new EventServerClient.Communication.TcpManager();
 
             coreSide.Connect("127.0.0.1", 8765);
@@ -35,7 +35,7 @@ namespace TestNetwork
             {
                 MemoryStream stream = new MemoryStream(data);
 
-                CoreCommand.Reply.EntityDeclared reply = ProtoBuf.Serializer.DeserializeWithLengthPrefix<CoreCommand.Reply.EntityDeclared>(stream, ProtoBuf.PrefixStyle.Base128);
+                CoreCommand.Command.Declare.Reply reply = BinarySerializer.Serializer.Deserialize<CoreCommand.Command.Declare.Reply>(data);//ProtoBuf.Serializer.DeserializeWithLengthPrefix<CoreCommand.Reply.EntityDeclared>(stream, ProtoBuf.PrefixStyle.Base128);
 
                 Debug.WriteLine("Reply: { {" + reply.Command.ContainerID + ", " + reply.Command.EntityType + ", \"" + reply.Command.Name + "\", " + reply.Command.Visibility + "}, " + reply.EntityID + "}");
                 Assert.IsTrue(
@@ -49,7 +49,8 @@ namespace TestNetwork
 
             MemoryStream sendstream = new MemoryStream();
 
-            ProtoBuf.Serializer.SerializeWithLengthPrefix(sendstream, tosend, ProtoBuf.PrefixStyle.Base128);
+            BinarySerializer.Serializer.Serialize(tosend, sendstream);
+            //ProtoBuf.Serializer.SerializeWithLengthPrefix(sendstream, tosend, ProtoBuf.PrefixStyle.Base128);
 
             guiSide.SendEvent("DECLARE", sendstream.GetBuffer());
 

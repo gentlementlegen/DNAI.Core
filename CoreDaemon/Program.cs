@@ -11,7 +11,7 @@ namespace CoreDaemon
     {
         static void Main(string[] args)
         {
-            CoreNetwork.ClientManager client = new CoreNetwork.ClientManager(new CoreCommand.ProtobufManager());
+            CoreNetwork.ClientManager client = new CoreNetwork.ClientManager(new CoreCommand.BinaryManager());
 
             //client.Connect("10.248.84.63", 7777);
             int port = 7777;

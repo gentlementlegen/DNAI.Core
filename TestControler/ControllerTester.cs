@@ -178,7 +178,7 @@ namespace TestControler
             controller.LinkInstructionExecution(play, if_lr_eq_more, (uint)If.ConditionIndexes.OnTrue, set_min);
             controller.LinkInstructionExecution(play, if_lr_eq_more, (uint)If.ConditionIndexes.OnFalse, if_lr_eq_less);
 
-            controller.LinkInstructionExecution(play, set_min, 0, if_lr_eq_less);
+            controller.LinkInstructionExecution(play, set_min, 0, result_calculation);
 
             controller.LinkInstructionExecution(play, if_lr_eq_less, (uint)If.ConditionIndexes.OnTrue, set_max);
             controller.LinkInstructionExecution(play, if_lr_eq_less, (uint)If.ConditionIndexes.OnFalse, result_calculation);
@@ -255,10 +255,16 @@ namespace TestControler
             uint obj = controller.Declare(ENTITY.OBJECT_TYPE, 0, "tata", VISIBILITY.PRIVATE);
             uint lst = controller.Declare(ENTITY.LIST_TYPE, 0, "tutu", VISIBILITY.PRIVATE);
 
+            //context
+
+            controller.SetContextParent(ctx, 0);
+
             //variable
 
             controller.SetVariableType(var, integer);
+            Assert.IsTrue(controller.GetVariableType(var) == integer);
             controller.SetVariableValue(var, 42);
+            Assert.IsTrue(controller.GetVariableValue(var) == 42);
 
             //enum
 
@@ -339,6 +345,11 @@ namespace TestControler
 
             Assert.IsTrue(controller.GetVariableValue(res) == 71.2);
 
+            Assert.IsTrue(controller.GetFunctionParameters(fnt).Count == 1);
+            Assert.IsTrue(controller.GetFunctionReturns(fnt).Count == 1);
+
+            // declarators
+
             controller.ChangeVisibility(ENTITY.CONTEXT_D, 0, "toto", VISIBILITY.PUBLIC);
             controller.ChangeVisibility(ENTITY.VARIABLE, 0, "toto", VISIBILITY.PUBLIC);
             controller.ChangeVisibility(ENTITY.FUNCTION, 0, "toto", VISIBILITY.PUBLIC);
@@ -360,6 +371,14 @@ namespace TestControler
             controller.Rename(ENTITY.DATA_TYPE, cnt, "toto", "titi");
             controller.Rename(ENTITY.DATA_TYPE, cnt, "tata", "toto");
             controller.Rename(ENTITY.DATA_TYPE, cnt, "tutu", "tata");
+
+            List<Entity> ret = controller.GetEntitiesOfType(ENTITY.CONTEXT_D, cnt);
+
+            Assert.IsTrue(ret.Count == 1);
+            Assert.IsTrue(controller.GetEntitiesOfType(ENTITY.VARIABLE, cnt).Count == 1);
+            Assert.IsTrue(controller.GetEntitiesOfType(ENTITY.FUNCTION, cnt).Count == 1);
+            Assert.IsTrue(controller.GetEntitiesOfType(ENTITY.DATA_TYPE, cnt).Count == 3);
+
 
             controller.Remove(ENTITY.CONTEXT_D, cnt, "titi");
             controller.Remove(ENTITY.VARIABLE, cnt, "titi");

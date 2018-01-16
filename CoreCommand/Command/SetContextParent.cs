@@ -1,14 +1,29 @@
 ﻿using System;
+using CoreControl;
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class SetContextParent
+    public class SetContextParent : ICommand<SetContextParent.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public SetContextParent Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public UInt32 ContextId { get; set; }
 
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
         public UInt32 ParentId { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.SetContextParent(ContextId, ParentId);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

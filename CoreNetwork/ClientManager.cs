@@ -46,7 +46,11 @@ namespace CoreNetwork
         /// </summary>
         public void RegisterEvents()
         {
-            eventProtocolClient.RegisterEvent("DECLARE", this.DeclareEvent, 0);
+            //eventProtocolClient.RegisterEvent("DECLARE", this.DeclareEvent, 0);
+            foreach (KeyValuePair<String, String> command in commandManager.GetRegisteredCommands())
+            {
+                Register(command.Key, command.Value);
+            }
         }
 
         /// <summary>
@@ -73,24 +77,25 @@ namespace CoreNetwork
         /// <param name="data">Command body that correspond to consumer data</param>
         /// <param name="callback">Manager command to call</param>
         /// <param name="replyEventName">Name of the event to reply</param>
-        private void HandleEvent(byte[] data, Action<Stream, Stream> callback, string replyEventName)
+        private void HandleEvent(byte[] data, Func<Stream, Stream, bool> callback, string replyEventName)
         {
             MemoryStream inStream = new MemoryStream(data);
             MemoryStream outStream = new MemoryStream();
-            
-            callback(inStream, outStream);
-            eventProtocolClient.SendEvent(replyEventName, outStream.GetBuffer());
+
+            if (callback(inStream, outStream))
+                eventProtocolClient.SendEvent(replyEventName, outStream.GetBuffer());
+            else
+                eventProtocolClient.SendEvent("ERROR", outStream.GetBuffer());
         }
 
-        /// <summary>
-        /// Handle declared event
-        /// </summary>
-        /// <param name="data">Declare command body</param>
-        private void DeclareEvent(byte[] data)
+        private void Register(String command, String reply)
         {
-            Console.WriteLine("Declaring data");
-            HandleEvent(data, commandManager.OnDeclare, "ENTITY_DECLARED");
-            Console.WriteLine("Data declared");
+            Func<Stream, Stream, bool> cb = commandManager.GetCommand(command);
+
+            eventProtocolClient.RegisterEvent(command, (byte[] data) =>
+            {
+                HandleEvent(data, cb, reply);
+            }, 0);
         }
     }
 }

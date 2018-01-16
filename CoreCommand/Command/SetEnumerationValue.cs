@@ -1,13 +1,32 @@
-﻿namespace CoreCommand.Command
+﻿using CoreControl;
+using Newtonsoft.Json;
+
+namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class SetEnumerationValue
+    public class SetEnumerationValue : ICommand<SetEnumerationValue.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public SetEnumerationValue Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public uint EnumId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
-        [ProtoBuf.ProtoMember(3)]
-        public dynamic Value { get; set; }
+
+        [BinarySerializer.BinaryFormat]
+        public string Value { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.SetEnumerationValue(EnumId, Name, JsonConvert.DeserializeObject(Value));
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

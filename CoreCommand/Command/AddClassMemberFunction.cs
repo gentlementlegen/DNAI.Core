@@ -1,15 +1,35 @@
 ﻿using CoreControl;
+using System;
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class AddClassMemberFunction
+    public class AddClassMemberFunction : ICommand<AddClassMemberFunction.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
-        public uint ClassId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public AddClassMemberFunction Command { get; set; }
+
+            [BinarySerializer.BinaryFormat]
+            public UInt32 MethodID { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
+        public UInt32 ClassId { get; set; }
+
+        [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
-        [ProtoBuf.ProtoMember(3)]
+
+        [BinarySerializer.BinaryFormat]
         public EntityFactory.VISIBILITY Visibility { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            return new Reply
+            {
+                Command = this,
+                MethodID = controller.AddClassMemberFunction(ClassId, Name, Visibility)
+            };
+        }
     }
 }

@@ -1,11 +1,28 @@
-﻿namespace CoreCommand.Command
+﻿using CoreControl;
+
+namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class SetListType
+    public class SetListType : ICommand<SetListType.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public SetListType Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public uint ListId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public uint TypeId { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.SetListType(ListId, TypeId);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

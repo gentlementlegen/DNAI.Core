@@ -1,13 +1,31 @@
-﻿namespace CoreCommand.Command
+﻿using CoreControl;
+
+namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class UnlinkInstructionInput
+    public class UnlinkInstructionInput : ICommand<UnlinkInstructionInput.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public UnlinkInstructionInput Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public uint FunctionID { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public uint Instruction { get; set; }
-        [ProtoBuf.ProtoMember(3)]
+
+        [BinarySerializer.BinaryFormat]
         public string InputName { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.UnlinkInstructionInput(FunctionID, Instruction, InputName);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

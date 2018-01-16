@@ -3,16 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CoreControl;
+using Newtonsoft.Json;
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class SetVariableValue
+    public class SetVariableValue : ICommand<SetVariableValue.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public SetVariableValue Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public UInt32 VariableID { get; set; }
 
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
         public string Value { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.SetVariableValue(VariableID, JsonConvert.DeserializeObject(Value));
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

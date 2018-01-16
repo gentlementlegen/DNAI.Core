@@ -7,18 +7,20 @@ namespace TestCommand
     [TestClass]
     public class TestManager
     {
-        private void testCommand<Command, Reply>(CoreCommand.IManager manager, Command toserial, Action<Stream, Stream> toCall, Action<Command, Reply> check)
+        private void testCommand<Command, Reply>(CoreCommand.IManager manager, Command toserial, Func<Stream, Stream, bool> toCall, Action<Command, Reply> check)
         {
             Stream instream = new MemoryStream();
             Stream outStream = new MemoryStream();
 
-            ProtoBuf.Serializer.SerializeWithLengthPrefix(instream, toserial, ProtoBuf.PrefixStyle.Base128);
+            BinarySerializer.Serializer.Serialize(toserial, instream);
+            //ProtoBuf.Serializer.SerializeWithLengthPrefix(instream, toserial, ProtoBuf.PrefixStyle.Base128);
             instream.Position = 0;
 
-            toCall(instream, outStream);
+            Assert.IsTrue(toCall(instream, outStream));
 
             outStream.Position = 0;
-            Reply reply = ProtoBuf.Serializer.DeserializeWithLengthPrefix<Reply>(outStream, ProtoBuf.PrefixStyle.Base128);
+            Reply reply = BinarySerializer.Serializer.Deserialize<Reply>(outStream);
+            //ProtoBuf.Serializer.DeserializeWithLengthPrefix<Reply>(outStream, ProtoBuf.PrefixStyle.Base128);
 
             check(toserial, reply);
         }
@@ -26,7 +28,7 @@ namespace TestCommand
         [TestMethod]
         public void ManagerCoverage()
         {
-            CoreCommand.IManager dispatcher = new CoreCommand.ProtobufManager();
+            CoreCommand.IManager dispatcher = new CoreCommand.BinaryManager();
 
             testCommand(
                 dispatcher,
@@ -37,8 +39,8 @@ namespace TestCommand
                     Name = "toto",
                     Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
                 },
-                dispatcher.OnDeclare,
-                (CoreCommand.Command.Declare command, CoreCommand.Reply.EntityDeclared reply) =>
+                dispatcher.GetCommand("DECLARE"),
+                (CoreCommand.Command.Declare command, CoreCommand.Command.Declare.Reply reply) =>
                 {
                     Assert.IsTrue(
                        reply.Command.ContainerID == command.ContainerID
@@ -55,8 +57,8 @@ namespace TestCommand
                     VariableID = 6,
                     TypeID = 2
                 },
-                dispatcher.OnSetVariableType,
-                (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
+                dispatcher.GetCommand("SET_VARIABLE_TYPE"),
+                (CoreCommand.Command.SetVariableType message, CoreCommand.Command.SetVariableType.Reply reply) =>
                 {
                     Assert.IsTrue(
                         reply.Command.VariableID == message.VariableID
@@ -70,8 +72,8 @@ namespace TestCommand
                     VariableID = 6,
                     Value = "42"
                 },
-                dispatcher.OnSetVariableValue,
-                (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
+                dispatcher.GetCommand("SET_VARIABLE_VALUE"),
+                (CoreCommand.Command.SetVariableValue message, CoreCommand.Command.SetVariableValue.Reply reply) =>
                 {
                     Assert.IsTrue(
                         message.VariableID == reply.Command.VariableID
@@ -88,8 +90,8 @@ namespace TestCommand
                     Name = "toto",
                     NewVisi = CoreControl.EntityFactory.VISIBILITY.PUBLIC
                 },
-                dispatcher.OnChangeVisibility,
-                (CoreCommand.Command.ChangeVisibility message, CoreCommand.Reply.ChangeVisibility reply) =>
+                dispatcher.GetCommand("CHANGE_VISIBILITY"),
+                (CoreCommand.Command.ChangeVisibility message, CoreCommand.Command.ChangeVisibility.Reply reply) =>
                 {
                     Assert.IsTrue(
                         message.Name == reply.Command.Name
@@ -105,8 +107,8 @@ namespace TestCommand
                 {
                     VariableId = 6
                 },
-                dispatcher.OnGetVariableValue,
-                (CoreCommand.Command.GetVariableValue message, CoreCommand.Reply.GetVariableValue reply) =>
+                dispatcher.GetCommand("GET_VARIABLE_VALUE"),
+                (CoreCommand.Command.GetVariableValue message, CoreCommand.Command.GetVariableValue.Reply reply) =>
                 {
                     Assert.IsTrue(
                         message.VariableId == reply.Command.VariableId
@@ -140,8 +142,8 @@ namespace TestCommand
                     ContainerID = 0,
                     Name = "toto"
                 },
-                dispatcher.OnRemove,
-                (CoreCommand.Command.Remove message, CoreCommand.Reply.Remove reply) =>
+                dispatcher.GetCommand("REMOVE"),
+                (CoreCommand.Command.Remove message, CoreCommand.Command.Remove.Reply reply) =>
                 {
                     Assert.IsTrue(
                         message.Name == reply.Command.Name

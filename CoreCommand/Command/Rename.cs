@@ -7,19 +7,33 @@ using System.Threading.Tasks;
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class Rename
+    public class Rename : ICommand<Rename.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public Rename Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public EntityFactory.ENTITY EntityType { get; set; }
 
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
         public UInt32 ContainerID { get; set; }
 
-        [ProtoBuf.ProtoMember(3)]
+        [BinarySerializer.BinaryFormat]
         public string LastName { get; set; }
 
-        [ProtoBuf.ProtoMember(4)]
+        [BinarySerializer.BinaryFormat]
         public string NewName { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.Rename(EntityType, ContainerID, LastName, NewName);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

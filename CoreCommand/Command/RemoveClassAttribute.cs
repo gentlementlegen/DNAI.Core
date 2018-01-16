@@ -1,11 +1,28 @@
-﻿namespace CoreCommand.Command
+﻿using CoreControl;
+
+namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class RemoveClassAttribute
+    public class RemoveClassAttribute : ICommand<RemoveClassAttribute.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public RemoveClassAttribute Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public uint ClassId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.RemoveClassAttribute(ClassId, Name);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

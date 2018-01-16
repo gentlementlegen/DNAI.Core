@@ -1,18 +1,36 @@
 ﻿using CoreControl;
 using System;
+using System.Collections.Generic;
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class Remove
+    public class Remove : ICommand<Remove.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public Remove Command { get; set; }
+
+            [BinarySerializer.BinaryFormat]
+            public List<UInt32> Removed { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public EntityFactory.ENTITY EntityType { get; set; }
 
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
         public UInt32 ContainerID { get; set; }
 
-        [ProtoBuf.ProtoMember(3)]
+        [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            return new Reply
+            {
+                Command = this,
+                Removed = controller.Remove(EntityType, ContainerID, Name)
+            };
+        }
     }
 }

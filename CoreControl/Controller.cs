@@ -12,6 +12,14 @@ namespace CoreControl
         /// Entity factory used to manage entities
         /// </summary>
         private EntityFactory entity_factory = new EntityFactory();
+        
+        /// <summary>
+        /// Resets the controller state to initial values.
+        /// </summary>
+        public void Reset()
+        {
+            entity_factory = new EntityFactory();
+        }
 
         /// <summary>
         /// Will declare an entity in a container with a specific name and visibility
@@ -75,6 +83,17 @@ namespace CoreControl
         }
 
         /// <summary>
+        /// Will expose all externals entities of a specific type in a given container
+        /// </summary>
+        /// <param name="entities_type">Type of the entities to expose</param>
+        /// <param name="containerID"></param>
+        /// <returns></returns>
+        public List<EntityFactory.Entity> GetEntitiesOfType(EntityFactory.ENTITY entities_type, UInt32 containerID)
+        {
+            return entity_factory.GetEntitiesOfType(entities_type, containerID);
+        }
+
+        /// <summary>
         /// Set a specific value to a variable
         /// </summary>
         /// <param name="variableID">Identifier of the variable</param>
@@ -83,7 +102,17 @@ namespace CoreControl
         {
             entity_factory.FindDefinitionOfType<CorePackage.Entity.Variable>(variableID).Value = value;
         }
-
+        
+        /// <summary>
+        /// Get a variable value
+        /// </summary>
+        /// <param name="variableID">Identifier of the variable from which retreive the value</param>
+        /// <returns>Value of the variable identified by the given id</returns>
+        public dynamic GetVariableValue(UInt32 variableID)
+        {
+            return entity_factory.FindDefinitionOfType<CorePackage.Entity.Variable>(variableID).Value;
+        }
+        
         /// <summary>
         /// Set a specific type to a variable
         /// </summary>
@@ -95,21 +124,13 @@ namespace CoreControl
         }
 
         /// <summary>
-        /// Resets the controller state to initial values.
+        /// Returns given variable type
         /// </summary>
-        public void Reset()
+        /// <param name="variableID">Identifier of the variable on which retreive type</param>
+        /// <returns>Identifier of the variable type</returns>
+        public UInt32 GetVariableType(UInt32 variableID)
         {
-            entity_factory = new EntityFactory();
-        }
-
-        /// <summary>
-        /// Get a variable value
-        /// </summary>
-        /// <param name="variableID">Identifier of the variable from which retreive the value</param>
-        /// <returns>Value of the variable identified by the given id</returns>
-        public dynamic GetVariableValue(UInt32 variableID)
-        {
-            return entity_factory.FindDefinitionOfType<CorePackage.Entity.Variable>(variableID).Value;
+            return entity_factory.GetEntityID(entity_factory.FindDefinitionOfType<CorePackage.Entity.Variable>(variableID).Type);
         }
 
         /// <summary>
@@ -264,6 +285,25 @@ namespace CoreControl
         }
 
         /// <summary>
+        /// Allow user to expose function parameters
+        /// </summary>
+        /// <param name="funcID">Identifier of the declared function in which retreive parameters</param>
+        /// <returns>List of entities that contains function parameters</returns>
+        public List<EntityFactory.Entity> GetFunctionParameters(UInt32 funcID)
+        {
+            List<EntityFactory.Entity> externals = GetEntitiesOfType(EntityFactory.ENTITY.VARIABLE, funcID);
+            List<EntityFactory.Entity> filtered = new List<EntityFactory.Entity>();
+            Dictionary<String, CorePackage.Entity.Variable> parameters = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(funcID).Parameters;
+            
+            foreach (EntityFactory.Entity curr in externals)
+            {
+                if (parameters.ContainsKey(curr.Name))
+                    filtered.Add(curr);
+            }
+            return filtered;
+        }
+
+        /// <summary>
         /// Set a function public variable as return
         /// </summary>
         /// <param name="funcID">Identifier of specific function</param>
@@ -271,6 +311,25 @@ namespace CoreControl
         public void SetFunctionReturn(UInt32 funcID, string externalVarName)
         {
             entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(funcID).SetVariableAs(externalVarName, CorePackage.Entity.Function.VariableRole.RETURN);
+        }
+
+        /// <summary>
+        /// Allow user to expose function returns
+        /// </summary>
+        /// <param name="funcID">Identifier of the declared function in which retreive returns</param>
+        /// <returns>List of the entities that corresponds to the returns variable in the function</returns>
+        public List<EntityFactory.Entity> GetFunctionReturns(UInt32 funcID)
+        {
+            List<EntityFactory.Entity> externals = GetEntitiesOfType(EntityFactory.ENTITY.VARIABLE, funcID);
+            List<EntityFactory.Entity> filtered = new List<EntityFactory.Entity>();
+            Dictionary<String, CorePackage.Entity.Variable> parameters = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(funcID).Returns;
+
+            foreach (EntityFactory.Entity curr in externals)
+            {
+                if (parameters.ContainsKey(curr.Name))
+                    filtered.Add(curr);
+            }
+            return filtered;
         }
 
         /// <summary>

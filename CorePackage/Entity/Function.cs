@@ -179,6 +179,7 @@ namespace CorePackage.Entity
         public void setEntryPoint(UInt32 instructionID)
         {
             entrypoint = findInstruction<Execution.ExecutionRefreshInstruction>(instructionID);
+            //Console.Write(ToDotFile());
         }
 
         /// <summary>
@@ -371,6 +372,11 @@ namespace CorePackage.Entity
         public List<Variable> Clear()
         {
             return scope.Clear();
+        }
+
+        public Dictionary<string, Variable> GetEntities(AccessMode visibility)
+        {
+            return scope.GetEntities(visibility);
         }
     }
 }

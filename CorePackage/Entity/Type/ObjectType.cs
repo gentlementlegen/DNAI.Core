@@ -147,6 +147,12 @@ namespace CorePackage.Entity.Type
             return ((IDeclarator<IContext>)context).Clear();
         }
 
+        ///<see cref="IDeclarator{definitionType}.GetEntities(AccessMode)"/>
+        Dictionary<string, IContext> IDeclarator<IContext>.GetEntities(AccessMode visibility)
+        {
+            return ((IDeclarator<IContext>)context).GetEntities(visibility);
+        }
+
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
         public Variable Declare(Variable entity, string name, AccessMode visibility)
         {
@@ -187,6 +193,12 @@ namespace CorePackage.Entity.Type
         List<Variable> IDeclarator<Variable>.Clear()
         {
             return ((IDeclarator<Variable>)context).Clear();
+        }
+
+        ///<see cref="IDeclarator{definitionType}.GetEntities(AccessMode)"/>
+        Dictionary<string, Variable> IDeclarator<Variable>.GetEntities(AccessMode visibility)
+        {
+            return ((IDeclarator<Variable>)context).GetEntities(visibility);
         }
 
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
@@ -231,6 +243,12 @@ namespace CorePackage.Entity.Type
             return ((IDeclarator<DataType>)context).Clear();
         }
 
+        ///<see cref="IDeclarator{definitionType}.GetEntities(AccessMode)"/>
+        Dictionary<string, DataType> IDeclarator<DataType>.GetEntities(AccessMode visibility)
+        {
+            return ((IDeclarator<DataType>)context).GetEntities(visibility);
+        }
+
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
         public Function Declare(Function entity, string name, AccessMode visibility)
         {
@@ -271,6 +289,12 @@ namespace CorePackage.Entity.Type
         List<Function> IDeclarator<Function>.Clear()
         {
             return ((IDeclarator<Function>)context).Clear();
+        }
+
+        ///<see cref="IDeclarator{definitionType}.GetEntities(AccessMode)"/>
+        Dictionary<string, Function> IDeclarator<Function>.GetEntities(AccessMode visibility)
+        {
+            return ((IDeclarator<Function>)context).GetEntities(visibility);
         }
 
         /// <summary>
