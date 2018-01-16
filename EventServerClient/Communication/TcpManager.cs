@@ -32,7 +32,7 @@ namespace EventServerClient.Communication
 
                 _tcpClient.Connect(address, port);
               
-                Byte[] data = _createPackage.AuthenticatePackage("YOLO fernand");
+                Byte[] data = _createPackage.AuthenticatePackage("Core com.");
                 _tcpClient.GetStream().Write(data, 0, data.Length);
                 
             }
