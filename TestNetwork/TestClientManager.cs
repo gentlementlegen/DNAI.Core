@@ -24,7 +24,7 @@ namespace TestNetwork
 
             CoreCommand.Command.Declare tosend = new CoreCommand.Command.Declare {
                 ContainerID = 0,
-                EntityType = CoreControl.EntityFactory.ENTITY.CONTEXT_D,
+                EntityType = CoreControl.EntityFactory.ENTITY.CONTEXT,
                 Name = "testCoverage",
                 Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
             };

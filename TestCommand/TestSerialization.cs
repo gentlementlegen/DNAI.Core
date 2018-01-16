@@ -144,7 +144,7 @@ namespace TestCommand
             Declare.Reply moreOrLessContext = HandleCommand<Declare.Reply, Declare>(
                 new Declare
                 {
-                    EntityType = EntityFactory.ENTITY.CONTEXT_D,
+                    EntityType = EntityFactory.ENTITY.CONTEXT,
                     ContainerID = 0,
                     Name = "moreOrLess",
                     Visibility = EntityFactory.VISIBILITY.PUBLIC

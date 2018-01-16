@@ -48,6 +48,7 @@
     <Compile Include="Command\AddClassMemberFunction.cs" />
     <Compile Include="Command\CallFunction.cs" />
     <Compile Include="Command\GetEnumerationValue.cs" />
+    <Compile Include="Command\GetVariableType.cs" />
     <Compile Include="Command\GetVariableValue.cs" />
     <Compile Include="Command\LinkInstructionData.cs" />
     <Compile Include="Command\LinkInstructionExecution.cs" />
