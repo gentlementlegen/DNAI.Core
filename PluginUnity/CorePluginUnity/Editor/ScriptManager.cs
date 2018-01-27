@@ -3,6 +3,7 @@ using CoreCommand;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Core.Plugin.Editor
 {
@@ -32,12 +33,17 @@ namespace Core.Plugin.Editor
         /// </summary>
         private readonly IManager _manager = new ProtobufManager();
 
+        private readonly DulyCodeConverter _codeConverter;
+
+        public List<string> FunctionList { get; private set; } = new List<string>();
+
         public ScriptManager(string filePath = "", string fileName = "")
         {
             FileName = fileName;
             FilePath = filePath;
             ProcessingStatus = "No file selected.";
             //fileLoader.onFileLoaded += OnScriptLoaded;
+            _codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
         }
 
         /// <summary>
@@ -67,9 +73,12 @@ namespace Core.Plugin.Editor
             Directory.CreateDirectory(fileCopyPath);
             File.Copy(FilePath, Path.Combine(fileCopyPath, Path.GetFileName(FilePath)));
 
-            _manager.LoadCommandsFrom(FilePath);
-            var codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
-            codeConverter.ConvertCode();
+            Task.Run(() =>
+            {
+                _manager.LoadCommandsFrom(FilePath);
+                //var codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
+                //codeConverter.ConvertCode();
+            }).ContinueWith((param) => OnScriptLoaded(param.Status.ToString()));
         }
 
         /// <summary>
@@ -84,6 +93,7 @@ namespace Core.Plugin.Editor
             //iaList = scriptList.ConvertAll(
             //	x => new KeyValuePair<string, Type>(x.Key, Type.GetType(x.Value))
             //);
+            FunctionList = _codeConverter.FetchFunctions();
         }
     }
 }

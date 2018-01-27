@@ -5,6 +5,7 @@
 using Core.Plugin.Unity.Extensions;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace Core.Plugin.Unity.Generator
 {
@@ -15,6 +16,7 @@ namespace Core.Plugin.Unity.Generator
         public string FilePath = "";
         public uint FunctionId;
         public string FunctionArguments = "";
+        public string Namespace = "Behaviour";
     }
 
     internal class TemplateReader
@@ -72,6 +74,8 @@ namespace Core.Plugin.Unity.Generator
         internal string GenerateTemplateContent(CoreCommand.ProtobufManager manager = null, List<CoreControl.EntityFactory.Entity> variables = null, List<CoreControl.EntityFactory.Entity> functions = null)
         {
             _template.FilePath = Path.GetFileName(manager.FilePath);
+            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+            _template.Namespace = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rgx.Replace(Path.GetFileNameWithoutExtension(_template.FilePath), ""));
             if (variables != null)
             {
                 _template.Inputs.Clear();

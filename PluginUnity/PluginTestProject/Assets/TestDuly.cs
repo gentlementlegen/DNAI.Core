@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Duly.Test;
+using UnityEngine;
 
 public class TestDuly : DulyBehaviour
 {

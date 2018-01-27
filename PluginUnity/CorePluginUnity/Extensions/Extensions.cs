@@ -19,5 +19,15 @@ namespace Core.Plugin.Unity.Extensions
             var value = controller.GetVariableValue(entity.Id);
             return $"{value.GetType()} {entity.Name}";
         }
+
+        /// <summary>
+        /// Splits a string according to its camel case represetation, adding spaces in it.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string SplitCamelCase(this string str)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(str, "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim();
+        }
     }
 }

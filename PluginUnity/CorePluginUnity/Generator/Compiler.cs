@@ -1,8 +1,10 @@
 ﻿#define UNITY_ENGINE
+using Core.Plugin.Unity.Extensions;
 using CoreCommand;
 using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -36,6 +38,17 @@ namespace Core.Plugin.Unity.Generator
             var functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
             var code = _template.GenerateTemplateContent(_manager, variables, functions);
             _compiler.Compile(code);
+        }
+
+        /// <summary>
+        /// Retrieves all the functions available in the AI file, as names.
+        /// </summary>
+        /// <returns></returns>
+        public List<string> FetchFunctions()
+        {
+            var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
+            _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
+            return _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]).ConvertAll(x => x.Name.SplitCamelCase());
         }
     }
 
@@ -92,6 +105,7 @@ namespace Core.Plugin.Unity.Generator
             _parameters.GenerateInMemory = true;
             // True - exe file generation, false - dll file generation
             _parameters.GenerateExecutable = false;
+            _parameters.CompilerOptions += $"-doc:{assemblyPath}DulyGeneratedAssembly.xml";
         }
 
         /// <summary>

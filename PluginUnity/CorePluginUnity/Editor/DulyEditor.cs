@@ -34,7 +34,7 @@ namespace Core.Plugin.Editor
     {
         private ScriptDrawer _scriptDrawer;
 
-        [MenuItem("Component/Duly")]
+        [MenuItem("Window/Duly")]
         public static void ShowWindow()
         {
             EditorWindow.GetWindow(typeof(DulyEditor));

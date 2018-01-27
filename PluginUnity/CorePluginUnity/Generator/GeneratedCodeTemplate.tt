@@ -9,46 +9,49 @@ using UnityEngine;
 using CoreCommand;
 using System.Collections.Generic;
 
-///<summary>
-/// Base behaviour for Duly IA.
-///</summary>
-public class DulyBehaviour : MonoBehaviour
+namespace Duly.<#=Namespace#>
 {
-	//[Header("Input variables")]
-	<# foreach (var item in Inputs)
-	{ #>
-		public <#=item #>;
-	<# } #>
-
-	//[Header("Output variables")]
-	<# foreach (var item in Outputs)
-	{ #>
-		public <#=item #> { get; private set; }
-	<# } #>
-
-	private ProtobufManager _manager;
-	public DulyBehaviour()
-	{
-		_manager = new ProtobufManager();
-		_manager.LoadCommandsFrom(@"Assets\DulyAssets\" + "<#=FilePath#>");
-	}
-
 	///<summary>
-	/// Executes the Duly Behaviour by calling the created function.
-	/// Updates Outputs accordingly.
+	/// Base behaviour for Duly IA.
 	///</summary>
-	public void Execute()
+	public class DulyBehaviour : MonoBehaviour
 	{
-		var results = new Dictionary<string, dynamic>();
+		//[Header("Input variables")]
+		<# foreach (var item in Inputs)
+		{ #>
+			public <#=item #>;
+		<# } #>
 
-		results = _manager.Controller.CallFunction(<#=FunctionId#>, new Dictionary<string, dynamic>{ <#=FunctionArguments#> });
-		<# if (Outputs.Count > 0)
+		//[Header("Output variables")]
+		<# foreach (var item in Outputs)
+		{ #>
+			public <#=item #> { get; private set; }
+		<# } #>
+
+		private ProtobufManager _manager;
+		public DulyBehaviour()
 		{
-			foreach (var output in Outputs)
+			_manager = new ProtobufManager();
+			_manager.LoadCommandsFrom(@"Assets\DulyAssets\" + "<#=FilePath#>");
+		}
+
+		///<summary>
+		/// Executes the Duly Behaviour by calling the created function.
+		/// Updates Outputs accordingly.
+		///</summary>
+		public void Execute()
+		{
+			var results = new Dictionary<string, dynamic>();
+
+			results = _manager.Controller.CallFunction(<#=FunctionId#>, new Dictionary<string, dynamic>{ <#=FunctionArguments#> });
+			<# if (Outputs.Count > 0)
 			{
-				var varName = output.Split(' ')[1]; #>
-				<#=varName#> = results["<#=varName#>"];
-			<# }
-		} #>
+				foreach (var output in Outputs)
+				{
+					var varName = output.Split(' ')[1]; #>
+					<#=varName#> = results["<#=varName#>"];
+				<# }
+			} #>
+		}
 	}
 }

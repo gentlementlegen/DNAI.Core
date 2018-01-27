@@ -19,7 +19,7 @@ namespace Core.Plugin.Drawing
 
         private ReorderableList rList;
 
-        private List<ListIAHandler> listIA = new List<ListIAHandler>();
+        private readonly List<ListIAHandler> listIA = new List<ListIAHandler>();
 
         private EditorWindow _editorWindow;
 
@@ -47,7 +47,8 @@ namespace Core.Plugin.Drawing
             public ListIAHandler()
             {
                 scriptManager = new ScriptManager();
-                subScriptList = new ReorderableList(scriptManager.iaList, scriptManager.iaList.GetType(), false, true, false, false);
+                //subScriptList = new ReorderableList(scriptManager.iaList, scriptManager.iaList.GetType(), false, true, false, false);
+                subScriptList = new ReorderableList(scriptManager.FunctionList, scriptManager.FunctionList.GetType(), false, true, false, false);
                 subScriptList.drawHeaderCallback = DrawHeaderInternal;
                 subScriptList.drawElementCallback = DrawListElement;
             }
@@ -60,7 +61,8 @@ namespace Core.Plugin.Drawing
             {
                 EditorGUI.LabelField(rect, "IA List");
 
-                subScriptList.list = scriptManager.iaList;
+                //subScriptList.list = scriptManager.iaList;
+                subScriptList.list = scriptManager.FunctionList;
             }
 
             /// <summary>
@@ -75,15 +77,16 @@ namespace Core.Plugin.Drawing
                 Rect labelRect = new Rect(rect.x, rect.y, rect.xMax - 45f, 15f);
                 Rect plusRect = new Rect(rect.xMax - 8f - 25f, rect.y, 25f, 13f);
 
-                string str = scriptManager.iaList[index].Key;
+                //string str = scriptManager.iaList[index].Key;
+                string str = scriptManager.FunctionList[index];
                 GUI.Label(labelRect, str);
 
                 if (GUI.Button(plusRect, iconToolbarPlus, preButton))
                 {
-                    foreach (var go in Selection.gameObjects)
-                    {
-                        go.AddComponent(scriptManager.iaList[index].Value);
-                    }
+                    //foreach (var go in Selection.gameObjects)
+                    //{
+                    //    go.AddComponent(scriptManager.iaList[index].Value);
+                    //}
                 }
                 if (index + 1 < subScriptList.count)
                     DrawingHelper.Separator(new Rect(labelRect.x, labelRect.y + EditorGUIUtility.singleLineHeight + 1.5f, rect.width, 1.2f));

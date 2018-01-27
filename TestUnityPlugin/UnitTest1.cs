@@ -65,8 +65,10 @@ namespace TestUnityPlugin
             string code = template.GenerateTemplateContent(_manager, variables, functions);
             var res = compiler.Compile(code);
 
-            var type = res.CompiledAssembly.GetType("DulyBehaviour");
+            var type = res.CompiledAssembly.GetType("Duly.Test.DulyBehaviour");
             Assert.IsNotNull(type);
+            var func = type.GetMethod("Execute");
+            Assert.IsNotNull(func);
         }
 
         private void TestCommand<Command, Reply>(CoreCommand.IManager manager, Command toserial, Action<Stream, Stream> toCall, Action<Command, Reply> check)
