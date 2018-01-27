@@ -4,12 +4,12 @@
         <name>DulyGeneratedAssembly</name>
     </assembly>
     <members>
-        <member name="T:Duly.Test.DulyBehaviour">
+        <member name="T:Duly.Test.MyFunction">
             <summary>
              Base behaviour for Duly IA.
             </summary>
             </member>
-        <member name="M:Duly.Test.DulyBehaviour.Execute">
+        <member name="M:Duly.Test.MyFunction.Execute">
             <summary>
              Executes the Duly Behaviour by calling the created function.
              Updates Outputs accordingly.

@@ -14,7 +14,7 @@ namespace Duly.<#=Namespace#>
 	///<summary>
 	/// Base behaviour for Duly IA.
 	///</summary>
-	public class DulyBehaviour : MonoBehaviour
+	public class <#=ClassName#> : MonoBehaviour
 	{
 		//[Header("Input variables")]
 		<# foreach (var item in Inputs)
@@ -29,7 +29,8 @@ namespace Duly.<#=Namespace#>
 		<# } #>
 
 		private ProtobufManager _manager;
-		public DulyBehaviour()
+
+		public <#=ClassName#>()
 		{
 			_manager = new ProtobufManager();
 			_manager.LoadCommandsFrom(@"Assets\DulyAssets\" + "<#=FilePath#>");

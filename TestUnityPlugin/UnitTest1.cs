@@ -41,8 +41,20 @@ namespace TestUnityPlugin
             string code = template.GenerateTemplateContent();
             var res = compiler.Compile(code);
 
-            var type = res.CompiledAssembly.GetType("DulyBehaviour");
+            var type = res.CompiledAssembly.GetType("Duly.Behaviour.DulyBehaviour");
             Assert.IsNotNull(type);
+        }
+
+        [TestMethod]
+        public void TestUnityConverter()
+        {
+            var manager = new ProtobufManager();
+            GenerateDulyFile();
+            manager.LoadCommandsFrom("test.duly");
+            var unity = new DulyCodeConverter(manager);
+
+            unity.ConvertCode();
+            unity.ConvertCode();
         }
 
         [TestMethod]
@@ -65,7 +77,7 @@ namespace TestUnityPlugin
             string code = template.GenerateTemplateContent(_manager, variables, functions);
             var res = compiler.Compile(code);
 
-            var type = res.CompiledAssembly.GetType("Duly.Test.DulyBehaviour");
+            var type = res.CompiledAssembly.GetType("Duly.Test.MyFunction");
             Assert.IsNotNull(type);
             var func = type.GetMethod("Execute");
             Assert.IsNotNull(func);

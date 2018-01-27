@@ -1,15 +1,15 @@
 ﻿using Duly.Test;
 using UnityEngine;
 
-public class TestDuly : DulyBehaviour
+public class TestDuly : MyFunction
 {
     // Use this for initialization
     private void Start()
     {
         Debug.Log("Executing !");
-        //Debug.Log("Result => " + return1);
+        Debug.Log("Result => " + return1);
         Execute();
-        //Debug.Log("Result after execution => " + return1);
+        Debug.Log("Result after execution => " + return1);
     }
 
     // Update is called once per frame

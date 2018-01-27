@@ -17,6 +17,7 @@ namespace Core.Plugin.Unity.Generator
         public uint FunctionId;
         public string FunctionArguments = "";
         public string Namespace = "Behaviour";
+        public string ClassName = "DulyBehaviour";
     }
 
     internal class TemplateReader
@@ -24,8 +25,6 @@ namespace Core.Plugin.Unity.Generator
         //private readonly IServiceProvider serviceProvider;
         //private readonly ITextTemplating t4;
         //private readonly ITextTemplatingSessionHost sessionHost;
-
-        private readonly GeneratedCodeTemplate _template = new GeneratedCodeTemplate();
 
         internal TemplateReader()
         {
@@ -73,29 +72,38 @@ namespace Core.Plugin.Unity.Generator
         /// <returns></returns>
         internal string GenerateTemplateContent(CoreCommand.ProtobufManager manager = null, List<CoreControl.EntityFactory.Entity> variables = null, List<CoreControl.EntityFactory.Entity> functions = null)
         {
-            _template.FilePath = Path.GetFileName(manager.FilePath);
-            Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-            _template.Namespace = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rgx.Replace(Path.GetFileNameWithoutExtension(_template.FilePath), ""));
+            var template = new GeneratedCodeTemplate();
+            if (manager != null)
+            {
+                template.FilePath = Path.GetFileName(manager.FilePath);
+                Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+                template.Namespace = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rgx.Replace(Path.GetFileNameWithoutExtension(template.FilePath), ""));
+            }
+
+            if (functions?.Count > 0)
+                template.ClassName = functions[0].Name;
+
             if (variables != null)
             {
-                _template.Inputs.Clear();
+                template.Inputs.Clear();
                 foreach (var item in variables)
-                    _template.Inputs.Add(item.ToSerialString(manager.Controller));
+                    template.Inputs.Add(item.ToSerialString(manager.Controller));
             }
+
             if (functions != null)
             {
-                _template.Outputs.Clear();
+                template.Outputs.Clear();
                 foreach (var item in functions)
                 {
-                    _template.FunctionId = item.Id;
+                    template.FunctionId = item.Id;
                     var pars = manager.Controller.GetFunctionParameters(item.Id);
                     for (int i = 0; i < pars.Count; i++)
-                        _template.FunctionArguments += $"{{\"{pars[i].Name}\",{manager.Controller.GetVariableValue(pars[i].Id).ToString()}}},";
+                        template.FunctionArguments += $"{{\"{pars[i].Name}\",{manager.Controller.GetVariableValue(pars[i].Id).ToString()}}},";
                     foreach (var ret in manager.Controller.GetFunctionReturns(item.Id))
-                        _template.Outputs.Add(ret.ToSerialString(manager.Controller));
+                        template.Outputs.Add(ret.ToSerialString(manager.Controller));
                 }
             }
-            return _template.TransformText();
+            return template.TransformText();
         }
     }
 }
