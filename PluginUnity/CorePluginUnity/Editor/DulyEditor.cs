@@ -55,8 +55,6 @@ namespace Core.Plugin.Editor
         {
             if (_scriptDrawer == null)
                 _scriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
-            else
-                _scriptDrawer = GetWindow(typeof(DulyEditor)) as ScriptDrawer;
         }
 
         #region Editor Drawing

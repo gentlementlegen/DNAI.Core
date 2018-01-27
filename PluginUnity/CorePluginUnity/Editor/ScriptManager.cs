@@ -71,7 +71,7 @@ namespace Core.Plugin.Editor
             //t.Start ();
             var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "DulyAssets");
             Directory.CreateDirectory(fileCopyPath);
-            File.Copy(FilePath, Path.Combine(fileCopyPath, Path.GetFileName(FilePath)));
+            File.Copy(FilePath, Path.Combine(fileCopyPath, Path.GetFileName(FilePath)), true);
 
             Task.Run(() =>
             {

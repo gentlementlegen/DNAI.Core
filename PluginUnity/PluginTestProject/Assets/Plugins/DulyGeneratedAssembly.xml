@@ -5,15 +5,22 @@
     </assembly>
     <members>
         <member name="T:Duly.Test.MyFunction">
-            <summary>
-             Base behaviour for Duly IA.
-            </summary>
+            <summary>
+
+             Base behaviour for Duly IA.
+
+            </summary>
+
             </member>
         <member name="M:Duly.Test.MyFunction.Execute">
-            <summary>
-             Executes the Duly Behaviour by calling the created function.
-             Updates Outputs accordingly.
-            </summary>
+            <summary>
+
+             Executes the Duly Behaviour by calling the created function.
+
+             Updates Outputs accordingly.
+
+            </summary>
+
             </member>
     </members>
 </doc>
