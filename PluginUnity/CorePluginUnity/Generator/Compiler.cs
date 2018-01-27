@@ -6,6 +6,7 @@ using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using static CoreControl.EntityFactory;
@@ -37,6 +38,24 @@ namespace Core.Plugin.Unity.Generator
             var variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[0]);
             var functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
             var code = _template.GenerateTemplateContent(_manager, variables, functions);
+            _compiler.Compile(code);
+        }
+
+        /// <summary>
+        /// Transforms Duly code to Unity code only keeping the specified functions.
+        /// </summary>
+        /// <param name="functionIds">The ids of the functions to keep.</param>
+        public void ConvertCode(IEnumerable<int> functionIds)
+        {
+            var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
+            var variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[0]);
+            var functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
+            var funcToKeep = new List<Entity>();
+            foreach (var id in functionIds)
+            {
+                funcToKeep.Add(functions[id]);
+            }
+            var code = _template.GenerateTemplateContent(_manager, variables, funcToKeep);
             _compiler.Compile(code);
         }
 

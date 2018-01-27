@@ -1,5 +1,7 @@
 ﻿using Core.Plugin.Editor;
+using Core.Plugin.Unity.Extensions;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -19,7 +21,7 @@ namespace Core.Plugin.Drawing
 
         private ReorderableList rList;
 
-        private readonly List<ListIAHandler> listIA = new List<ListIAHandler>();
+        private readonly List<ListAIHandler> listIA = new List<ListAIHandler>();
 
         private EditorWindow _editorWindow;
 
@@ -31,7 +33,7 @@ namespace Core.Plugin.Drawing
         /// Nested class for the IA list.
         /// Contains a ScriptManager and a Reordarable list to draw.
         /// </summary>
-        private class ListIAHandler
+        private class ListAIHandler
         {
             public ScriptManager scriptManager;
             public ReorderableList subScriptList;
@@ -40,11 +42,13 @@ namespace Core.Plugin.Drawing
             {
                 get
                 {
-                    return 80f + subScriptList.count * 20f;
+                    return 80f + (subScriptList.count * 20f);
                 }
             }
 
-            public ListIAHandler()
+            private List<bool> _selectedScripts;
+
+            public ListAIHandler()
             {
                 scriptManager = new ScriptManager();
                 //subScriptList = new ReorderableList(scriptManager.iaList, scriptManager.iaList.GetType(), false, true, false, false);
@@ -59,10 +63,20 @@ namespace Core.Plugin.Drawing
             /// <param name="rect">Rect size</param>
             private void DrawHeaderInternal(Rect rect)
             {
+                Rect refreshRect = new Rect(rect.x + rect.xMax - (rect.xMax / 5f) - 10f, rect.y, rect.xMax / 5f, 15f);
+
                 EditorGUI.LabelField(rect, "IA List");
 
                 //subScriptList.list = scriptManager.iaList;
                 subScriptList.list = scriptManager.FunctionList;
+                if (_selectedScripts?.Count != subScriptList.list.Count)
+                    _selectedScripts = Enumerable.Repeat(false, subScriptList.list.Count).ToList();
+
+                if (GUI.Button(refreshRect, dotButton))
+                {
+                    scriptManager.Compile(_selectedScripts.FindIndices(x => x));
+                    AssetDatabase.Refresh();
+                }
             }
 
             /// <summary>
@@ -81,13 +95,14 @@ namespace Core.Plugin.Drawing
                 string str = scriptManager.FunctionList[index];
                 GUI.Label(labelRect, str);
 
-                if (GUI.Button(plusRect, iconToolbarPlus, preButton))
-                {
+                _selectedScripts[index] = GUI.Toggle(plusRect, _selectedScripts[index], "");
+                //if (GUI.Button(plusRect, iconToolbarPlus, preButton))
+                //{
                     //foreach (var go in Selection.gameObjects)
                     //{
                     //    go.AddComponent(scriptManager.iaList[index].Value);
                     //}
-                }
+                //}
                 if (index + 1 < subScriptList.count)
                     DrawingHelper.Separator(new Rect(labelRect.x, labelRect.y + EditorGUIUtility.singleLineHeight + 1.5f, rect.width, 1.2f));
             }
@@ -180,7 +195,7 @@ namespace Core.Plugin.Drawing
 
         private void AddElementInternal(ReorderableList list)
         {
-            listIA.Add(new ListIAHandler());
+            listIA.Add(new ListAIHandler());
         }
     }
 }

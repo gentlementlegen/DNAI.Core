@@ -95,5 +95,14 @@ namespace Core.Plugin.Editor
             //);
             FunctionList = _codeConverter.FetchFunctions();
         }
+
+        /// <summary>
+        /// Compile the loaded code to the library.
+        /// </summary>
+        /// <param name="functionIds"></param>
+        public void Compile(IEnumerable<int> functionIds)
+        {
+            _codeConverter.ConvertCode(functionIds);
+        }
     }
 }

@@ -53,7 +53,10 @@ namespace Core.Plugin.Editor
 
         private void OnEnable()
         {
-            _scriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
+            if (_scriptDrawer == null)
+                _scriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
+            else
+                _scriptDrawer = GetWindow(typeof(DulyEditor)) as ScriptDrawer;
         }
 
         #region Editor Drawing

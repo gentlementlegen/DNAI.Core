@@ -1,4 +1,7 @@
-﻿using static CoreControl.EntityFactory;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using static CoreControl.EntityFactory;
 
 namespace Core.Plugin.Unity.Extensions
 {
@@ -28,6 +31,18 @@ namespace Core.Plugin.Unity.Extensions
         public static string SplitCamelCase(this string str)
         {
             return System.Text.RegularExpressions.Regex.Replace(str, "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim();
+        }
+
+        /// <summary>
+        /// Finds the indices of all objects matching the given predicate.
+        /// </summary>
+        /// <typeparam name="T">The type of objects in the list.</typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="predicate">The predicate.</param>
+        /// <returns>Indices of all objects matching the given predicate.</returns>
+        public static IEnumerable<int> FindIndices<T>(this IList<T> list, Func<T, bool> predicate)
+        {
+            return list.Where(predicate).Select(list.IndexOf);
         }
     }
 }
