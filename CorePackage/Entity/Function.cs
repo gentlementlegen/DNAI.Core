@@ -172,6 +172,26 @@ namespace CorePackage.Entity
             return (T)instructions[instructionID];
         }
 
+        public void LinkInstructionData(UInt32 from, String output, UInt32 to, String input)
+        {
+            findInstruction<Execution.Instruction>(to).GetInput(input).LinkTo(findInstruction<Execution.Instruction>(from), output);
+        }
+
+        public void LinkInstructionExecution(UInt32 from, UInt32 index, UInt32 to)
+        {
+            findInstruction<Execution.ExecutionRefreshInstruction>(from).LinkTo(index, findInstruction<Execution.ExecutionRefreshInstruction>(to));
+        }
+
+        public void UnlinkInstructionInput(UInt32 instruction, String input)
+        {
+            findInstruction<Execution.Instruction>(instruction).GetInput(input).Unlink();
+        }
+
+        public void UnlinkInstructionFlow(UInt32 instruction, UInt32 index)
+        {
+            findInstruction<Execution.ExecutionRefreshInstruction>(instruction).Unlink(index);
+        }
+
         /// <summary>
         /// Allow user to set function entry point from internal instruction identifier
         /// </summary>

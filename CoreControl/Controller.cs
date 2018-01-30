@@ -232,10 +232,7 @@ namespace CoreControl
         {
             UInt32 funcID = entity_factory.Declare<CorePackage.Entity.Function>(classID, name, (CorePackage.Global.AccessMode)visibility);
             CorePackage.Entity.Type.ObjectType obj = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID);
-            CorePackage.Entity.Function func = ((CorePackage.Global.IDeclarator<CorePackage.Entity.Function>)obj).Find(name, (CorePackage.Global.AccessMode)visibility);
-
-            func.Declare(new CorePackage.Entity.Variable(obj), "this", CorePackage.Global.AccessMode.EXTERNAL);
-            func.SetVariableAs("this", CorePackage.Entity.Function.VariableRole.PARAMETER);
+            obj.SetFunctionAsMember(name, (CorePackage.Global.AccessMode)visibility);
             return funcID;
         }
 
@@ -384,7 +381,8 @@ namespace CoreControl
         {
             CorePackage.Entity.Function func = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID);
 
-            func.findInstruction<CorePackage.Execution.ExecutionRefreshInstruction>(fromID).LinkTo(outIndex, func.findInstruction<CorePackage.Execution.ExecutionRefreshInstruction>(toID));
+            func.LinkInstructionExecution(fromID, outIndex, toID);
+            //func.findInstruction<CorePackage.Execution.ExecutionRefreshInstruction>(fromID).LinkTo(outIndex, func.findInstruction<CorePackage.Execution.ExecutionRefreshInstruction>(toID));
         }
 
         /// <summary>
@@ -395,11 +393,12 @@ namespace CoreControl
         /// <param name="outputName">Name of the output to link</param>
         /// <param name="toID">Identifier of the instruction to which link to input</param>
         /// <param name="intputName">Name of the input to link</param>
-        public void LinkInstructionData(UInt32 functionID, UInt32 fromID, string outputName, UInt32 toID, string intputName)
+        public void LinkInstructionData(UInt32 functionID, UInt32 fromID, string outputName, UInt32 toID, string inputName)
         {
             CorePackage.Entity.Function func = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID);
 
-            func.findInstruction<CorePackage.Execution.Instruction>(toID).GetInput(intputName).LinkTo(func.findInstruction<CorePackage.Execution.Instruction>(fromID), outputName);
+            func.LinkInstructionData(fromID, outputName, toID, inputName);
+            //func.findInstruction<CorePackage.Execution.Instruction>(toID).GetInput(intputName).LinkTo(func.findInstruction<CorePackage.Execution.Instruction>(fromID), outputName);
         }
 
         /// <summary>
@@ -424,7 +423,8 @@ namespace CoreControl
         /// <param name="outIndex">Index of the pin to unlink in the instruction</param>
         public void UnlinkInstructionFlow(UInt32 functionID, UInt32 instruction, uint outIndex)
         {
-            entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID).findInstruction<CorePackage.Execution.ExecutionRefreshInstruction>(instruction).Unlink(outIndex);
+            entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID).UnlinkInstructionFlow(instruction, outIndex);
+            //entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID).findInstruction<CorePackage.Execution.ExecutionRefreshInstruction>(instruction).Unlink(outIndex);
         }
 
         /// <summary>
@@ -435,7 +435,8 @@ namespace CoreControl
         /// <param name="inputname">Name of the input to unlink</param>
         public void UnlinkInstructionInput(UInt32 functionID, UInt32 instruction, string inputname)
         {
-            entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID).findInstruction<CorePackage.Execution.Instruction>(instruction).GetInput(inputname).Unlink();
+            entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID).UnlinkInstructionInput(instruction, inputname);
+            //entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID).findInstruction<CorePackage.Execution.Instruction>(instruction).GetInput(inputname).Unlink();
         }
     }
 }

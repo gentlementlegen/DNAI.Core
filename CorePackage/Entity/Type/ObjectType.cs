@@ -81,22 +81,50 @@ namespace CorePackage.Entity.Type
             attributes.Rename(lastName, newName);
         }
 
+        public void SetFunctionAsMember(string name, Global.AccessMode visibility)
+        {
+            Function func = ((IDeclarator<Function>)this).Find(name, visibility);
+
+            if (func == null)
+                return;
+
+            func.Declare(new Variable(this), "this", AccessMode.EXTERNAL);
+            func.SetVariableAs("this", Function.VariableRole.PARAMETER);
+        }
+
         /// <see cref="DataType.Instantiate"/>
         public override dynamic Instantiate()
         {
-            /*System.Dynamic.ExpandoObject toret = new System.Dynamic.ExpandoObject();
+            Dictionary<string, dynamic> data = new Dictionary<string, dynamic>();
 
-            foreach (Declaration.DeclarationNode attr in this.attributes.Internals)
+            foreach(KeyValuePair<string, DataType> attrtype in attributes.GetEntities(AccessMode.EXTERNAL))
             {
-                toret[attr.name] = attr.definition.Instanciate();
-            }*/
-            throw new NotImplementedException();
+                data[attrtype.Key] = attrtype.Value.Instantiate();
+            }
+            foreach (KeyValuePair<string, DataType> attrtype in attributes.GetEntities(AccessMode.INTERNAL))
+            {
+                data[attrtype.Key] = attrtype.Value.Instantiate();
+            }
+            return data;
         }
 
         /// <see cref="DataType.IsValueOfType(dynamic)"/>
         public override bool IsValueOfType(dynamic value)
         {
-            throw new NotImplementedException();
+            foreach (KeyValuePair<string, DataType> attrtype in attributes.GetEntities(AccessMode.EXTERNAL))
+            {
+                if (!value.ContainsKey(attrtype.Key)
+                    || !attrtype.Value.IsValueOfType(value[attrtype.Key]))
+                    return false;
+            }
+            
+            foreach (KeyValuePair<string, DataType> attrtype in attributes.GetEntities(AccessMode.INTERNAL))
+            {
+                if (!value.ContainsKey(attrtype.Key)
+                    || !attrtype.Value.IsValueOfType(value[attrtype.Key]))
+                    return false;
+            }
+            return true;
         }
 
         /// <see cref="Global.Definition.IsValid"/>
@@ -266,7 +294,7 @@ namespace CorePackage.Entity.Type
         {
             return ((IDeclarator<Function>)context).Find(name, visibility);
         }
-
+        
         ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
         Function IDeclarator<Function>.Rename(string lastName, string newName)
         {
@@ -304,6 +332,11 @@ namespace CorePackage.Entity.Type
         public void SetParent(IContext parent)
         {
             context.SetParent(parent);
+        }
+
+        public Dictionary<string, DataType> GetPublicAttributes()
+        {
+            return attributes.GetEntities(AccessMode.EXTERNAL);
         }
     }
 }
