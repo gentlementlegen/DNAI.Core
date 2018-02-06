@@ -56,12 +56,15 @@ namespace Core.Plugin.Drawing
             {
                 get
                 {
-                    return _subScriptList ??
-                        (_subScriptList = new ReorderableList(scriptManager.FunctionList, scriptManager.FunctionList.GetType(), false, true, false, false)
+                    if (_subScriptList == null && scriptManager != null && scriptManager.FunctionList != null && scriptManager.FunctionList != null)
                     {
-                        drawHeaderCallback = DrawHeaderInternal,
-                        drawElementCallback = DrawListElement
-                    });
+                        _subScriptList = new ReorderableList(scriptManager.FunctionList, scriptManager.FunctionList.GetType(), false, true, false, false)
+                        {
+                            drawHeaderCallback = DrawHeaderInternal,
+                            drawElementCallback = DrawListElement
+                        };
+                    }
+                    return _subScriptList;
                 }
             }
 
@@ -69,7 +72,7 @@ namespace Core.Plugin.Drawing
             {
                 get
                 {
-                    return 80f + (SubScriptList.count * 20f);
+                    return 80f + (SubScriptList?.count * 20f) ?? 80f;
                 }
             }
 
@@ -179,11 +182,8 @@ namespace Core.Plugin.Drawing
                 AssetDatabase.ImportAsset("Assets/DulyAssets/DulyEditor.asset");
             }
             Debug.Log("[Settings] list => " + _editorSettings.listIA.Count);
-            //Debug.Log("[Settings] toto => " + _editorSettings.toto);
-            //Debug.Log("[Settings] list int => " + _editorSettings.listInt.Count);
-            //_editorSettings.toto = "TATA";
-            //_editorSettings.listInt = new List<int> { 1, 2 };
             AssetDatabase.SaveAssets();
+            EditorUtility.SetDirty(_editorSettings);
         }
 
         /// <summary>
@@ -255,10 +255,11 @@ namespace Core.Plugin.Drawing
 
             GUI.Label(bottomRect, listIA[index].scriptManager.ProcessingStatus);
 
-            Debug.Log("[DEBUG] 3. ");
+            Debug.Log("[DEBUG] 3.");
 
-            listIA[index].SubScriptList.DoList(new Rect(rect.x, rect.y + 30, rect.width, rect.height));
-            if (listIA[index].CurrentSize > rList.elementHeight)
+            listIA[index].SubScriptList?.DoList(new Rect(rect.x, rect.y + 30, rect.width, rect.height));
+
+            if (listIA[index]?.CurrentSize > rList.elementHeight)
             {
                 rList.elementHeight = listIA[index].CurrentSize;
             }

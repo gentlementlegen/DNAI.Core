@@ -11,4 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: -473877679, guid: 3ef4bc44668edeb4599a082f50b1813c, type: 3}
   m_Name: DulyEditor
   m_EditorClassIdentifier: 
-  listIA: []
+  listIA:
+  - scriptManager:
+      _fileName: 
+      _filePath: C:/Users/ferna/Documents/Visual Studio 2017/Projects/DulyTFS/TestUnityPlugin/bin/Debug/test.duly
+  - scriptManager:
+      _fileName: 
+      _filePath: C:/Users/ferna/Documents/Visual Studio 2017/Projects/DulyTFS/TestUnityPlugin/bin/Debug/testCopy.duly
