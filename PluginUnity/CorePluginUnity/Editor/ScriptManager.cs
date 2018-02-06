@@ -10,19 +10,25 @@ namespace Core.Plugin.Editor
     /// <summary>
     /// Manages the loaded scripts for Duly.
     /// </summary>
+    [System.Serializable]
     public class ScriptManager
     {
         /// The name of the file.
+        [UnityEngine.SerializeField]
+        private string _fileName;
         public string FileName
-        { get; }
+        { get => _fileName; set => _fileName = value; }
 
         /// The path to the loaded file.
+        [UnityEngine.SerializeField]
+        private string _filePath;
         public string FilePath
-        { get; set; }
+        { get => _filePath; set => _filePath = value; }
 
         /// The current processing status.
+        private string _processingStatus;
         public string ProcessingStatus
-        { get; private set; }
+        { get => _processingStatus; set => _processingStatus = value; }
 
         public string AssemblyName
         { get => DulyCodeConverter.AssemblyName; }

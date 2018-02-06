@@ -11,9 +11,11 @@ namespace Core.Plugin.Drawing
     /// <summary>
     /// This class helps Unity remembering the state of the window content between each close/open call.
     /// </summary>
+    [System.Serializable]
     internal class EditorSettings : ScriptableObject
     {
-        public readonly List<ScriptDrawer.ListAIHandler> listIA = new List<ScriptDrawer.ListAIHandler>();
+        [SerializeField]
+        public List<ScriptDrawer.ListAIHandler> listIA = new List<ScriptDrawer.ListAIHandler>();
     }
 
     /// <summary>
@@ -43,28 +45,49 @@ namespace Core.Plugin.Drawing
         /// Nested class for the IA list.
         /// Contains a ScriptManager and a Reordarable list to draw.
         /// </summary>
+        [System.Serializable]
         internal class ListAIHandler
         {
+            [SerializeField]
             public ScriptManager scriptManager;
-            public ReorderableList subScriptList;
+
+            private ReorderableList _subScriptList;
+            public ReorderableList SubScriptList
+            {
+                get
+                {
+                    return _subScriptList ??
+                        (_subScriptList = new ReorderableList(scriptManager.FunctionList, scriptManager.FunctionList.GetType(), false, true, false, false)
+                    {
+                        drawHeaderCallback = DrawHeaderInternal,
+                        drawElementCallback = DrawListElement
+                    });
+                }
+            }
 
             public float CurrentSize
             {
                 get
                 {
-                    return 80f + (subScriptList.count * 20f);
+                    return 80f + (SubScriptList.count * 20f);
                 }
             }
 
             private List<bool> _selectedScripts;
 
-            public ListAIHandler()
+            /// <summary>
+            /// Enables this class in order to be used.
+            /// Necessary because Unity cannot serialize classes that do request to any UI element
+            /// inside a ctor, as the ReordarableList does.
+            /// </summary>
+            public void EnableListAIHandler()
             {
                 scriptManager = new ScriptManager();
-                //subScriptList = new ReorderableList(scriptManager.iaList, scriptManager.iaList.GetType(), false, true, false, false);
-                subScriptList = new ReorderableList(scriptManager.FunctionList, scriptManager.FunctionList.GetType(), false, true, false, false);
-                subScriptList.drawHeaderCallback = DrawHeaderInternal;
-                subScriptList.drawElementCallback = DrawListElement;
+                ////subScriptList = new ReorderableList(scriptManager.iaList, scriptManager.iaList.GetType(), false, true, false, false);
+
+                //subScriptList = new ReorderableList(scriptManager.FunctionList, scriptManager.FunctionList.GetType(), false, true, false, false);
+                //subScriptList.drawHeaderCallback = DrawHeaderInternal;
+                //subScriptList.drawElementCallback = DrawListElement;
             }
 
             /// <summary>
@@ -78,9 +101,9 @@ namespace Core.Plugin.Drawing
                 EditorGUI.LabelField(rect, "IA List");
 
                 //subScriptList.list = scriptManager.iaList;
-                subScriptList.list = scriptManager.FunctionList;
-                if (_selectedScripts?.Count != subScriptList.list.Count)
-                    _selectedScripts = Enumerable.Repeat(false, subScriptList.list.Count).ToList();
+                SubScriptList.list = scriptManager.FunctionList;
+                if (_selectedScripts?.Count != SubScriptList.list.Count)
+                    _selectedScripts = Enumerable.Repeat(false, SubScriptList.list.Count).ToList();
 
                 if (GUI.Button(refreshRect, refreshButton))
                 {
@@ -114,7 +137,7 @@ namespace Core.Plugin.Drawing
                     //    go.AddComponent(scriptManager.iaList[index].Value);
                     //}
                 //}
-                if (index + 1 < subScriptList.count)
+                if (index + 1 < SubScriptList.count)
                     DrawingHelper.Separator(new Rect(labelRect.x, labelRect.y + EditorGUIUtility.singleLineHeight + 1.5f, rect.width, 1.2f));
             }
         }
@@ -139,16 +162,28 @@ namespace Core.Plugin.Drawing
             _editorWindow = EditorWindow.GetWindow(typeof(DulyEditor));
         }
 
+        private void OnDisable()
+        {
+            Debug.Log("List count => " + _editorSettings.listIA.Count);
+        }
+
         private void LoadSettings()
         {
             _editorSettings = (EditorSettings)AssetDatabase.LoadAssetAtPath<EditorSettings>("Assets/DulyAssets/DulyEditor.asset");
             if (_editorSettings == null)
             {
+                Debug.Log("Settings were NULL");
                 _editorSettings = CreateInstance<EditorSettings>();
                 AssetDatabase.CreateAsset(_editorSettings, "Assets/DulyAssets/DulyEditor.asset");
                 AssetDatabase.SaveAssets();
                 AssetDatabase.ImportAsset("Assets/DulyAssets/DulyEditor.asset");
             }
+            Debug.Log("[Settings] list => " + _editorSettings.listIA.Count);
+            //Debug.Log("[Settings] toto => " + _editorSettings.toto);
+            //Debug.Log("[Settings] list int => " + _editorSettings.listInt.Count);
+            //_editorSettings.toto = "TATA";
+            //_editorSettings.listInt = new List<int> { 1, 2 };
+            AssetDatabase.SaveAssets();
         }
 
         /// <summary>
@@ -193,12 +228,19 @@ namespace Core.Plugin.Drawing
             var dropdownRect = new Rect(rect.x + thirdWidth, rect.y, rect.width * 0.15f, 15f);
             var bottomRect = new Rect(rect.x, rect.y + 50f, rect.width, 15f);
 
+            Debug.Log("[DEBUG] list ia => " + listIA);
+            Debug.Log("[DEBUG] list ia => " + listIA[index]);
+            Debug.Log("[DEBUG] list ia => " + listIA[index].scriptManager);
+            Debug.Log("[DEBUG] list ia => " + listIA[index].scriptManager.FilePath);
+
             listIA[index].scriptManager.FilePath = GUI.TextField(gameObjectRect, listIA[index].scriptManager.FilePath);
 
             if (miniButton == null)
                 miniButton = "miniButton";
             if (preButton == null)
                 preButton = "RL FooterButton";
+
+            Debug.Log("[DEBUG] 1. ");
 
             //			if (GUI.Button (dropdownRect, "Browse", miniButton))
             if (GUI.Button(dropdownRect, dotButton))
@@ -209,19 +251,28 @@ namespace Core.Plugin.Drawing
                 _editorWindow.Focus();
             }
 
+            Debug.Log("[DEBUG] 2. ");
+
             GUI.Label(bottomRect, listIA[index].scriptManager.ProcessingStatus);
 
-            listIA[index].subScriptList.DoList(new Rect(rect.x, rect.y + 30, rect.width, rect.height));
+            Debug.Log("[DEBUG] 3. ");
+
+            listIA[index].SubScriptList.DoList(new Rect(rect.x, rect.y + 30, rect.width, rect.height));
             if (listIA[index].CurrentSize > rList.elementHeight)
             {
                 rList.elementHeight = listIA[index].CurrentSize;
             }
+
+            Debug.Log("[DEBUG] 4. ");
+
             _editorWindow.Repaint();
         }
 
         private void AddElementInternal(ReorderableList list)
         {
-            listIA.Add(new ListAIHandler());
+            var handler = new ListAIHandler();
+            handler.EnableListAIHandler();
+            listIA.Add(handler);
         }
     }
 }
