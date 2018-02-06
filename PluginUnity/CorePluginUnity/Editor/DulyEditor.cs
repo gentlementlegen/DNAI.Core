@@ -44,10 +44,10 @@ namespace Core.Plugin.Editor
             window.Show();
         }
 
-        //public static void ShowWindow()
-        //{
-        //    EditorWindow.GetWindow(typeof(DulyEditor));
-        //}
+        public static void ShowWindow()
+        {
+            EditorWindow.GetWindow(typeof(DulyEditor));
+        }
 
         private void OnGUI()
         {
@@ -63,7 +63,19 @@ namespace Core.Plugin.Editor
         private void OnEnable()
         {
             if (_scriptDrawer == null)
+            {
                 _scriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
+            }
+        }
+
+        private void OnDisable()
+        {
+            AssetDatabase.SaveAssets();
+        }
+
+        private void OnDestroy()
+        {
+            AssetDatabase.SaveAssets();
         }
 
         #region Editor Drawing

@@ -10,7 +10,6 @@ namespace Core.Plugin.Editor
     /// <summary>
     /// Manages the loaded scripts for Duly.
     /// </summary>
-    [Serializable]
     public class ScriptManager
     {
         /// The name of the file.

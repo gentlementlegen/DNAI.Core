@@ -9,6 +9,14 @@ using UnityEngine;
 namespace Core.Plugin.Drawing
 {
     /// <summary>
+    /// This class helps Unity remembering the state of the window content between each close/open call.
+    /// </summary>
+    internal class EditorSettings : ScriptableObject
+    {
+        public readonly List<ScriptDrawer.ListAIHandler> listIA = new List<ScriptDrawer.ListAIHandler>();
+    }
+
+    /// <summary>
     /// Draws the <code>ScriptManager</code> class to the window.
     /// </summary>
     public class ScriptDrawer : EditorWindow, IEditorDrawable
@@ -22,9 +30,10 @@ namespace Core.Plugin.Drawing
 
         private ReorderableList rList;
 
-        private readonly List<ListAIHandler> listIA = new List<ListAIHandler>();
+        private List<ListAIHandler> listIA;
 
         private EditorWindow _editorWindow;
+        private EditorSettings _editorSettings;
 
         /// Should the ScriptDrawer be drawing ?
         public bool ShouldDraw
@@ -34,7 +43,7 @@ namespace Core.Plugin.Drawing
         /// Nested class for the IA list.
         /// Contains a ScriptManager and a Reordarable list to draw.
         /// </summary>
-        private class ListAIHandler
+        internal class ListAIHandler
         {
             public ScriptManager scriptManager;
             public ReorderableList subScriptList;
@@ -119,6 +128,8 @@ namespace Core.Plugin.Drawing
             iconToolbarPlus = EditorGUIUtility.IconContent("Toolbar Plus", "|Add new script");
             dotButton = EditorGUIUtility.IconContent("sv_icon_dot0_sml", "|Browse Script");
             refreshButton = EditorGUIUtility.IconContent("TreeEditor.Refresh", "|Refresh");
+            LoadSettings();
+            listIA = _editorSettings.listIA;
             rList = new ReorderableList(listIA, typeof(ScriptManager));
             rList.draggable = false;
             rList.elementHeight *= 2;
@@ -126,6 +137,18 @@ namespace Core.Plugin.Drawing
             rList.drawElementCallback = DrawElementInternal;
             rList.onAddCallback = AddElementInternal;
             _editorWindow = EditorWindow.GetWindow(typeof(DulyEditor));
+        }
+
+        private void LoadSettings()
+        {
+            _editorSettings = (EditorSettings)AssetDatabase.LoadAssetAtPath<EditorSettings>("Assets/DulyAssets/DulyEditor.asset");
+            if (_editorSettings == null)
+            {
+                _editorSettings = CreateInstance<EditorSettings>();
+                AssetDatabase.CreateAsset(_editorSettings, "Assets/DulyAssets/DulyEditor.asset");
+                AssetDatabase.SaveAssets();
+                AssetDatabase.ImportAsset("Assets/DulyAssets/DulyEditor.asset");
+            }
         }
 
         /// <summary>
