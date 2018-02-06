@@ -15,7 +15,7 @@ namespace Core.Plugin.Editor
     {
         /// The name of the file.
         public string FileName
-        { get; set; }
+        { get; }
 
         /// The path to the loaded file.
         public string FilePath
@@ -24,6 +24,9 @@ namespace Core.Plugin.Editor
         /// The current processing status.
         public string ProcessingStatus
         { get; private set; }
+
+        public string AssemblyName
+        { get => DulyCodeConverter.AssemblyName; }
 
         /// The list of IA references contained in the Duly file.
         public List<KeyValuePair<string, Type>> iaList = new List<KeyValuePair<string, Type>>();

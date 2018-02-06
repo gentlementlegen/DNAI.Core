@@ -19,6 +19,8 @@ namespace Core.Plugin.Unity.Generator
     /// </summary>
     public class DulyCodeConverter
     {
+        public const string AssemblyName = "DulyGeneratedAssembly";
+
         private readonly Compiler _compiler = new Compiler();
         private readonly TemplateReader _template = new TemplateReader();
         private readonly ProtobufManager _manager;
@@ -111,7 +113,7 @@ namespace Core.Plugin.Unity.Generator
             const string assemblyPath = "";
 #endif
             Directory.CreateDirectory("Assets/Plugins");
-            _parameters.OutputAssembly = "Assets/Plugins/DulyGeneratedAssembly.dll";
+            _parameters.OutputAssembly = "Assets/Plugins/" + DulyCodeConverter.AssemblyName + ".dll";
             // Reference to library
             // TODO : change with instllation program
             _parameters.ReferencedAssemblies.Add(Environment.ExpandEnvironmentVariables("%ProgramW6432%") + @"\Unity\Editor\Data\Managed\UnityEngine.dll");
@@ -123,7 +125,7 @@ namespace Core.Plugin.Unity.Generator
             _parameters.GenerateInMemory = true;
             // True - exe file generation, false - dll file generation
             _parameters.GenerateExecutable = false;
-            _parameters.CompilerOptions += $"-doc:{assemblyPath}DulyGeneratedAssembly.xml";
+            _parameters.CompilerOptions += $"-doc:{assemblyPath}{DulyCodeConverter.AssemblyName}.xml";
         }
 
         /// <summary>

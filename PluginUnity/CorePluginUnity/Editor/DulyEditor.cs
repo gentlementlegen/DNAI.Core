@@ -14,6 +14,7 @@ using UnityEngine;
 // Atlassian to advanced reordarable list : https://bitbucket.org/rotorz/reorderable-list-editor-field-for-unity
 // Order list in editor : https://forum.unity3d.com/threads/reorderablelist-in-the-custom-editorwindow.384006/
 // Unity Decompiled : https://github.com/MattRix/UnityDecompiled/blob/master/UnityEditor/UnityEditorInternal/ReorderableList.cs
+// Saving window state : https://answers.unity.com/questions/119978/how-do-i-have-an-editorwindow-save-its-data-inbetw.html
 
 // TODO : L'idée ce serait de faire un système comme les unity events, ou on chargerait un script,
 // qui une fois chargé (avec des threads) afficherait les behaviours dispos
@@ -35,10 +36,18 @@ namespace Core.Plugin.Editor
         private ScriptDrawer _scriptDrawer;
 
         [MenuItem("Window/Duly")]
-        public static void ShowWindow()
+        static void Init()
         {
-            EditorWindow.GetWindow(typeof(DulyEditor));
+            // Get existing open window or if none, make a new one:
+            DulyEditor window = (DulyEditor)EditorWindow.GetWindow(typeof(DulyEditor));
+            window.titleContent = new GUIContent("Duly");
+            window.Show();
         }
+
+        //public static void ShowWindow()
+        //{
+        //    EditorWindow.GetWindow(typeof(DulyEditor));
+        //}
 
         private void OnGUI()
         {

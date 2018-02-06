@@ -15,6 +15,7 @@ namespace Core.Plugin.Drawing
     {
         public static GUIContent iconToolbarPlus;
         public static GUIContent dotButton;
+        public static GUIContent refreshButton;
 
         public static GUIStyle preButton;
         public static GUIStyle miniButton;
@@ -63,7 +64,7 @@ namespace Core.Plugin.Drawing
             /// <param name="rect">Rect size</param>
             private void DrawHeaderInternal(Rect rect)
             {
-                Rect refreshRect = new Rect(rect.x + rect.xMax - (rect.xMax / 5f) - 10f, rect.y, rect.xMax / 5f, 15f);
+                Rect refreshRect = new Rect(rect.x + rect.xMax - 25f, rect.y, 15f, 15f);
 
                 EditorGUI.LabelField(rect, "IA List");
 
@@ -72,10 +73,11 @@ namespace Core.Plugin.Drawing
                 if (_selectedScripts?.Count != subScriptList.list.Count)
                     _selectedScripts = Enumerable.Repeat(false, subScriptList.list.Count).ToList();
 
-                if (GUI.Button(refreshRect, dotButton))
+                if (GUI.Button(refreshRect, refreshButton))
                 {
                     scriptManager.Compile(_selectedScripts.FindIndices(x => x));
-                    AssetDatabase.Refresh();
+                    //AssetDatabase.Refresh();
+                    AssetDatabase.ImportAsset("Assets/Plugins/" + scriptManager.AssemblyName + ".dll");
                 }
             }
 
@@ -116,6 +118,7 @@ namespace Core.Plugin.Drawing
             ShouldDraw = true;
             iconToolbarPlus = EditorGUIUtility.IconContent("Toolbar Plus", "|Add new script");
             dotButton = EditorGUIUtility.IconContent("sv_icon_dot0_sml", "|Browse Script");
+            refreshButton = EditorGUIUtility.IconContent("TreeEditor.Refresh", "|Refresh");
             rList = new ReorderableList(listIA, typeof(ScriptManager));
             rList.draggable = false;
             rList.elementHeight *= 2;
