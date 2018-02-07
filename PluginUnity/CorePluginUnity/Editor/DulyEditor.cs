@@ -62,6 +62,7 @@ namespace Core.Plugin.Editor
 
         private void OnEnable()
         {
+            Debug.Log("[DulyEditor] On enable");
             if (_scriptDrawer == null)
             {
                 _scriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
@@ -70,6 +71,8 @@ namespace Core.Plugin.Editor
 
         private void OnDisable()
         {
+            Debug.Log("[DulyEditor] On disable");
+            _scriptDrawer.OnDisable();
             AssetDatabase.SaveAssets();
         }
 

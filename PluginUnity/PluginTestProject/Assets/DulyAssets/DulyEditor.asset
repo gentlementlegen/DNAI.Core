@@ -14,7 +14,11 @@ MonoBehaviour:
   listIA:
   - scriptManager:
       _fileName: 
-      _filePath: C:/Users/ferna/Documents/Visual Studio 2017/Projects/DulyTFS/TestUnityPlugin/bin/Debug/test.duly
+      _filePath: C:/Users/ferna/Documents/Visual Studio 2017/Projects/DulyTFS/TestUnityPlugin/bin/Debug/testCopy.duly
+    _scriptList:
+    - My Function
   - scriptManager:
       _fileName: 
-      _filePath: C:/Users/ferna/Documents/Visual Studio 2017/Projects/DulyTFS/TestUnityPlugin/bin/Debug/testCopy.duly
+      _filePath: C:/Users/ferna/Documents/Visual Studio 2017/Projects/DulyTFS/TestUnityPlugin/bin/Debug/test.duly
+    _scriptList:
+    - My Function

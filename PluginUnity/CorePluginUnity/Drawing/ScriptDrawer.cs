@@ -51,7 +51,16 @@ namespace Core.Plugin.Drawing
             [SerializeField]
             public ScriptManager scriptManager;
 
+            /// <summary>
+            /// Backup of the <see cref="SubScriptList"/> list that cannot be serialized by Unity.
+            /// </summary>
+            [SerializeField]
+            private List<string> _scriptList = new List<string>();
+
             private ReorderableList _subScriptList;
+            /// <summary>
+            /// List of scripts that can be displayed in the Unity UI.
+            /// </summary>
             public ReorderableList SubScriptList
             {
                 get
@@ -68,6 +77,9 @@ namespace Core.Plugin.Drawing
                 }
             }
 
+            /// <summary>
+            /// Gets the current size of the script list.
+            /// </summary>
             public float CurrentSize
             {
                 get
@@ -83,14 +95,37 @@ namespace Core.Plugin.Drawing
             /// Necessary because Unity cannot serialize classes that do request to any UI element
             /// inside a ctor, as the ReordarableList does.
             /// </summary>
-            public void EnableListAIHandler()
+            public void OnEnable()
             {
-                scriptManager = new ScriptManager();
+                if (scriptManager == null)
+                    scriptManager = new ScriptManager();
                 ////subScriptList = new ReorderableList(scriptManager.iaList, scriptManager.iaList.GetType(), false, true, false, false);
 
                 //subScriptList = new ReorderableList(scriptManager.FunctionList, scriptManager.FunctionList.GetType(), false, true, false, false);
                 //subScriptList.drawHeaderCallback = DrawHeaderInternal;
                 //subScriptList.drawElementCallback = DrawListElement;
+
+                Debug.Log("[ScriptDrawer IA HANDLER] ================== OnEnable ia list => " + _scriptList.Count);
+                if (scriptManager.FunctionList?.Count <= 0)
+                {
+                    foreach (var func in _scriptList)
+                        scriptManager.FunctionList.Add(func);
+                }
+            }
+
+            /// <summary>
+            /// Must be called manually when the UI is disabled, to preserve the workspace.
+            /// </summary>
+            public void OnDisable()
+            {
+                Debug.Log("[ScriptDrawer IA HANDLER] ======================= ia list => " + _scriptList.Count);
+                if (scriptManager?.FunctionList != null)
+                {
+                    _scriptList.Clear();
+                    Debug.Log("[ScriptDrawer IAHANDLER] ======================= FUNCTION ia list => " + scriptManager.FunctionList.Count);
+                    foreach (var func in scriptManager.FunctionList)
+                        _scriptList.Add(func);
+                }
             }
 
             /// <summary>
@@ -148,7 +183,7 @@ namespace Core.Plugin.Drawing
         /// <summary>
         /// Called when the window is enabled.
         /// </summary>
-        private void OnEnable()
+        public void OnEnable()
         {
             ShouldDraw = true;
             iconToolbarPlus = EditorGUIUtility.IconContent("Toolbar Plus", "|Add new script");
@@ -156,6 +191,8 @@ namespace Core.Plugin.Drawing
             refreshButton = EditorGUIUtility.IconContent("TreeEditor.Refresh", "|Refresh");
             LoadSettings();
             listIA = _editorSettings.listIA;
+            Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ON ENABLE CALLED");
+            listIA.ForEach(x => x.OnEnable());
             rList = new ReorderableList(listIA, typeof(ScriptManager));
             rList.draggable = false;
             rList.elementHeight *= 2;
@@ -165,11 +202,24 @@ namespace Core.Plugin.Drawing
             _editorWindow = EditorWindow.GetWindow(typeof(DulyEditor));
         }
 
-        private void OnDisable()
+        /// <summary>
+        /// Called when the window is disabled.
+        /// </summary>
+        public void OnDisable()
         {
-            Debug.Log("List count => " + _editorSettings.listIA.Count);
+            Debug.Log("+++++++ List count => " + _editorSettings.listIA.Count);
+            listIA.ForEach(x => x.OnDisable());
         }
 
+        private void OnDestroy()
+        {
+            Debug.Log("+++++++ ON DESTROY List count => " + _editorSettings.listIA.Count);
+            listIA.ForEach(x => x.OnDisable());
+        }
+
+        /// <summary>
+        /// Retrieves the saved setting of the wokspace.
+        /// </summary>
         private void LoadSettings()
         {
             _editorSettings = (EditorSettings)AssetDatabase.LoadAssetAtPath<EditorSettings>("Assets/DulyAssets/DulyEditor.asset");
@@ -228,10 +278,10 @@ namespace Core.Plugin.Drawing
             var dropdownRect = new Rect(rect.x + thirdWidth, rect.y, rect.width * 0.15f, 15f);
             var bottomRect = new Rect(rect.x, rect.y + 50f, rect.width, 15f);
 
-            Debug.Log("[DEBUG] list ia => " + listIA);
-            Debug.Log("[DEBUG] list ia => " + listIA[index]);
-            Debug.Log("[DEBUG] list ia => " + listIA[index].scriptManager);
-            Debug.Log("[DEBUG] list ia => " + listIA[index].scriptManager.FilePath);
+            //Debug.Log("[DEBUG] list ia => " + listIA);
+            //Debug.Log("[DEBUG] list ia => " + listIA[index]);
+            //Debug.Log("[DEBUG] list ia => " + listIA[index].scriptManager);
+            //Debug.Log("[DEBUG] list ia => " + listIA[index].scriptManager.FilePath);
 
             listIA[index].scriptManager.FilePath = GUI.TextField(gameObjectRect, listIA[index].scriptManager.FilePath);
 
@@ -240,7 +290,7 @@ namespace Core.Plugin.Drawing
             if (preButton == null)
                 preButton = "RL FooterButton";
 
-            Debug.Log("[DEBUG] 1. ");
+            //Debug.Log("[DEBUG] 1. ");
 
             //			if (GUI.Button (dropdownRect, "Browse", miniButton))
             if (GUI.Button(dropdownRect, dotButton))
@@ -251,11 +301,11 @@ namespace Core.Plugin.Drawing
                 _editorWindow.Focus();
             }
 
-            Debug.Log("[DEBUG] 2. ");
+            //Debug.Log("[DEBUG] 2. ");
 
             GUI.Label(bottomRect, listIA[index].scriptManager.ProcessingStatus);
 
-            Debug.Log("[DEBUG] 3.");
+            //Debug.Log("[DEBUG] 3.");
 
             listIA[index].SubScriptList?.DoList(new Rect(rect.x, rect.y + 30, rect.width, rect.height));
 
@@ -264,7 +314,7 @@ namespace Core.Plugin.Drawing
                 rList.elementHeight = listIA[index].CurrentSize;
             }
 
-            Debug.Log("[DEBUG] 4. ");
+            //Debug.Log("[DEBUG] 4. ");
 
             _editorWindow.Repaint();
         }
@@ -272,7 +322,7 @@ namespace Core.Plugin.Drawing
         private void AddElementInternal(ReorderableList list)
         {
             var handler = new ListAIHandler();
-            handler.EnableListAIHandler();
+            handler.OnEnable();
             listIA.Add(handler);
         }
     }
