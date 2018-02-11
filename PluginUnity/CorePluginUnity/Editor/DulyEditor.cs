@@ -34,19 +34,48 @@ namespace Core.Plugin.Editor
     public class DulyEditor : EditorWindow
     {
         private ScriptDrawer _scriptDrawer;
+        private static DulyEditor _window;
 
-        [MenuItem("Window/Duly")]
-        static void Init()
+        public static DulyEditor Instance { get { return _window; } }
+
+        public DulyEditor()
         {
-            // Get existing open window or if none, make a new one:
-            DulyEditor window = (DulyEditor)EditorWindow.GetWindow(typeof(DulyEditor));
-            window.titleContent = new GUIContent("Duly");
-            window.Show();
+            _window = this;
         }
 
+        //[MenuItem("Window/Duly")]
+        //static void Init()
+        //{
+        //    // Get existing open window or if none, make a new one:
+        //    if (_window == null)
+        //    {
+        //        _window = (DulyEditor)EditorWindow.GetWindow(typeof(DulyEditor));
+        //        _window.titleContent = new GUIContent("Duly");
+        //        _window.Show();
+        //    }
+        //    else
+        //    {
+        //        _window.Focus();
+        //    }
+        //    //DulyEditor window = (DulyEditor)EditorWindow.GetWindow(typeof(DulyEditor));
+        //    //_window.titleContent = new GUIContent("Duly");
+        //    //_window.Show();
+        //}
+
+        [MenuItem("Window/Duly")]
         public static void ShowWindow()
         {
-            EditorWindow.GetWindow(typeof(DulyEditor));
+            //EditorWindow.GetWindow(typeof(DulyEditor));
+            if (_window == null)
+            {
+                _window = (DulyEditor)EditorWindow.GetWindow(typeof(DulyEditor));
+                _window.titleContent = new GUIContent("Duly");
+                _window.Show();
+            }
+            else
+            {
+                _window.Focus();
+            }
         }
 
         private void OnGUI()
@@ -57,27 +86,31 @@ namespace Core.Plugin.Editor
 
             EditorGUILayout.Space();
 
-            _scriptDrawer.Draw();
+            GUI.enabled = !EditorApplication.isPlaying;
+            _scriptDrawer?.Draw();
         }
 
         private void OnEnable()
         {
-            Debug.Log("[DulyEditor] On enable");
+            //Debug.Log("[DulyEditor] On enable");
             if (_scriptDrawer == null)
             {
-                _scriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
+                //_scriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
+                _scriptDrawer = new ScriptDrawer();
+                _scriptDrawer.OnEnable();
             }
         }
 
         private void OnDisable()
         {
-            Debug.Log("[DulyEditor] On disable");
-            _scriptDrawer.OnDisable();
+            //Debug.Log("[DulyEditor] On disable");
+            _scriptDrawer?.OnDisable();
             AssetDatabase.SaveAssets();
         }
 
         private void OnDestroy()
         {
+            _scriptDrawer?.OnDestroy();
             AssetDatabase.SaveAssets();
         }
 

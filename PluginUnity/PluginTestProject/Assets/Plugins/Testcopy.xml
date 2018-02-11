@@ -4,12 +4,12 @@
         <name>Testcopy</name>
     </assembly>
     <members>
-        <member name="T:Duly.Testcopy.MyFunction">
+        <member name="T:Duly.Testcopy.DulyBehaviour">
             <summary>
              Base behaviour for Duly IA.
             </summary>
             </member>
-        <member name="M:Duly.Testcopy.MyFunction.Execute">
+        <member name="M:Duly.Testcopy.DulyBehaviour.Execute">
             <summary>
              Executes the Duly Behaviour by calling the created function.
              Updates Outputs accordingly.

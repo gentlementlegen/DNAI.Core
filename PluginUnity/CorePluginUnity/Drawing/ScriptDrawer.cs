@@ -21,7 +21,7 @@ namespace Core.Plugin.Drawing
     /// <summary>
     /// Draws the <code>ScriptManager</code> class to the window.
     /// </summary>
-    public class ScriptDrawer : EditorWindow, IEditorDrawable
+    public class ScriptDrawer : /*EditorWindow, ScriptableObject,*/ IEditorDrawable
     {
         public static GUIContent iconToolbarPlus;
         public static GUIContent dotButton;
@@ -105,7 +105,7 @@ namespace Core.Plugin.Drawing
                 //subScriptList.drawHeaderCallback = DrawHeaderInternal;
                 //subScriptList.drawElementCallback = DrawListElement;
 
-                Debug.Log("[ScriptDrawer IA HANDLER] ================== OnEnable ia list => " + _scriptList.Count);
+                //Debug.Log("[ScriptDrawer IA HANDLER] ================== OnEnable ia list => " + _scriptList.Count);
                 if (scriptManager.FunctionList?.Count <= 0)
                 {
                     foreach (var func in _scriptList)
@@ -118,11 +118,11 @@ namespace Core.Plugin.Drawing
             /// </summary>
             public void OnDisable()
             {
-                Debug.Log("[ScriptDrawer IA HANDLER] ======================= ia list => " + _scriptList.Count);
+                //Debug.Log("[ScriptDrawer IA HANDLER] ======================= ia list => " + _scriptList.Count);
                 if (scriptManager?.FunctionList != null)
                 {
                     _scriptList.Clear();
-                    Debug.Log("[ScriptDrawer IAHANDLER] ======================= FUNCTION ia list => " + scriptManager.FunctionList.Count);
+                    //Debug.Log("[ScriptDrawer IAHANDLER] ======================= FUNCTION ia list => " + scriptManager.FunctionList.Count);
                     foreach (var func in scriptManager.FunctionList)
                         _scriptList.Add(func);
                 }
@@ -191,7 +191,7 @@ namespace Core.Plugin.Drawing
             refreshButton = EditorGUIUtility.IconContent("TreeEditor.Refresh", "|Refresh");
             LoadSettings();
             listIA = _editorSettings.listIA;
-            Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ON ENABLE CALLED");
+            //Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ON ENABLE CALLED");
             listIA.ForEach(x => x.OnEnable());
             rList = new ReorderableList(listIA, typeof(ScriptManager));
             rList.draggable = false;
@@ -199,7 +199,8 @@ namespace Core.Plugin.Drawing
             rList.drawHeaderCallback = DrawHeaderInternal;
             rList.drawElementCallback = DrawElementInternal;
             rList.onAddCallback = AddElementInternal;
-            _editorWindow = EditorWindow.GetWindow(typeof(DulyEditor));
+            //_editorWindow = EditorWindow.GetWindow(typeof(DulyEditor));
+            _editorWindow = DulyEditor.Instance;
         }
 
         /// <summary>
@@ -207,13 +208,13 @@ namespace Core.Plugin.Drawing
         /// </summary>
         public void OnDisable()
         {
-            Debug.Log("+++++++ List count => " + _editorSettings.listIA.Count);
+            //Debug.Log("+++++++ List count => " + _editorSettings.listIA.Count);
             listIA.ForEach(x => x.OnDisable());
         }
 
-        private void OnDestroy()
+        public void OnDestroy()
         {
-            Debug.Log("+++++++ ON DESTROY List count => " + _editorSettings.listIA.Count);
+            //Debug.Log("+++++++ ON DESTROY List count => " + _editorSettings.listIA.Count);
             listIA.ForEach(x => x.OnDisable());
         }
 
@@ -225,13 +226,14 @@ namespace Core.Plugin.Drawing
             _editorSettings = (EditorSettings)AssetDatabase.LoadAssetAtPath<EditorSettings>("Assets/DulyAssets/DulyEditor.asset");
             if (_editorSettings == null)
             {
-                Debug.Log("Settings were NULL");
-                _editorSettings = CreateInstance<EditorSettings>();
+                //Debug.Log("Settings were NULL");
+                //_editorSettings = CreateInstance<EditorSettings>();
+                _editorSettings = ScriptableObject.CreateInstance<EditorSettings>();
                 AssetDatabase.CreateAsset(_editorSettings, "Assets/DulyAssets/DulyEditor.asset");
                 AssetDatabase.SaveAssets();
                 AssetDatabase.ImportAsset("Assets/DulyAssets/DulyEditor.asset");
             }
-            Debug.Log("[Settings] list => " + _editorSettings.listIA.Count);
+            //Debug.Log("[Settings] list => " + _editorSettings.listIA.Count);
             AssetDatabase.SaveAssets();
             EditorUtility.SetDirty(_editorSettings);
         }
