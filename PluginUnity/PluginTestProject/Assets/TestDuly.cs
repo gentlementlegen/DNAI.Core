@@ -1,7 +1,7 @@
 ﻿using Duly.Test;
 using UnityEngine;
 
-public class TestDuly : MyFunction
+public class TestDuly : MyBehaviour
 {
     // Use this for initialization
     private void Start()

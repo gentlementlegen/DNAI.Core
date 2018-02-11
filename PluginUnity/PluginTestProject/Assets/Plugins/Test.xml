@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Test</name>
+    </assembly>
+    <members>
+        <member name="T:Duly.Test.MyBehaviour">
+            <summary>
+             Base behaviour for Duly IA.
+            </summary>
+            </member>
+        <member name="M:Duly.Test.MyBehaviour.Execute">
+            <summary>
+             Executes the Duly Behaviour by calling the created function.
+             Updates Outputs accordingly.
+            </summary>
+            </member>
+    </members>
+</doc>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using static CoreControl.EntityFactory;
 
 namespace Core.Plugin.Unity.Extensions
@@ -31,6 +32,17 @@ namespace Core.Plugin.Unity.Extensions
         public static string SplitCamelCase(this string str)
         {
             return System.Text.RegularExpressions.Regex.Replace(str, "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim();
+        }
+
+        /// <summary>
+        /// Removes illegal characters in a string such as space, dashes.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string RemoveIllegalCharacters(this string str)
+        {
+            var rgx = new Regex("[^a-zA-Z0-9 -]");
+            return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rgx.Replace(str, ""));
         }
 
         /// <summary>

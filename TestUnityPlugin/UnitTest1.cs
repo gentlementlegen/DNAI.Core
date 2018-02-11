@@ -13,16 +13,16 @@ namespace TestUnityPlugin
     [TestClass]
     public class UnitTest1
     {
-        [TestMethod]
-        public void CompileTest()
-        {
-            var c = new Compiler();
+        //[TestMethod]
+        //public void CompileTest()
+        //{
+        //    var c = new Compiler();
 
-            var res = c.Compile();
+        //    var res = c.Compile();
 
-            var main = res.CompiledAssembly.GetType("First.Program").GetMethod("Main");
-            main.Invoke(null, null);
-        }
+        //    var main = res.CompiledAssembly.GetType("First.Program").GetMethod("Main");
+        //    main.Invoke(null, null);
+        //}
 
         [TestMethod]
         public void TemplateFileTest()
@@ -76,11 +76,28 @@ namespace TestUnityPlugin
 
             string code = template.GenerateTemplateContent(_manager, variables, functions);
             var res = compiler.Compile(code);
+            res = compiler.Compile(code);
 
-            var type = res.CompiledAssembly.GetType("Duly.Test.MyFunction");
+            var type = res.CompiledAssembly.GetType("Duly.Test.MyBehaviour");
             Assert.IsNotNull(type);
             var func = type.GetMethod("Execute");
             Assert.IsNotNull(func);
+        }
+
+        [TestMethod]
+        public void GenerationFromControllerWithFunctonIds()
+        {
+            var _manager = new ProtobufManager();
+            var functions = new List<Entity>();
+            var codeConverter = new DulyCodeConverter(_manager);
+
+            GenerateDulyFile();
+            _manager.LoadCommandsFrom("test.duly");
+
+            var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
+            functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
+            codeConverter.ConvertCode(new List<int> { 0 });
+            codeConverter.ConvertCode(new List<int> { 0 });
         }
 
         private void TestCommand<Command, Reply>(CoreCommand.IManager manager, Command toserial, Action<Stream, Stream> toCall, Action<Command, Reply> check)
@@ -154,7 +171,7 @@ namespace TestUnityPlugin
                 {
                     ContainerID = 0,
                     EntityType = CoreControl.EntityFactory.ENTITY.FUNCTION,
-                    Name = "MyFunction",
+                    Name = "MyBehaviour",
                     Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
                 },
                 dispatcher.OnDeclare,

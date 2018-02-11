@@ -13,6 +13,15 @@ namespace Core.Plugin.Editor
     [System.Serializable]
     public class ScriptManager
     {
+        /// <summary>
+        /// A reference to a file loader, able to manage loading of Duly files.
+        /// </summary>
+        private readonly ProtobufManager _manager = new ProtobufManager();
+
+        private readonly DulyCodeConverter _codeConverter;
+
+        public List<string> FunctionList { get; private set; } = new List<string>();
+
         /// The name of the file.
         [UnityEngine.SerializeField]
         private string _fileName;
@@ -31,28 +40,25 @@ namespace Core.Plugin.Editor
         { get => _processingStatus; set => _processingStatus = value; }
 
         public string AssemblyName
-        { get => DulyCodeConverter.AssemblyName; }
+        { get => _codeConverter.AssemblyName; }
 
         /// The list of IA references contained in the Duly file.
         public List<KeyValuePair<string, Type>> iaList = new List<KeyValuePair<string, Type>>();
 
-        /// <summary>
-        /// A reference to a file loader, able to manage loading of Duly files.
-        /// </summary>
-        private readonly IManager _manager = new ProtobufManager();
-
-        private readonly DulyCodeConverter _codeConverter;
-
-        public List<string> FunctionList { get; private set; } = new List<string>();
-
-        public ScriptManager(string filePath = "", string fileName = "")
+        public ScriptManager()
         {
-            FileName = fileName;
-            FilePath = filePath;
             ProcessingStatus = "No file selected.";
-            //fileLoader.onFileLoaded += OnScriptLoaded;
             _codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
         }
+
+        //public ScriptManager(string filePath = "", string fileName = "")
+        //{
+        //    FileName = fileName;
+        //    FilePath = filePath;
+        //    ProcessingStatus = "No file selected.";
+        //    //fileLoader.onFileLoaded += OnScriptLoaded;
+        //    _codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
+        //}
 
         /// <summary>
         /// Loads the script at a certain location.
@@ -110,6 +116,11 @@ namespace Core.Plugin.Editor
         /// <param name="functionIds"></param>
         public void Compile(IEnumerable<int> functionIds)
         {
+            // This case happens when Unity ddeserializes the object.
+            // Since we don't want to slow down the ctor too much, it's better
+            // to check it on Compile call
+            if (_manager.FilePath == null && _filePath != null)
+                _manager.LoadCommandsFrom(_filePath);
             _codeConverter.ConvertCode(functionIds);
         }
     }

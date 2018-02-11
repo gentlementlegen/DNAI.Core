@@ -76,8 +76,9 @@ namespace Core.Plugin.Unity.Generator
             if (manager != null)
             {
                 template.FilePath = Path.GetFileName(manager.FilePath);
-                Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-                template.Namespace = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rgx.Replace(Path.GetFileNameWithoutExtension(template.FilePath), ""));
+                //Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+                //template.Namespace = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rgx.Replace(Path.GetFileNameWithoutExtension(template.FilePath), ""));
+                template.Namespace = Path.GetFileNameWithoutExtension(template.FilePath).RemoveIllegalCharacters();
             }
 
             if (functions?.Count > 0)

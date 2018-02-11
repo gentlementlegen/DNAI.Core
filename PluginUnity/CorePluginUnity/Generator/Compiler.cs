@@ -19,7 +19,7 @@ namespace Core.Plugin.Unity.Generator
     /// </summary>
     public class DulyCodeConverter
     {
-        public const string AssemblyName = "DulyGeneratedAssembly";
+        public string AssemblyName { get; private set; }
 
         private readonly Compiler _compiler = new Compiler();
         private readonly TemplateReader _template = new TemplateReader();
@@ -35,11 +35,12 @@ namespace Core.Plugin.Unity.Generator
         /// </summary>
         public void ConvertCode()
         {
+            AssemblyName = Path.GetFileNameWithoutExtension(_manager.FilePath).RemoveIllegalCharacters();
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
             var variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[0]);
             var functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
             var code = _template.GenerateTemplateContent(_manager, variables, functions);
-            _compiler.Compile(code);
+            _compiler.Compile(code, AssemblyName);
         }
 
         /// <summary>
@@ -48,6 +49,9 @@ namespace Core.Plugin.Unity.Generator
         /// <param name="functionIds">The ids of the functions to keep.</param>
         public void ConvertCode(IEnumerable<int> functionIds)
         {
+            if (_manager.FilePath == null)
+                throw new NullReferenceException("Path is null");
+            AssemblyName = Path.GetFileNameWithoutExtension(_manager.FilePath).RemoveIllegalCharacters();
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
             var variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[0]);
             var functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
@@ -57,7 +61,7 @@ namespace Core.Plugin.Unity.Generator
                 funcToKeep.Add(functions[id]);
             }
             var code = _template.GenerateTemplateContent(_manager, variables, funcToKeep);
-            _compiler.Compile(code);
+            _compiler.Compile(code, AssemblyName);
         }
 
         /// <summary>
@@ -99,21 +103,22 @@ namespace Core.Plugin.Unity.Generator
     }
 ";
 
-        internal CompilerResults Compile(string code, string outputPath = "./")
-        {
-            this.code = code;
-            return Compile();
-        }
+#if UNITY_ENGINE
+        private const string assemblyPath = "Assets/Plugins/";
+#else
+        private const string assemblyPath = "";
+#endif
+
+        //internal CompilerResults Compile(string code, string outputPath = "./")
+        //{
+        //    this.code = code;
+        //    return Compile();
+        //}
 
         internal Compiler()
         {
-#if UNITY_ENGINE
-            const string assemblyPath = "Assets/Plugins/";
-#else
-            const string assemblyPath = "";
-#endif
             Directory.CreateDirectory("Assets/Plugins");
-            _parameters.OutputAssembly = "Assets/Plugins/" + DulyCodeConverter.AssemblyName + ".dll";
+            //_parameters.OutputAssembly = "Assets/Plugins/" + assemblyName + ".dll";
             // Reference to library
             // TODO : change with instllation program
             _parameters.ReferencedAssemblies.Add(Environment.ExpandEnvironmentVariables("%ProgramW6432%") + @"\Unity\Editor\Data\Managed\UnityEngine.dll");
@@ -125,15 +130,20 @@ namespace Core.Plugin.Unity.Generator
             _parameters.GenerateInMemory = true;
             // True - exe file generation, false - dll file generation
             _parameters.GenerateExecutable = false;
-            _parameters.CompilerOptions += $"-doc:{assemblyPath}{DulyCodeConverter.AssemblyName}.xml";
+            //_parameters.CompilerOptions += $"-doc:{assemblyPath}{assemblyName}.xml";
         }
 
         /// <summary>
         /// Compiles the code to an assembly. <para/>
         /// Throws <see cref="InvalidOperationException"/> on compilation failure.
         /// </summary>
-        internal CompilerResults Compile()
+        /// <param name="code">The code to compile.</param>
+        /// <param name="assemblyName">The name of the assembly output.</param>
+        internal CompilerResults Compile(string code, string assemblyName = "DulyGeneratedAssembly")
         {
+            _parameters.OutputAssembly = "Assets/Plugins/" + assemblyName + ".dll";
+            _parameters.CompilerOptions = $"-doc:{assemblyPath}{assemblyName}.xml";
+
             CompilerResults results = _provider.CompileAssemblyFromSource(_parameters, code);
 
             if (results.Errors.HasErrors)

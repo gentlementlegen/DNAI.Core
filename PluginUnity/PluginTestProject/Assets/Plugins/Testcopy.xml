@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>DulyGeneratedAssembly</name>
+        <name>Testcopy</name>
     </assembly>
     <members>
-        <member name="T:Duly.Test.MyFunction">
+        <member name="T:Duly.Testcopy.MyFunction">
             <summary>
              Base behaviour for Duly IA.
             </summary>
             </member>
-        <member name="M:Duly.Test.MyFunction.Execute">
+        <member name="M:Duly.Testcopy.MyFunction.Execute">
             <summary>
              Executes the Duly Behaviour by calling the created function.
              Updates Outputs accordingly.

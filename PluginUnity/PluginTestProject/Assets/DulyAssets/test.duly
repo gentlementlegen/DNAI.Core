@@ -20,8 +20,7 @@ iCoreCommand.Command.SetFunctionReturn, CoreCommand, Version=1.0.0.0, Culture=ne
 fCoreCommand.Command.AddInstruction, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 mCoreCommand.Command.SetFunctionEntryPoint, CoreCommand, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
 toto 
-MyVariable 
-MyFunction param1 return1 4242		666
+MyVariable MyBehaviour param1 return1 4242		666
 
 -1
 toto toto
