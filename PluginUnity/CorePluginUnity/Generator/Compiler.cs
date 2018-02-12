@@ -23,9 +23,9 @@ namespace Core.Plugin.Unity.Generator
 
         private readonly Compiler _compiler = new Compiler();
         private readonly TemplateReader _template = new TemplateReader();
-        private readonly ProtobufManager _manager;
+        private readonly BinaryManager _manager;
 
-        public DulyCodeConverter(ProtobufManager manager)
+        public DulyCodeConverter(BinaryManager manager)
         {
             _manager = manager;
         }

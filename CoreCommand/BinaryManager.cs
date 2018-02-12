@@ -15,7 +15,12 @@ namespace CoreCommand
         /// <summary>
         /// Controller on which dispatch command
         /// </summary>
-        private readonly Controller _controller = new Controller();
+        public Controller Controller { get; } = new Controller();
+
+        /// <summary>
+        /// Path to the loaded file.
+        /// </summary>
+        public string FilePath { get; private set; }
 
         /// <summary>
         /// Internal history of dispatched commands => for serialisation
@@ -159,7 +164,7 @@ namespace CoreCommand
             if (callback == null)
                 callback = (Command message) =>
                 {
-                    return message.Resolve(_controller);
+                    return message.Resolve(Controller);
                 };
             _handledCommands[name] = (Stream inS, Stream ouS) =>
             {
@@ -197,13 +202,15 @@ namespace CoreCommand
         {
             using (var file = new StreamReader(filename))
             {
-                _controller.Reset();
+                Controller.Reset();
 
                 foreach (var command in BinarySerializer.Serializer.Deserialize<List<string>>(file.BaseStream))//ProtoBuf.Serializer.DeserializeWithLengthPrefix<List<string>>(file.BaseStream, _prefix)
                 {
                     if (!CallCommand(command, file.BaseStream, null))
                         throw new InvalidOperationException("BinaryManager.LoadCommandsFrom : Error while executing command \"" + command + "\"");
                 }
+
+                FilePath = filename;
             }
         }
 

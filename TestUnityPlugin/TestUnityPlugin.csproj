@@ -59,6 +59,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BinarySerializer\BinarySerializer.csproj">
+      <Project>{89733D6E-A3D3-46EB-801D-8C7302308E23}</Project>
+      <Name>BinarySerializer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CoreCommand\CoreCommand.csproj">
       <Project>{022FFC42-784D-4D25-8598-3E356DC7B7DB}</Project>
       <Name>CoreCommand</Name>

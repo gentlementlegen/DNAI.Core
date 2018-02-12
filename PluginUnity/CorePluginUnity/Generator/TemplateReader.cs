@@ -70,7 +70,7 @@ namespace Core.Plugin.Unity.Generator
         /// <param name="variables"></param>
         /// <param name="functions"></param>
         /// <returns></returns>
-        internal string GenerateTemplateContent(CoreCommand.ProtobufManager manager = null, List<CoreControl.EntityFactory.Entity> variables = null, List<CoreControl.EntityFactory.Entity> functions = null)
+        internal string GenerateTemplateContent(CoreCommand.BinaryManager manager = null, List<CoreControl.EntityFactory.Entity> variables = null, List<CoreControl.EntityFactory.Entity> functions = null)
         {
             var template = new GeneratedCodeTemplate();
             if (manager != null)

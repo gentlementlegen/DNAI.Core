@@ -16,7 +16,7 @@ namespace Core.Plugin.Editor
         /// <summary>
         /// A reference to a file loader, able to manage loading of Duly files.
         /// </summary>
-        private readonly ProtobufManager _manager = new ProtobufManager();
+        private readonly BinaryManager _manager = new BinaryManager();
 
         private readonly DulyCodeConverter _codeConverter;
 
@@ -48,7 +48,7 @@ namespace Core.Plugin.Editor
         public ScriptManager()
         {
             ProcessingStatus = "No file selected.";
-            _codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
+            _codeConverter = new DulyCodeConverter(_manager as BinaryManager);
         }
 
         //public ScriptManager(string filePath = "", string fileName = "")
