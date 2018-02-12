@@ -83,6 +83,32 @@ namespace CoreControl
         }
 
         /// <summary>
+        /// Returns the type of a given entity in order to use good methods on it
+        /// </summary>
+        /// <param name="entityId">Identifier of the entity to retreive the type</param>
+        /// <returns>Type of the given entity</returns>
+        public EntityFactory.ENTITY GetEntityType(UInt32 entityId)
+        {
+            CorePackage.Global.Definition entity = entity_factory.FindDefinitionOfType<CorePackage.Global.Definition>(entityId);
+
+            if (entity.GetType() == typeof(CorePackage.Entity.Type.EnumType))
+                return EntityFactory.ENTITY.ENUM_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ObjectType))
+                return EntityFactory.ENTITY.OBJECT_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ListType))
+                return EntityFactory.ENTITY.LIST_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.DataType))
+                return EntityFactory.ENTITY.DATA_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Function))
+                return EntityFactory.ENTITY.FUNCTION;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Variable))
+                return EntityFactory.ENTITY.VARIABLE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Context))
+                return EntityFactory.ENTITY.CONTEXT;
+            throw new InvalidOperationException("Controller.GetEntityType : Given entity as no declared type");
+        }
+
+        /// <summary>
         /// Will expose all externals entities of a specific type in a given container
         /// </summary>
         /// <param name="entities_type">Type of the entities to expose</param>
