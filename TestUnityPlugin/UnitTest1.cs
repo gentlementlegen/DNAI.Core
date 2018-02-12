@@ -55,7 +55,8 @@ namespace TestUnityPlugin
         {
             var manager = new BinaryManager();
             //GenerateDulyFile();
-            manager.LoadCommandsFrom("test.duly");
+            GenerateMoreOrLess();
+            manager.LoadCommandsFrom("moreOrLess.duly");
             var unity = new DulyCodeConverter(manager);
 
             unity.ConvertCode();
@@ -71,19 +72,25 @@ namespace TestUnityPlugin
             var variables = new List<Entity>();
             var functions = new List<Entity>();
             //GenerateDulyFile();
-            _manager.LoadCommandsFrom("test.duly");
+            GenerateMoreOrLess();
+            _manager.LoadCommandsFrom("moreOrLess.duly");
             //GenerateMoreOrLess(_manager, out variables, out functions);
 
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
-            variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[0]);
-            functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
+            foreach (var id in ids)
+            {
+                variables.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, id));
+                functions.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
+            }
+            //variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[1]);
+            //functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[1]);
             //GenerateMoreOrLess(_manager, out List<Entity> variables, out List<Entity> functions);
 
             string code = template.GenerateTemplateContent(_manager, variables, functions);
             var res = compiler.Compile(code);
             res = compiler.Compile(code);
 
-            var type = res.CompiledAssembly.GetType("Duly.Test.MyBehaviour");
+            var type = res.CompiledAssembly.GetType("Duly.Moreorless.Play");
             Assert.IsNotNull(type);
             var func = type.GetMethod("Execute");
             Assert.IsNotNull(func);
@@ -97,10 +104,16 @@ namespace TestUnityPlugin
             var codeConverter = new DulyCodeConverter(_manager);
 
             //GenerateDulyFile();
-            _manager.LoadCommandsFrom("test.duly");
+            GenerateMoreOrLess();
+            //_manager.LoadCommandsFrom("test.duly");
+            _manager.LoadCommandsFrom("moreOrLess.duly");
 
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
-            functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
+            foreach (var id in ids)
+            {
+                functions.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
+            }
+            //functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
             codeConverter.ConvertCode(new List<int> { 0 });
             codeConverter.ConvertCode(new List<int> { 0 });
         }

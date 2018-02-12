@@ -88,15 +88,15 @@ namespace Core.Plugin.Unity.Generator
             
             #line default
             #line hidden
-            this.Write("\r\n\t\tprivate ProtobufManager _manager;\r\n\r\n\t\tpublic ");
+            this.Write("\r\n\t\tprivate BinaryManager _manager;\r\n\r\n\t\tpublic ");
             
             #line 33 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
             #line hidden
-            this.Write("()\r\n\t\t{\r\n\t\t\t_manager = new ProtobufManager();\r\n\t\t\t_manager.LoadCommandsFrom(@\"Ass" +
-                    "ets\\DulyAssets\\\" + \"");
+            this.Write("()\r\n\t\t{\r\n\t\t\t_manager = new BinaryManager();\r\n\t\t\t_manager.LoadCommandsFrom(@\"Asset" +
+                    "s\\DulyAssets\\\" + \"");
             
             #line 36 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FilePath));

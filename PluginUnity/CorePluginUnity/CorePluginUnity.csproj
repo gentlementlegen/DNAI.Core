@@ -126,6 +126,7 @@
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreNetwork.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins" &amp;
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)EventServerClient.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins" &amp;
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins" &amp;
-"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)protobuf-net.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins"</PostBuildEvent>
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)protobuf-net.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)BinarySerializer.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>

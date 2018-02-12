@@ -28,11 +28,11 @@ namespace Duly.<#=Namespace#>
 			public <#=item #> { get; private set; }
 		<# } #>
 
-		private ProtobufManager _manager;
+		private BinaryManager _manager;
 
 		public <#=ClassName#>()
 		{
-			_manager = new ProtobufManager();
+			_manager = new BinaryManager();
 			_manager.LoadCommandsFrom(@"Assets\DulyAssets\" + "<#=FilePath#>");
 		}
 

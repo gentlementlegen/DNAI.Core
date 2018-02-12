@@ -1,4 +1,4 @@
-﻿#define UNITY_ENGINE
+﻿//#define UNITY_ENGINE
 using Core.Plugin.Unity.Extensions;
 using CoreCommand;
 using Microsoft.CSharp;
@@ -52,9 +52,16 @@ namespace Core.Plugin.Unity.Generator
             if (_manager.FilePath == null)
                 throw new NullReferenceException("Path is null");
             AssemblyName = Path.GetFileNameWithoutExtension(_manager.FilePath).RemoveIllegalCharacters();
+            var variables = new List<Entity>();
+            var functions = new List<Entity>();
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
-            var variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[0]);
-            var functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
+            //var variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[0]);
+            //var functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
+            foreach (var id in ids)
+            {
+                variables.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, id));
+                functions.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
+            }
             var funcToKeep = new List<Entity>();
             foreach (var id in functionIds)
             {
