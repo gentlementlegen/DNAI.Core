@@ -5,7 +5,6 @@
 using Core.Plugin.Unity.Extensions;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 
 namespace Core.Plugin.Unity.Generator
 {
@@ -13,6 +12,7 @@ namespace Core.Plugin.Unity.Generator
     {
         public List<string> Inputs = new List<string>();
         public List<string> Outputs = new List<string>();
+        public List<string> DataTypes = new List<string>();
         public string FilePath = "";
         public uint FunctionId;
         public string FunctionArguments = "";
@@ -70,7 +70,8 @@ namespace Core.Plugin.Unity.Generator
         /// <param name="variables"></param>
         /// <param name="functions"></param>
         /// <returns></returns>
-        internal string GenerateTemplateContent(CoreCommand.BinaryManager manager = null, List<CoreControl.EntityFactory.Entity> variables = null, List<CoreControl.EntityFactory.Entity> functions = null)
+        internal string GenerateTemplateContent(CoreCommand.BinaryManager manager = null, List<CoreControl.EntityFactory.Entity> variables = null,
+            List<CoreControl.EntityFactory.Entity> functions = null, List<CoreControl.EntityFactory.Entity> dataTypes = null)
         {
             var template = new GeneratedCodeTemplate();
             if (manager != null)
@@ -83,6 +84,23 @@ namespace Core.Plugin.Unity.Generator
 
             if (functions?.Count > 0)
                 template.ClassName = functions[0].Name;
+
+            if (dataTypes != null)
+            {
+                foreach (var item in dataTypes)
+                {
+                    var type = manager.Controller.GetEntityType(item.Id);
+                    if (type == CoreControl.EntityFactory.ENTITY.ENUM_TYPE)
+                    {
+                        var ret = "";
+                        ret += $"enum {item.Name} {{";
+                        foreach (var v in manager.Controller.GetEnumerationValues(item.Id))
+                            ret += $"{v} = {manager.Controller.GetEnumerationValue(item.Id, v)},";
+                        ret += "}";
+                        template.DataTypes.Add(ret);
+                    }
+                }
+            }
 
             if (variables != null)
             {

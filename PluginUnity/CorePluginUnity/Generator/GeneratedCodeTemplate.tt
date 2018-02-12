@@ -16,6 +16,11 @@ namespace Duly.<#=Namespace#>
 	///</summary>
 	public class <#=ClassName#> : MonoBehaviour
 	{
+		<# foreach (var item in DataTypes)
+		{#>
+			public <#=item#>
+		<# } #>
+
 		//[Header("Input variables")]
 		<# foreach (var item in Inputs)
 		{ #>

@@ -71,6 +71,7 @@ namespace TestUnityPlugin
             var _manager = new BinaryManager();
             var variables = new List<Entity>();
             var functions = new List<Entity>();
+            var dataTypes = new List<Entity>();
             //GenerateDulyFile();
             GenerateMoreOrLess();
             _manager.LoadCommandsFrom("moreOrLess.duly");
@@ -79,6 +80,7 @@ namespace TestUnityPlugin
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
             foreach (var id in ids)
             {
+                dataTypes.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.DATA_TYPE, id));
                 variables.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, id));
                 functions.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
             }
@@ -86,11 +88,11 @@ namespace TestUnityPlugin
             //functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[1]);
             //GenerateMoreOrLess(_manager, out List<Entity> variables, out List<Entity> functions);
 
-            string code = template.GenerateTemplateContent(_manager, variables, functions);
+            string code = template.GenerateTemplateContent(_manager, variables, functions, dataTypes);
             var res = compiler.Compile(code);
             res = compiler.Compile(code);
 
-            var type = res.CompiledAssembly.GetType("Duly.Moreorless.Play");
+            var type = res.CompiledAssembly.GetType("Duly.MoreOrLess.Play");
             Assert.IsNotNull(type);
             var func = type.GetMethod("Execute");
             Assert.IsNotNull(func);

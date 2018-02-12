@@ -20,6 +20,17 @@ namespace Core.Plugin.Unity.Extensions
         /// <returns>The serializable string.</returns>
         public static string ToSerialString(this Entity entity, CoreControl.Controller controller)
         {
+            var type = controller.GetEntityType(entity.Id);
+            if (type == ENTITY.ENUM_TYPE)
+            {
+                var ret = "";
+                ret += $"enum {entity.Name} {{";
+                foreach (var v in controller.GetEnumerationValues(entity.Id))
+                    ret += $"{v} = {controller.GetEnumerationValue(entity.Id, v)},";
+                ret += "}";
+                return ret;
+            }
+            var t = controller.GetVariableType(entity.Id);
             var value = controller.GetVariableValue(entity.Id);
             return $"{value.GetType()} {entity.Name}";
         }
@@ -35,6 +46,22 @@ namespace Core.Plugin.Unity.Extensions
         }
 
         /// <summary>
+        /// Makes the first letter of a string Uppercase.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string UppercaseFirst(this string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return string.Empty;
+            }
+            char[] a = s.ToCharArray();
+            a[0] = char.ToUpper(a[0]);
+            return new string(a);
+        }
+
+        /// <summary>
         /// Removes illegal characters in a string such as space, dashes.
         /// </summary>
         /// <param name="str"></param>
@@ -42,7 +69,8 @@ namespace Core.Plugin.Unity.Extensions
         public static string RemoveIllegalCharacters(this string str)
         {
             var rgx = new Regex("[^a-zA-Z0-9 -]");
-            return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rgx.Replace(str, ""));
+            return rgx.Replace(str, "").UppercaseFirst();
+            //return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rgx.Replace(str, ""));
         }
 
         /// <summary>

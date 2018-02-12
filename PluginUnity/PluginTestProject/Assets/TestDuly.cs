@@ -1,4 +1,4 @@
-﻿using Duly.Moreorless;
+﻿using Duly.MoreOrLess;
 using UnityEngine;
 
 public class TestDuly : Play

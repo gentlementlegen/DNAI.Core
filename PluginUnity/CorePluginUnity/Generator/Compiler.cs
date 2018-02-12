@@ -52,13 +52,17 @@ namespace Core.Plugin.Unity.Generator
             if (_manager.FilePath == null)
                 throw new NullReferenceException("Path is null");
             AssemblyName = Path.GetFileNameWithoutExtension(_manager.FilePath).RemoveIllegalCharacters();
+
             var variables = new List<Entity>();
             var functions = new List<Entity>();
+            var dataTypes = new List<Entity>();
+
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
             //var variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[0]);
             //var functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
             foreach (var id in ids)
             {
+                dataTypes.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.DATA_TYPE, id));
                 variables.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, id));
                 functions.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
             }
@@ -67,7 +71,7 @@ namespace Core.Plugin.Unity.Generator
             {
                 funcToKeep.Add(functions[id]);
             }
-            var code = _template.GenerateTemplateContent(_manager, variables, funcToKeep);
+            var code = _template.GenerateTemplateContent(_manager, variables, funcToKeep, dataTypes);
             _compiler.Compile(code, AssemblyName);
         }
 
