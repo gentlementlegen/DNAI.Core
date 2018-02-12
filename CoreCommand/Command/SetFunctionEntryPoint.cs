@@ -1,13 +1,28 @@
-﻿using System;
+﻿using CoreControl;
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class SetFunctionEntryPoint
+    public class SetFunctionEntryPoint : ICommand<SetFunctionEntryPoint.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
-        public int FunctionId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
-        public int Instruction { get; set; }
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public SetFunctionEntryPoint Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
+        public uint FunctionId { get; set; }
+
+        [BinarySerializer.BinaryFormat]
+        public uint Instruction { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.SetFunctionEntryPoint(FunctionId, Instruction);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

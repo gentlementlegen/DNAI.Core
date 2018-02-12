@@ -2,94 +2,93 @@
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
     public class Commands
     {
-        [ProtoBuf.ProtoMember(1)]
+        [BinarySerializer.BinaryFormat]
         public Declare Declare { get { return new Declare(); } }
 
-        [ProtoBuf.ProtoMember(2)]
+        [BinarySerializer.BinaryFormat]
         public Remove Remove { get { return new Remove(); } }
 
-        [ProtoBuf.ProtoMember(3)]
+        [BinarySerializer.BinaryFormat]
         public Rename Rename { get { return new Rename(); } }
 
-        [ProtoBuf.ProtoMember(4)]
+        [BinarySerializer.BinaryFormat]
         public Move Move { get { return new Move(); } }
 
-        [ProtoBuf.ProtoMember(5)]
+        [BinarySerializer.BinaryFormat]
         public ChangeVisibility ChangeVisibility { get { return new ChangeVisibility(); } }
-        
-        [ProtoBuf.ProtoMember(6)]
+
+        [BinarySerializer.BinaryFormat]
         public SetVariableValue SetVariableValue { get { return new SetVariableValue(); } }
 
-        [ProtoBuf.ProtoMember(7)]
+        [BinarySerializer.BinaryFormat]
         public SetVariableType SetVariableType { get { return new SetVariableType(); } }
 
-        [ProtoBuf.ProtoMember(8)]
+        [BinarySerializer.BinaryFormat]
         public GetVariableValue GetVariableValue { get { return new GetVariableValue(); } }
 
-        [ProtoBuf.ProtoMember(9)]
+        [BinarySerializer.BinaryFormat]
         public SetContextParent SetContextParent { get { return new SetContextParent(); } }
 
-        [ProtoBuf.ProtoMember(10)]
+        [BinarySerializer.BinaryFormat]
         public SetEnumerationType SetEnumerationType { get { return new SetEnumerationType(); } }
 
-        [ProtoBuf.ProtoMember(11)]
+        [BinarySerializer.BinaryFormat]
         public SetEnumerationValue SetEnumerationValue { get { return new SetEnumerationValue(); } }
 
-        [ProtoBuf.ProtoMember(12)]
+        [BinarySerializer.BinaryFormat]
         public GetEnumerationValue GetEnumerationValue { get { return new GetEnumerationValue(); } }
 
-        [ProtoBuf.ProtoMember(13)]
+        [BinarySerializer.BinaryFormat]
         public RemoveEnumerationValue RemoveEnumerationValue { get { return new RemoveEnumerationValue(); } }
 
-        [ProtoBuf.ProtoMember(14)]
+        [BinarySerializer.BinaryFormat]
         public AddClassAttribute AddClassAttribute { get { return new AddClassAttribute(); } }
 
-        [ProtoBuf.ProtoMember(15)]
+        [BinarySerializer.BinaryFormat]
         public RenameClassAttribute RenameClassAttribute { get { return new RenameClassAttribute(); } }
 
-        [ProtoBuf.ProtoMember(16)]
+        [BinarySerializer.BinaryFormat]
         public RemoveClassAttribute RemoveClassAttribute { get { return new RemoveClassAttribute(); } }
 
-        [ProtoBuf.ProtoMember(17)]
+        [BinarySerializer.BinaryFormat]
         public AddClassMemberFunction AddClassMemberFunction { get { return new AddClassMemberFunction(); } }
 
-        [ProtoBuf.ProtoMember(18)]
+        [BinarySerializer.BinaryFormat]
         public SetListType SetListType { get { return new SetListType(); } }
 
-        [ProtoBuf.ProtoMember(19)]
+        [BinarySerializer.BinaryFormat]
         public CallFunction CallFunction { get { return new CallFunction(); } }
 
-        [ProtoBuf.ProtoMember(20)]
+        [BinarySerializer.BinaryFormat]
         public SetFunctionParameter SetFunctionParameter { get { return new SetFunctionParameter(); } }
 
-        [ProtoBuf.ProtoMember(21)]
+        [BinarySerializer.BinaryFormat]
         public SetFunctionReturn SetFunctionReturn { get { return new SetFunctionReturn(); } }
 
-        [ProtoBuf.ProtoMember(22)]
+        [BinarySerializer.BinaryFormat]
         public SetFunctionEntryPoint SetFunctionEntryPoint { get { return new SetFunctionEntryPoint(); } }
 
-        [ProtoBuf.ProtoMember(23)]
+        [BinarySerializer.BinaryFormat]
         public RemoveFunctionInstruction RemoveFunctionInstruction { get { return new RemoveFunctionInstruction(); } }
 
-        [ProtoBuf.ProtoMember(24)]
+        [BinarySerializer.BinaryFormat]
         public AddInstruction AddInstruction { get { return new AddInstruction(); } }
 
-        [ProtoBuf.ProtoMember(25)]
+        [BinarySerializer.BinaryFormat]
         public LinkInstructionExecution LinkInstructionExecution { get { return new LinkInstructionExecution(); } }
 
-        [ProtoBuf.ProtoMember(26)]
+        [BinarySerializer.BinaryFormat]
         public LinkInstructionData LinkInstructionData { get { return new LinkInstructionData(); } }
 
-        [ProtoBuf.ProtoMember(27)]
+        [BinarySerializer.BinaryFormat]
         public SetInstructionInputValue SetInstructionInputValue { get { return new SetInstructionInputValue(); } }
 
-        [ProtoBuf.ProtoMember(28)]
+        [BinarySerializer.BinaryFormat]
         public UnlinkInstructionFlow UnlinkInstructionFlow { get { return new UnlinkInstructionFlow(); } }
 
-        [ProtoBuf.ProtoMember(29)]
+        [BinarySerializer.BinaryFormat]
         public UnlinkInstructionInput UnlinkInstructionInput { get { return new UnlinkInstructionInput(); } }
     }
 }

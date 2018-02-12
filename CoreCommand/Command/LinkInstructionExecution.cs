@@ -1,15 +1,34 @@
-﻿namespace CoreCommand.Command
+﻿using CoreControl;
+
+namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class LinkInstructionExecution
+    public class LinkInstructionExecution : ICommand<LinkInstructionExecution.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public LinkInstructionExecution Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public uint FunctionID { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public uint FromId { get; set; }
-        [ProtoBuf.ProtoMember(3)]
+
+        [BinarySerializer.BinaryFormat]
         public uint OutIndex { get; set; }
-        [ProtoBuf.ProtoMember(4)]
+
+        [BinarySerializer.BinaryFormat]
         public uint ToId { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.LinkInstructionExecution(FunctionID, FromId, OutIndex, ToId);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

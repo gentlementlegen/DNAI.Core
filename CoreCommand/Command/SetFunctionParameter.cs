@@ -1,11 +1,28 @@
-﻿namespace CoreCommand.Command
+﻿using CoreControl;
+
+namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class SetFunctionParameter
+    public class SetFunctionParameter : ICommand<SetFunctionParameter.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public SetFunctionParameter Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public uint FuncId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public string ExternalVarName { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.SetFunctionParameter(FuncId, ExternalVarName);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

@@ -133,36 +133,36 @@ namespace TestControler
             factory.Remove<DataType>(cnt, "tata");
             factory.Remove<IContext>(0, "container");
 
-            ctx = factory.Declare(ENTITY.CONTEXT_D, 0, "toto", VISIBILITY.PRIVATE);
+            ctx = factory.Declare(ENTITY.CONTEXT, 0, "toto", VISIBILITY.PRIVATE);
             fnt = factory.Declare(ENTITY.FUNCTION, 0, "toto", VISIBILITY.PRIVATE);
             var = factory.Declare(ENTITY.VARIABLE, 0, "toto", VISIBILITY.PRIVATE);
             enu = factory.Declare(ENTITY.ENUM_TYPE, 0, "toto", VISIBILITY.PRIVATE);
             obj = factory.Declare(ENTITY.OBJECT_TYPE, 0, "tata", VISIBILITY.PRIVATE);
             lst = factory.Declare(ENTITY.LIST_TYPE, 0, "tutu", VISIBILITY.PRIVATE);
 
-            factory.ChangeVisibility(ENTITY.CONTEXT_D, 0, "toto", VISIBILITY.PUBLIC);
+            factory.ChangeVisibility(ENTITY.CONTEXT, 0, "toto", VISIBILITY.PUBLIC);
             factory.ChangeVisibility(ENTITY.VARIABLE, 0, "toto", VISIBILITY.PUBLIC);
             factory.ChangeVisibility(ENTITY.FUNCTION, 0, "toto", VISIBILITY.PUBLIC);
             factory.ChangeVisibility(ENTITY.DATA_TYPE, 0, "toto", VISIBILITY.PUBLIC);
             factory.ChangeVisibility(ENTITY.DATA_TYPE, 0, "tata", VISIBILITY.PUBLIC);
             factory.ChangeVisibility(ENTITY.DATA_TYPE, 0, "tutu", VISIBILITY.PUBLIC);
 
-            cnt = factory.Declare(ENTITY.CONTEXT_D, 0, "Container", VISIBILITY.PUBLIC);
-            factory.Move(ENTITY.CONTEXT_D, 0, cnt, "toto");
+            cnt = factory.Declare(ENTITY.CONTEXT, 0, "Container", VISIBILITY.PUBLIC);
+            factory.Move(ENTITY.CONTEXT, 0, cnt, "toto");
             factory.Move(ENTITY.VARIABLE, 0, cnt, "toto");
             factory.Move(ENTITY.FUNCTION, 0, cnt, "toto");
             factory.Move(ENTITY.DATA_TYPE, 0, cnt, "toto");
             factory.Move(ENTITY.DATA_TYPE, 0, cnt, "tata");
             factory.Move(ENTITY.DATA_TYPE, 0, cnt, "tutu");
 
-            factory.Rename(ENTITY.CONTEXT_D, cnt, "toto", "titi");
+            factory.Rename(ENTITY.CONTEXT, cnt, "toto", "titi");
             factory.Rename(ENTITY.VARIABLE, cnt, "toto", "titi");
             factory.Rename(ENTITY.FUNCTION, cnt, "toto", "titi");
             factory.Rename(ENTITY.DATA_TYPE, cnt, "toto", "titi");
             factory.Rename(ENTITY.DATA_TYPE, cnt, "tata", "toto");
             factory.Rename(ENTITY.DATA_TYPE, cnt, "tutu", "tata");
 
-            factory.Remove(ENTITY.CONTEXT_D, cnt, "titi");
+            factory.Remove(ENTITY.CONTEXT, cnt, "titi");
             factory.Remove(ENTITY.VARIABLE, cnt, "titi");
             factory.Remove(ENTITY.FUNCTION, cnt, "titi");
             factory.Remove(ENTITY.DATA_TYPE, cnt, "titi");

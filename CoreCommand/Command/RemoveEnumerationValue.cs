@@ -1,11 +1,28 @@
-﻿namespace CoreCommand.Command
+﻿using CoreControl;
+
+namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class RemoveEnumerationValue
+    public class RemoveEnumerationValue : ICommand<RemoveEnumerationValue.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public RemoveEnumerationValue Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public uint EnumId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.RemoveEnumerationValue(EnumId, Name);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

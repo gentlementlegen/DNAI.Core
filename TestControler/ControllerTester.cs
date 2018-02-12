@@ -25,7 +25,7 @@ namespace TestControler
             uint integer = (uint)CoreControl.EntityFactory.BASE_ID.INTEGER_TYPE;
 
             //declaring moreOrLess context in global context
-            uint ctx = controller.Declare(ENTITY.CONTEXT_D, 0, "moreOrLess", VISIBILITY.PUBLIC);
+            uint ctx = controller.Declare(ENTITY.CONTEXT, 0, "moreOrLess", VISIBILITY.PUBLIC);
 
             //declaring global variables min, max and lastGiven in moreOrLess context
             uint min = controller.Declare(ENTITY.VARIABLE, ctx, "min", VISIBILITY.PRIVATE);
@@ -178,7 +178,7 @@ namespace TestControler
             controller.LinkInstructionExecution(play, if_lr_eq_more, (uint)If.ConditionIndexes.OnTrue, set_min);
             controller.LinkInstructionExecution(play, if_lr_eq_more, (uint)If.ConditionIndexes.OnFalse, if_lr_eq_less);
 
-            controller.LinkInstructionExecution(play, set_min, 0, if_lr_eq_less);
+            controller.LinkInstructionExecution(play, set_min, 0, result_calculation);
 
             controller.LinkInstructionExecution(play, if_lr_eq_less, (uint)If.ConditionIndexes.OnTrue, set_max);
             controller.LinkInstructionExecution(play, if_lr_eq_less, (uint)If.ConditionIndexes.OnFalse, result_calculation);
@@ -248,7 +248,7 @@ namespace TestControler
             uint integer = (uint)CoreControl.EntityFactory.BASE_ID.INTEGER_TYPE;
             uint floating = (uint)CoreControl.EntityFactory.BASE_ID.FLOATING_TYPE;
 
-            uint ctx = controller.Declare(ENTITY.CONTEXT_D, 0, "toto", VISIBILITY.PRIVATE);
+            uint ctx = controller.Declare(ENTITY.CONTEXT, 0, "toto", VISIBILITY.PRIVATE);
             uint fnt = controller.Declare(ENTITY.FUNCTION, 0, "toto", VISIBILITY.PRIVATE);
             uint var = controller.Declare(ENTITY.VARIABLE, 0, "toto", VISIBILITY.PRIVATE);
             uint enu = controller.Declare(ENTITY.ENUM_TYPE, 0, "toto", VISIBILITY.PRIVATE);
@@ -350,29 +350,29 @@ namespace TestControler
 
             // declarators
 
-            controller.ChangeVisibility(ENTITY.CONTEXT_D, 0, "toto", VISIBILITY.PUBLIC);
+            controller.ChangeVisibility(ENTITY.CONTEXT, 0, "toto", VISIBILITY.PUBLIC);
             controller.ChangeVisibility(ENTITY.VARIABLE, 0, "toto", VISIBILITY.PUBLIC);
             controller.ChangeVisibility(ENTITY.FUNCTION, 0, "toto", VISIBILITY.PUBLIC);
             controller.ChangeVisibility(ENTITY.DATA_TYPE, 0, "toto", VISIBILITY.PUBLIC);
             controller.ChangeVisibility(ENTITY.DATA_TYPE, 0, "tata", VISIBILITY.PUBLIC);
             controller.ChangeVisibility(ENTITY.DATA_TYPE, 0, "tutu", VISIBILITY.PUBLIC);
 
-            uint cnt = controller.Declare(ENTITY.CONTEXT_D, 0, "Container", VISIBILITY.PUBLIC);
-            controller.Move(ENTITY.CONTEXT_D, 0, cnt, "toto");
+            uint cnt = controller.Declare(ENTITY.CONTEXT, 0, "Container", VISIBILITY.PUBLIC);
+            controller.Move(ENTITY.CONTEXT, 0, cnt, "toto");
             controller.Move(ENTITY.VARIABLE, 0, cnt, "toto");
             controller.Move(ENTITY.FUNCTION, 0, cnt, "toto");
             controller.Move(ENTITY.DATA_TYPE, 0, cnt, "toto");
             controller.Move(ENTITY.DATA_TYPE, 0, cnt, "tata");
             controller.Move(ENTITY.DATA_TYPE, 0, cnt, "tutu");
 
-            controller.Rename(ENTITY.CONTEXT_D, cnt, "toto", "titi");
+            controller.Rename(ENTITY.CONTEXT, cnt, "toto", "titi");
             controller.Rename(ENTITY.VARIABLE, cnt, "toto", "titi");
             controller.Rename(ENTITY.FUNCTION, cnt, "toto", "titi");
             controller.Rename(ENTITY.DATA_TYPE, cnt, "toto", "titi");
             controller.Rename(ENTITY.DATA_TYPE, cnt, "tata", "toto");
             controller.Rename(ENTITY.DATA_TYPE, cnt, "tutu", "tata");
 
-            List<Entity> ret = controller.GetEntitiesOfType(ENTITY.CONTEXT_D, cnt);
+            List<Entity> ret = controller.GetEntitiesOfType(ENTITY.CONTEXT, cnt);
 
             Assert.IsTrue(ret.Count == 1);
             Assert.IsTrue(controller.GetEntitiesOfType(ENTITY.VARIABLE, cnt).Count == 1);
@@ -380,7 +380,7 @@ namespace TestControler
             Assert.IsTrue(controller.GetEntitiesOfType(ENTITY.DATA_TYPE, cnt).Count == 3);
 
 
-            controller.Remove(ENTITY.CONTEXT_D, cnt, "titi");
+            controller.Remove(ENTITY.CONTEXT, cnt, "titi");
             controller.Remove(ENTITY.VARIABLE, cnt, "titi");
             controller.Remove(ENTITY.FUNCTION, cnt, "titi");
             controller.Remove(ENTITY.DATA_TYPE, cnt, "titi");

@@ -1,11 +1,28 @@
-﻿namespace CoreCommand.Command
+﻿using CoreControl;
+
+namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class RemoveFunctionInstruction
+    public class RemoveFunctionInstruction : ICommand<RemoveFunctionInstruction.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public RemoveFunctionInstruction Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public uint FunctionId { get; internal set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public uint Instruction { get; internal set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.RemoveFunctionInstruction(FunctionId, Instruction);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

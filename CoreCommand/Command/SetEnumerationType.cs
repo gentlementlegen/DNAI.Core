@@ -1,11 +1,28 @@
-﻿namespace CoreCommand.Command
+﻿using CoreControl;
+
+namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class SetEnumerationType
+    public class SetEnumerationType : ICommand<SetEnumerationType.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public SetEnumerationType Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public uint EnumId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public uint TypeId { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.SetEnumerationType(EnumId, TypeId);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

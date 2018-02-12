@@ -2,16 +2,34 @@
 
 namespace CoreCommand.Command
 {
-    [ProtoBuf.ProtoContract]
-    public class AddClassAttribute
+    public class AddClassAttribute : ICommand<AddClassAttribute.Reply>
     {
-        [ProtoBuf.ProtoMember(1)]
+
+        public class Reply
+        {
+            [BinarySerializer.BinaryFormat]
+            public AddClassAttribute Command { get; set; }
+        }
+
+        [BinarySerializer.BinaryFormat]
         public uint ClassId { get; set; }
-        [ProtoBuf.ProtoMember(2)]
+
+        [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
-        [ProtoBuf.ProtoMember(3)]
+
+        [BinarySerializer.BinaryFormat]
         public uint TypeId { get; set; }
-        [ProtoBuf.ProtoMember(4)]
+
+        [BinarySerializer.BinaryFormat]
         public EntityFactory.VISIBILITY Visibility { get; set; }
+
+        public Reply Resolve(Controller controller)
+        {
+            controller.AddClassAttribute(ClassId, Name, TypeId, Visibility);
+            return new Reply
+            {
+                Command = this
+            };
+        }
     }
 }

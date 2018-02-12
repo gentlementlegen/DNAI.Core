@@ -46,7 +46,14 @@ namespace CoreControl
             SETTER,
             FUNCTION_CALL,
             IF,
-            WHILE
+            WHILE,
+            APPEND, //ICI
+            INSERT,
+            REMOVE,
+            REMOVE_INDEX,
+            SIZE,
+            FOREACH,
+            OBJECT_ATTRIBUTES
         };
 
         /// <summary>
@@ -81,7 +88,14 @@ namespace CoreControl
             { INSTRUCTION_ID.SETTER, 1 },
             { INSTRUCTION_ID.FUNCTION_CALL, 1 },
             { INSTRUCTION_ID.IF, 0 },
-            { INSTRUCTION_ID.WHILE, 0 }
+            { INSTRUCTION_ID.WHILE, 0 },
+            { INSTRUCTION_ID.APPEND, 0 },
+            { INSTRUCTION_ID.INSERT, 0 },
+            { INSTRUCTION_ID.REMOVE, 0 },
+            { INSTRUCTION_ID.REMOVE_INDEX, 0 },
+            { INSTRUCTION_ID.SIZE, 0 },
+            { INSTRUCTION_ID.FOREACH, 1 },
+            { INSTRUCTION_ID.OBJECT_ATTRIBUTES, 1 }
         };
 
         /// <summary>
@@ -273,9 +287,52 @@ namespace CoreControl
                     return new If();
                 }
             },
-            { INSTRUCTION_ID.WHILE, (List<Definition> arguments) =>
+            {
+                INSTRUCTION_ID.WHILE, (List<Definition> arguments) =>
                 {
                     return new While();
+                }
+            },
+            {
+                INSTRUCTION_ID.APPEND, (List<Definition> args) =>
+                {
+                    return new Append();
+                }
+            },
+            {
+                INSTRUCTION_ID.INSERT, (List<Definition> args) =>
+                {
+                    return new Insert();
+                }
+            },
+            {
+                INSTRUCTION_ID.REMOVE, (List<Definition> args) =>
+                {
+                    return new Remove();
+                }
+            },
+            {
+                INSTRUCTION_ID.REMOVE_INDEX, (List<Definition> args) =>
+                {
+                    return new RemoveIndex();
+                }
+            },
+            {
+                INSTRUCTION_ID.SIZE, (List<Definition> args) =>
+                {
+                    return new Size();
+                }
+            },
+            {
+                INSTRUCTION_ID.FOREACH, (List<Definition> args) =>
+                {
+                    return new Foreach((DataType)args[0]);
+                }
+            },
+            {
+                INSTRUCTION_ID.OBJECT_ATTRIBUTES, (List<Definition> args) =>
+                {
+                    return new ObjectAttributes((ObjectType)(args[0]));
                 }
             }
         };
