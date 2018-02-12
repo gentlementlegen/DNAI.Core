@@ -204,6 +204,16 @@ namespace CoreControl
         }
 
         /// <summary>
+        /// Returns a list of all name's values contained in the enumeration
+        /// </summary>
+        /// <param name="enumID">Identifier of the enumeration</param>
+        /// <returns>List of given enumeration values</returns>
+        public List<String> GetEnumerationValues(UInt32 enumID)
+        {
+            return new List<String>(entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.EnumType>(enumID).Values.Keys);
+        }
+
+        /// <summary>
         /// Remove a specific enum value
         /// </summary>
         /// <param name="enumID">Identifier of a specific enumeration</param>
