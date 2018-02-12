@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>Test</name>
+        <name>Moreorless</name>
     </assembly>
     <members>
-        <member name="T:Duly.Test.MyBehaviour">
+        <member name="T:Duly.Moreorless.Play">
             <summary>
              Base behaviour for Duly IA.
             </summary>
             </member>
-        <member name="M:Duly.Test.MyBehaviour.Execute">
+        <member name="M:Duly.Moreorless.Play.Execute">
             <summary>
              Executes the Duly Behaviour by calling the created function.
              Updates Outputs accordingly.

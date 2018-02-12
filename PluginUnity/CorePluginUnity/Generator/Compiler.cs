@@ -1,4 +1,4 @@
-﻿//#define UNITY_ENGINE
+﻿#define UNITY_ENGINE
 using Core.Plugin.Unity.Extensions;
 using CoreCommand;
 using Microsoft.CSharp;
@@ -78,8 +78,10 @@ namespace Core.Plugin.Unity.Generator
         public List<string> FetchFunctions()
         {
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
-            _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
-            return _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]).ConvertAll(x => x.Name.SplitCamelCase());
+            var funcs = new List<Entity>();
+            foreach (var id in ids)
+                funcs.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
+            return funcs.ConvertAll(x => x.Name.SplitCamelCase());
         }
     }
 
