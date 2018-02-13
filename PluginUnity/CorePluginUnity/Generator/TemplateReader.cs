@@ -69,6 +69,7 @@ namespace Core.Plugin.Unity.Generator
         /// <param name="manager"></param>
         /// <param name="variables"></param>
         /// <param name="functions"></param>
+        /// <param name="dataTypes"></param>
         /// <returns></returns>
         internal string GenerateTemplateContent(CoreCommand.BinaryManager manager = null, List<CoreControl.EntityFactory.Entity> variables = null,
             List<CoreControl.EntityFactory.Entity> functions = null, List<CoreControl.EntityFactory.Entity> dataTypes = null)
@@ -116,8 +117,14 @@ namespace Core.Plugin.Unity.Generator
                 {
                     template.FunctionId = item.Id;
                     var pars = manager.Controller.GetFunctionParameters(item.Id);
+
+                    // Gets the variables with the function container id
+                    foreach (var v in pars)
+                        template.Inputs.Add(v.ToSerialString(manager.Controller));
+
                     for (int i = 0; i < pars.Count; i++)
-                        template.FunctionArguments += $"{{\"{pars[i].Name}\",{manager.Controller.GetVariableValue(pars[i].Id).ToString()}}},";
+                        template.FunctionArguments += $"{{\"{pars[i].Name}\",{pars[i].Name}}},";
+                        //template.FunctionArguments += $"{{\"{pars[i].Name}\",{manager.Controller.GetVariableValue(pars[i].Id).ToString()}}},";
                     foreach (var ret in manager.Controller.GetFunctionReturns(item.Id))
                         template.Outputs.Add(ret.ToSerialString(manager.Controller));
                 }

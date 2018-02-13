@@ -1,19 +1,39 @@
 ﻿using Duly.MoreOrLess;
+using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TestDuly : Play
 {
-    // Use this for initialization
-    private void Start()
+    public Text TextNumber;
+
+    public int Tries = 10;
+    public int MysteryNumber = 42;
+
+    public void Play()
     {
-        Debug.Log("Executing !");
-        Debug.Log("Result => " + result);
-        Execute();
-        Debug.Log("Result after execution => " + result);
+        Debug.Log("Has to find " + MysteryNumber);
+        StartCoroutine(PlayRoutine());
     }
 
-    // Update is called once per frame
-    private void Update()
+    private IEnumerator PlayRoutine()
     {
+        lastResult = 2;
+        for (int i = Tries; i > 0 && result != MysteryNumber; i--)
+        {
+            Execute();
+            lastResult = result < MysteryNumber ? 0 : 1;
+            Debug.Log($"Result = {result}; MysteryNumber = {MysteryNumber}; lastResult = {lastResult}");
+            TextNumber.text = result.ToString();
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    public void OnMysteryNumberChanged(string nbr)
+    {
+        if (string.IsNullOrEmpty(nbr))
+            return;
+        MysteryNumber = Convert.ToInt32(nbr);
     }
 }
