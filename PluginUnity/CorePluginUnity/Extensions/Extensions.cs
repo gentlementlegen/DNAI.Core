@@ -30,7 +30,7 @@ namespace Core.Plugin.Unity.Extensions
                 ret += "}";
                 return ret;
             }
-            var t = controller.GetVariableType(entity.Id);
+            //var t = controller.GetVariableType(entity.Id);
             var value = controller.GetVariableValue(entity.Id);
             return $"{value.GetType()} {entity.Name}";
         }

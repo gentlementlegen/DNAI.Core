@@ -22,6 +22,8 @@ namespace Core.Plugin.Unity.Generator
 
     internal class TemplateReader
     {
+        private readonly Dictionary<uint, string> enumNames = new Dictionary<uint, string>();
+
         //private readonly IServiceProvider serviceProvider;
         //private readonly ITextTemplating t4;
         //private readonly ITextTemplatingSessionHost sessionHost;
@@ -75,6 +77,8 @@ namespace Core.Plugin.Unity.Generator
             List<CoreControl.EntityFactory.Entity> functions = null, List<CoreControl.EntityFactory.Entity> dataTypes = null)
         {
             var template = new GeneratedCodeTemplate();
+            enumNames.Clear();
+
             if (manager != null)
             {
                 template.FilePath = Path.GetFileName(manager.FilePath);
@@ -99,6 +103,7 @@ namespace Core.Plugin.Unity.Generator
                             ret += $"{v} = {manager.Controller.GetEnumerationValue(item.Id, v)},";
                         ret += "}";
                         template.DataTypes.Add(ret);
+                        enumNames.Add(item.Id, item.Name);
                     }
                 }
             }
@@ -120,10 +125,22 @@ namespace Core.Plugin.Unity.Generator
 
                     // Gets the variables with the function container id
                     foreach (var v in pars)
-                        template.Inputs.Add(v.ToSerialString(manager.Controller));
+                    {
+                        var typeId = manager.Controller.GetVariableType(v.Id);
+                        var realType = manager.Controller.GetEntityType(typeId);
+                        if (realType == CoreControl.EntityFactory.ENTITY.ENUM_TYPE)
+                        {
+                            var ret = $"{enumNames[typeId]} {v.Name}";
+                            template.Inputs.Add(ret);
+                        }
+                        else
+                        {
+                            template.Inputs.Add(v.ToSerialString(manager.Controller));
+                        }
+                    }
 
                     for (int i = 0; i < pars.Count; i++)
-                        template.FunctionArguments += $"{{\"{pars[i].Name}\",{pars[i].Name}}},";
+                        template.FunctionArguments += $"{{\"{pars[i].Name}\", ({manager.Controller.GetVariableValue(pars[i].Id).GetType().ToString()}) {pars[i].Name}}},";
                         //template.FunctionArguments += $"{{\"{pars[i].Name}\",{manager.Controller.GetVariableValue(pars[i].Id).ToString()}}},";
                     foreach (var ret in manager.Controller.GetFunctionReturns(item.Id))
                         template.Outputs.Add(ret.ToSerialString(manager.Controller));

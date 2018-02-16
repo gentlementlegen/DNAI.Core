@@ -19,11 +19,11 @@ public class TestDuly : Play
 
     private IEnumerator PlayRoutine()
     {
-        lastResult = 2;
+        lastResult = COMPARISON.NONE;
         for (int i = Tries; i > 0 && result != MysteryNumber; i--)
         {
             Execute();
-            lastResult = result < MysteryNumber ? 0 : 1;
+            lastResult = result < MysteryNumber ? COMPARISON.MORE : COMPARISON.LESS;
             Debug.Log($"Result = {result}; MysteryNumber = {MysteryNumber}; lastResult = {lastResult}");
             TextNumber.text = result.ToString();
             yield return new WaitForSeconds(0.5f);
