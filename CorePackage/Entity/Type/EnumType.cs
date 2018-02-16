@@ -92,11 +92,14 @@ namespace CorePackage.Entity.Type
         public override bool IsValueOfType(dynamic value)
         {
             System.Type valType = value.GetType();
-            
+
             //return value.GetType() != typeof(string) && values.Keys.Contains((string)value);
-            if (valType != values.Values.First().Value.GetType()
-                || (valType.IsEnum && values.ContainsKey(valType.GetEnumName(value))))
+            if (valType.IsEnum && values.ContainsKey(valType.GetEnumName(value)))
                 return false;
+
+            if (valType != values.Values.First().Value.GetType())
+                return false;
+
             foreach (Variable curr in values.Values)
             {
                 if (curr.Value == value)
