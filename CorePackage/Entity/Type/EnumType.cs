@@ -95,7 +95,7 @@ namespace CorePackage.Entity.Type
             
             //return value.GetType() != typeof(string) && values.Keys.Contains((string)value);
             if (valType != values.Values.First().Value.GetType()
-                || (valType.IsEnum && valType.GetEnumUnderlyingType() != values.Values.First().Value.GetType()))
+                || (valType.IsEnum && values.ContainsKey(valType.GetEnumName(value))))
                 return false;
             foreach (Variable curr in values.Values)
             {
