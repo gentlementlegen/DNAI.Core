@@ -95,7 +95,7 @@ namespace CorePackage.Entity.Type
 
             //return value.GetType() != typeof(string) && values.Keys.Contains((string)value);
             if (valType.IsEnum && values.ContainsKey(valType.GetEnumName(value)))
-                return false;
+                return true;
 
             if (valType != values.Values.First().Value.GetType())
                 return false;
