@@ -205,8 +205,15 @@ namespace CorePackage.Entity
         /// <summary>
         /// Execute internals instructions
         /// </summary>
-        public void Call()
+        public Dictionary<string, dynamic> Call(Dictionary<string, dynamic> parameters = null)
         {
+            if (parameters != null)
+                foreach (KeyValuePair<string, dynamic> curr in parameters)
+                {
+                    SetParameterValue(curr.Key, curr.Value);
+                }
+
+            Dictionary<string, dynamic> returns = new Dictionary<string, dynamic>();
             Stack<Execution.ExecutionRefreshInstruction> instructions = new Stack<Execution.ExecutionRefreshInstruction>();
 
             if (entrypoint == null)
@@ -226,6 +233,12 @@ namespace CorePackage.Entity
                         instructions.Push(curr);
                 }
             }
+
+            foreach (KeyValuePair<string, Variable> curr in Returns)
+            {
+                returns[curr.Key] = curr.Value.Value;
+            }
+            return returns;
         }
 
         /// <see cref="Global.Definition.IsValid"/>

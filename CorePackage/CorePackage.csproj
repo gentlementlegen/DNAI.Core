@@ -49,7 +49,10 @@
     <Compile Include="Entity\Type\ObjectType.cs" />
     <Compile Include="Entity\Type\ScalarType.cs" />
     <Compile Include="Entity\Variable.cs" />
+    <Compile Include="Error\InvalidOperatorSignature.cs" />
     <Compile Include="Error\NotFoundException.cs" />
+    <Compile Include="Error\OperatorNotOverloaded.cs" />
+    <Compile Include="Error\OperatorNotPermitted.cs" />
     <Compile Include="Execution\AccessRefreshInstruction.cs" />
     <Compile Include="Execution\AccessRefresh\EnumSplitter.cs" />
     <Compile Include="Execution\AccessRefresh\Getter.cs" />
@@ -76,8 +79,6 @@
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\RightShift.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Substract.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Xor.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\OverloadableBinaryOperator.cs" />
-    <Compile Include="Execution\AccessRefresh\Operators\OverloadableUnaryOperator.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\UnaryOperator.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Unary\BinaryNot.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Unary\Decrement.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="Global\Definition.cs" />
     <Compile Include="Global\IContext.cs" />
     <Compile Include="Global\IDeclarator.cs" />
+    <Compile Include="Global\IOperable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

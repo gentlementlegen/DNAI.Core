@@ -9,7 +9,7 @@ namespace CorePackage.Execution.Operators
     /// <summary>
     /// Instruction that represents "/" operator
     /// </summary>
-    public class Divide : OverloadableBinaryOperator
+    public class Divide : BinaryOperator
     {
         /// <summary>
         /// Constructor that 
@@ -20,21 +20,11 @@ namespace CorePackage.Execution.Operators
         public Divide(Entity.DataType lOpType, Entity.DataType rOpType, Entity.DataType resType) :
             base(lOpType,
                 rOpType,
-                delegate(dynamic left, dynamic right)
+                delegate(Entity.Variable left, Entity.Variable right)
                 {
-                    return left / right;
+                    return left.Type.OperatorDiv(left.Value, right.Value);
                 },
                 resType)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor used to overload the operator
-        /// </summary>
-        /// <param name="overload">Overload function</param>
-        public Divide(Entity.Function overload) :
-            base(overload)
         {
 
         }

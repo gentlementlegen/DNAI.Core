@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CorePackage.Error;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CorePackage.Entity.Type
 {
@@ -71,6 +73,91 @@ namespace CorePackage.Entity.Type
         public override bool IsValueOfType(dynamic value)
         {
             return _listType == value.GetType();
+        }
+
+        public override dynamic OperatorAdd(dynamic lOp, dynamic rOp)
+        {
+            return lOp.Union(rOp).ToList();
+        }
+
+        public override dynamic OperatorSub(dynamic lOp, dynamic rOp)
+        {
+            return lOp.Except(rOp).ToList();
+        }
+
+        public override dynamic OperatorMul(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override dynamic OperatorDiv(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override dynamic OperatorMod(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override bool OperatorGt(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override bool OperatorGtEq(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override bool OperatorLt(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override bool OperatorLtEq(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override bool OperatorEqual(dynamic lOp, dynamic rOp)
+        {
+            return lOp.Equals(rOp);
+        }
+
+        public override dynamic OperatorBAnd(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override dynamic OperatorBOr(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override dynamic OperatorRightShift(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override dynamic OperatorLeftShift(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override dynamic OperatorXor(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override dynamic OperatorBNot(dynamic op)
+        {
+            throw new OperatorNotPermitted("This operator is not permitted on list type");
+        }
+
+        public override dynamic OperatorAccess(dynamic lOp, dynamic rOp)
+        {
+            return lOp[rOp];
         }
     }
 }

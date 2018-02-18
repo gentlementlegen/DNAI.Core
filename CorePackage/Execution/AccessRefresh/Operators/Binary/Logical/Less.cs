@@ -18,22 +18,12 @@ namespace CorePackage.Execution.Operators
         /// <param name="rightOpType">Type of the right operand</param>
         public Less(Entity.DataType leftOpType, Entity.DataType rightOpType) :
             base(leftOpType, rightOpType,
-                delegate(dynamic left, dynamic right)
+                delegate(Entity.Variable left, Entity.Variable right)
                 {
-                    return left < right;
+                    return left.Type.OperatorLt(left.Value, right.Value);
                 })
         {
              
-        }
-
-        /// <summary>
-        /// Constructor used to overload operator
-        /// </summary>
-        /// <param name="overload">Overload function</param>
-        public Less(Entity.Function overload) :
-            base(overload)
-        {
-
         }
     }
 }

@@ -9,7 +9,7 @@ namespace CorePackage.Entity
     /// <summary>
     /// Intermediary class the corresponds to a type definition
     /// </summary>
-    public abstract class DataType : Global.Definition
+    public abstract class DataType : Global.Definition, Global.IOperable
     {
         /// <summary>
         /// Instanciate a dynamic object of the type
@@ -26,5 +26,22 @@ namespace CorePackage.Entity
 
         ///<see cref="Global.Definition.IsValid"/>
         public abstract bool IsValid();
+        public abstract dynamic OperatorAdd(dynamic lOp, dynamic rOp);
+        public abstract dynamic OperatorSub(dynamic lOp, dynamic rOp);
+        public abstract dynamic OperatorMul(dynamic lOp, dynamic rOp);
+        public abstract dynamic OperatorDiv(dynamic lOp, dynamic rOp);
+        public abstract dynamic OperatorMod(dynamic lOp, dynamic rOp);
+        public abstract bool OperatorGt(dynamic lOp, dynamic rOp);
+        public abstract bool OperatorGtEq(dynamic lOp, dynamic rOp);
+        public abstract bool OperatorLt(dynamic lOp, dynamic rOp);
+        public abstract bool OperatorLtEq(dynamic lOp, dynamic rOp);
+        public abstract bool OperatorEqual(dynamic lOp, dynamic rOp);
+        public abstract dynamic OperatorBAnd(dynamic lOp, dynamic rOp);
+        public abstract dynamic OperatorBOr(dynamic lOp, dynamic rOp);
+        public abstract dynamic OperatorRightShift(dynamic lOp, dynamic rOp);
+        public abstract dynamic OperatorLeftShift(dynamic lOp, dynamic rOp);
+        public abstract dynamic OperatorXor(dynamic lOp, dynamic rOp);
+        public abstract dynamic OperatorBNot(dynamic op);
+        public abstract dynamic OperatorAccess(dynamic lOp, dynamic rOp);
     }
 }

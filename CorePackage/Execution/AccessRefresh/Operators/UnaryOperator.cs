@@ -17,7 +17,7 @@ namespace CorePackage.Execution
         /// <param name="opType">Type of the operand</param>
         /// <param name="operation">Operation to execute</param>
         /// <param name="resultType">Type of the returned value</param>
-        public UnaryOperator(Entity.DataType opType, Func<dynamic, dynamic> operation, Entity.DataType resultType):
+        public UnaryOperator(Entity.DataType opType, Func<Entity.Variable, dynamic> operation, Entity.DataType resultType):
             base(
                 new Dictionary<string, Entity.Variable>
                 {
@@ -35,7 +35,7 @@ namespace CorePackage.Execution
         /// </summary>
         public override void Execute()
         {
-            this.outputs["result"].Value.definition.Value = base.operation.DynamicInvoke(this.inputs["Operand"].Value.definition.Value);
+            this.outputs["result"].Value.definition.Value = base.operation.DynamicInvoke(this.inputs["Operand"].Value.definition);
         }
     }
 }

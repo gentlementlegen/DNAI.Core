@@ -9,7 +9,7 @@ namespace CorePackage.Execution.Operators
     /// <summary>
     /// Instruction that represents "~" operator
     /// </summary>
-    public class BinaryNot : OverloadableUnaryOperator
+    public class BinaryNot : UnaryOperator
     {
         /// <summary>
         /// Constructor that need input and output type
@@ -17,17 +17,7 @@ namespace CorePackage.Execution.Operators
         /// <param name="opType">Type of the operand</param>
         /// <param name="resType">Type of the returned value</param>
         public BinaryNot(Entity.DataType opType, Entity.DataType resType) :
-            base(opType, delegate(dynamic opr) { return ~opr; }, resType)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor used to overload the operator
-        /// </summary>
-        /// <param name="overload">Function to overload</param>
-        public BinaryNot(Entity.Function overload) :
-            base(overload)
+            base(opType, delegate(Entity.Variable opr) { return opr.Type.OperatorBNot(opr.Value); }, resType)
         {
 
         }

@@ -16,20 +16,10 @@ namespace CorePackage.Execution.Operators
         /// </summary>
         public And() :
             base(Entity.Type.Scalar.Boolean, Entity.Type.Scalar.Boolean,
-                delegate(dynamic left, dynamic right)
+                delegate(Entity.Variable left, Entity.Variable right)
                 {
-                    return left && right;
+                    return left.Value && right.Value; //logical and is not overloadable
                 })
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor to overload this operator
-        /// </summary>
-        /// <param name="overload">Overload function</param>
-        public And(Entity.Function overload) :
-            base(overload)
         {
 
         }

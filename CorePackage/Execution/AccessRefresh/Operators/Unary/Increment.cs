@@ -9,7 +9,7 @@ namespace CorePackage.Execution.Operators
     /// <summary>
     /// Instruction that represents "++" operator
     /// </summary>
-    public class Increment: OverloadableUnaryOperator
+    public class Increment: UnaryOperator
     {
         /// <summary>
         /// Constructor that need input and output type
@@ -17,17 +17,7 @@ namespace CorePackage.Execution.Operators
         /// <param name="opType">Operand type</param>
         /// <param name="resType">Returned value type</param>
         public Increment(Entity.DataType opType, Entity.DataType resType) :
-            base(opType, delegate(dynamic op) { return ++op; }, resType)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor used to overload the operator
-        /// </summary>
-        /// <param name="overload">Function to overload</param>
-        public Increment(Entity.Function overload) :
-            base(overload)
+            base(opType, delegate(Entity.Variable op) { return ++(op.Value); }, resType)
         {
 
         }

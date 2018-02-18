@@ -1,4 +1,5 @@
-﻿using CorePackage.Global;
+﻿using CorePackage.Error;
+using CorePackage.Global;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace CorePackage.Entity.Type
         /// Represents the objects attributes through a declarator of DataType
         /// </summary>
         private Declarator<DataType> attributes = new Declarator<DataType>();
+
+        private Dictionary<Operator.Name, Function> overloadedOperators = new Dictionary<Operator.Name, Function>();
 
         /// <summary>
         /// Basic default constructor which is necessary for factory
@@ -337,6 +340,135 @@ namespace CorePackage.Entity.Type
         public Dictionary<string, DataType> GetPublicAttributes()
         {
             return attributes.GetEntities(AccessMode.EXTERNAL);
+        }
+
+        public void OverloadOperator(Operator.Name toOverload, string externalFuncName)
+        {
+            IDeclarator<Function> that = this;
+            Function overload = that.Find(externalFuncName, AccessMode.EXTERNAL);
+
+            if (overload == null)
+                throw new NotFoundException("No such function \"" + externalFuncName + "\" in object");
+
+            Operator.Type opType = Operator.GetTypeOf(toOverload);
+
+            if (opType == Operator.Type.UNARY
+                && overload.GetParameter("Operand").Type != this)
+                throw new InvalidOperatorSignature("Unary operator must have 1 parameter named`\"Operand\" of type " + this.ToString());
+
+            if (opType == Operator.Type.BINARY
+                && (overload.GetParameter("LeftOperand").Type != this
+                    || overload.GetParameter("RightOperand") == null))
+                throw new InvalidOperatorSignature("Binary operator must have 2 parameters named \"LeftOperand\" (of type " + this.ToString() + ") and \"RightOperand\"");
+
+            if (overload.GetReturn("result") == null)
+                throw new InvalidOperatorSignature("Operator must have \"result\" return value");
+
+            overloadedOperators[toOverload] = overload;
+        }
+
+        private Dictionary<string, dynamic> CallOperator(Operator.Name tocall, Dictionary<string, dynamic> parameters)
+        {
+            if (!overloadedOperators.ContainsKey(tocall))
+                throw new OperatorNotOverloaded();
+            return overloadedOperators[tocall].Call(parameters);
+        }
+
+        private dynamic CallOperator(Operator.Name tocall, dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(tocall, new Dictionary<string, dynamic>
+            {
+                { "LeftOperand", lOp },
+                { "RightOperand", rOp }
+            })["result"];
+        }
+
+        public override dynamic OperatorAdd(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.ADD, lOp, rOp);
+        }
+
+        public override dynamic OperatorSub(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.SUB, lOp, rOp);
+        }
+
+        public override dynamic OperatorMul(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.MUL, lOp, rOp);
+        }
+
+        public override dynamic OperatorDiv(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.DIV, lOp, rOp);
+        }
+
+        public override dynamic OperatorMod(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.MOD, lOp, rOp);
+        }
+
+        public override bool OperatorGt(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.GT, lOp, rOp);
+        }
+
+        public override bool OperatorGtEq(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.GT_EQ, lOp, rOp);
+        }
+
+        public override bool OperatorLt(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.LT, lOp, rOp);
+        }
+
+        public override bool OperatorLtEq(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.LT_EQ, lOp, rOp);
+        }
+
+        public override bool OperatorEqual(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.EQUAL, lOp, rOp);
+        }
+
+        public override dynamic OperatorBAnd(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.B_AND, lOp, rOp);
+        }
+
+        public override dynamic OperatorBOr(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.B_OR, lOp, rOp);
+        }
+
+        public override dynamic OperatorRightShift(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.R_SHIFT, lOp, rOp);
+        }
+
+        public override dynamic OperatorLeftShift(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.L_SHIFT, lOp, rOp);
+        }
+
+        public override dynamic OperatorXor(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.XOR, lOp, rOp);
+        }
+
+        public override dynamic OperatorBNot(dynamic op)
+        {
+            return CallOperator(Operator.Name.B_NOT, new Dictionary<string, dynamic>
+            {
+                { "Operand", op }
+            })["result"];
+        }
+
+        public override dynamic OperatorAccess(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.ACCESS, lOp, rOp);
         }
     }
 }

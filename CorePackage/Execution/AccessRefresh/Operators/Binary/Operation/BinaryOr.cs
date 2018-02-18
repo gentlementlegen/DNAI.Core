@@ -9,7 +9,7 @@ namespace CorePackage.Execution.Operators
     /// <summary>
     /// Instruction that corresponds to the "|" operator
     /// </summary>
-    public class BinaryOr : OverloadableBinaryOperator
+    public class BinaryOr : BinaryOperator
     {
         /// <summary>
         /// Constructor that 
@@ -19,21 +19,11 @@ namespace CorePackage.Execution.Operators
         /// <param name="resType">Type of the returned value</param>
         public BinaryOr(Entity.DataType lOpType, Entity.DataType rOpType, Entity.DataType resType) :
             base(lOpType, rOpType,
-                delegate(dynamic left, dynamic right)
+                delegate(Entity.Variable left, Entity.Variable right)
                 {
-                    return left | right;
+                    return left.Type.OperatorBOr(left.Value, right.Value);
                 },
                 resType)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor used to overload the operator
-        /// </summary>
-        /// <param name="overload">Overload function</param>
-        public BinaryOr(Entity.Function overload) :
-            base(overload)
         {
 
         }

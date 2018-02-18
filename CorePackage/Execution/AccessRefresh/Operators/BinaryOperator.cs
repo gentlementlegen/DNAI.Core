@@ -18,7 +18,7 @@ namespace CorePackage.Execution
         /// <param name="rOpType">Type of the right operand</param>
         /// <param name="operation">Operation to execute</param>
         /// <param name="resultType">Type of the returned value</param>
-        public BinaryOperator(Entity.DataType lOpType, Entity.DataType rOpType, Func<dynamic, dynamic, dynamic> operation, Entity.DataType resultType) :
+        public BinaryOperator(Entity.DataType lOpType, Entity.DataType rOpType, Func<Entity.Variable, Entity.Variable, dynamic> operation, Entity.DataType resultType) :
             base(
                 new Dictionary<string, Entity.Variable>
                 {
@@ -37,7 +37,7 @@ namespace CorePackage.Execution
         /// </summary>
         public override void Execute()
         {
-            this.outputs["result"].Value.definition.Value = this.operation.DynamicInvoke(this.inputs["LeftOperand"].Value.definition.Value, this.inputs["RightOperand"].Value.definition.Value);
+            this.outputs["result"].Value.definition.Value = this.operation.DynamicInvoke(this.inputs["LeftOperand"].Value.definition, this.inputs["RightOperand"].Value.definition);
         }
     }
 }

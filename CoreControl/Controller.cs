@@ -254,21 +254,7 @@ namespace CoreControl
         /// <returns>Dictionary that contains function returns' value</returns>
         public Dictionary<string, dynamic> CallFunction(UInt32 funcID, Dictionary<string, dynamic> parameters)
         {
-            Dictionary<string, dynamic> returns = new Dictionary<string, dynamic>();
-
-            CorePackage.Entity.Function to_call = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(funcID);
-
-            foreach (KeyValuePair<string, dynamic> param in parameters)
-            {
-                to_call.SetParameterValue(param.Key, param.Value);
-            }
-            to_call.Call();
-
-            foreach (KeyValuePair<string, CorePackage.Entity.Variable> ret in to_call.Returns)
-            {
-                returns[ret.Key] = ret.Value.Value;
-            }
-            return returns;
+            return entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(funcID).Call(parameters);
         }
 
         /// <summary>

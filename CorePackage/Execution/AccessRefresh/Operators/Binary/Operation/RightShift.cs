@@ -9,7 +9,7 @@ namespace CorePackage.Execution.Operators
     /// <summary>
     /// Instruction that represents ">>" operator
     /// </summary>
-    public class RightShift : OverloadableBinaryOperator
+    public class RightShift : BinaryOperator
     {
         /// <summary>
         /// Constructor that 
@@ -19,23 +19,13 @@ namespace CorePackage.Execution.Operators
         /// <param name="resType">Type of the returned value</param>
         public RightShift(Entity.DataType lOpType, Entity.DataType rOpType, Entity.DataType resType) :
             base(lOpType, rOpType,
-                delegate(dynamic left, dynamic right)
+                delegate(Entity.Variable left, Entity.Variable right)
                 {
-                    return left >> right;
+                    return left.Type.OperatorRightShift(left.Value, right.Value);
                 },
                 resType)
         {
 
-        }
-
-        /// <summary>
-        /// Constructor used to overload the operator
-        /// </summary>
-        /// <param name="overload">Overload function</param>
-        public RightShift(Entity.Function overload) :
-            base(overload)
-        {
-            
         }
     }
 }
