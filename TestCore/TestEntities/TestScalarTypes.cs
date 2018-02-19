@@ -577,7 +577,7 @@ namespace CoreTest.TestEntities
         public void TestString()
         {
             CorePackage.Entity.DataType my_string = CorePackage.Entity.Type.Scalar.String;
-
+            
             //Different, Equal, Greater, GreaterEqual, Less, LessEqual
             TestAuxiliary.HandleOperations<bool>(
                 new List<CorePackage.Execution.Operator>
@@ -626,6 +626,81 @@ namespace CoreTest.TestEntities
                 });
 
             //Add
+        }
+        
+        [TestMethod]
+        public void ScalarOperators()
+        {
+            CorePackage.Entity.DataType
+                integer = CorePackage.Entity.Type.Scalar.Integer,
+                floating = CorePackage.Entity.Type.Scalar.Floating,
+                character = CorePackage.Entity.Type.Scalar.Character,
+                boolean = CorePackage.Entity.Type.Scalar.Boolean,
+                stringc = CorePackage.Entity.Type.Scalar.String;
+
+            //Test integer
+
+            Assert.IsTrue(integer.OperatorAdd(3, 4) == 7);
+            Assert.IsTrue(integer.OperatorSub(3, 4) == -1);
+            Assert.IsTrue(integer.OperatorMul(3, 4) == 12);
+            Assert.IsTrue(integer.OperatorDiv(8, 4) == 2);
+            Assert.IsTrue(integer.OperatorMod(7, 3) == 1);
+            Assert.IsTrue(integer.OperatorGt(4, 3));
+            Assert.IsTrue(integer.OperatorGtEq(4, 3) && integer.OperatorGtEq(4, 4));
+            Assert.IsTrue(integer.OperatorLt(3, 4));
+            Assert.IsTrue(integer.OperatorLtEq(3, 4) && integer.OperatorLtEq(4, 4));
+            Assert.IsTrue(integer.OperatorEqual(4, 4));
+            Assert.IsTrue(integer.OperatorBAnd(0b1111, 0b1010) == 0b1010);
+            Assert.IsTrue(integer.OperatorBOr(0b0000, 0b1010) == 0b1010);
+            Assert.IsTrue(integer.OperatorRightShift(0b1000, 3) == 0b1);
+            Assert.IsTrue(integer.OperatorLeftShift(0b1, 3) == 0b1000);
+            Assert.IsTrue(integer.OperatorXor(0b1100, 0b1010) == 0b0110);
+            Assert.IsTrue(integer.OperatorBNot(0xFFFFFFFF) == 0b0);
+
+            //Test floating
+
+            Assert.IsTrue(floating.OperatorAdd(3.14, 4.13) == 7.27);
+            
+            Assert.IsTrue(Math.Round(floating.OperatorSub(3.14, 0.28), 2) == 2.86);
+            Assert.IsTrue(Math.Round(floating.OperatorMul(3.14, 4.13), 4) == 12.9682);
+            Assert.IsTrue(Math.Round(floating.OperatorDiv(3.14, 3.2), 5) == 0.98125);
+            Assert.IsTrue(floating.OperatorGt(4.28, 3.14));
+            Assert.IsTrue(floating.OperatorGtEq(4.28, 3.14) && floating.OperatorGtEq(4.28, 4.28));
+            Assert.IsTrue(floating.OperatorLt(3.14, 4.28));
+            Assert.IsTrue(floating.OperatorLtEq(3.14, 4.28) && floating.OperatorLtEq(3.14, 3.14));
+            Assert.IsTrue(floating.OperatorEqual(3.14, 3.14));
+
+            //Test character
+
+            Assert.IsTrue(character.OperatorGt('c', 'a'));
+            Assert.IsTrue(character.OperatorGtEq('c', 'a') && character.OperatorGtEq('c', 'c'));
+            Assert.IsTrue(character.OperatorLt('a', 'c'));
+            Assert.IsTrue(character.OperatorLtEq('a', 'c') && character.OperatorLtEq('a', 'a'));
+            Assert.IsTrue(character.OperatorEqual('a', 'a'));
+
+            //Test boolean
+
+            Assert.IsTrue(
+                boolean.OperatorBAnd(true, true)
+                && !boolean.OperatorBAnd(true, false)
+                && !boolean.OperatorBAnd(false, true)
+                && !boolean.OperatorBAnd(false, false));
+            Assert.IsTrue(
+                boolean.OperatorBOr(true, true)
+                && boolean.OperatorBOr(true, false)
+                && boolean.OperatorBOr(false, true)
+                && !boolean.OperatorBOr(false, false));
+            Assert.IsTrue(
+                !boolean.OperatorXor(true, true)
+                && boolean.OperatorXor(true, false)
+                && boolean.OperatorXor(false, true)
+                && !boolean.OperatorXor(false, false));
+
+            //Test string
+
+            Assert.IsTrue(stringc.OperatorAdd("salut", "salut") == "salutsalut");
+            Assert.IsTrue(stringc.OperatorEqual("hello", "hello"));
+            Assert.IsTrue(stringc.OperatorAccess("salut", 3) == 'u');
         }
     }
 }

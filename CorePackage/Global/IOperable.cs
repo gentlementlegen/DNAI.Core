@@ -8,6 +8,11 @@ namespace CorePackage.Global
 {
     public static class Operator
     {
+        public static readonly String Left = "LeftOperand";
+        public static readonly String Right = "RightOperand";
+        public static readonly String Unary = "Operand";
+        public static readonly String Result = "result";
+
         public enum Name
         {
             ADD,

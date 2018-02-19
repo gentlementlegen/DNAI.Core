@@ -70,7 +70,6 @@ namespace TestNetwork
             MemoryStream sendstream = new MemoryStream();
 
             BinarySerializer.Serializer.Serialize(tosend, sendstream);
-            //ProtoBuf.Serializer.SerializeWithLengthPrefix(sendstream, tosend, ProtoBuf.PrefixStyle.Base128);
 
             guiSide.SendEvent("DECLARE", sendstream.GetBuffer());
 
@@ -82,6 +81,8 @@ namespace TestNetwork
             }
 
             server.Kill();
+
+            server.WaitForExit();
 
             Directory.Delete(serverDirectory, true);
         }

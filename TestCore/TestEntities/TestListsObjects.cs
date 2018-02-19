@@ -45,7 +45,7 @@ namespace CoreTest.TestEntities
             //      - index
             //      - value
             t.Insert(0, CorePackage.Entity.Type.Scalar.Integer.Instantiate());
-
+            
             //remove
             //  inputs:
             //      - index
@@ -98,15 +98,15 @@ namespace CoreTest.TestEntities
 
             //x + y
             uint xPy = getAttrSum.addInstruction(new CorePackage.Execution.Operators.Add(CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer));
-            getAttrSum.LinkInstructionData(getAttrs, "x", xPy, "LeftOperand");
-            getAttrSum.LinkInstructionData(getAttrs, "y", xPy, "RightOperand");
+            getAttrSum.LinkInstructionData(getAttrs, "x", xPy, CorePackage.Global.Operator.Left);
+            getAttrSum.LinkInstructionData(getAttrs, "y", xPy, CorePackage.Global.Operator.Right);
 
             //x + y + z
             uint xPyPz = getAttrSum.addInstruction(new CorePackage.Execution.Operators.Add(CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer, CorePackage.Entity.Type.Scalar.Integer));
-            getAttrSum.LinkInstructionData(xPy, "result", xPyPz, "LeftOperand");
-            getAttrSum.LinkInstructionData(getAttrs, "z", xPyPz, "RightOperand");
+            getAttrSum.LinkInstructionData(xPy, CorePackage.Global.Operator.Result, xPyPz, CorePackage.Global.Operator.Left);
+            getAttrSum.LinkInstructionData(getAttrs, "z", xPyPz, CorePackage.Global.Operator.Right);
 
-            getAttrSum.LinkInstructionData(xPyPz, "result", setRes, "value");
+            getAttrSum.LinkInstructionData(xPyPz, CorePackage.Global.Operator.Result, setRes, "value");
 
             getAttrSum.setEntryPoint(setRes);
 

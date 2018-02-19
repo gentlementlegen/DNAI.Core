@@ -22,8 +22,8 @@ namespace CorePackage.Execution
             base(
                 new Dictionary<string, Entity.Variable>
                 {
-                    { "LeftOperand", new Entity.Variable(lOpType) },
-                    { "RightOperand", new Entity.Variable(rOpType) }
+                    { Global.Operator.Left, new Entity.Variable(lOpType) },
+                    { Global.Operator.Right, new Entity.Variable(rOpType) }
                 },
                 resultType,
                 operation
@@ -37,7 +37,7 @@ namespace CorePackage.Execution
         /// </summary>
         public override void Execute()
         {
-            this.outputs["result"].Value.definition.Value = this.operation.DynamicInvoke(this.inputs["LeftOperand"].Value.definition, this.inputs["RightOperand"].Value.definition);
+            this.outputs[Global.Operator.Result].Value.definition.Value = this.operation.DynamicInvoke(this.inputs[Global.Operator.Left].Value.definition, this.inputs[Global.Operator.Right].Value.definition);
         }
     }
 }
