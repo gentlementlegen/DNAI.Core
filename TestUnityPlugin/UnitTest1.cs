@@ -1,4 +1,5 @@
 ﻿using BinarySerializer;
+using Core.Plugin.API;
 using Core.Plugin.Unity.Generator;
 using CoreCommand;
 using CoreCommand.Command;
@@ -118,6 +119,15 @@ namespace TestUnityPlugin
             //functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
             codeConverter.ConvertCode(new List<int> { 0 });
             codeConverter.ConvertCode(new List<int> { 0 });
+        }
+
+        [TestMethod]
+        public void TestApi()
+        {
+            var api = new ApiAccess();
+
+            Core.Plugin.API.File file = api.GetFile(0).Result;
+            api.PostFile(new Core.Plugin.API.File { Id = 0, Title = "MyFile" }).Wait();
         }
 
         private Reply HandleCommand<Reply, Command>(Command tohandle, CoreCommand.IManager manager)

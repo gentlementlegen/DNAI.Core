@@ -1,7 +1,10 @@
 ﻿using Core.Plugin.Editor;
 using Core.Plugin.Unity.Extensions;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -128,6 +131,7 @@ namespace Core.Plugin.Drawing
                 }
             }
 
+            private bool _shouldRefreshAssets = false;
             /// <summary>
             /// Draws the header of the list.
             /// </summary>
@@ -146,8 +150,7 @@ namespace Core.Plugin.Drawing
                 if (GUI.Button(refreshRect, refreshButton))
                 {
                     scriptManager.Compile(_selectedScripts.FindIndices(x => x));
-                    //AssetDatabase.Refresh();
-                    AssetDatabase.ImportAsset("Assets/Plugins/" + scriptManager.AssemblyName + ".dll");
+                    AssetDatabase.ImportAsset("Assets/DulyAssets/Compiled/" + scriptManager.AssemblyName + ".dll");
                 }
             }
 
@@ -223,6 +226,7 @@ namespace Core.Plugin.Drawing
         /// </summary>
         private void LoadSettings()
         {
+            Directory.CreateDirectory("Assets/DulyAssets");
             _editorSettings = (EditorSettings)AssetDatabase.LoadAssetAtPath<EditorSettings>("Assets/DulyAssets/DulyEditor.asset");
             if (_editorSettings == null)
             {

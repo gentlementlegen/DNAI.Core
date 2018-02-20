@@ -99,23 +99,7 @@ namespace Core.Plugin.Unity.Generator
         private readonly CSharpCodeProvider _provider = new CSharpCodeProvider();
         private readonly CompilerParameters _parameters = new CompilerParameters();
 
-        private string code = @"
-    using System;
-
-    namespace First
-    {
-        public class Program
-        {
-            public static void Main()
-            {
-            " +
-                "Console.WriteLine(\"Hello, world!\");"
-                + @"
-            }
-        }
-    }
-";
-
+        private const string AssemblyOutputPath = "Assets/DulyAssets/Compiled/";
 #if UNITY_ENGINE
         private const string assemblyPath = "Assets/Plugins/";
 #else
@@ -131,6 +115,7 @@ namespace Core.Plugin.Unity.Generator
         internal Compiler()
         {
             Directory.CreateDirectory("Assets/Plugins");
+            Directory.CreateDirectory(AssemblyOutputPath);
             //_parameters.OutputAssembly = "Assets/Plugins/" + assemblyName + ".dll";
             // Reference to library
             // TODO : change with instllation program
@@ -154,8 +139,8 @@ namespace Core.Plugin.Unity.Generator
         /// <param name="assemblyName">The name of the assembly output.</param>
         internal CompilerResults Compile(string code, string assemblyName = "DulyGeneratedAssembly")
         {
-            _parameters.OutputAssembly = "Assets/Plugins/" + assemblyName + ".dll";
-            _parameters.CompilerOptions = $"-doc:{assemblyPath}{assemblyName}.xml";
+            _parameters.OutputAssembly = AssemblyOutputPath + assemblyName + ".dll";
+            _parameters.CompilerOptions = $"-doc:{AssemblyOutputPath}{assemblyName}.xml";
 
             CompilerResults results = _provider.CompileAssemblyFromSource(_parameters, code);
 
