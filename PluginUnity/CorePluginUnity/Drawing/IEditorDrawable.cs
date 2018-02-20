@@ -1,4 +1,4 @@
-﻿namespace Core.Plugin.Drawing
+﻿namespace Core.Plugin.Unity.Drawing
 {
     /// <summary>
     /// Interface for classes that handle drawing in the editor.

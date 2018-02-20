@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Core.Plugin.Drawing
+namespace Core.Plugin.Unity.Drawing
 {
     /// <summary>
     /// Drawing helper, that contains generic drawing tools for Unity Windows.

@@ -1,5 +1,5 @@
 ﻿using BinarySerializer;
-using Core.Plugin.API;
+using Core.Plugin.Unity.API;
 using Core.Plugin.Unity.Generator;
 using CoreCommand;
 using CoreCommand.Command;
@@ -126,8 +126,11 @@ namespace TestUnityPlugin
         {
             var api = new ApiAccess();
 
-            Core.Plugin.API.File file = api.GetFile(0).Result;
-            api.PostFile(new Core.Plugin.API.File { Id = 0, Title = "MyFile" }).Wait();
+            Core.Plugin.Unity.API.File file = api.GetFile(0).Result;
+            Assert.IsNotNull(file, "File was null");
+            Core.Plugin.Unity.API.User usr = api.GetUser(0).Result;
+            Assert.IsNotNull(usr, "User was null");
+            api.PostFile(new Core.Plugin.Unity.API.File { Id = 0, Title = "MyFile" }).Wait();
         }
 
         private Reply HandleCommand<Reply, Command>(Command tohandle, CoreCommand.IManager manager)

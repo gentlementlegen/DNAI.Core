@@ -65,7 +65,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\Accessor.cs" />
     <Compile Include="API\ApiAcces.cs" />
+    <Compile Include="API\Objects.cs" />
     <Compile Include="Drawing\DrawingHelper.cs" />
     <Compile Include="Drawing\IEditorDrawable.cs" />
     <Compile Include="Drawing\ListStyles.cs" />
@@ -73,6 +75,7 @@
     <Compile Include="Editor\Constants.cs" />
     <Compile Include="Editor\DulyEditor.cs" />
     <Compile Include="Editor\ScriptManager.cs" />
+    <Compile Include="Editor\SettingsDrawer.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Generator\Compiler.cs" />
     <Compile Include="Generator\GeneratedCodeTemplate.cs">

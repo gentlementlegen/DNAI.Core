@@ -1,4 +1,4 @@
-﻿using Core.Plugin.Drawing;
+﻿using Core.Plugin.Unity.Drawing;
 using UnityEditor;
 using UnityEngine;
 
@@ -15,6 +15,7 @@ using UnityEngine;
 // Order list in editor : https://forum.unity3d.com/threads/reorderablelist-in-the-custom-editorwindow.384006/
 // Unity Decompiled : https://github.com/MattRix/UnityDecompiled/blob/master/UnityEditor/UnityEditorInternal/ReorderableList.cs
 // Saving window state : https://answers.unity.com/questions/119978/how-do-i-have-an-editorwindow-save-its-data-inbetw.html
+// Serialization rules in Unity : https://blogs.unity3d.com/2012/10/25/unity-serialization/
 
 // TODO : L'idée ce serait de faire un système comme les unity events, ou on chargerait un script,
 // qui une fois chargé (avec des threads) afficherait les behaviours dispos
@@ -26,7 +27,7 @@ using UnityEngine;
 // soit copier toutes les .dll dans le dossier plugin, soit utiliser un utilitaire de merge de librairies
 // cf : https://github.com/Microsoft/ILMerge/blob/master/ilmerge-manual.md
 
-namespace Core.Plugin.Editor
+namespace Core.Plugin.Unity.Editor
 {
     /// <summary>
     /// Duly editor, the unique, the one.
@@ -34,6 +35,7 @@ namespace Core.Plugin.Editor
     public class DulyEditor : EditorWindow
     {
         private ScriptDrawer _scriptDrawer;
+        private SettingsDrawer _settingsDrawer;
         private static DulyEditor _window;
 
         public static DulyEditor Instance { get { return _window; } }
@@ -62,14 +64,14 @@ namespace Core.Plugin.Editor
         //    //_window.Show();
         //}
 
-        [MenuItem("Window/Duly")]
+        [MenuItem("Window/DNAI &d")]
         public static void ShowWindow()
         {
             //EditorWindow.GetWindow(typeof(DulyEditor));
             if (_window == null)
             {
                 _window = (DulyEditor)EditorWindow.GetWindow(typeof(DulyEditor));
-                _window.titleContent = new GUIContent("Duly");
+                _window.titleContent = new GUIContent("DNAI");
                 _window.Show();
             }
             else
@@ -88,16 +90,29 @@ namespace Core.Plugin.Editor
 
             GUI.enabled = !EditorApplication.isPlaying;
             _scriptDrawer?.Draw();
+
+            if (GUILayout.Button("Settings"))
+            {
+                //_settingsDrawer = GetWindow<SettingsDrawer>();
+                if (_settingsDrawer == null)
+                    _settingsDrawer = CreateInstance<SettingsDrawer>();
+                _settingsDrawer?.ShowAuxWindow();
+            }
         }
 
         private void OnEnable()
         {
+            hideFlags = HideFlags.HideAndDontSave;
             //Debug.Log("[DulyEditor] On enable");
             if (_scriptDrawer == null)
             {
                 //_scriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
                 _scriptDrawer = new ScriptDrawer();
                 _scriptDrawer.OnEnable();
+            }
+            if (_settingsDrawer == null)
+            {
+                _settingsDrawer = CreateInstance<SettingsDrawer>();
             }
         }
 
@@ -119,7 +134,7 @@ namespace Core.Plugin.Editor
         private void DrawWindowTitle()
         {
             GUILayout.FlexibleSpace();
-            GUILayout.Label("Duly Editor V1.0", EditorStyles.largeLabel);
+            GUILayout.Label("DNAI Editor", EditorStyles.largeLabel);
             GUILayout.FlexibleSpace();
         }
 

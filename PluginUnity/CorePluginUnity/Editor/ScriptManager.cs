@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Core.Plugin.Editor
+namespace Core.Plugin.Unity.Editor
 {
     /// <summary>
     /// Manages the loaded scripts for Duly.

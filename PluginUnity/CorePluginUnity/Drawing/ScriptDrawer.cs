@@ -1,15 +1,13 @@
-﻿using Core.Plugin.Editor;
+﻿using Core.Plugin.Unity.Editor;
 using Core.Plugin.Unity.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace Core.Plugin.Drawing
+namespace Core.Plugin.Unity.Drawing
 {
     /// <summary>
     /// This class helps Unity remembering the state of the window content between each close/open call.
@@ -61,6 +59,7 @@ namespace Core.Plugin.Drawing
             private List<string> _scriptList = new List<string>();
 
             private ReorderableList _subScriptList;
+
             /// <summary>
             /// List of scripts that can be displayed in the Unity UI.
             /// </summary>
@@ -172,10 +171,10 @@ namespace Core.Plugin.Drawing
                 _selectedScripts[index] = GUI.Toggle(plusRect, _selectedScripts[index], "");
                 //if (GUI.Button(plusRect, iconToolbarPlus, preButton))
                 //{
-                    //foreach (var go in Selection.gameObjects)
-                    //{
-                    //    go.AddComponent(scriptManager.iaList[index].Value);
-                    //}
+                //foreach (var go in Selection.gameObjects)
+                //{
+                //    go.AddComponent(scriptManager.iaList[index].Value);
+                //}
                 //}
                 if (index + 1 < SubScriptList.count)
                     DrawingHelper.Separator(new Rect(labelRect.x, labelRect.y + EditorGUIUtility.singleLineHeight + 1.5f, rect.width, 1.2f));

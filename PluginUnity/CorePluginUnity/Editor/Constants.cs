@@ -1,4 +1,4 @@
-﻿namespace Core.Plugin.Editor
+﻿namespace Core.Plugin.Unity.Editor
 {
     public static class Constants
     {
