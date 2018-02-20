@@ -131,7 +131,6 @@ namespace Core.Plugin.Drawing
                 }
             }
 
-            private bool _shouldRefreshAssets = false;
             /// <summary>
             /// Draws the header of the list.
             /// </summary>

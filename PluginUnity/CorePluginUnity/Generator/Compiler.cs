@@ -101,7 +101,7 @@ namespace Core.Plugin.Unity.Generator
 
         private const string AssemblyOutputPath = "Assets/DulyAssets/Compiled/";
 #if UNITY_ENGINE
-        private const string assemblyPath = "Assets/Plugins/";
+        private const string assemblyPath = "Assets/Standard Assets/Plugins/";
 #else
         private const string assemblyPath = "";
 #endif

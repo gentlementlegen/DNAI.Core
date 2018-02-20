@@ -38,7 +38,7 @@ namespace Duly.<#=Namespace#>
 		public <#=ClassName#>()
 		{
 			_manager = new BinaryManager();
-			_manager.LoadCommandsFrom(@"Assets\DulyAssets\" + "<#=FilePath#>");
+			_manager.LoadCommandsFrom(@"Assets\DulyAssets\Scripts\" + "<#=FilePath#>");
 		}
 
 		///<summary>
