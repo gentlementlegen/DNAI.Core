@@ -128,7 +128,12 @@ namespace TestUnityPlugin
             var api = new ApiAccess();
 
             var token = Task.Run(() => api.GetToken("toto", "tata")).Result;
-            Core.Plugin.Unity.API.File file = api.GetFile(0).Result;
+            api.SetAuthorization(token);
+            List<Core.Plugin.Unity.API.File> files = null;
+            files = api.GetFiles().Result;
+            Assert.IsNotNull(files);
+            Task.Run(() => api.PostFile(new Core.Plugin.Unity.API.File { Description = "my file", Id = 1, Title = "Title" })).Wait();
+            Core.Plugin.Unity.API.File file = api.GetFile(2).Result;
             Assert.IsNotNull(file, "File was null");
             Core.Plugin.Unity.API.User usr = api.GetUser(0).Result;
             Assert.IsNotNull(usr, "User was null");

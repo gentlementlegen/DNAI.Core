@@ -1,5 +1,6 @@
 ﻿using Core.Plugin.Unity.Extensions;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 // https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
@@ -27,7 +28,17 @@ namespace Core.Plugin.Unity.API
         /// <returns></returns>
         internal Task<File> GetFile(uint fileId)
         {
-            return _accessor.GetObject<File>($"{FilePath}{fileId}");
+            return _accessor.GetObject<File>($"{FilePath}{fileId}/");
+        }
+
+        /// <summary>
+        /// Retrieves all the files currently present on the server.
+        /// </summary>
+        /// <returns></returns>
+        internal async Task<List<File>> GetFiles()
+        {
+            var fileList = await _accessor.GetObject<FileList>(FilePath);
+            return fileList?.results;
         }
 
         /// <summary>
@@ -79,6 +90,15 @@ namespace Core.Plugin.Unity.API
             var auth = "W8GMGSaFU71AVN6AXzQBxt68jQiNu5Gx5S7BmuMR:GCR0imL6Wx0sJk6qo8P7DuG0tQeEZUTxMNNbEnTrJO52T1tfA6FwyaNRxDWetMHTi6XXKT8tae1Ymxs299n4dF6s5OFYt4arU835PYgGnalDAN3aN5A0cZyG3HGibPsB".ToBase64();
             var msg = await _accessor.PostObjectEncoded(AuthenticationPath, user, auth);
             return JsonConvert.DeserializeObject<Token>(await msg.Content.ReadAsStringAsync());
+        }
+
+        /// <summary>
+        /// Sets an OAuth authorization using OAuth 2.0.
+        /// </summary>
+        /// <param name="token"></param>
+        internal void SetAuthorization(Token token)
+        {
+            _accessor.SetAuthorizationOAuth(token);
         }
     }
 }

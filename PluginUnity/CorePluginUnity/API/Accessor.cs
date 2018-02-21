@@ -75,8 +75,16 @@ namespace Core.Plugin.Unity.API
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
             if (!string.IsNullOrEmpty(auth))
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", auth);
-                //byteContent.Headers.Add("Authorization", auth);
             return _client.PostAsync(url, byteContent);
+        }
+
+        /// <summary>
+        /// Sets an authorization using OAuth 2.0 and the given Token.
+        /// </summary>
+        /// <param name="token"></param>
+        internal void SetAuthorizationOAuth(Token token)
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.access_token);
         }
     }
 }
