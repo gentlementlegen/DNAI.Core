@@ -1,6 +1,6 @@
 ﻿using Core.Plugin.Unity.API;
+using Core.Plugin.Unity.Context;
 using System;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,7 +12,12 @@ namespace Core.Plugin.Unity.Editor
     public class SettingsDrawer : EditorWindow
     {
         private Settings _settings;
-        private ApiAccess _access = new ApiAccess();
+        private readonly ApiAccess _access = new ApiAccess();
+
+        private string _username;
+        private string _password;
+
+        private string _connectionStatus = "Disconnected.";
 
         public SettingsDrawer()
         {
@@ -40,12 +45,27 @@ namespace Core.Plugin.Unity.Editor
             GUILayout.Label("Hello" + (_settings.MyInt++));
             GUILayout.Label("Credentials");
             GUILayout.Label("Username");
-            GUILayout.TextField("toto");
+            _username = GUILayout.TextField(_username);
             GUILayout.Label("Password");
-            GUILayout.TextField("tata");
+            _password = GUILayout.TextField(_password);
+            GUILayout.Label(_connectionStatus);
             if (GUILayout.Button("Login"))
             {
-                Task.Run(() => _access.GetToken("toto", "tata"));
+                UnityTasks.Run(async() =>
+                {
+                    _connectionStatus = "Connecting...";
+                    var token = await _access.GetToken(_username, _password);
+                    if (token.access_token != null)
+                    {
+                        _connectionStatus = "Connected.";
+                        _access.SetAuthorization(token);
+                    }
+                    else
+                    {
+                        _connectionStatus = "Error on getting access token.";
+                    }
+                    Repaint();
+                });
             }
             if (GUILayout.Button("Download"))
             {

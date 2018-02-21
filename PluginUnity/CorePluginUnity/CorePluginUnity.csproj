@@ -68,6 +68,8 @@
     <Compile Include="API\Accessor.cs" />
     <Compile Include="API\ApiAcces.cs" />
     <Compile Include="API\Objects.cs" />
+    <Compile Include="Context\UnitySynchronizationContext.cs" />
+    <Compile Include="Context\UnityTask.cs" />
     <Compile Include="Drawing\DrawingHelper.cs" />
     <Compile Include="Drawing\IEditorDrawable.cs" />
     <Compile Include="Drawing\ListStyles.cs" />

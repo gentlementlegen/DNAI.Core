@@ -1,4 +1,5 @@
-﻿using Core.Plugin.Unity.Editor;
+﻿using Core.Plugin.Unity.Context;
+using Core.Plugin.Unity.Editor;
 using Core.Plugin.Unity.Extensions;
 using System.Collections.Generic;
 using System.IO;
@@ -147,8 +148,11 @@ namespace Core.Plugin.Unity.Drawing
 
                 if (GUI.Button(refreshRect, refreshButton))
                 {
-                    scriptManager.Compile(_selectedScripts.FindIndices(x => x));
-                    AssetDatabase.ImportAsset("Assets/DulyAssets/Compiled/" + scriptManager.AssemblyName + ".dll");
+                    UnityTasks.Run(async () =>
+                    {
+                        await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
+                        AssetDatabase.ImportAsset("Assets/DulyAssets/Compiled/" + scriptManager.AssemblyName + ".dll");
+                    });
                 }
             }
 

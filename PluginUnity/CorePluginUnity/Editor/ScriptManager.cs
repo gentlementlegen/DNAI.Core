@@ -123,5 +123,20 @@ namespace Core.Plugin.Unity.Editor
                 _manager.LoadCommandsFrom(_filePath);
             _codeConverter.ConvertCode(functionIds);
         }
+
+        /// <summary>
+        /// Compile the loaded code to the library asynchronously.
+        /// </summary>
+        /// <param name="functionIds"></param>
+        /// <returns></returns>
+        public async Task CompileAsync(IEnumerable<int> functionIds)
+        {
+            // This case happens when Unity ddeserializes the object.
+            // Since we don't want to slow down the ctor too much, it's better
+            // to check it on Compile call
+            if (_manager.FilePath == null && _filePath != null)
+                _manager.LoadCommandsFrom(_filePath);
+            await Task.Run(() => _codeConverter.ConvertCode(functionIds));
+        }
     }
 }
