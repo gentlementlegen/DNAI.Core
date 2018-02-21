@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Core.Plugin.Unity.API;
+using System;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,6 +12,7 @@ namespace Core.Plugin.Unity.Editor
     public class SettingsDrawer : EditorWindow
     {
         private Settings _settings;
+        private ApiAccess _access = new ApiAccess();
 
         public SettingsDrawer()
         {
@@ -35,6 +38,19 @@ namespace Core.Plugin.Unity.Editor
         private void OnGUI()
         {
             GUILayout.Label("Hello" + (_settings.MyInt++));
+            GUILayout.Label("Credentials");
+            GUILayout.Label("Username");
+            GUILayout.TextField("toto");
+            GUILayout.Label("Password");
+            GUILayout.TextField("tata");
+            if (GUILayout.Button("Login"))
+            {
+                Task.Run(() => _access.GetToken("toto", "tata"));
+            }
+            if (GUILayout.Button("Download"))
+            {
+                _access.DownloadSolution();
+            }
         }
     }
 

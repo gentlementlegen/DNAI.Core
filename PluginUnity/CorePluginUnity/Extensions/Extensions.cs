@@ -74,6 +74,17 @@ namespace Core.Plugin.Unity.Extensions
         }
 
         /// <summary>
+        /// Converts a string to its encoded base 64 version.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string ToBase64(this string str)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(str);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
+        /// <summary>
         /// Finds the indices of all objects matching the given predicate.
         /// </summary>
         /// <typeparam name="T">The type of objects in the list.</typeparam>

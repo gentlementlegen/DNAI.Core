@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using static CoreControl.EntityFactory;
 using static CoreControl.InstructionFactory;
 
@@ -126,6 +127,7 @@ namespace TestUnityPlugin
         {
             var api = new ApiAccess();
 
+            var token = Task.Run(() => api.GetToken("toto", "tata")).Result;
             Core.Plugin.Unity.API.File file = api.GetFile(0).Result;
             Assert.IsNotNull(file, "File was null");
             Core.Plugin.Unity.API.User usr = api.GetUser(0).Result;
