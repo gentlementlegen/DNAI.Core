@@ -39,6 +39,8 @@ namespace Core.Plugin.Unity.Drawing
         private EditorWindow _editorWindow;
         private EditorSettings _editorSettings;
 
+        private const string rootPath = "Assets/Standard Assets/DNAI/";
+
         /// Should the ScriptDrawer be drawing ?
         public bool ShouldDraw
         { get; set; }
@@ -150,8 +152,11 @@ namespace Core.Plugin.Unity.Drawing
                 {
                     UnityTask.Run(async () =>
                     {
+                        Debug.Log("Compile 1");
                         await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
-                        AssetDatabase.ImportAsset("Assets/DulyAssets/Compiled/" + scriptManager.AssemblyName + ".dll");
+                        Debug.Log("Compile 2");
+                        AssetDatabase.ImportAsset("Assets/Standard Assets/DNAI/Compiled/" + scriptManager.AssemblyName + ".dll");
+                        Debug.Log("Compile 3 " + "Assets/Standard Assets/DNAI/Compiled/" + scriptManager.AssemblyName + ".dll");
                     });
                 }
             }
@@ -228,16 +233,16 @@ namespace Core.Plugin.Unity.Drawing
         /// </summary>
         private void LoadSettings()
         {
-            Directory.CreateDirectory("Assets/DulyAssets");
-            _editorSettings = (EditorSettings)AssetDatabase.LoadAssetAtPath<EditorSettings>("Assets/DulyAssets/DulyEditor.asset");
+            Directory.CreateDirectory(rootPath);
+            _editorSettings = (EditorSettings)AssetDatabase.LoadAssetAtPath<EditorSettings>(rootPath + "DNAIEditor.asset");
             if (_editorSettings == null)
             {
                 //Debug.Log("Settings were NULL");
                 //_editorSettings = CreateInstance<EditorSettings>();
                 _editorSettings = ScriptableObject.CreateInstance<EditorSettings>();
-                AssetDatabase.CreateAsset(_editorSettings, "Assets/DulyAssets/DulyEditor.asset");
+                AssetDatabase.CreateAsset(_editorSettings, rootPath + "DNAIEditor.asset");
                 AssetDatabase.SaveAssets();
-                AssetDatabase.ImportAsset("Assets/DulyAssets/DulyEditor.asset");
+                AssetDatabase.ImportAsset(rootPath + "DNAIEditor.asset");
             }
             //Debug.Log("[Settings] list => " + _editorSettings.listIA.Count);
             AssetDatabase.SaveAssets();

@@ -1,5 +1,4 @@
 ﻿using Core.Plugin.Unity.Drawing;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -113,7 +112,7 @@ namespace Core.Plugin.Unity.Editor
             }
             if (_settingsDrawer == null)
             {
-                _settingsDrawer = CreateInstance<SettingsDrawer>();
+                //_settingsDrawer = CreateInstance<SettingsDrawer>();
             }
         }
 

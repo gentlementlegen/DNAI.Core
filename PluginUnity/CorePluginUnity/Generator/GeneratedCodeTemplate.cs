@@ -118,7 +118,7 @@ namespace Core.Plugin.Unity.Generator
             #line default
             #line hidden
             this.Write("()\r\n\t\t{\r\n\t\t\t_manager = new BinaryManager();\r\n\t\t\t_manager.LoadCommandsFrom(@\"Asset" +
-                    "s\\DulyAssets\\Scripts\\\" + \"");
+                    "s\\Standard Assets\\DNAI\\Scripts\\\" + \"");
             
             #line 41 "C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FilePath));

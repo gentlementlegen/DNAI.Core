@@ -83,7 +83,7 @@ namespace Core.Plugin.Unity.Editor
             ProcessingStatus = "Reading file...";
             //Thread t = new Thread (() => fileLoader.LoadFile(FilePath));
             //t.Start ();
-            var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "DulyAssets", "Scripts");
+            var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "Scripts");
             Directory.CreateDirectory(fileCopyPath);
             File.Copy(FilePath, Path.Combine(fileCopyPath, Path.GetFileName(FilePath)), true);
 

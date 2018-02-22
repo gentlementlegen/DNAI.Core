@@ -24,7 +24,7 @@ namespace Core.Plugin.Unity.Editor
         public SettingsDrawer()
         {
             titleContent = new GUIContent("DNAI Settings");
-            _fileWatcher.Path = ("Assets/Standard Assets/DulyAssets/Scripts/");
+            _fileWatcher.Path = ("Assets/Standard Assets/DNAI/Scripts/");
             _fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
             _fileWatcher.Filter = "*.duly";
             _fileWatcher.Created += OnFileCreated;

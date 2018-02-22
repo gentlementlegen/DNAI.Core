@@ -133,7 +133,7 @@ namespace TestUnityPlugin
             api.SetAuthorization(token);
             List<Core.Plugin.Unity.API.File> files = null;
             files = api.GetFiles().Result;
-            Assert.IsNotNull(files);
+            Assert.IsNotNull(files, "Files are null");
             Core.Plugin.Unity.API.File file = api.GetFile(2).Result;
             Assert.IsNotNull(file, "File was null");
             var f = new ByteArrayContent(System.IO.File.ReadAllBytes("moreOrLess.duly"));

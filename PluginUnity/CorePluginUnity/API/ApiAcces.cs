@@ -15,7 +15,7 @@ namespace Core.Plugin.Unity.API
         // http://163.5.84.173/
         private const string ApiAddress = "http://163.5.84.173/";
 
-        private const string FilePath = "cloud/files/";
+        private const string FilePath = "files/";
         private const string SolutionPath = "solution/";
         private const string UserPath = "users/";
         private const string AuthenticationPath = "oauth/token/";
