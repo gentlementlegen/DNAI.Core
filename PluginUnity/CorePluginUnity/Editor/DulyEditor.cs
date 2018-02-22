@@ -1,4 +1,5 @@
 ﻿using Core.Plugin.Unity.Drawing;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -121,12 +122,14 @@ namespace Core.Plugin.Unity.Editor
             //Debug.Log("[DulyEditor] On disable");
             _scriptDrawer?.OnDisable();
             AssetDatabase.SaveAssets();
+            _settingsDrawer?.OnDisable();
         }
 
         private void OnDestroy()
         {
             _scriptDrawer?.OnDestroy();
             AssetDatabase.SaveAssets();
+            _settingsDrawer?.OnDestroy();
         }
 
         #region Editor Drawing

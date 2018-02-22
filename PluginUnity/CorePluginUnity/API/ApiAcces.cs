@@ -47,14 +47,29 @@ namespace Core.Plugin.Unity.API
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        internal async Task PostFile(FileUpload file)
+        internal Task<string> PostFile(FileUpload file)
         {
-            var ret = await _accessor.PostObjectMultipart(FilePath, file, (content) =>
+            return _accessor.PostObjectMultipart(FilePath, file, (content) =>
             {
                 var fs = System.IO.File.ReadAllBytes(file.file);
                 var sc = new ByteArrayContent(fs);
                 content.Add(sc, nameof(file.file), System.IO.Path.GetFileName(file.file));
             }).Result.Content.ReadAsStringAsync();
+        }
+
+        internal Task<string> PutFile(FileUpload file)
+        {
+            return _accessor.PutObjectMultipart(FilePath, file, (content) =>
+            {
+                var fs = System.IO.File.ReadAllBytes(file.file);
+                var sc = new ByteArrayContent(fs);
+                content.Add(sc, nameof(file.file), System.IO.Path.GetFileName(file.file));
+            }).Result.Content.ReadAsStringAsync();
+        }
+
+        internal Task<string> DeleteFile(string id)
+        {
+            return _accessor.DeleteObject(FilePath + id).Result.Content.ReadAsStringAsync();
         }
 
         /// <summary>

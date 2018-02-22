@@ -8,11 +8,11 @@ using UnityEditor;
 namespace Core.Plugin.Unity.Context
 {
     [InitializeOnLoad]
-    public static class UnityTasks
+    public static class UnityTask
     {
         private static readonly TaskScheduler Scheduler;
 
-        static UnityTasks()
+        static UnityTask()
         {
             var context = new UnitySynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(context);

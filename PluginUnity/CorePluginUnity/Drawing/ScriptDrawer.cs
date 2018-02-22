@@ -148,7 +148,7 @@ namespace Core.Plugin.Unity.Drawing
 
                 if (GUI.Button(refreshRect, refreshButton))
                 {
-                    UnityTasks.Run(async () =>
+                    UnityTask.Run(async () =>
                     {
                         await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
                         AssetDatabase.ImportAsset("Assets/DulyAssets/Compiled/" + scriptManager.AssemblyName + ".dll");

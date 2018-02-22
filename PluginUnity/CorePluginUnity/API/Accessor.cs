@@ -92,6 +92,14 @@ namespace Core.Plugin.Unity.API
             return _client.PostAsync(url, content);
         }
 
+        /// <summary>
+        /// Proceeds a POST call for a Multipart Object, allowing binary data files to be uploaded.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <param name="object"></param>
+        /// <param name="FillAdditionalContent"></param>
+        /// <returns></returns>
         internal Task<HttpResponseMessage> PostObjectMultipart<T>(string url, T @object, Action<MultipartFormDataContent> FillAdditionalContent)
         {
             var json = JsonConvert.SerializeObject(@object);
@@ -107,6 +115,28 @@ namespace Core.Plugin.Unity.API
             FillAdditionalContent?.Invoke(content);
 
             return _client.PostAsync(url, content);
+        }
+
+        internal Task<HttpResponseMessage> PutObjectMultipart<T>(string url, T @object, Action<MultipartFormDataContent> FillAdditionalContent)
+        {
+            var json = JsonConvert.SerializeObject(@object);
+            var dic = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+            var obj = new StringContent(json);
+            var content = new MultipartFormDataContent();
+
+            foreach (var field in dic)
+            {
+                content.Add(new StringContent(field.Value), field.Key);
+            }
+            FillAdditionalContent?.Invoke(content);
+
+            return _client.PutAsync(url, content);
+        }
+
+        internal Task<HttpResponseMessage> DeleteObject(string url)
+        {
+            return _client.DeleteAsync(url);
         }
 
         /// <summary>
