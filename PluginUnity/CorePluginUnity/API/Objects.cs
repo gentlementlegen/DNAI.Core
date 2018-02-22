@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Net.Http;
 
 namespace Core.Plugin.Unity.API
 {
@@ -51,7 +53,9 @@ namespace Core.Plugin.Unity.API
     {
         public uint file_type_id;
         public string title;
-        public byte[] file;
+        public bool in_store;
+        [JsonIgnore]
+        public string file;
     }
 
     internal class FileList

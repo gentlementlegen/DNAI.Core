@@ -1,6 +1,7 @@
 ﻿using Core.Plugin.Unity.Extensions;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 // https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
@@ -46,9 +47,14 @@ namespace Core.Plugin.Unity.API
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        internal async Task PostFile(File file)
+        internal async Task PostFile(FileUpload file)
         {
-            await _accessor.PostObject(FilePath, file);
+            var ret = await _accessor.PostObjectMultipart(FilePath, file, (content) =>
+            {
+                var fs = System.IO.File.ReadAllBytes(file.file);
+                var sc = new ByteArrayContent(fs);
+                content.Add(sc, nameof(file.file), System.IO.Path.GetFileName(file.file));
+            }).Result.Content.ReadAsStringAsync();
         }
 
         /// <summary>
@@ -88,7 +94,8 @@ namespace Core.Plugin.Unity.API
                 grant_type = "password"
             };
             var auth = "W8GMGSaFU71AVN6AXzQBxt68jQiNu5Gx5S7BmuMR:GCR0imL6Wx0sJk6qo8P7DuG0tQeEZUTxMNNbEnTrJO52T1tfA6FwyaNRxDWetMHTi6XXKT8tae1Ymxs299n4dF6s5OFYt4arU835PYgGnalDAN3aN5A0cZyG3HGibPsB".ToBase64();
-            var msg = await _accessor.PostObjectEncoded(AuthenticationPath, user, auth);
+            _accessor.SetAuthorizationBasic(auth);
+            var msg = await _accessor.PostObjectEncoded(AuthenticationPath, user);
             return JsonConvert.DeserializeObject<Token>(await msg.Content.ReadAsStringAsync());
         }
 

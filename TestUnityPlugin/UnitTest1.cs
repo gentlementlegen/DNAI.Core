@@ -9,6 +9,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using static CoreControl.EntityFactory;
 using static CoreControl.InstructionFactory;
@@ -134,9 +136,9 @@ namespace TestUnityPlugin
             Assert.IsNotNull(files);
             Core.Plugin.Unity.API.File file = api.GetFile(2).Result;
             Assert.IsNotNull(file, "File was null");
-            //Core.Plugin.Unity.API.User usr = api.GetUser(0).Result;
-            //Assert.IsNotNull(usr, "User was null");
-            api.PostFile(new Core.Plugin.Unity.API.File { Id = 0, Title = "MyFile" }).Wait();
+            var f = new ByteArrayContent(System.IO.File.ReadAllBytes("moreOrLess.duly"));
+            f.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+            api.PostFile(new Core.Plugin.Unity.API.FileUpload { file_type_id = 1, title = "MyFile", in_store = false, file = "moreOrLess.duly" }).Wait();
         }
 
         private Reply HandleCommand<Reply, Command>(Command tohandle, CoreCommand.IManager manager)

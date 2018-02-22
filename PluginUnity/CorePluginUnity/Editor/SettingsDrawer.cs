@@ -14,10 +14,11 @@ namespace Core.Plugin.Unity.Editor
         private Settings _settings;
         private readonly ApiAccess _access = new ApiAccess();
 
-        private string _username;
-        private string _password;
+        private string _username = "";
+        private string _password = "";
 
         private string _connectionStatus = "Disconnected.";
+        private bool _automaticSync = true;
 
         public SettingsDrawer()
         {
@@ -42,12 +43,11 @@ namespace Core.Plugin.Unity.Editor
 
         private void OnGUI()
         {
-            GUILayout.Label("Hello" + (_settings.MyInt++));
             GUILayout.Label("Credentials");
             GUILayout.Label("Username");
             _username = GUILayout.TextField(_username);
             GUILayout.Label("Password");
-            _password = GUILayout.TextField(_password);
+            _password = GUILayout.PasswordField(_password, '*', 25);
             GUILayout.Label(_connectionStatus);
             if (GUILayout.Button("Login"))
             {
@@ -71,6 +71,7 @@ namespace Core.Plugin.Unity.Editor
             {
                 _access.DownloadSolution();
             }
+            _automaticSync = GUILayout.Toggle(_automaticSync, "Automatically sync files");
         }
     }
 

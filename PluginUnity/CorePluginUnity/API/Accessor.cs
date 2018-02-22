@@ -49,12 +49,12 @@ namespace Core.Plugin.Unity.API
         /// <param name="url"></param>
         /// <param name="object"></param>
         /// <returns></returns>
-        internal Task<HttpResponseMessage> PostObject<T>(string url, T @object)
+        internal Task<HttpResponseMessage> PostObject<T>(string url, T @object, string typeHeader = "application/json")
         {
             var obj = JsonConvert.SerializeObject(@object);
             var buffer = System.Text.Encoding.UTF8.GetBytes(obj);
             var byteContent = new ByteArrayContent(buffer);
-            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue(typeHeader);
             return _client.PostAsync(url, byteContent);
         }
 
@@ -67,15 +67,46 @@ namespace Core.Plugin.Unity.API
         /// <param name="object"></param>
         /// <param name="auth"></param>
         /// <returns></returns>
-        internal Task<HttpResponseMessage> PostObjectEncoded<T>(string url, T @object, string auth = "")
+        internal Task<HttpResponseMessage> PostObjectEncoded<T>(string url, T @object)
         {
             var obj = JsonConvert.SerializeObject(@object);
             var dic = JsonConvert.DeserializeObject<Dictionary<string, string>>(obj);
             var byteContent = new FormUrlEncodedContent(dic);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-            if (!string.IsNullOrEmpty(auth))
-                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", auth);
             return _client.PostAsync(url, byteContent);
+        }
+
+        internal Task<HttpResponseMessage> PostObjectMultipart<T>(string url, T @object)
+        {
+            var json = JsonConvert.SerializeObject(@object);
+            var dic = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+            var obj = new StringContent(json);
+            var content = new MultipartFormDataContent();
+
+            foreach (var field in dic)
+            {
+                content.Add(new StringContent(field.Value), field.Key);
+            }
+
+            return _client.PostAsync(url, content);
+        }
+
+        internal Task<HttpResponseMessage> PostObjectMultipart<T>(string url, T @object, Action<MultipartFormDataContent> FillAdditionalContent)
+        {
+            var json = JsonConvert.SerializeObject(@object);
+            var dic = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+            var obj = new StringContent(json);
+            var content = new MultipartFormDataContent();
+
+            foreach (var field in dic)
+            {
+                content.Add(new StringContent(field.Value), field.Key);
+            }
+            FillAdditionalContent?.Invoke(content);
+
+            return _client.PostAsync(url, content);
         }
 
         /// <summary>
@@ -85,6 +116,15 @@ namespace Core.Plugin.Unity.API
         internal void SetAuthorizationOAuth(Token token)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.access_token);
+        }
+
+        /// <summary>
+        /// Sets and authorization using Basic login.
+        /// </summary>
+        /// <param name="auth"></param>
+        internal void SetAuthorizationBasic(string auth)
+        {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", auth);
         }
     }
 }
