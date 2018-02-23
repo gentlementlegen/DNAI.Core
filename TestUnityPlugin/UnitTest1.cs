@@ -129,7 +129,7 @@ namespace TestUnityPlugin
         {
             var api = new ApiAccess();
 
-            var token = Task.Run(() => api.GetToken("toto", "tata")).Result;
+            var token = Task.Run(() => api.GetToken("adpa", "qwerty")).Result;
             api.SetAuthorization(token);
             List<Core.Plugin.Unity.API.File> files = null;
             files = api.GetFiles().Result;

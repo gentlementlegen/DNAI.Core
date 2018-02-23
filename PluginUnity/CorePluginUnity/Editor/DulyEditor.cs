@@ -43,6 +43,7 @@ namespace Core.Plugin.Unity.Editor
         public DulyEditor()
         {
             _window = this;
+            CloudFileWatcher.Watch(true);
         }
 
         //[MenuItem("Window/Duly")]
@@ -93,6 +94,7 @@ namespace Core.Plugin.Unity.Editor
 
             if (GUILayout.Button("Settings"))
             {
+                Debug.Log("Bonsoir");
                 //_settingsDrawer = GetWindow<SettingsDrawer>();
                 if (_settingsDrawer == null)
                     _settingsDrawer = CreateInstance<SettingsDrawer>();
@@ -121,14 +123,12 @@ namespace Core.Plugin.Unity.Editor
             //Debug.Log("[DulyEditor] On disable");
             _scriptDrawer?.OnDisable();
             AssetDatabase.SaveAssets();
-            _settingsDrawer?.OnDisable();
         }
 
         private void OnDestroy()
         {
             _scriptDrawer?.OnDestroy();
             AssetDatabase.SaveAssets();
-            _settingsDrawer?.OnDestroy();
         }
 
         #region Editor Drawing

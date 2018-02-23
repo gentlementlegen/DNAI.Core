@@ -13,7 +13,7 @@ namespace Core.Plugin.Unity.API
     internal class ApiAccess
     {
         // http://163.5.84.173/
-        private const string ApiAddress = "http://163.5.84.173/";
+        private const string ApiAddress = "http://api.dnai.io/";
 
         private const string FilePath = "files/";
         private const string SolutionPath = "solution/";

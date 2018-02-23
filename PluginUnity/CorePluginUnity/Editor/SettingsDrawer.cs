@@ -10,11 +10,10 @@ namespace Core.Plugin.Unity.Editor
     /// <summary>
     /// Handles the drawing of the settings widow for the DNAI editor.
     /// </summary>
-    public class SettingsDrawer : EditorWindow, IDisposable
+    public class SettingsDrawer : EditorWindow
     {
         private Settings _settings;
-        private static readonly ApiAccess _access = new ApiAccess();
-        private static readonly FileSystemWatcher _fileWatcher = new FileSystemWatcher();
+        private readonly ApiAccess _access = new ApiAccess();
 
         private string _username = "";
         private string _password = "";
@@ -24,53 +23,6 @@ namespace Core.Plugin.Unity.Editor
         public SettingsDrawer()
         {
             titleContent = new GUIContent("DNAI Settings");
-            _fileWatcher.Path = ("Assets/Standard Assets/DNAI/Scripts/");
-            _fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
-            _fileWatcher.Filter = "*.duly";
-            _fileWatcher.Created += OnFileCreated;
-            _fileWatcher.Changed += OnFileChanged;
-            _fileWatcher.Deleted += OnFileDeleted;
-            _fileWatcher.EnableRaisingEvents = true;
-        }
-
-        private void OnFileChanged(object sender, FileSystemEventArgs e)
-        {
-            Debug.Log("[Settings drawer] File changed " + e.Name);
-            UnityTask.Run(async () =>
-            {
-                var ret = await _access.PutFile(new FileUpload { file_type_id = 1, in_store = false, title = Path.GetFileName(e.Name), file = e.Name });
-                Debug.Log("Response put = " + ret);
-            }).ContinueWith((x) => Debug.Log("File put ? " + x.Status));
-        }
-
-        private void OnFileDeleted(object sender, FileSystemEventArgs e)
-        {
-            Debug.Log("[Settings drawer] File deleted " + e.Name);
-            UnityTask.Run(async () =>
-            {
-                var ret = await _access.DeleteFile(Path.GetFileName(e.Name));
-                Debug.Log("Response delete = " + ret);
-            }).ContinueWith((x) => Debug.Log("File deleted ? " + x.Status));
-        }
-
-        private void OnFileCreated(object sender, FileSystemEventArgs e)
-        {
-            Debug.Log("[Settings drawer] File created " + e.Name);
-            UnityTask.Run(async () =>
-            {
-                var ret = await _access.PostFile(new FileUpload { file_type_id = 1, in_store = false, title = Path.GetFileName(e.Name), file = e.Name });
-                Debug.Log("Response upload = " + ret);
-            }).ContinueWith((x) => Debug.Log("File uploaded ? " + x.Status));
-        }
-
-        public void OnDestroy()
-        {
-            Dispose();
-        }
-
-        public void OnDisable()
-        {
-            Dispose();
         }
 
         public void OnEnable()
@@ -120,14 +72,7 @@ namespace Core.Plugin.Unity.Editor
                 _access.DownloadSolution();
             }
             _autoSync = GUILayout.Toggle(_autoSync, "Automatically sync files");
-            _fileWatcher.EnableRaisingEvents = _autoSync;
-        }
-
-        public void Dispose()
-        {
-            _fileWatcher.Created -= OnFileCreated;
-            _fileWatcher.Changed -= OnFileChanged;
-            _fileWatcher.Deleted -= OnFileDeleted;
+            CloudFileWatcher.Watch(_autoSync);
         }
     }
 

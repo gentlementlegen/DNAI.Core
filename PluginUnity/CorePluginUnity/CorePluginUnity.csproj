@@ -74,6 +74,7 @@
     <Compile Include="Drawing\IEditorDrawable.cs" />
     <Compile Include="Drawing\ListStyles.cs" />
     <Compile Include="Drawing\ScriptDrawer.cs" />
+    <Compile Include="Editor\CloudFileWatcher.cs" />
     <Compile Include="Editor\Constants.cs" />
     <Compile Include="Editor\DulyEditor.cs" />
     <Compile Include="Editor\ScriptManager.cs" />
