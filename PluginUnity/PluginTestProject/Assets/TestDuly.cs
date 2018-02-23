@@ -1,10 +1,17 @@
-﻿using Duly.MoreOrLess;
+﻿#define COMPILE
+
+#if COMPILE
+using Duly.MoreOrLess;
+#endif
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TestDuly : Play
+public class TestDuly
+#if COMPILE
+    : Play
+#endif
 {
     public Text TextNumber;
 
@@ -14,9 +21,12 @@ public class TestDuly : Play
     public void Play()
     {
         Debug.Log("Has to find " + MysteryNumber);
+#if COMPILE
         StartCoroutine(PlayRoutine());
+#endif
     }
 
+#if COMPILE
     private IEnumerator PlayRoutine()
     {
         lastResult = COMPARISON.NONE;
@@ -28,7 +38,8 @@ public class TestDuly : Play
             TextNumber.text = result.ToString();
             yield return new WaitForSeconds(0.5f);
         }
-    }
+}
+#endif
 
     public void OnMysteryNumberChanged(string nbr)
     {

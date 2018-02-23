@@ -35,11 +35,22 @@ namespace Core.Plugin.Unity.Generator
         /// </summary>
         public void ConvertCode()
         {
+            var variables = new List<Entity>();
+            var functions = new List<Entity>();
+            var dataTypes = new List<Entity>();
+
             AssemblyName = Path.GetFileNameWithoutExtension(_manager.FilePath).RemoveIllegalCharacters();
+
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
-            var variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[0]);
-            var functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[0]);
-            var code = _template.GenerateTemplateContent(_manager, variables, functions);
+
+            foreach (var id in ids)
+            {
+                dataTypes.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.DATA_TYPE, id));
+                variables.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, id));
+                functions.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
+            }
+
+            var code = _template.GenerateTemplateContent(_manager, variables, functions, dataTypes);
             _compiler.Compile(code, AssemblyName);
         }
 

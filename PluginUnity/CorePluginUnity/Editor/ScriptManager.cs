@@ -85,7 +85,15 @@ namespace Core.Plugin.Unity.Editor
             //t.Start ();
             var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "Scripts");
             Directory.CreateDirectory(fileCopyPath);
-            File.Copy(FilePath, Path.Combine(fileCopyPath, Path.GetFileName(FilePath)), true);
+
+            try
+            {
+                File.Copy(FilePath, Path.Combine(fileCopyPath, Path.GetFileName(FilePath)), true);
+            }
+            catch (IOException e)
+            {
+                UnityEngine.Debug.LogWarning($"Error copying file at location [{FilePath}]: {e.Message}");
+            }
 
             Task.Run(() =>
             {
@@ -129,14 +137,28 @@ namespace Core.Plugin.Unity.Editor
         /// </summary>
         /// <param name="functionIds"></param>
         /// <returns></returns>
-        public async Task CompileAsync(IEnumerable<int> functionIds)
+        public Task CompileAsync(IEnumerable<int> functionIds)
         {
             // This case happens when Unity ddeserializes the object.
             // Since we don't want to slow down the ctor too much, it's better
             // to check it on Compile call
             if (_manager.FilePath == null && _filePath != null)
                 _manager.LoadCommandsFrom(_filePath);
-            await Task.Run(() => _codeConverter.ConvertCode(functionIds));
+            return Task.Run(() => _codeConverter.ConvertCode(functionIds));
+        }
+
+        /// <summary>
+        /// Compile the loaded code to the library asynchronously.
+        /// </summary>
+        /// <returns></returns>
+        public Task CompileAsync()
+        {
+            // This case happens when Unity ddeserializes the object.
+            // Since we don't want to slow down the ctor too much, it's better
+            // to check it on Compile call
+            if (_manager.FilePath == null && _filePath != null)
+                _manager.LoadCommandsFrom(_filePath);
+            return Task.Run(() => _codeConverter.ConvertCode());
         }
     }
 }

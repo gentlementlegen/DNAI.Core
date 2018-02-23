@@ -94,7 +94,6 @@ namespace Core.Plugin.Unity.Editor
 
             if (GUILayout.Button("Settings"))
             {
-                Debug.Log("Bonsoir");
                 //_settingsDrawer = GetWindow<SettingsDrawer>();
                 if (_settingsDrawer == null)
                     _settingsDrawer = CreateInstance<SettingsDrawer>();

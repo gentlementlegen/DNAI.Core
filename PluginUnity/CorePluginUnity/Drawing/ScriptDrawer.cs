@@ -152,11 +152,16 @@ namespace Core.Plugin.Unity.Drawing
                 {
                     UnityTask.Run(async () =>
                     {
-                        Debug.Log("Compile 1");
-                        await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
-                        Debug.Log("Compile 2");
+                        //await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
+                        await scriptManager.CompileAsync();
                         AssetDatabase.ImportAsset("Assets/Standard Assets/DNAI/Compiled/" + scriptManager.AssemblyName + ".dll");
-                        Debug.Log("Compile 3 " + "Assets/Standard Assets/DNAI/Compiled/" + scriptManager.AssemblyName + ".dll");
+                    }).ContinueWith((e) =>
+                    {
+                        if (e.IsFaulted)
+                        {
+                            Debug.LogError(e?.Exception.GetBaseException().Message);
+                            Debug.LogError(e?.Exception.GetBaseException().StackTrace);
+                        }
                     });
                 }
             }
