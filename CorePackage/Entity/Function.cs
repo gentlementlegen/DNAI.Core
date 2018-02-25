@@ -202,27 +202,18 @@ namespace CorePackage.Entity
             //Console.Write(ToDotFile());
         }
 
-        /// <summary>
-        /// Execute internals instructions
-        /// </summary>
-        public Dictionary<string, dynamic> Call(Dictionary<string, dynamic> parameters = null)
+        public void Call()
         {
-            if (parameters != null)
-                foreach (KeyValuePair<string, dynamic> curr in parameters)
-                {
-                    SetParameterValue(curr.Key, curr.Value);
-                }
-
-            Dictionary<string, dynamic> returns = new Dictionary<string, dynamic>();
-            Stack<Execution.ExecutionRefreshInstruction> instructions = new Stack<Execution.ExecutionRefreshInstruction>();
-
             if (entrypoint == null)
                 throw new InvalidOperationException("Function entry point has not been defined yet");
+
+            Stack<Execution.ExecutionRefreshInstruction> instructions = new Stack<Execution.ExecutionRefreshInstruction>();
+
             instructions.Push(entrypoint);
             while (instructions.Count > 0)
             {
                 Execution.ExecutionRefreshInstruction toexecute = instructions.Pop();
-                
+
                 toexecute.Execute();
 
                 Execution.ExecutionRefreshInstruction[] nexts = toexecute.GetNextInstructions();
@@ -233,6 +224,21 @@ namespace CorePackage.Entity
                         instructions.Push(curr);
                 }
             }
+        }
+
+        /// <summary>
+        /// Execute internals instructions
+        /// </summary>
+        public Dictionary<string, dynamic> Call(Dictionary<string, dynamic> parameters)
+        {
+            foreach (KeyValuePair<string, dynamic> curr in parameters)
+            {
+                SetParameterValue(curr.Key, curr.Value);
+            }
+
+            Dictionary<string, dynamic> returns = new Dictionary<string, dynamic>();
+            
+            Call();
 
             foreach (KeyValuePair<string, Variable> curr in Returns)
             {

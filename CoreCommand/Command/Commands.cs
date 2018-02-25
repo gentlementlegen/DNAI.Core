@@ -53,7 +53,7 @@ namespace CoreCommand.Command
         public RemoveClassAttribute RemoveClassAttribute { get { return new RemoveClassAttribute(); } }
 
         [BinarySerializer.BinaryFormat]
-        public AddClassMemberFunction AddClassMemberFunction { get { return new AddClassMemberFunction(); } }
+        public SetClassFunctionAsMember AddClassMemberFunction { get { return new SetClassFunctionAsMember(); } }
 
         [BinarySerializer.BinaryFormat]
         public SetListType SetListType { get { return new SetListType(); } }

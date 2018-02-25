@@ -84,15 +84,16 @@ namespace CorePackage.Entity.Type
             attributes.Rename(lastName, newName);
         }
 
-        public void SetFunctionAsMember(string name, Global.AccessMode visibility)
+        public Variable SetFunctionAsMember(string name, Global.AccessMode visibility)
         {
             Function func = ((IDeclarator<Function>)this).Find(name, visibility);
 
             if (func == null)
-                return;
+                throw new NotFoundException("No such function named \"" + name + "\" with visibility " + visibility.ToString());
 
-            func.Declare(new Variable(this), "this", AccessMode.EXTERNAL);
+            Variable toret = func.Declare(new Variable(this), "this", AccessMode.EXTERNAL);
             func.SetVariableAs("this", Function.VariableRole.PARAMETER);
+            return toret;
         }
 
         /// <see cref="DataType.Instantiate"/>
@@ -337,9 +338,9 @@ namespace CorePackage.Entity.Type
             context.SetParent(parent);
         }
 
-        public Dictionary<string, DataType> GetPublicAttributes()
+        public Dictionary<string, DataType> GetAttributes()
         {
-            return attributes.GetEntities(AccessMode.EXTERNAL);
+            return attributes.GetEntities();
         }
 
         public void OverloadOperator(Operator.Name toOverload, string externalFuncName)
@@ -350,18 +351,21 @@ namespace CorePackage.Entity.Type
             if (overload == null)
                 throw new NotFoundException("No such function \"" + externalFuncName + "\" in object");
 
+            if (overload.GetParameter("this") == null)
+                throw new InvalidOperationException("Overload function as to be member function (with \"this\" parameter)");
+
             Operator.Type opType = Operator.GetTypeOf(toOverload);
 
             if (opType == Operator.Type.UNARY
-                && overload.GetParameter("Operand").Type != this)
+                && overload.GetParameter("this").Type != this)
                 throw new InvalidOperatorSignature("Unary operator must have 1 parameter named`\"Operand\" of type " + this.ToString());
 
             if (opType == Operator.Type.BINARY
-                && (overload.GetParameter("LeftOperand").Type != this
-                    || overload.GetParameter("RightOperand") == null))
+                && (overload.GetParameter("this").Type != this
+                    || overload.GetParameter(Operator.Right) == null))
                 throw new InvalidOperatorSignature("Binary operator must have 2 parameters named \"LeftOperand\" (of type " + this.ToString() + ") and \"RightOperand\"");
 
-            if (overload.GetReturn("result") == null)
+            if (overload.GetReturn(Operator.Result) == null)
                 throw new InvalidOperatorSignature("Operator must have \"result\" return value");
 
             overloadedOperators[toOverload] = overload;
@@ -378,9 +382,9 @@ namespace CorePackage.Entity.Type
         {
             return CallOperator(tocall, new Dictionary<string, dynamic>
             {
-                { "LeftOperand", lOp },
-                { "RightOperand", rOp }
-            })["result"];
+                { "this", lOp },
+                { Operator.Right, rOp }
+            })[Operator.Result];
         }
 
         public override dynamic OperatorAdd(dynamic lOp, dynamic rOp)

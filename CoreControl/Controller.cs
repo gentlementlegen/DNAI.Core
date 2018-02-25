@@ -223,17 +223,18 @@ namespace CoreControl
         /// <summary>
         /// Add a member function to a class
         /// </summary>
-        /// <remarks>Will declare a function where the first argument is 'this' reference</remarks>
+        /// <remarks>Will declare 'this' parameter in a given function</remarks>
         /// <param name="classID">Identifier of a specific class</param>
-        /// <param name="name">Name of the method to add</param>
+        /// <param name="funcname">Name of the method to set as member</param>
         /// <param name="visibility">Visibility of the method to add</param>
-        /// <returns>Identifier of the new function added</returns>
-        public UInt32 AddClassMemberFunction(UInt32 classID, string name, EntityFactory.VISIBILITY visibility)
+        /// <returns>Identifier of the 'this' parameter added</returns>
+        public UInt32 SetClassFunctionAsMember(UInt32 classID, string funcname, EntityFactory.VISIBILITY visibility)
         {
-            UInt32 funcID = entity_factory.Declare<CorePackage.Entity.Function>(classID, name, (CorePackage.Global.AccessMode)visibility);
-            CorePackage.Entity.Type.ObjectType obj = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID);
-            obj.SetFunctionAsMember(name, (CorePackage.Global.AccessMode)visibility);
-            return funcID;
+            CorePackage.Entity.Type.ObjectType objtype = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID);
+
+            entity_factory.AddEntity(objtype.SetFunctionAsMember(funcname, (CorePackage.Global.AccessMode)visibility));
+
+            return entity_factory.LastID;
         }
 
         /// <summary>

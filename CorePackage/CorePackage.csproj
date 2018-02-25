@@ -93,6 +93,7 @@
     <Compile Include="Execution\ExecRefresh\Insert.cs" />
     <Compile Include="Execution\ExecRefresh\Remove.cs" />
     <Compile Include="Execution\ExecRefresh\RemoveIndex.cs" />
+    <Compile Include="Execution\ExecRefresh\SetAttribute.cs" />
     <Compile Include="Execution\ExecRefresh\Setter.cs" />
     <Compile Include="Execution\ExecRefresh\Size.cs" />
     <Compile Include="Execution\ExecRefresh\Statement.cs" />

@@ -40,7 +40,7 @@ namespace CoreCommand
         public BinaryManager()
         {
             RegisterCommand<AddClassAttribute, AddClassAttribute.Reply>("ADD_CLASS_ATTRIBUTE", "CLASS_ATTRIBUTE_ADDED");
-            RegisterCommand<AddClassMemberFunction, AddClassMemberFunction.Reply>("ADD_CLASS_MEMBER_FUNCTION", "CLASS_MEMBER_FUNCTION_ADDED");
+            RegisterCommand<SetClassFunctionAsMember, SetClassFunctionAsMember.Reply>("ADD_CLASS_MEMBER_FUNCTION", "CLASS_MEMBER_FUNCTION_ADDED");
             RegisterCommand<AddInstruction, AddInstruction.Reply>("ADD_INSTRUCTION", "INSTRUCTION_ADDED");
             RegisterCommand<CallFunction, CallFunction.Reply>("CALL_FUNCTION", "FUNCTION_CALLED", false);
             RegisterCommand<ChangeVisibility, ChangeVisibility.Reply>("CHANGE_VISIBILITY", "ENTITY_VISIBILITY_CHANGED");
