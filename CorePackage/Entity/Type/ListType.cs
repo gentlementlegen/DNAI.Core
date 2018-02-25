@@ -77,12 +77,18 @@ namespace CorePackage.Entity.Type
 
         public override dynamic OperatorAdd(dynamic lOp, dynamic rOp)
         {
-            return lOp.Union(rOp).ToList();
+            dynamic ret = Instantiate();
+
+            ret.AddRange(System.Linq.Enumerable.Concat(lOp, rOp));
+            return ret;
         }
 
         public override dynamic OperatorSub(dynamic lOp, dynamic rOp)
         {
-            return lOp.Except(rOp).ToList();
+            dynamic ret = Instantiate();
+
+            ret.AddRange(System.Linq.Enumerable.Except(lOp, rOp));
+            return ret;
         }
 
         public override dynamic OperatorMul(dynamic lOp, dynamic rOp)
@@ -122,7 +128,16 @@ namespace CorePackage.Entity.Type
 
         public override bool OperatorEqual(dynamic lOp, dynamic rOp)
         {
-            return lOp.Equals(rOp);
+            if (lOp.Count != rOp.Count)
+                return false;
+
+            for (int i = 0; i < lOp.Count; i++)
+            {
+                if (!stored.OperatorEqual(lOp[i], rOp[i]))
+                    return false;
+            }
+
+            return true;
         }
 
         public override dynamic OperatorBAnd(dynamic lOp, dynamic rOp)

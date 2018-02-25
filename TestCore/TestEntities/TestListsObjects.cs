@@ -14,7 +14,8 @@ namespace CoreTest.TestEntities
         [TestMethod]
         public void TestListActions()
         {
-            CorePackage.Entity.DataType type = new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Integer);
+            CorePackage.Entity.Type.ScalarType integer = CorePackage.Entity.Type.Scalar.Integer;
+            CorePackage.Entity.DataType type = new CorePackage.Entity.Type.ListType(integer);
 
             var t = type.Instantiate();
 
@@ -29,7 +30,9 @@ namespace CoreTest.TestEntities
             //append
             //  input:
             //      - value
-            t.Add(CorePackage.Entity.Type.Scalar.Integer.Instantiate());
+            t.Add(integer.Instantiate());
+
+            Assert.IsTrue(type.OperatorEqual(t, new List<int> { 0 }));
 
             //foreach
             //  outputs:
@@ -45,7 +48,28 @@ namespace CoreTest.TestEntities
             //      - index
             //      - value
             t.Insert(0, CorePackage.Entity.Type.Scalar.Integer.Instantiate());
-            
+
+            Assert.IsTrue(type.OperatorEqual(t, new List<int> { 0, 0 }));
+
+            var operatorTest = type.Instantiate();
+
+            operatorTest.Add(42);
+            operatorTest.Add(50);
+
+            var union = type.OperatorAdd(t, operatorTest);
+
+            t.Add(42);
+
+            var sub = type.OperatorSub(operatorTest, t);
+
+            t.Add(50);
+
+            var item = type.OperatorAccess(operatorTest, 1);
+
+            Assert.IsTrue(type.OperatorEqual(union, new List<long> { 0, 0, 42, 50 }));
+            Assert.IsTrue(type.OperatorEqual(sub, new List<long> { 50 }));
+            Assert.IsTrue(item == 50);
+
             //remove
             //  inputs:
             //      - index
