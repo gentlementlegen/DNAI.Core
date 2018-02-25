@@ -23,7 +23,6 @@ namespace Core.Plugin.Unity.Editor
 
         public static void Watch(bool watch)
         {
-            Debug.Log("Status => " + _fileWatcher.EnableRaisingEvents);
             _fileWatcher.EnableRaisingEvents = watch;
         }
 

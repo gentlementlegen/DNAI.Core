@@ -1,5 +1,6 @@
 ﻿using BinarySerializer;
 using Core.Plugin.Unity.API;
+using Core.Plugin.Unity.Editor;
 using Core.Plugin.Unity.Generator;
 using CoreCommand;
 using CoreCommand.Command;
@@ -139,6 +140,13 @@ namespace TestUnityPlugin
             var f = new ByteArrayContent(System.IO.File.ReadAllBytes("moreOrLess.duly"));
             f.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
             api.PostFile(new Core.Plugin.Unity.API.FileUpload { file_type_id = 1, title = "MyFile", in_store = false, file = "moreOrLess.duly" }).Wait();
+        }
+
+        [TestMethod]
+        public void TestSettingsSaver()
+        {
+            SettingsSaver.AddItem("test", "azerty");
+            var str = SettingsSaver.GetValue<string>("test");
         }
 
         private Reply HandleCommand<Reply, Command>(Command tohandle, CoreCommand.IManager manager)

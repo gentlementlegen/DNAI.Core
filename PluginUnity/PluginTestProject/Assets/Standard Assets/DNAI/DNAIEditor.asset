@@ -8,13 +8,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2066551659, guid: 60169c1b0f8a04544944d2c5d167c10d, type: 3}
+  m_Script: {fileID: -2066551659, guid: 428b0ae85a99ff3429c93ae485c64c81, type: 3}
   m_Name: DNAIEditor
   m_EditorClassIdentifier: 
   listIA:
   - scriptManager:
       _fileName: 
-      _filePath: D:/Folders/VisualStudio/Duly/PluginUnity/PluginTestProject/Assets/Standard
+      _filePath: C:/Users/ferna/Documents/Visual Studio 2017/Projects/DulyTFS/PluginUnity/PluginTestProject/Assets/Standard
         Assets/DNAI/Scripts/moreOrLess.duly
     _scriptList:
     - Play

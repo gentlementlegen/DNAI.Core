@@ -12,12 +12,12 @@ namespace Core.Plugin.Unity.Editor
     /// </summary>
     public class SettingsDrawer : EditorWindow
     {
+        public const string RootPath = "Assets/Standard Assets/DNAI/";
+        public const string FileName = "DNAIEditorSettings.asset";
+
         private Settings _settings;
         private readonly ApiAccess _access = new ApiAccess();
 
-        private string _username = "";
-        private string _password = "";
-        private bool _autoSync = true;
         private string _connectionStatus = "Disconnected.";
 
         public SettingsDrawer()
@@ -27,34 +27,43 @@ namespace Core.Plugin.Unity.Editor
 
         public void OnEnable()
         {
-            //Debug.Log("On enable called");
             hideFlags = HideFlags.HideAndDontSave;
+            LoadSettings();
+        }
 
+        public void OnDestroy()
+        {
+        }
+
+        private void LoadSettings()
+        {
+            Directory.CreateDirectory(RootPath);
+            _settings = AssetDatabase.LoadAssetAtPath<Settings>(RootPath + FileName);
             if (_settings == null)
             {
-                //Debug.Log("On enable TEST IS NULL");
-                _settings = new Settings();
+                _settings = ScriptableObject.CreateInstance<Settings>();
+                AssetDatabase.CreateAsset(_settings, RootPath + FileName);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.ImportAsset(RootPath + FileName);
             }
-            //else
-            //{
-            //    Debug.Log("On enable TEST is NOT null");
-            //}
+            AssetDatabase.SaveAssets();
+            EditorUtility.SetDirty(_settings);
         }
 
         private void OnGUI()
         {
             GUILayout.Label("Credentials");
             GUILayout.Label("Username");
-            _username = GUILayout.TextField(_username);
+            _settings.Username = GUILayout.TextField(_settings.Username);
             GUILayout.Label("Password");
-            _password = GUILayout.PasswordField(_password, '*', 25);
+            _settings.Password = GUILayout.PasswordField(_settings.Password, '*', 25);
             GUILayout.Label(_connectionStatus);
             if (GUILayout.Button("Login"))
             {
                 UnityTask.Run(async() =>
                 {
                     _connectionStatus = "Connecting...";
-                    var token = await _access.GetToken(_username, _password);
+                    var token = await _access.GetToken(_settings.Username, _settings.Password);
                     if (token.access_token != null)
                     {
                         _connectionStatus = "Connected.";
@@ -71,15 +80,16 @@ namespace Core.Plugin.Unity.Editor
             {
                 _access.DownloadSolution();
             }
-            _autoSync = GUILayout.Toggle(_autoSync, "Automatically sync files");
-            CloudFileWatcher.Watch(_autoSync);
+            _settings.AutoSync = GUILayout.Toggle(_settings.AutoSync, "Automatically sync files");
+            CloudFileWatcher.Watch(_settings.AutoSync);
         }
     }
 
     [Serializable]
-    public class Settings
+    public class Settings : ScriptableObject
     {
-        [SerializeField]
-        public int MyInt;
+        public string Username = "";
+        public string Password = "";
+        public bool AutoSync = true;
     }
 }

@@ -78,7 +78,9 @@
     <Compile Include="Editor\Constants.cs" />
     <Compile Include="Editor\DulyEditor.cs" />
     <Compile Include="Editor\ScriptManager.cs" />
+    <Compile Include="Editor\SettingsClassBuilder.cs" />
     <Compile Include="Editor\SettingsDrawer.cs" />
+    <Compile Include="Editor\SettingsSaver.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Generator\Compiler.cs" />
     <Compile Include="Generator\GeneratedCodeTemplate.cs">
