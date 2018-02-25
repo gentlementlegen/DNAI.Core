@@ -16,7 +16,6 @@ namespace Core.Plugin.Unity.Editor
         public const string FileName = "DNAIEditorSettings.asset";
 
         private Settings _settings;
-        private readonly ApiAccess _access = new ApiAccess();
 
         private string _connectionStatus = "Disconnected.";
 
@@ -63,11 +62,11 @@ namespace Core.Plugin.Unity.Editor
                 UnityTask.Run(async() =>
                 {
                     _connectionStatus = "Connecting...";
-                    var token = await _access.GetToken(_settings.Username, _settings.Password);
+                    var token = await CloudFileWatcher.Access.GetToken(_settings.Username, _settings.Password);
                     if (token.access_token != null)
                     {
                         _connectionStatus = "Connected.";
-                        _access.SetAuthorization(token);
+                        CloudFileWatcher.Access.SetAuthorization(token);
                     }
                     else
                     {
@@ -78,7 +77,7 @@ namespace Core.Plugin.Unity.Editor
             }
             if (GUILayout.Button("Download"))
             {
-                _access.DownloadSolution();
+                CloudFileWatcher.Access.DownloadSolution();
             }
             _settings.AutoSync = GUILayout.Toggle(_settings.AutoSync, "Automatically sync files");
             CloudFileWatcher.Watch(_settings.AutoSync);
