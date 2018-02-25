@@ -67,7 +67,7 @@ namespace CorePackage.Global
                 return list[op];
             throw new KeyNotFoundException("No such operator: " + op.ToString());
         }
-    };
+    }
 
     public interface IOperable
     {

@@ -110,7 +110,7 @@ namespace CoreTest.TestEntities
 
             uint getT = getAttrSum.addInstruction(new CorePackage.Execution.Getter(getAttrSum.GetParameter("this")));
 
-            uint getAttrs = getAttrSum.addInstruction(new CorePackage.Execution.ObjectAttributes(type));
+            uint getAttrs = getAttrSum.addInstruction(new CorePackage.Execution.GetAttributes(type));
             getAttrSum.LinkInstructionData(getT, "reference", getAttrs, "this");
 
             uint setRes = getAttrSum.addInstruction(new CorePackage.Execution.Setter(res));
@@ -155,11 +155,11 @@ namespace CoreTest.TestEntities
              */
           
             uint getThis = addOp.addInstruction(new CorePackage.Execution.Getter(addOp.GetParameter("this")));
-            uint splitThis = addOp.addInstruction(new CorePackage.Execution.ObjectAttributes(type));
+            uint splitThis = addOp.addInstruction(new CorePackage.Execution.GetAttributes(type));
             addOp.LinkInstructionData(getThis, "reference", splitThis, "this");
 
             uint getROP = addOp.addInstruction(new CorePackage.Execution.Getter(addOp.GetParameter(CorePackage.Global.Operator.Right)));
-            uint splitROP = addOp.addInstruction(new CorePackage.Execution.ObjectAttributes(type));
+            uint splitROP = addOp.addInstruction(new CorePackage.Execution.GetAttributes(type));
             addOp.LinkInstructionData(getROP, "reference", splitROP, "this");
 
             //this.x + RightOperand.x
@@ -178,7 +178,7 @@ namespace CoreTest.TestEntities
             addOp.LinkInstructionData(splitROP, "z", addZ, CorePackage.Global.Operator.Right);
 
             uint getRes = addOp.addInstruction(new CorePackage.Execution.Getter(addOp.GetReturn(CorePackage.Global.Operator.Result)));
-            uint splitRes = addOp.addInstruction(new CorePackage.Execution.ObjectAttributes(type));
+            uint splitRes = addOp.addInstruction(new CorePackage.Execution.GetAttributes(type));
             addOp.LinkInstructionData(getRes, "reference", splitRes, "this");
 
             uint setResult = addOp.addInstruction(new CorePackage.Execution.SetAttribute(addOp.GetReturn(CorePackage.Global.Operator.Result)));

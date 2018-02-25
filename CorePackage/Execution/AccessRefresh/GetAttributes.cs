@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace CorePackage.Execution
 {
-    public class ObjectAttributes : AccessRefreshInstruction
+    public class GetAttributes : AccessRefreshInstruction
     {
         private Entity.Type.ObjectType _stored;
 
-        public ObjectAttributes(Entity.Type.ObjectType typetosplit) :
+        public GetAttributes(Entity.Type.ObjectType typetosplit) :
             base(
                 new Dictionary<string, Entity.Variable>
                 {
