@@ -37,6 +37,7 @@ namespace Core.Plugin.Unity.Editor
         private ScriptDrawer _scriptDrawer;
         private SettingsDrawer _settingsDrawer;
         private static DulyEditor _window;
+        private static Texture _texture;
 
         public static DulyEditor Instance { get { return _window; } }
 
@@ -68,11 +69,11 @@ namespace Core.Plugin.Unity.Editor
         [MenuItem("Window/DNAI &d")]
         public static void ShowWindow()
         {
-            //EditorWindow.GetWindow(typeof(DulyEditor));
             if (_window == null)
             {
                 _window = (DulyEditor)EditorWindow.GetWindow(typeof(DulyEditor));
-                _window.titleContent = new GUIContent("DNAI");
+                _texture = AssetDatabase.LoadAssetAtPath<Texture>(@"Assets\Standard Assets\DNAI\Resources\dnai_logo.png");
+                _window.titleContent = new GUIContent("DNAI", _texture);
                 _window.Show();
             }
             else
