@@ -44,7 +44,7 @@ namespace Core.Plugin.Unity.Editor
         public DulyEditor()
         {
             _window = this;
-            CloudFileWatcher.Watch(true);
+            //CloudFileWatcher.Watch(true);
         }
 
         //[MenuItem("Window/Duly")]
