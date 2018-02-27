@@ -6,15 +6,13 @@ using CorePackage.Global;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoreControl
 {
     /// <summary>
     /// Class that is used to instanciate instructions
     /// </summary>
-    public class InstructionFactory
+    public static class InstructionFactory
     {
         /// <summary>
         /// Enumeration for each possible instruction
@@ -48,13 +46,20 @@ namespace CoreControl
             SETTER,
             FUNCTION_CALL,
             IF,
-            WHILE
+            WHILE,
+            APPEND, //ICI
+            INSERT,
+            REMOVE,
+            REMOVE_INDEX,
+            SIZE,
+            FOREACH,
+            OBJECT_ATTRIBUTES
         };
 
         /// <summary>
         /// Dictionary that associates an instruction to the number of arguments that takes its constructor
         /// </summary>
-        private static Dictionary<INSTRUCTION_ID, uint> number_of_arguments = new Dictionary<INSTRUCTION_ID, uint>
+        private static readonly Dictionary<INSTRUCTION_ID, uint> number_of_arguments = new Dictionary<INSTRUCTION_ID, uint>
         {
             { INSTRUCTION_ID.AND, 0 },
             { INSTRUCTION_ID.OR, 0 },
@@ -83,13 +88,20 @@ namespace CoreControl
             { INSTRUCTION_ID.SETTER, 1 },
             { INSTRUCTION_ID.FUNCTION_CALL, 1 },
             { INSTRUCTION_ID.IF, 0 },
-            { INSTRUCTION_ID.WHILE, 0 }
+            { INSTRUCTION_ID.WHILE, 0 },
+            { INSTRUCTION_ID.APPEND, 0 },
+            { INSTRUCTION_ID.INSERT, 0 },
+            { INSTRUCTION_ID.REMOVE, 0 },
+            { INSTRUCTION_ID.REMOVE_INDEX, 0 },
+            { INSTRUCTION_ID.SIZE, 0 },
+            { INSTRUCTION_ID.FOREACH, 1 },
+            { INSTRUCTION_ID.OBJECT_ATTRIBUTES, 1 }
         };
 
         /// <summary>
         /// Dictionary that associates an instruction to its creator delegate
         /// </summary>
-        private static Dictionary<INSTRUCTION_ID, Func<List<Definition>, Instruction>> creators = new Dictionary<INSTRUCTION_ID, Func<List<CorePackage.Global.Definition>, CorePackage.Execution.Instruction>>
+        private static readonly Dictionary<INSTRUCTION_ID, Func<List<Definition>, Instruction>> creators = new Dictionary<INSTRUCTION_ID, Func<List<CorePackage.Global.Definition>, CorePackage.Execution.Instruction>>
         {
             {
                 INSTRUCTION_ID.AND, (List<Definition> arguments) =>
@@ -275,9 +287,52 @@ namespace CoreControl
                     return new If();
                 }
             },
-            { INSTRUCTION_ID.WHILE, (List<Definition> arguments) =>
+            {
+                INSTRUCTION_ID.WHILE, (List<Definition> arguments) =>
                 {
                     return new While();
+                }
+            },
+            {
+                INSTRUCTION_ID.APPEND, (List<Definition> args) =>
+                {
+                    return new Append();
+                }
+            },
+            {
+                INSTRUCTION_ID.INSERT, (List<Definition> args) =>
+                {
+                    return new Insert();
+                }
+            },
+            {
+                INSTRUCTION_ID.REMOVE, (List<Definition> args) =>
+                {
+                    return new Remove();
+                }
+            },
+            {
+                INSTRUCTION_ID.REMOVE_INDEX, (List<Definition> args) =>
+                {
+                    return new RemoveIndex();
+                }
+            },
+            {
+                INSTRUCTION_ID.SIZE, (List<Definition> args) =>
+                {
+                    return new Size();
+                }
+            },
+            {
+                INSTRUCTION_ID.FOREACH, (List<Definition> args) =>
+                {
+                    return new Foreach((DataType)args[0]);
+                }
+            },
+            {
+                INSTRUCTION_ID.OBJECT_ATTRIBUTES, (List<Definition> args) =>
+                {
+                    return new ObjectAttributes((ObjectType)(args[0]));
                 }
             }
         };
@@ -288,11 +343,11 @@ namespace CoreControl
         /// <param name="to_create">Type of the instruction to create</param>
         /// <param name="arguments">List of arguments to pass to the instruction at construction</param>
         /// <returns>An instruction of type represented by the give id</returns>
-        public static Instruction create_instruction(INSTRUCTION_ID to_create, List<Definition> arguments)
+        public static Instruction CreateInstruction(INSTRUCTION_ID to_create, List<Definition> arguments)
         {
             if (!number_of_arguments.ContainsKey(to_create) || !creators.ContainsKey(to_create))
                 throw new KeyNotFoundException("Given instruction isn't referenced in factory");
-            if (arguments.Count() < number_of_arguments[to_create])
+            if (arguments.Count < number_of_arguments[to_create])
                 throw new InvalidProgramException("Not enought arguments to construct intruction");
             return creators[to_create](arguments);
         }

@@ -14,7 +14,7 @@ namespace CorePackage.Global
         /// <summary>
         /// Class that associates a definition to its visibility
         /// </summary>
-        private struct Declaration
+        private class Declaration
         {
             public DefinitionType definition;
             public AccessMode visibility;
@@ -120,6 +120,18 @@ namespace CorePackage.Global
             }
             defined.Clear();
             return to_ret;
+        }
+
+        public Dictionary<string, DefinitionType> GetEntities(AccessMode visibility)
+        {
+            Dictionary<string, DefinitionType> toret = new Dictionary<string, DefinitionType>();
+
+            foreach (KeyValuePair<string, Declaration> curr in defined)
+            {
+                if (curr.Value.visibility == visibility)
+                    toret.Add(curr.Key, curr.Value.definition);
+            }
+            return toret;
         }
     }
 }

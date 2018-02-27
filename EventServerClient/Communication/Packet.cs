@@ -105,7 +105,7 @@ namespace EventServerClient.Communication
         [ProtoMember(4)]
         public uint EventId { get; set; }
 
-        [ProtoMember(4)]
+        [ProtoMember(5)]
         public byte[] Data { get; set; }
     }
 
@@ -128,7 +128,7 @@ namespace EventServerClient.Communication
         [ProtoMember(4)]
         public uint EventId { get; set; }
 
-        [ProtoMember(4)]
+        [ProtoMember(5)]
         public byte[] Data { get; set; }
     }
 }

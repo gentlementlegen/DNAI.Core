@@ -14,7 +14,7 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Contains the real C# associated type
         /// </summary>
-        public readonly System.Type real_type;
+        public readonly List<System.Type> handledTypes = new List<System.Type>();
 
         /// <summary>
         /// Constructor that asks for the real C# type
@@ -22,27 +22,41 @@ namespace CorePackage.Entity.Type
         /// <param name="real_type">Real C# type</param>
         public ScalarType(System.Type real_type)
         {
-            this.real_type = real_type;
+            handledTypes.Add(real_type);
+        }
+
+        public ScalarType(System.Type toinstanciate, params System.Type[] handled)
+        {
+            handledTypes.Add(toinstanciate);
+            foreach (System.Type curr in handled)
+            {
+                handledTypes.Add(curr);
+            }
         }
 
         /// <see cref="DataType.Instantiate"/>
         public override dynamic Instantiate()
         {
-            if (real_type == typeof(string))
+            if (handledTypes.First() == typeof(string))
                 return "";
-            return Activator.CreateInstance(real_type);
+            return Activator.CreateInstance(handledTypes.First());
         }
 
         /// <see cref="Global.Definition.IsValid"/>
         public override bool IsValid()
         {
-            return real_type != null;
+            return handledTypes.Count > 0;
         }
 
         /// <see cref="DataType.IsValueOfType(dynamic)"/>
         public override bool IsValueOfType(dynamic value)
         {
-            return real_type == value.GetType();
+            foreach (System.Type curr in handledTypes)
+            {
+                if (curr.IsAssignableFrom(value.GetType()))
+                    return true;
+            }
+            return false;
         }
     }
 
@@ -59,12 +73,12 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Represents an integer type
         /// </summary>
-        public static readonly ScalarType Integer = new ScalarType(typeof(int));
+        public static readonly ScalarType Integer = new ScalarType(typeof(long), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(ulong));
 
         /// <summary>
         /// Represents a floating type
         /// </summary>
-        public static readonly ScalarType Floating = new ScalarType(typeof(double));
+        public static readonly ScalarType Floating = new ScalarType(typeof(double), typeof(float));
 
         /// <summary>
         /// Represents a character type

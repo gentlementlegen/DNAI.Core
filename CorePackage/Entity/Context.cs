@@ -113,6 +113,13 @@ namespace CorePackage.Entity
             return children.Clear();
         }
 
+
+        ///<see cref="IDeclarator{definitionType}.GetEntities(AccessMode)"/>
+        Dictionary<string, IContext> IDeclarator<IContext>.GetEntities(AccessMode visibility)
+        {
+            return children.GetEntities(visibility);
+        }
+
         ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
         Variable IDeclarator<Variable>.ChangeVisibility(string name, AccessMode newVisibility)
         {
@@ -153,6 +160,12 @@ namespace CorePackage.Entity
         List<Variable> IDeclarator<Variable>.Clear()
         {
             return storage.Clear();
+        }
+
+        ///<see cref="IDeclarator{definitionType}.GetEntities(AccessMode)"/>
+        Dictionary<string, Variable> IDeclarator<Variable>.GetEntities(AccessMode visibility)
+        {
+            return storage.GetEntities(visibility);
         }
 
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
@@ -197,6 +210,12 @@ namespace CorePackage.Entity
             return types.Clear();
         }
 
+        ///<see cref="IDeclarator{definitionType}.GetEntities(AccessMode)"/>
+        Dictionary<string, DataType> IDeclarator<DataType>.GetEntities(AccessMode visibility)
+        {
+            return types.GetEntities(visibility);
+        }
+
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
         Function IDeclarator<Function>.Declare(Function entity, string name, AccessMode visibility)
         {
@@ -237,6 +256,12 @@ namespace CorePackage.Entity
         List<Function> IDeclarator<Function>.Clear()
         {
             return methods.Clear();
+        }
+
+        ///<see cref="IDeclarator{definitionType}.GetEntities(AccessMode)"/>
+        Dictionary<string, Function> IDeclarator<Function>.GetEntities(AccessMode visibility)
+        {
+            return methods.GetEntities(visibility);
         }
     }
 }

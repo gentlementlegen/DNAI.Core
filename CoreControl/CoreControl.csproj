@@ -7,8 +7,8 @@
     <ProjectGuid>{DD2B786E-17B1-443B-A449-49199B6A46A8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CoreCtrl</RootNamespace>
-    <AssemblyName>CoreCtrl</AssemblyName>
+    <RootNamespace>CoreControl</RootNamespace>
+    <AssemblyName>CoreControl</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -21,6 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controler.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="EntityFactory.cs" />
     <Compile Include="InstructionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

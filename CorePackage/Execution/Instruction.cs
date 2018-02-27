@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using StorageDeclarator = CorePackage.Global.Declarator<CorePackage.Entity.Variable>;
 
@@ -34,19 +31,23 @@ namespace CorePackage.Execution
         /// </summary>
         /// <param name="inputs">Dictionarry that contains all inputs</param>
         /// <param name="outputs">Dictionarry that contains all outputs</param>
-        public Instruction(Dictionary<string, Entity.Variable> inputs = null, Dictionary<string, Entity.Variable> outputs = null)
-        {            
+        protected Instruction(Dictionary<string, Entity.Variable> inputs = null, Dictionary<string, Entity.Variable> outputs = null)
+        {
             if (inputs != null)
+            {
                 foreach (KeyValuePair<string, Entity.Variable> curr in inputs)
                 {
                     AddInput(curr.Key, curr.Value);
                 }
+            }
 
             if (outputs != null)
+            {
                 foreach (KeyValuePair<string, Entity.Variable> curr in outputs)
                 {
                     AddOutput(curr.Key, curr.Value);
                 }
+            }
         }
 
         /// <summary>
@@ -72,7 +73,7 @@ namespace CorePackage.Execution
         /// <param name="definition">Variable definition of the input</param>
         public void AddInput(string name, Entity.Variable definition)
         {
-            AddInput(new Global.Declaration<Entity.Variable>{name = name, definition = scope.Declare(definition, name, Global.AccessMode.EXTERNAL)});
+            AddInput(new Global.Declaration<Entity.Variable> { name = name, definition = scope.Declare(definition, name, Global.AccessMode.EXTERNAL) });
         }
 
         /// <summary>

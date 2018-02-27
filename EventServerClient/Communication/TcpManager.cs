@@ -13,7 +13,7 @@ namespace EventServerClient.Communication
         private readonly CreatePackage _createPackage;
         private byte[] _dataStorage;
         private ValidatePackage _validatePackage;
-        private System.Collections.Generic.Dictionary<string, Func<byte[], int>> _mapPtr;
+        private System.Collections.Generic.Dictionary<string, Action<byte[]>> _mapPtr;
 
 
         public TcpManager()
@@ -22,7 +22,7 @@ namespace EventServerClient.Communication
             _createPackage = new CreatePackage();
             _dataStorage = null;
             _validatePackage = new ValidatePackage();
-            _mapPtr = new System.Collections.Generic.Dictionary<string, Func<byte[], int>>();
+            _mapPtr = new System.Collections.Generic.Dictionary<string, Action<byte[]>>();
         }
 
         public void Connect(string address, int port)
@@ -31,17 +31,10 @@ namespace EventServerClient.Communication
             {
 
                 _tcpClient.Connect(address, port);
-               // CreatePackage createPackage = new CreatePackage();
-
-                Byte[] data = _createPackage.AuthenticatePackage("YOLO fernand");
+              
+                Byte[] data = _createPackage.AuthenticatePackage("Core com.");
                 _tcpClient.GetStream().Write(data, 0, data.Length);
-
-               // Byte[] dataRegisterEvent = _createPackage.EventRegisterPackage("POPOLE", 0, true);
-               // _tcpClient.GetStream().Write(dataRegisterEvent, 0, dataRegisterEvent.Length);
-
-                Byte[] zerodata = new byte[0];
-                Byte[] dataSendEvent = _createPackage.EventSendPackage("POPOLE", zerodata);
-                _tcpClient.GetStream().Write(dataSendEvent, 0, dataSendEvent.Length);
+                
             }
             catch
             {
@@ -62,7 +55,7 @@ namespace EventServerClient.Communication
             _tcpClient.Close();
         }
 
-        public void RegisterEvent(string eventName, Func<byte[], int> func, uint size) {
+        public void RegisterEvent(string eventName, Action<byte[]> func, uint size) {
             Byte[] dataRegisterEvent = _createPackage.EventRegisterPackage(eventName, size, true);
             _tcpClient.GetStream().Write(dataRegisterEvent, 0, dataRegisterEvent.Length);
             _mapPtr.Add(eventName, func);
@@ -129,7 +122,6 @@ namespace EventServerClient.Communication
                             if (_mapPtr.ContainsKey(receiveEvent.eventName))
                             {
                                 _mapPtr[receiveEvent.eventName](receiveEvent.data);
-
                             }
                             byte[] newArray = new byte[_dataStorage.Length - (12 + head.size)];
                             Buffer.BlockCopy(_dataStorage, (int)(12 + head.size), newArray, 0, newArray.Length);
@@ -157,5 +149,9 @@ namespace EventServerClient.Communication
             }
         }
 
+        public bool isConnected()
+        {
+            return _tcpClient.Connected;
+        }
     }
 }

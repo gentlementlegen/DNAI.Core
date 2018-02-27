@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2066551659, guid: 428b0ae85a99ff3429c93ae485c64c81, type: 3}
+  m_Name: DNAIEditor
+  m_EditorClassIdentifier: 
+  listIA:
+  - scriptManager:
+      _fileName: 
+      _filePath: C:/Users/ferna/Documents/Visual Studio 2017/Projects/DulyTFS/PluginUnity/PluginTestProject/Assets/Standard
+        Assets/DNAI/Scripts/moreOrLess.duly
+    _scriptList:
+    - Play
