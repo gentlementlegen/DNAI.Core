@@ -93,13 +93,12 @@ namespace Core.Plugin.Unity.Editor
             GUI.enabled = !EditorApplication.isPlaying;
             _scriptDrawer?.Draw();
 
-            if (GUILayout.Button("Settings"))
-            {
-                //_settingsDrawer = GetWindow<SettingsDrawer>();
-                if (_settingsDrawer == null)
-                    _settingsDrawer = CreateInstance<SettingsDrawer>();
-                _settingsDrawer?.ShowAuxWindow();
-            }
+            //if (GUILayout.Button("Settings"))
+            //{
+            //    if (_settingsDrawer == null)
+            //        _settingsDrawer = CreateInstance<SettingsDrawer>();
+            //    _settingsDrawer?.ShowAuxWindow();
+            //}
         }
 
         private void OnEnable()
