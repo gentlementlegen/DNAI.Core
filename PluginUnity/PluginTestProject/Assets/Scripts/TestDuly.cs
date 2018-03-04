@@ -1,4 +1,4 @@
-﻿#define COMPILE
+﻿//#define COMPILE
 
 #if COMPILE
 using Duly.MoreOrLess;

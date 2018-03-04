@@ -18,3 +18,7 @@ MonoBehaviour:
         Assets/DNAI/Scripts/moreOrLess.duly
     _scriptList:
     - Play
+  - scriptManager:
+      _fileName: 
+      _filePath: 
+    _scriptList: []
