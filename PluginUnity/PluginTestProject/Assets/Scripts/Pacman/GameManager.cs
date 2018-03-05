@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Pacman
 {
@@ -10,6 +11,13 @@ namespace Assets.Scripts.Pacman
 
         public GameState State { get; private set; } = GameState.Menu;
 
+        public int Score { get; private set; }
+
+        [Header("UI")]
+        [SerializeField]
+        private Text _textScore;
+
+        [Header("Prefabs")]
         [SerializeField]
         private GameObject _playerPrefab;
 
@@ -23,8 +31,14 @@ namespace Assets.Scripts.Pacman
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 State = GameState.Play;
-                Instantiate(_playerPrefab);
+                Instantiate(_playerPrefab, TerrainManager.Instance.GetWorldPosition(1, 1), Quaternion.identity);
             }
+        }
+
+        public void AddScore(int score)
+        {
+            Score += score;
+            _textScore.text = Score.ToString();
         }
     }
 }

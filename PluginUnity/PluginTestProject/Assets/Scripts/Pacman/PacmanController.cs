@@ -42,8 +42,6 @@ namespace Assets.Scripts.Pacman
             {
                 AddDirection(TerrainManager.Direction.Right);
             }
-            //Debug.Log("X => " + x + "; Y => " + y);
-            Debug.Log("Queue list size = " + _dir.Count);
             transform.position = Vector3.MoveTowards(transform.position, _target, _distanceDelta);
             if (Vector3.Distance(transform.position, _target) < 0.01f)
                 UpdateTarget();

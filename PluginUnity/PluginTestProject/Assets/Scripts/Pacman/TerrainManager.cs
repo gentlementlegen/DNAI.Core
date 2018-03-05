@@ -110,5 +110,15 @@ namespace Assets.Scripts.Pacman
             res.y = -newY;
             return res * _scaleFactor;
         }
+
+        public Vector2Int GetGridPosition(float x, float y)
+        {
+            return new Vector2Int((int)(x / _scaleFactor), (int)(y / _scaleFactor));
+        }
+
+        public Vector3 GetWorldPosition(int x, int y)
+        {
+            return new Vector3(x, -y) * _scaleFactor;
+        }
     }
 }
