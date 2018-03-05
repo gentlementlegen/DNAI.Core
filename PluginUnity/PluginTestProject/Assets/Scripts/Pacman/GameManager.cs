@@ -1,8 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Pacman
 {
+    public class GameStateEvent : EventArgs
+    {
+        public GameManager.GameState CurrentState;
+        public GameManager.GameState PreviousState;
+    }
+
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
@@ -10,6 +17,8 @@ namespace Assets.Scripts.Pacman
         public enum GameState { Play, Pause, End, Menu }
 
         public GameState State { get; private set; } = GameState.Menu;
+
+        public event EventHandler OnGameStateChange;
 
         public int Score { get; private set; }
 
@@ -26,11 +35,16 @@ namespace Assets.Scripts.Pacman
             Instance = this;
         }
 
+        private void Start()
+        {
+            SetGameState(GameState.Menu);
+        }
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                State = GameState.Play;
+                SetGameState(GameState.Play);
                 Instantiate(_playerPrefab, TerrainManager.Instance.GetWorldPosition(1, 1), Quaternion.identity);
             }
         }
@@ -39,6 +53,17 @@ namespace Assets.Scripts.Pacman
         {
             Score += score;
             _textScore.text = Score.ToString();
+        }
+
+        public void OnPlayerWin()
+        {
+            SetGameState(GameState.End);
+        }
+
+        private void SetGameState(GameState state)
+        {
+            OnGameStateChange?.Invoke(this, new GameStateEvent { CurrentState = state, PreviousState = State });
+            State = state;
         }
     }
 }

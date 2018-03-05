@@ -12,6 +12,7 @@ namespace Assets.Scripts.Pacman
             if (other.tag == "Player" /*&& Vector3.Distance(transform.position, other.transform.position) < 0.01f*/)
             {
                 GameManager.Instance.AddScore(_reward);
+                TerrainManager.Instance.OnGumEaten();
                 Destroy(gameObject);
             }
         }

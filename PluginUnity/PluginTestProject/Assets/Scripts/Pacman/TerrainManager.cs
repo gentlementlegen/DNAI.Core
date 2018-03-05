@@ -55,6 +55,8 @@ namespace Assets.Scripts.Pacman
         [SerializeField]
         private GameObject _prefabPowerUp;
 
+        private float _remainingGums;
+
         private void Awake()
         {
             Instance = this;
@@ -70,10 +72,12 @@ namespace Assets.Scripts.Pacman
                     {
                         case '.':
                             Instantiate(_prefabPacgum, new Vector3(x * _scaleFactor, -y * _scaleFactor), Quaternion.identity);
+                            ++_remainingGums;
                             break;
 
                         case 'O':
                             Instantiate(_prefabPowerUp, new Vector3(x * _scaleFactor, -y * _scaleFactor), Quaternion.identity);
+                            ++_remainingGums;
                             break;
                     }
                 }
@@ -119,6 +123,15 @@ namespace Assets.Scripts.Pacman
         public Vector3 GetWorldPosition(int x, int y)
         {
             return new Vector3(x, -y) * _scaleFactor;
+        }
+
+        public void OnGumEaten()
+        {
+            --_remainingGums;
+            if (_remainingGums <= 0)
+            {
+                GameManager.Instance.OnPlayerWin();
+            }
         }
     }
 }
