@@ -133,9 +133,9 @@ namespace TestUnityPlugin
             var token = Task.Run(() => api.GetToken("toto", "tata")).Result;
             api.SetAuthorization(token);
             List<Core.Plugin.Unity.API.File> files = null;
-            files = api.GetFiles().Result;
+            files = api.GetFiles(token.user_id).Result;
             Assert.IsNotNull(files, "Files are null");
-            Core.Plugin.Unity.API.File file = api.GetFile(2).Result;
+            Core.Plugin.Unity.API.File file = api.GetFile(token.user_id, 0).Result;
             Assert.IsNotNull(file, "File was null");
             var f = new ByteArrayContent(System.IO.File.ReadAllBytes("moreOrLess.duly"));
             f.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");

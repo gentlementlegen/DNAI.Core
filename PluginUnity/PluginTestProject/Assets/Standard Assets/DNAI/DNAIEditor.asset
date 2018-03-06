@@ -14,11 +14,7 @@ MonoBehaviour:
   listIA:
   - scriptManager:
       _fileName: 
-      _filePath: C:/Users/ferna/Documents/Visual Studio 2017/Projects/DulyTFS/PluginUnity/PluginTestProject/Assets/Standard
+      _filePath: D:/Folders/VisualStudio/Duly/PluginUnity/PluginTestProject/Assets/Standard
         Assets/DNAI/Scripts/moreOrLess.duly
     _scriptList:
     - Play
-  - scriptManager:
-      _fileName: 
-      _filePath: 
-    _scriptList: []

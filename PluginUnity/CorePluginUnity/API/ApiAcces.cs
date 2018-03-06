@@ -13,12 +13,12 @@ namespace Core.Plugin.Unity.API
     internal class ApiAccess
     {
         // http://163.5.84.173/
-        private const string ApiAddress = "http://api.dnai.io/";
+        private const string ApiAddress = "https://api.preprod.dnai.io/";
 
-        private const string FilePath = "files/";
+        private const string FilePath = "users/";
         private const string SolutionPath = "solution/";
         private const string UserPath = "users/";
-        private const string AuthenticationPath = "oauth/token/";
+        private const string AuthenticationPath = "signin/";
 
         private readonly Accessor _accessor = new Accessor(ApiAddress);
 
@@ -27,18 +27,18 @@ namespace Core.Plugin.Unity.API
         /// </summary>
         /// <param name="fileId"></param>
         /// <returns></returns>
-        internal Task<File> GetFile(uint fileId)
+        internal Task<File> GetFile(string userId, uint fileId)
         {
-            return _accessor.GetObject<File>($"{FilePath}{fileId}/");
+            return _accessor.GetObject<File>($"{FilePath}/{userId}/ias/{fileId}/");
         }
 
         /// <summary>
         /// Retrieves all the files currently present on the server.
         /// </summary>
         /// <returns></returns>
-        internal async Task<List<File>> GetFiles()
+        internal async Task<List<File>> GetFiles(string userId)
         {
-            var fileList = await _accessor.GetObject<FileList>(FilePath);
+            var fileList = await _accessor.GetObject<FileList>($"{FilePath}/{userId}/ias/");
             return fileList?.results;
         }
 
@@ -104,12 +104,11 @@ namespace Core.Plugin.Unity.API
         {
             var user = new UserToken
             {
-                username = username,
-                password = password,
-                grant_type = "password"
+                login = username,
+                password = password
             };
-            var auth = "W8GMGSaFU71AVN6AXzQBxt68jQiNu5Gx5S7BmuMR:GCR0imL6Wx0sJk6qo8P7DuG0tQeEZUTxMNNbEnTrJO52T1tfA6FwyaNRxDWetMHTi6XXKT8tae1Ymxs299n4dF6s5OFYt4arU835PYgGnalDAN3aN5A0cZyG3HGibPsB".ToBase64();
-            _accessor.SetAuthorizationBasic(auth);
+            //var auth = "W8GMGSaFU71AVN6AXzQBxt68jQiNu5Gx5S7BmuMR:GCR0imL6Wx0sJk6qo8P7DuG0tQeEZUTxMNNbEnTrJO52T1tfA6FwyaNRxDWetMHTi6XXKT8tae1Ymxs299n4dF6s5OFYt4arU835PYgGnalDAN3aN5A0cZyG3HGibPsB".ToBase64();
+            //_accessor.SetAuthorizationBasic(auth);
             var msg = await _accessor.PostObjectEncoded(AuthenticationPath, user);
             return JsonConvert.DeserializeObject<Token>(await msg.Content.ReadAsStringAsync());
         }

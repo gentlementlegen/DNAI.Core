@@ -14,18 +14,21 @@ namespace Core.Plugin.Unity.API
 
     internal class UserToken
     {
-        public string grant_type;
-        public string username;
+        public string login;
         public string password;
     }
 
     internal class Token
     {
-        public string access_token;
-        public string expires_in;
-        public string token_type;
-        public string scope;
-        public string refresh_token;
+        //public string access_token;
+        //public string expires_in;
+        //public string token_type;
+        //public string scope;
+        //public string refresh_token;
+
+        public string token;
+        public string refreshToken;
+        public string user_id;
 }
 
     internal class File

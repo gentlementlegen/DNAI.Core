@@ -63,7 +63,7 @@ namespace Core.Plugin.Unity.Editor
                 {
                     _connectionStatus = "Connecting...";
                     var token = await CloudFileWatcher.Access.GetToken(_settings.Username, _settings.Password);
-                    if (token.access_token != null)
+                    if (token.token != null)
                     {
                         _connectionStatus = "Connected.";
                         CloudFileWatcher.Access.SetAuthorization(token);

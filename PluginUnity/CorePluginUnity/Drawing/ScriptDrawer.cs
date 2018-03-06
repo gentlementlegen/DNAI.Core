@@ -182,7 +182,8 @@ namespace Core.Plugin.Unity.Drawing
                 string str = scriptManager.FunctionList[index];
                 GUI.Label(labelRect, str);
 
-                _selectedScripts[index] = GUI.Toggle(plusRect, _selectedScripts[index], "");
+                //_selectedScripts[index] = GUI.Toggle(plusRect, _selectedScripts[index], "");
+           
                 //if (GUI.Button(plusRect, iconToolbarPlus, preButton))
                 //{
                 //foreach (var go in Selection.gameObjects)
@@ -313,15 +314,19 @@ namespace Core.Plugin.Unity.Drawing
             //			if (GUI.Button (dropdownRect, "Browse", miniButton))
             if (GUI.Button(dropdownRect, dotButton))
             {
-                listIA[index].scriptManager.FilePath = EditorUtility.OpenFilePanel("Select a script to load", "Documents", Constants.iaFileExtension);
-                listIA[index].scriptManager.LoadScript();
-                AssetDatabase.Refresh();
-                _editorWindow.Focus();
+                var newPath = EditorUtility.OpenFilePanel("Select a script to load", "Documents", Constants.iaFileExtension);
+                if (!string.IsNullOrEmpty(newPath))
+                {
+                    listIA[index].scriptManager.FilePath = newPath;
+                    listIA[index].scriptManager.LoadScript();
+                    AssetDatabase.Refresh();
+                    _editorWindow.Focus();
+                }
             }
 
             //Debug.Log("[DEBUG] 2. ");
 
-            GUI.Label(bottomRect, listIA[index].scriptManager.ProcessingStatus);
+            //GUI.Label(bottomRect, listIA[index].scriptManager.ProcessingStatus);
 
             //Debug.Log("[DEBUG] 3.");
 
