@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Pacman
 {
@@ -10,6 +11,10 @@ namespace Assets.Scripts.Pacman
         [SerializeField] private GameObject _panelGame;
         [SerializeField] private GameObject _panelGameOver;
         [SerializeField] private GameObject _panelPause;
+
+        [Header("Text")]
+        [SerializeField] private Text _textBestScore;
+        [SerializeField] private Text _textScoreGameOver;
 
         private void Start()
         {
@@ -36,6 +41,7 @@ namespace Assets.Scripts.Pacman
                 case GameManager.GameState.End:
                     _panelGameOver.SetActive(true);
                     _panelGame.SetActive(false);
+                    _textScoreGameOver.text = "Score: " + GameManager.Instance.Score.ToString();
                     break;
 
                 case GameManager.GameState.Menu:
@@ -43,6 +49,7 @@ namespace Assets.Scripts.Pacman
                     _panelGame.SetActive(false);
                     _panelGameOver.SetActive(false);
                     _panelPause.SetActive(false);
+                    _textBestScore.text = "Best score: " + GameManager.Instance.GetBestScore().ToString();
                     break;
             }
         }

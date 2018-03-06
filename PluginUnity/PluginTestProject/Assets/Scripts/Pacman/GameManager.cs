@@ -87,6 +87,7 @@ namespace Assets.Scripts.Pacman
         {
             SetGameState(GameState.End);
             Destroy(_playerInstance);
+            SaveBestScore();
             _playerInstance = null;
             Score = 0;
         }
@@ -95,6 +96,17 @@ namespace Assets.Scripts.Pacman
         {
             OnGameStateChange?.Invoke(this, new GameStateEvent { CurrentState = state, PreviousState = State });
             State = state;
+        }
+
+        public int GetBestScore()
+        {
+            return PlayerPrefs.GetInt("BestScore", 0);
+        }
+
+        private void SaveBestScore()
+        {
+            if (Score > GetBestScore())
+                PlayerPrefs.SetInt("BestScore", Score);
         }
     }
 }

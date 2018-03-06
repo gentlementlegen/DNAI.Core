@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-//using static Assets.Scripts.Pacman.TerrainManager;
 
 namespace Assets.Scripts.Pacman
 {
@@ -84,12 +82,15 @@ namespace Assets.Scripts.Pacman
                 case TerrainManager.Direction.Up:
                     transform.rotation = Quaternion.Euler(0, 0, 90);
                     break;
+
                 case TerrainManager.Direction.Down:
                     transform.rotation = Quaternion.Euler(0, 0, -90);
                     break;
+
                 case TerrainManager.Direction.Left:
                     transform.rotation = Quaternion.Euler(0, 0, 180);
                     break;
+
                 case TerrainManager.Direction.Right:
                     transform.rotation = Quaternion.Euler(0, 0, 0);
                     break;
