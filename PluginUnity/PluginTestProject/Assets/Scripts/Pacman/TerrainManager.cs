@@ -22,7 +22,7 @@ namespace Assets.Scripts.Pacman
             "     X.XX          XX.X     ",
             "     X.XX XXXXXXXX XX.X     ",
             "XXXXXX.XX X      X XX.XXXXXX",
-            "      .   X      X   .      ",
+            "T     .   X      X   .     T",
             "XXXXXX.XX X      X XX.XXXXXX",
             "     X.XX XXXXXXXX XX.X     ",
             "     X.XX          XX.X     ",
@@ -94,11 +94,12 @@ namespace Assets.Scripts.Pacman
             }
         }
 
-        public Vector3 GetNextAvailableNode(int x, int y, Direction direction, out int newX, out int newY)
+        public Vector3 GetNextAvailableNode(int x, int y, Direction direction, out int newX, out int newY, out bool isJump)
         {
             var res = new Vector3(x, y, 0);
             newX = x;
             newY = y;
+            isJump = false;
             if (x <= 0 || y <= 0 || y >= Terrain.Length || x >= Terrain[y].Length)
                 return res * _scaleFactor;
             switch (direction)
@@ -112,11 +113,21 @@ namespace Assets.Scripts.Pacman
                         newY++;
                     break;
                 case Direction.Left:
-                    if (Terrain[y][x - 1] != 'X')
+                    if (Terrain[y][x - 1] == 'T')
+                    {
+                        isJump = true;
+                        newX = Terrain[y].Length - 1;
+                    }
+                    else if (Terrain[y][x - 1] != 'X')
                         newX--;
                     break;
                 case Direction.Right:
-                    if (Terrain[y][x + 1] != 'X')
+                    if (Terrain[y][x + 1] == 'T')
+                    {
+                        isJump = true;
+                        newX = 1;
+                    }
+                    else if (Terrain[y][x + 1] != 'X')
                         newX++;
                     break;
             }
