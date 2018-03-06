@@ -41,7 +41,7 @@ namespace Assets.Scripts.Pacman
                 case GameManager.GameState.End:
                     _panelGameOver.SetActive(true);
                     _panelGame.SetActive(false);
-                    _textScoreGameOver.text = "Score: " + GameManager.Instance.Score.ToString();
+                    _textScoreGameOver.text = GameManager.Instance.Score.ToString();
                     break;
 
                 case GameManager.GameState.Menu:
@@ -49,7 +49,7 @@ namespace Assets.Scripts.Pacman
                     _panelGame.SetActive(false);
                     _panelGameOver.SetActive(false);
                     _panelPause.SetActive(false);
-                    _textBestScore.text = "Best score: " + GameManager.Instance.GetBestScore().ToString();
+                    _textBestScore.text = GameManager.Instance.GetBestScore().ToString();
                     break;
             }
         }

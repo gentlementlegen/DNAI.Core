@@ -11,10 +11,10 @@ namespace Assets.Scripts.Pacman
         private Vector3 _target = new Vector3(1, 1, 0);
 
         private readonly Queue<TerrainManager.Direction> _dir = new Queue<TerrainManager.Direction>();
-        private TerrainManager.Direction _currentDir = TerrainManager.Direction.Right;
+        private TerrainManager.Direction _currentDir = TerrainManager.Direction.Left;
 
-        private int x = 1;
-        private int y = 1;
+        private int x = 14;
+        private int y = 23;
 
         private void Start()
         {
@@ -60,24 +60,24 @@ namespace Assets.Scripts.Pacman
             if (_dir.Count <= 0)
             {
                 _target = TerrainManager.Instance.GetNextAvailableNode(x, y, _currentDir, out x, out y, out isJump);
-                if (isJump)
-                {
-                    transform.position = _target;
-                }
-                return;
-            }
-
-            var currX = x; var currY = y;
-            var newTarget = TerrainManager.Instance.GetNextAvailableNode(x, y, _dir.Peek(), out x, out y, out isJump);
-            if (currX == x && currY == y)
-            {
-                newTarget = TerrainManager.Instance.GetNextAvailableNode(x, y, _currentDir, out x, out y, out isJump);
             }
             else
             {
-                _currentDir = _dir.Dequeue();
+
+                var currX = x; var currY = y;
+                var newTarget = TerrainManager.Instance.GetNextAvailableNode(x, y, _dir.Peek(), out x, out y, out isJump);
+                if (currX == x && currY == y)
+                {
+                    newTarget = TerrainManager.Instance.GetNextAvailableNode(x, y, _currentDir, out x, out y, out isJump);
+                }
+                else
+                {
+                    _currentDir = _dir.Dequeue();
+                }
+                _target = newTarget;
+
             }
-            _target = newTarget;
+
             if (isJump)
             {
                 transform.position = _target;

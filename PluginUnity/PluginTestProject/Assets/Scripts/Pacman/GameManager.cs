@@ -14,7 +14,7 @@ namespace Assets.Scripts.Pacman
     {
         public static GameManager Instance { get; private set; }
 
-        public enum GameState { Play, Pause, End, Menu }
+        public enum GameState { Play, Pause, End, Menu, Warmup }
 
         public GameState State { get; private set; } = GameState.Menu;
 
@@ -48,7 +48,7 @@ namespace Assets.Scripts.Pacman
                 if (State == GameState.Menu)
                 {
                     SetGameState(GameState.Play);
-                    _playerInstance = Instantiate(_playerPrefab, TerrainManager.Instance.GetWorldPosition(1, 1), Quaternion.identity);
+                    _playerInstance = Instantiate(_playerPrefab, TerrainManager.Instance.GetWorldPosition(14, 23), Quaternion.identity);
                 }
                 else if (State == GameState.End)
                 {
