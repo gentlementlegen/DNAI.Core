@@ -1,7 +1,9 @@
 ﻿#define UNITY_ENGINE
+
 using Core.Plugin.Unity.Extensions;
 using CoreCommand;
 using Microsoft.CSharp;
+using Microsoft.Win32;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
@@ -129,8 +131,12 @@ namespace Core.Plugin.Unity.Generator
             Directory.CreateDirectory(AssemblyOutputPath);
             //_parameters.OutputAssembly = "Assets/Plugins/" + assemblyName + ".dll";
             // Reference to library
-            // TODO : change with instllation program
-            _parameters.ReferencedAssemblies.Add(Environment.ExpandEnvironmentVariables("%ProgramW6432%") + @"\Unity\Editor\Data\Managed\UnityEngine.dll");
+            string unityLibPath = GetUnityLibraryPath();
+            if (string.IsNullOrEmpty(unityLibPath))
+                throw new DllNotFoundException("Unity library could not be found.");
+
+            _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEngine.dll");
+            //_parameters.ReferencedAssemblies.Add(Environment.ExpandEnvironmentVariables("%ProgramW6432%") + @"\Unity\Editor\Data\Managed\UnityEngine.dll");
             _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
             _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
             _parameters.ReferencedAssemblies.Add("System.Core.dll");
@@ -140,6 +146,25 @@ namespace Core.Plugin.Unity.Generator
             // True - exe file generation, false - dll file generation
             _parameters.GenerateExecutable = false;
             //_parameters.CompilerOptions += $"-doc:{assemblyPath}{assemblyName}.xml";
+        }
+
+        private string GetUnityLibraryPath()
+        {
+            var path = "";
+
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Unity Technologies\Installer\Unity"))
+            {
+                if (key != null)
+                {
+                    Object o = key.GetValue("Location x64");
+                    if (o != null)
+                    {
+                        path = o as string;
+                    }
+                }
+            }
+
+            return path;
         }
 
         /// <summary>
