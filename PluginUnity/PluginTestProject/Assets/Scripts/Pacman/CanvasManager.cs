@@ -6,11 +6,10 @@ namespace Assets.Scripts.Pacman
     public class CanvasManager : MonoBehaviour
     {
         [Header("UI")]
-        [SerializeField]
-        private GameObject _panelMenu;
-
+        [SerializeField] private GameObject _panelMenu;
         [SerializeField] private GameObject _panelGame;
         [SerializeField] private GameObject _panelGameOver;
+        [SerializeField] private GameObject _panelPause;
 
         private void Start()
         {
@@ -26,9 +25,12 @@ namespace Assets.Scripts.Pacman
                     _panelGame.SetActive(true);
                     _panelMenu.SetActive(false);
                     _panelGameOver.SetActive(false);
+                    _panelPause.SetActive(false);
                     break;
 
                 case GameManager.GameState.Pause:
+                    _panelPause.SetActive(true);
+                    _panelGame.SetActive(false);
                     break;
 
                 case GameManager.GameState.End:
@@ -37,9 +39,10 @@ namespace Assets.Scripts.Pacman
                     break;
 
                 case GameManager.GameState.Menu:
-                    _panelGame.SetActive(false);
                     _panelMenu.SetActive(true);
+                    _panelGame.SetActive(false);
                     _panelGameOver.SetActive(false);
+                    _panelPause.SetActive(false);
                     break;
             }
         }

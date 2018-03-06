@@ -64,21 +64,31 @@ namespace Assets.Scripts.Pacman
 
         private void Start()
         {
-            for (int y = 0; y < Terrain.Length; y++)
-            {
-                for (int x = 0; x < Terrain[y].Length; x++)
-                {
-                    switch (Terrain[y][x])
-                    {
-                        case '.':
-                            Instantiate(_prefabPacgum, new Vector3(x * _scaleFactor, -y * _scaleFactor), Quaternion.identity);
-                            ++_remainingGums;
-                            break;
+            GameManager.Instance.OnGameStateChange += GameStateChanged;
+        }
 
-                        case 'O':
-                            Instantiate(_prefabPowerUp, new Vector3(x * _scaleFactor, -y * _scaleFactor), Quaternion.identity);
-                            ++_remainingGums;
-                            break;
+        private void GameStateChanged(object sender, System.EventArgs e)
+        {
+            var ev = e as GameStateEvent;
+
+            if (ev.CurrentState == GameManager.GameState.Play && ev.PreviousState == GameManager.GameState.Menu)
+            {
+                for (int y = 0; y < Terrain.Length; y++)
+                {
+                    for (int x = 0; x < Terrain[y].Length; x++)
+                    {
+                        switch (Terrain[y][x])
+                        {
+                            case '.':
+                                Instantiate(_prefabPacgum, new Vector3(x * _scaleFactor, -y * _scaleFactor), Quaternion.identity);
+                                ++_remainingGums;
+                                break;
+
+                            case 'O':
+                                Instantiate(_prefabPowerUp, new Vector3(x * _scaleFactor, -y * _scaleFactor), Quaternion.identity);
+                                ++_remainingGums;
+                                break;
+                        }
                     }
                 }
             }
@@ -132,6 +142,11 @@ namespace Assets.Scripts.Pacman
             {
                 GameManager.Instance.OnPlayerWin();
             }
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.Instance.OnGameStateChange -= GameStateChanged;
         }
     }
 }

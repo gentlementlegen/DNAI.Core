@@ -29,6 +29,7 @@ namespace Assets.Scripts.Pacman
         [Header("Prefabs")]
         [SerializeField]
         private GameObject _playerPrefab;
+        private GameObject _playerInstance;
 
         private void Awake()
         {
@@ -44,8 +45,35 @@ namespace Assets.Scripts.Pacman
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
+                if (State == GameState.Menu)
+                {
+                    SetGameState(GameState.Play);
+                    _playerInstance = Instantiate(_playerPrefab, TerrainManager.Instance.GetWorldPosition(1, 1), Quaternion.identity);
+                }
+                else if (State == GameState.End)
+                {
+                    SetGameState(GameState.Menu);
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                PauseGame();
+            }
+        }
+
+        private void PauseGame()
+        {
+            if (State == GameState.Menu || State == GameState.End)
+                return;
+            if (State == GameState.Play)
+            {
+                Time.timeScale = 0;
+                SetGameState(GameState.Pause);
+            }
+            else if (State == GameState.Pause)
+            {
+                Time.timeScale = 1;
                 SetGameState(GameState.Play);
-                Instantiate(_playerPrefab, TerrainManager.Instance.GetWorldPosition(1, 1), Quaternion.identity);
             }
         }
 
@@ -58,6 +86,9 @@ namespace Assets.Scripts.Pacman
         public void OnPlayerWin()
         {
             SetGameState(GameState.End);
+            Destroy(_playerInstance);
+            _playerInstance = null;
+            Score = 0;
         }
 
         private void SetGameState(GameState state)
