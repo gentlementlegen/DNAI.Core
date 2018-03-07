@@ -28,7 +28,7 @@ namespace Core.Plugin.Unity.API
         /// </summary>
         /// <param name="fileId"></param>
         /// <returns></returns>
-        internal Task<File> GetFile(string userId, uint fileId)
+        internal Task<File> GetFile(string userId, string fileId)
         {
             return _accessor.GetObject<File>($"{FilePath}/{userId}/ias/{fileId}/");
         }
@@ -68,9 +68,9 @@ namespace Core.Plugin.Unity.API
             });
         }
 
-        internal Task<HttpResponseMessage> GetFileContent(string userId)
+        internal Task<Object> GetFileContent(string userId, string fileId)
         {
-            throw new NotImplementedException();
+            return _accessor.GetObject<Object>($"{FilePath}{userId}/ias/{fileId}/raw/");
         }
 
         internal Task<HttpResponseMessage> DeleteFile(string id)

@@ -62,7 +62,17 @@ namespace Core.Plugin.Unity.Editor
                 UnityTask.Run(async() =>
                 {
                     _connectionStatus = "Connecting...";
-                    var token = await CloudFileWatcher.Access.GetToken(_settings.Username, _settings.Password);
+                    Token token = null;
+                    Debug.Log("Connection " + _settings.Username + " " + _settings.Password);
+                    try
+                    {
+                        token = await CloudFileWatcher.Access.GetToken(_settings.Username, _settings.Password);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError(ex.InnerException.Message);
+                    }
+                    Debug.Log("Connect ? " + token);
                     if (token.token != null)
                     {
                         _connectionStatus = "Connected.";
@@ -70,7 +80,7 @@ namespace Core.Plugin.Unity.Editor
                     }
                     else
                     {
-                        _connectionStatus = "Error on getting access token.";
+                        _connectionStatus = "Wrong user/password.";
                     }
                     Repaint();
                 });
