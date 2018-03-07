@@ -47,13 +47,13 @@ namespace Assets.Scripts.Pacman
         }
 
         [SerializeField]
-        private float _scaleFactor = 1;
-
-        [SerializeField]
         private GameObject _prefabPacgum;
 
         [SerializeField]
         private GameObject _prefabPowerUp;
+
+        private Sprite _terrainSprite;
+        private Vector2 _scaleFactor;
 
         private float _remainingGums;
 
@@ -64,6 +64,10 @@ namespace Assets.Scripts.Pacman
 
         private void Start()
         {
+            _terrainSprite = GetComponent<SpriteRenderer>().sprite;
+            _scaleFactor.x = 224f / Terrain[0].Length;
+            _scaleFactor.y = 248f / Terrain.Length;
+            _scaleFactor /= _terrainSprite.pixelsPerUnit;
             GameManager.Instance.OnGameStateChange += GameStateChanged;
         }
 
@@ -80,12 +84,12 @@ namespace Assets.Scripts.Pacman
                         switch (Terrain[y][x])
                         {
                             case '.':
-                                Instantiate(_prefabPacgum, new Vector3(x * _scaleFactor, -y * _scaleFactor), Quaternion.identity);
+                                Instantiate(_prefabPacgum, new Vector3(x * _scaleFactor.x, -y * _scaleFactor.y), Quaternion.identity);
                                 ++_remainingGums;
                                 break;
 
                             case 'O':
-                                Instantiate(_prefabPowerUp, new Vector3(x * _scaleFactor, -y * _scaleFactor), Quaternion.identity);
+                                Instantiate(_prefabPowerUp, new Vector3(x * _scaleFactor.x, -y * _scaleFactor.y), Quaternion.identity);
                                 ++_remainingGums;
                                 break;
                         }
@@ -101,7 +105,11 @@ namespace Assets.Scripts.Pacman
             newY = y;
             isJump = false;
             if (x <= 0 || y <= 0 || y >= Terrain.Length || x >= Terrain[y].Length)
-                return res * _scaleFactor;
+            {
+                res.x *= _scaleFactor.x;
+                res.y *= _scaleFactor.y;
+                return res;
+            }
             switch (direction)
             {
                 case Direction.Up:
@@ -131,19 +139,19 @@ namespace Assets.Scripts.Pacman
                         newX++;
                     break;
             }
-            res.x = newX;
-            res.y = -newY;
-            return res * _scaleFactor;
+            res.x = newX * _scaleFactor.x;
+            res.y = -newY * _scaleFactor.y;
+            return res;
         }
 
         public Vector2Int GetGridPosition(float x, float y)
         {
-            return new Vector2Int((int)(x / _scaleFactor), (int)(y / _scaleFactor));
+            return new Vector2Int((int)(x / _scaleFactor.x), (int)(y / _scaleFactor.y));
         }
 
         public Vector3 GetWorldPosition(int x, int y)
         {
-            return new Vector3(x, -y) * _scaleFactor;
+            return new Vector3(x * _scaleFactor.x, -y * _scaleFactor.y);
         }
 
         public void OnGumEaten()
