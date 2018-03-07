@@ -33,16 +33,19 @@ namespace Core.Plugin.Unity.API
 
     internal class File
     {
-        public uint Id;
+        public string _id;
         public string Title;
         public string Description;
-        public bool in_store;
-        public string file;
-        public User user;
-        public User owner;
-        public FileType file_type;
-        public DateTime created;
-        public DateTime updated;
+        public string Type;
+        public List<string> Paths;
+        public List<string> Owners;
+        //public bool in_store;
+        //public string file;
+        //public User user;
+        //public User owner;
+        //public FileType file_type;
+        //public DateTime created;
+        //public DateTime updated;
     }
 
     internal class FileType

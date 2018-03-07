@@ -1,5 +1,6 @@
 ﻿using Core.Plugin.Unity.Extensions;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -38,8 +39,8 @@ namespace Core.Plugin.Unity.API
         /// <returns></returns>
         internal async Task<List<File>> GetFiles(string userId)
         {
-            var fileList = await _accessor.GetObject<FileList>($"{FilePath}/{userId}/ias/");
-            return fileList?.results;
+            var fileList = await _accessor.GetObject<List<File>>($"{FilePath}/{userId}/ias/");
+            return fileList;
         }
 
         /// <summary>
@@ -65,6 +66,11 @@ namespace Core.Plugin.Unity.API
                 var sc = new ByteArrayContent(fs);
                 content.Add(sc, nameof(file.file), System.IO.Path.GetFileName(file.file));
             });
+        }
+
+        internal Task<HttpResponseMessage> GetFileContent(string userId)
+        {
+            throw new NotImplementedException();
         }
 
         internal Task<HttpResponseMessage> DeleteFile(string id)
