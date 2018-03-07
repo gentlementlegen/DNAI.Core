@@ -68,6 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c874b55a5b4579c4e901d4912a059d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _eatSound: {fileID: 8300000, guid: e8199468259a7a949819dacf2e88ca48, type: 3}
   _reward: 10
 --- !u!212 &212410163976580258
 SpriteRenderer:

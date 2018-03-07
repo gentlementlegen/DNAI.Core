@@ -51,6 +51,13 @@ namespace Assets.Scripts.Pacman
                     _panelPause.SetActive(false);
                     _textBestScore.text = GameManager.Instance.GetBestScore().ToString();
                     break;
+
+                case GameManager.GameState.Warmup:
+                    _panelGame.SetActive(true);
+                    _panelMenu.SetActive(false);
+                    _panelGameOver.SetActive(false);
+                    _panelPause.SetActive(false);
+                    break;
             }
         }
 

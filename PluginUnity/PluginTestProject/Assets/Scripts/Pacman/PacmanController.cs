@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Pacman
@@ -104,6 +105,14 @@ namespace Assets.Scripts.Pacman
                 case TerrainManager.Direction.Right:
                     transform.rotation = Quaternion.Euler(0, 0, 0);
                     break;
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.tag == "Enemy")
+            {
+                GameManager.Instance.KillPlayer();
             }
         }
     }

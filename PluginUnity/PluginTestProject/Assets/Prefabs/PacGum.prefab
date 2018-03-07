@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a062bb0c3fa1b6439441f75f239f821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _eatSound: {fileID: 8300000, guid: d197cf618bbcbf24ea00948d4c929c1b, type: 3}
+  _eatSound: {fileID: 8300000, guid: 6f67c0954e24d054c999fc8c6f26bbcc, type: 3}
   _reward: 10
 --- !u!212 &212512118081153178
 SpriteRenderer:

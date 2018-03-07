@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,7 +15,7 @@ namespace Assets.Scripts.Pacman
     {
         public static GameManager Instance { get; private set; }
 
-        public enum GameState { Play, Pause, End, Menu, Warmup }
+        public enum GameState { Play, Pause, End, Menu, Warmup, Death }
 
         public GameState State { get; private set; } = GameState.Menu;
 
@@ -47,7 +48,7 @@ namespace Assets.Scripts.Pacman
             {
                 if (State == GameState.Menu)
                 {
-                    SetGameState(GameState.Play);
+                    StartCoroutine(StartRoundRoutine());
                     _playerInstance = Instantiate(_playerPrefab, TerrainManager.Instance.GetWorldPosition(14, 23), Quaternion.identity);
                 }
                 else if (State == GameState.End)
@@ -59,6 +60,13 @@ namespace Assets.Scripts.Pacman
             {
                 PauseGame();
             }
+        }
+
+        private IEnumerator StartRoundRoutine()
+        {
+            SetGameState(GameState.Warmup);
+            yield return new WaitForSeconds(4.5f);
+            SetGameState(GameState.Play);
         }
 
         private void PauseGame()
@@ -85,6 +93,7 @@ namespace Assets.Scripts.Pacman
 
         public void OnPlayerWin()
         {
+            SoundManager.Instance.StopSounds();
             SetGameState(GameState.End);
             Destroy(_playerInstance);
             SaveBestScore();
@@ -107,6 +116,13 @@ namespace Assets.Scripts.Pacman
         {
             if (Score > GetBestScore())
                 PlayerPrefs.SetInt("BestScore", Score);
+        }
+
+        internal void KillPlayer()
+        {
+            SetGameState(GameState.Death);
+            Destroy(_playerInstance);
+            SoundManager.Instance.PlayDeathSound();
         }
     }
 }

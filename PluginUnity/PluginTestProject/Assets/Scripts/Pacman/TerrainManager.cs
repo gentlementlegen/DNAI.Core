@@ -71,7 +71,7 @@ namespace Assets.Scripts.Pacman
         {
             var ev = e as GameStateEvent;
 
-            if (ev.CurrentState == GameManager.GameState.Play && ev.PreviousState == GameManager.GameState.Menu)
+            if (ev.CurrentState == GameManager.GameState.Warmup && ev.PreviousState == GameManager.GameState.Menu)
             {
                 for (int y = 0; y < Terrain.Length; y++)
                 {
