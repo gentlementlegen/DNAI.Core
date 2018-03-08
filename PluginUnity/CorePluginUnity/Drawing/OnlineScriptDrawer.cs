@@ -16,8 +16,8 @@ namespace Core.Plugin.Unity.Drawing
         private static GUIStyle preButton;
 
         private readonly ReorderableList _list;
-        private readonly GUIContent iconToolbarPlus;
-        private readonly List<string> _fileList = new List<string>();
+        private GUIContent iconToolbarPlus;
+        private readonly List<API.File> _fileList = new List<API.File>();
 
         /// <summary>
         /// Gets the current size of the script list in pixels.
@@ -37,8 +37,6 @@ namespace Core.Plugin.Unity.Drawing
                 drawHeaderCallback = DrawHeaderCallback,
                 drawElementCallback = DrawElementCallback
             };
-            iconToolbarPlus = EditorGUIUtility.IconContent("Toolbar Plus", "|Download script");
-            preButton = "RL FooterButton";
         }
 
         private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
@@ -46,11 +44,25 @@ namespace Core.Plugin.Unity.Drawing
             Rect labelRect = new Rect(rect.x, rect.y, rect.xMax - 45f, 15f);
             Rect plusRect = new Rect(rect.xMax - 8f - 25f, rect.y, 25f, 13f);
 
-            string str = _fileList[index];
+            string str = _fileList[index].Title;
             GUI.Label(labelRect, str);
 
             if (GUI.Button(plusRect, iconToolbarPlus, preButton))
             {
+                UnityTask.Run(async () =>
+                {
+                    try
+                    {
+                        bool res = await CloudFileWatcher.DownloadFileAsync(SettingsDrawer.UserID, _fileList[index]);
+                        if (!res)
+                            Debug.LogWarning($"Could not download the file [{_fileList[index].Title}]");
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError("Exception thrown while downloading the file: " + e.Message + "\nInner Message: " + e.InnerException?.Message);
+                    }
+                    
+                });
             }
 
             if (index + 1 < _list.count)
@@ -66,12 +78,8 @@ namespace Core.Plugin.Unity.Drawing
                 {
                     try
                     {
-                        var files = await CloudFileWatcher.Access.GetFiles(SettingsDrawer.UserID);
-                        _fileList.Clear();
-                        foreach (var file in files)
-                        {
-                            _fileList.Add(file.Title);
-                        }
+                        foreach (var file in await CloudFileWatcher.Access.GetFiles(SettingsDrawer.UserID))
+                            _fileList.Add(file);
                     }
                     catch (Exception ex)
                     {
@@ -86,6 +94,10 @@ namespace Core.Plugin.Unity.Drawing
         /// </summary>
         internal void Draw()
         {
+            if (iconToolbarPlus == null)
+                iconToolbarPlus = EditorGUIUtility.IconContent("Toolbar Plus", "|Download script");
+            if (preButton == null)
+                preButton = "RL FooterButton";
             _list.DoLayoutList();
         }
     }

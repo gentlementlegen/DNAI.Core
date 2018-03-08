@@ -57,6 +57,17 @@ namespace Core.Plugin.Unity.Editor
             });
         }
 
+        internal static async Task<bool> DownloadFileAsync(string userID, API.File file)
+        {
+            var fileContent = await Access.GetFileContent(userID, file._id);
+            if (fileContent == null)
+                return false;
+            var stream = System.IO.File.Create("Assets/Stardard Assets/DNAI/Scripts/" + file.Title + ".dnai");
+            stream.Dispose();
+            throw new NotImplementedException("Download File is not implemented.");
+            return true;
+        }
+
         public static void Watch(bool watch)
         {
             _fileWatcher.EnableRaisingEvents = watch;
