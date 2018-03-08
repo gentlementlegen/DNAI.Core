@@ -67,9 +67,9 @@ namespace Core.Plugin.Unity.API
             });
         }
 
-        internal Task<Object> GetFileContent(string userId, string fileId)
+        internal Task<byte[]> GetFileContent(string userId, string fileId)
         {
-            return _accessor.GetObject<Object>($"{FilePath}{userId}/ias/{fileId}/raw/");
+            return _accessor.GetObjectRaw($"{FilePath}{userId}/ias/{fileId}/raw/");
         }
 
         internal Task<HttpResponseMessage> DeleteFile(string id)
@@ -112,7 +112,7 @@ namespace Core.Plugin.Unity.API
                 login = username,
                 password = password
             };
-            var msg = await _accessor.PostObjectEncoded(AuthenticationPath, user);
+            var msg = await _accessor.PostObject(AuthenticationPath, user);
             return JsonConvert.DeserializeObject<Token>(await msg.Content.ReadAsStringAsync());
         }
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 
 namespace Core.Plugin.Unity.Editor
@@ -25,10 +26,9 @@ namespace Core.Plugin.Unity.Editor
             _fileWatcher.Changed += OnFileChanged;
             _fileWatcher.Deleted += OnFileDeleted;
             _fileWatcher.EnableRaisingEvents = true;
-            StartWatcher();
+            //StartWatcher();
         }
 
-        // TODO : change task with Action because task cannot be reused
         private static void StartWatcher()
         {
             UnityTask.Run(async () =>
@@ -62,9 +62,10 @@ namespace Core.Plugin.Unity.Editor
             var fileContent = await Access.GetFileContent(userID, file._id);
             if (fileContent == null)
                 return false;
-            var stream = System.IO.File.Create("Assets/Stardard Assets/DNAI/Scripts/" + file.Title + ".dnai");
+            var stream = System.IO.File.Create("Assets/Standard Assets/DNAI/Scripts/" + file.Title + ".dnai");
+            stream.Write(fileContent, 0, fileContent.Length);
             stream.Dispose();
-            throw new NotImplementedException("Download File is not implemented.");
+            AssetDatabase.ImportAsset("Assets/Standard Assets/DNAI/Scripts/" + file.Title + ".dnai");
             return true;
         }
 

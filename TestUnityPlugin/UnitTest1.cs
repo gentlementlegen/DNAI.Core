@@ -143,12 +143,13 @@ namespace TestUnityPlugin
             Core.Plugin.Unity.API.File file = api.GetFile(token.user_id, files[0]._id).Result;
             Assert.IsNotNull(file, "File was null");
 
-            Object fileContent = api.GetFileContent(token.user_id, file._id).Result;
+            // Get content of the file
+            var fileContent = api.GetFileContent(token.user_id, file._id).Result;
             Assert.IsNotNull(fileContent, "File content was null");
 
-            var f = new ByteArrayContent(System.IO.File.ReadAllBytes("moreOrLess.duly"));
-            f.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
-            api.PostFile(new Core.Plugin.Unity.API.FileUpload { file_type_id = 1, title = "MyFile", in_store = false, file = "moreOrLess.duly" }).Wait();
+            //var f = new ByteArrayContent(System.IO.File.ReadAllBytes("moreOrLess.duly"));
+            //f.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+            //api.PostFile(new Core.Plugin.Unity.API.FileUpload { file_type_id = 1, title = "MyFile", in_store = false, file = "moreOrLess.duly" }).Wait();
         }
 
         [TestMethod]

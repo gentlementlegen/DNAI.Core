@@ -86,6 +86,23 @@ namespace Core.Plugin.Unity.API
         }
 
         /// <summary>
+        /// Proceeds a GET call using the given url to retrieve an object, on it raw state.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        internal async Task<byte[]> GetObjectRaw(string url)
+        {
+            byte[] obj = null;
+            HttpResponseMessage response = await _client.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                obj = await response.Content.ReadAsByteArrayAsync();
+            }
+            return obj;
+        }
+
+        /// <summary>
         /// Proceeds a POST call sending the given object.
         /// </summary>
         /// <typeparam name="T"></typeparam>
