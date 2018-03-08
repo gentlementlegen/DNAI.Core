@@ -15,6 +15,8 @@ namespace Core.Plugin.Unity.Editor
         public const string RootPath = "Assets/Standard Assets/DNAI/";
         public const string FileName = "DNAIEditorSettings.asset";
 
+        public static string UserID { get; private set; }
+
         private Settings _settings;
 
         private string _connectionStatus = "Disconnected.";
@@ -63,7 +65,6 @@ namespace Core.Plugin.Unity.Editor
                 {
                     _connectionStatus = "Connecting...";
                     Token token = null;
-                    Debug.Log("Connection " + _settings.Username + " " + _settings.Password);
                     try
                     {
                         token = await CloudFileWatcher.Access.GetToken(_settings.Username, _settings.Password);
@@ -72,11 +73,11 @@ namespace Core.Plugin.Unity.Editor
                     {
                         Debug.LogError(ex.InnerException.Message);
                     }
-                    Debug.Log("Connect ? " + token);
                     if (token.token != null)
                     {
                         _connectionStatus = "Connected.";
                         CloudFileWatcher.Access.SetAuthorization(token);
+                        UserID = token.user_id;
                     }
                     else
                     {

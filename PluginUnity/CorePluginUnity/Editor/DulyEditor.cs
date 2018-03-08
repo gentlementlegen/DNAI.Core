@@ -35,6 +35,7 @@ namespace Core.Plugin.Unity.Editor
     public class DulyEditor : EditorWindow
     {
         private ScriptDrawer _scriptDrawer;
+        private OnlineScriptDrawer _onlineScriptDrawer;
         private SettingsDrawer _settingsDrawer;
         private static DulyEditor _window;
         private static Texture _texture;
@@ -92,6 +93,7 @@ namespace Core.Plugin.Unity.Editor
 
             GUI.enabled = !EditorApplication.isPlaying;
             _scriptDrawer?.Draw();
+            _onlineScriptDrawer?.Draw();
 
             if (GUILayout.Button("Settings"))
             {
@@ -114,6 +116,10 @@ namespace Core.Plugin.Unity.Editor
             if (_settingsDrawer == null)
             {
                 //_settingsDrawer = CreateInstance<SettingsDrawer>();
+            }
+            if (_onlineScriptDrawer == null)
+            {
+                _onlineScriptDrawer = new OnlineScriptDrawer();
             }
         }
 

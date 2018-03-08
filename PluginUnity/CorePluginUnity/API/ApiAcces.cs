@@ -1,5 +1,4 @@
-﻿using Core.Plugin.Unity.Extensions;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -113,8 +112,6 @@ namespace Core.Plugin.Unity.API
                 login = username,
                 password = password
             };
-            //var auth = "W8GMGSaFU71AVN6AXzQBxt68jQiNu5Gx5S7BmuMR:GCR0imL6Wx0sJk6qo8P7DuG0tQeEZUTxMNNbEnTrJO52T1tfA6FwyaNRxDWetMHTi6XXKT8tae1Ymxs299n4dF6s5OFYt4arU835PYgGnalDAN3aN5A0cZyG3HGibPsB".ToBase64();
-            //_accessor.SetAuthorizationBasic(auth);
             var msg = await _accessor.PostObjectEncoded(AuthenticationPath, user);
             return JsonConvert.DeserializeObject<Token>(await msg.Content.ReadAsStringAsync());
         }
