@@ -12,7 +12,10 @@ namespace Core.Plugin.Unity.Editor
 {
     public static class CloudFileWatcher
     {
+        public static event FileSystemEventHandler FileCreated { add => _fileWatcher.Created += value; remove => _fileWatcher.Created -= value; }
+
         private static readonly FileSystemWatcher _fileWatcher = new FileSystemWatcher();
+
         internal static readonly ApiAccess Access = new ApiAccess();
 
         private static readonly Queue<Func<Task<HttpResponseMessage>>> _delayedActions = new Queue<Func<Task<HttpResponseMessage>>>();
@@ -21,7 +24,7 @@ namespace Core.Plugin.Unity.Editor
         {
             _fileWatcher.Path = ("Assets/Standard Assets/DNAI/Scripts/");
             _fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
-            _fileWatcher.Filter = "*.duly";
+            _fileWatcher.Filter = "*." + Constants.iaFileExtension;
             _fileWatcher.Created += OnFileCreated;
             _fileWatcher.Changed += OnFileChanged;
             _fileWatcher.Deleted += OnFileDeleted;
@@ -62,10 +65,10 @@ namespace Core.Plugin.Unity.Editor
             var fileContent = await Access.GetFileContent(userID, file._id);
             if (fileContent == null)
                 return false;
-            var stream = System.IO.File.Create("Assets/Standard Assets/DNAI/Scripts/" + file.Title + ".dnai");
+            var stream = System.IO.File.Create("Assets/Standard Assets/DNAI/Scripts/" + file.Title + "." + Constants.iaFileExtension);
             stream.Write(fileContent, 0, fileContent.Length);
             stream.Dispose();
-            AssetDatabase.ImportAsset("Assets/Standard Assets/DNAI/Scripts/" + file.Title + ".dnai");
+            AssetDatabase.ImportAsset("Assets/Standard Assets/DNAI/Scripts/" + file.Title + "." + Constants.iaFileExtension);
             return true;
         }
 

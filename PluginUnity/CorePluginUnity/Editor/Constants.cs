@@ -2,6 +2,6 @@
 {
     public static class Constants
     {
-        public const string iaFileExtension = "duly";
+        public const string iaFileExtension = "dnai";
     }
 }

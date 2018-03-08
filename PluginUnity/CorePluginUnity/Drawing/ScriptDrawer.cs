@@ -196,6 +196,17 @@ namespace Core.Plugin.Unity.Drawing
             }
         }
 
+        public ScriptDrawer()
+        {
+            CloudFileWatcher.FileCreated += (sender, e) =>
+            {
+                var newElem = new ListAIHandler();
+                //newElem.scriptManager.FilePath = e.FullPath;
+                //newElem.scriptManager.LoadScript();
+                AddElementInternal(newElem);// todo fill path and stuff
+            };
+        }
+
         /// <summary>
         /// Called when the window is enabled.
         /// </summary>
@@ -345,6 +356,12 @@ namespace Core.Plugin.Unity.Drawing
         private void AddElementInternal(ReorderableList list)
         {
             var handler = new ListAIHandler();
+            handler.OnEnable();
+            listIA.Add(handler);
+        }
+
+        private void AddElementInternal(ListAIHandler handler)
+        {
             handler.OnEnable();
             listIA.Add(handler);
         }
