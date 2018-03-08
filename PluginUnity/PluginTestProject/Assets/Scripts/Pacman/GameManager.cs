@@ -121,7 +121,6 @@ namespace Assets.Scripts.Pacman
         internal void KillPlayer()
         {
             SetGameState(GameState.Death);
-            Destroy(_playerInstance);
             SoundManager.Instance.PlayDeathSound();
         }
     }

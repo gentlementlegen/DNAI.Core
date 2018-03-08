@@ -17,8 +17,11 @@ namespace Assets.Scripts.Pacman
         private int x = 14;
         private int y = 23;
 
+        private Animator _animator;
+
         private void Start()
         {
+            _animator = GetComponent<Animator>();
             UpdateTarget();
         }
 
@@ -45,6 +48,19 @@ namespace Assets.Scripts.Pacman
             transform.position = Vector3.MoveTowards(transform.position, _target, _distanceDelta);
             if (Vector3.Distance(transform.position, _target) < 0.01f)
                 UpdateTarget();
+
+            //if (Input.GetKeyDown(KeyCode.U))
+            //{
+            //    KillPacman();
+            //}
+        }
+
+        private void KillPacman()
+        {
+            _currentDir = TerrainManager.Direction.Right;
+            RotatePacman();
+            _animator.SetTrigger("Die");
+            GameManager.Instance.KillPlayer();
         }
 
         private void AddDirection(TerrainManager.Direction direction)
@@ -112,8 +128,13 @@ namespace Assets.Scripts.Pacman
         {
             if (collision.tag == "Enemy")
             {
-                GameManager.Instance.KillPlayer();
+                KillPacman();
             }
+        }
+
+        public void Destroy()
+        {
+            Destroy(gameObject);
         }
     }
 }

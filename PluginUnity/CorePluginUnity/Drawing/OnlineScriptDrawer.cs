@@ -61,7 +61,6 @@ namespace Core.Plugin.Unity.Drawing
                     {
                         Debug.LogError("Exception thrown while downloading the file: " + e.Message + "\nInner Message: " + e.InnerException?.Message);
                     }
-                    
                 });
             }
 
