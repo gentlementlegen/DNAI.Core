@@ -1,6 +1,5 @@
 ﻿using Core.Plugin.Unity.Context;
 using Core.Plugin.Unity.Editor;
-using Core.Plugin.Unity.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -196,15 +195,26 @@ namespace Core.Plugin.Unity.Drawing
             }
         }
 
+        /// <summary>
+        /// Public ctor.
+        /// </summary>
         public ScriptDrawer()
         {
-            CloudFileWatcher.FileCreated += (sender, e) =>
-            {
-                var newElem = new ListAIHandler();
-                //newElem.scriptManager.FilePath = e.FullPath;
-                //newElem.scriptManager.LoadScript();
-                AddElementInternal(newElem);// todo fill path and stuff
-            };
+            CloudFileWatcher.FileCreated += OnFileCreated;
+        }
+
+        /// <summary>
+        /// Called when a DNAI file is created.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnFileCreated(object sender, FileSystemEventArgs e)
+        {
+            var newElem = new ListAIHandler();
+            newElem.OnEnable();
+            newElem.scriptManager.FilePath = e.FullPath;
+            newElem.scriptManager.LoadScript();
+            listIA.Add(newElem);
         }
 
         /// <summary>
@@ -243,6 +253,7 @@ namespace Core.Plugin.Unity.Drawing
         {
             //Debug.Log("+++++++ ON DESTROY List count => " + _editorSettings.listIA.Count);
             listIA.ForEach(x => x.OnDisable());
+            CloudFileWatcher.FileCreated -= OnFileCreated;
         }
 
         /// <summary>
@@ -356,12 +367,6 @@ namespace Core.Plugin.Unity.Drawing
         private void AddElementInternal(ReorderableList list)
         {
             var handler = new ListAIHandler();
-            handler.OnEnable();
-            listIA.Add(handler);
-        }
-
-        private void AddElementInternal(ListAIHandler handler)
-        {
             handler.OnEnable();
             listIA.Add(handler);
         }
