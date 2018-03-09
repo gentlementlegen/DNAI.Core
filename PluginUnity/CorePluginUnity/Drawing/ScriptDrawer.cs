@@ -1,5 +1,6 @@
 ﻿using Core.Plugin.Unity.Context;
 using Core.Plugin.Unity.Editor;
+using Core.Plugin.Unity.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -158,8 +159,7 @@ namespace Core.Plugin.Unity.Drawing
                     {
                         if (e.IsFaulted)
                         {
-                            Debug.LogError(e?.Exception.GetBaseException().Message);
-                            Debug.LogError(e?.Exception.GetBaseException().StackTrace);
+                            Debug.LogError(e?.Exception.GetBaseException().Message + " " + e?.Exception.GetBaseException().StackTrace);
                         }
                     });
                 }

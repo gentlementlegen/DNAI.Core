@@ -1,6 +1,7 @@
 ﻿using BinarySerializer;
 using Core.Plugin.Unity.API;
 using Core.Plugin.Unity.Editor;
+using Core.Plugin.Unity.Extensions;
 using Core.Plugin.Unity.Generator;
 using CoreCommand;
 using CoreCommand.Command;
@@ -155,8 +156,11 @@ namespace TestUnityPlugin
         [TestMethod]
         public void TestSettingsSaver()
         {
-            SettingsSaver.AddItem("test", "azerty");
-            var str = SettingsSaver.GetValue<string>("test");
+            //SettingsSaver.AddItem("test", "azerty");
+            //var str = SettingsSaver.GetValue<string>("test");
+            var str = "More Or-Less";
+            str = str.RemoveIllegalCharacters();
+            Assert.IsFalse(str.Contains(" "));
         }
 
         private Reply HandleCommand<Reply, Command>(Command tohandle, CoreCommand.IManager manager)

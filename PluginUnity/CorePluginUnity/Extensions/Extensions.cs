@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using static CoreControl.EntityFactory;
@@ -69,7 +70,12 @@ namespace Core.Plugin.Unity.Extensions
         public static string RemoveIllegalCharacters(this string str)
         {
             var rgx = new Regex("[^a-zA-Z0-9 -]");
-            return rgx.Replace(str, "").UppercaseFirst();
+            string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+            var r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+            str = rgx.Replace(str, "").UppercaseFirst();
+            str = r.Replace(str, "");
+            var invalidChars = new string(Path.GetInvalidFileNameChars()) + " -";
+            return string.Concat(str.Split(invalidChars.ToCharArray()));
             //return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rgx.Replace(str, ""));
         }
 
