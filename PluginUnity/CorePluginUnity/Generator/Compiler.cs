@@ -1,5 +1,6 @@
 ﻿#define UNITY_ENGINE
 
+using Core.Plugin.Unity.Editor;
 using Core.Plugin.Unity.Extensions;
 using CoreCommand;
 using Microsoft.CSharp;
@@ -17,7 +18,7 @@ using static CoreControl.EntityFactory;
 namespace Core.Plugin.Unity.Generator
 {
     /// <summary>
-    /// Manages code conversion from Duly files to Unity files.
+    /// Manages code conversion from DNAI files to Unity files.
     /// </summary>
     public class DulyCodeConverter
     {
@@ -112,9 +113,9 @@ namespace Core.Plugin.Unity.Generator
         private readonly CSharpCodeProvider _provider = new CSharpCodeProvider();
         private readonly CompilerParameters _parameters = new CompilerParameters();
 
-        private const string AssemblyOutputPath = "Assets/Standard Assets/DNAI/Compiled/";
+        private const string AssemblyOutputPath = Constants.CompiledPath;
 #if UNITY_ENGINE
-        private const string assemblyPath = "Assets/Standard Assets/DNAI/Plugins/";
+        private const string assemblyPath = Constants.PluginsPath;
 #else
         private const string assemblyPath = "";
 #endif
@@ -127,7 +128,7 @@ namespace Core.Plugin.Unity.Generator
 
         internal Compiler()
         {
-            Directory.CreateDirectory("Assets/Standard Assets/DNAI/Plugins");
+            Directory.CreateDirectory(Constants.PluginsPath);
             Directory.CreateDirectory(AssemblyOutputPath);
             //_parameters.OutputAssembly = "Assets/Plugins/" + assemblyName + ".dll";
             // Reference to library

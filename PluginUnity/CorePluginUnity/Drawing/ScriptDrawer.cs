@@ -39,8 +39,6 @@ namespace Core.Plugin.Unity.Drawing
         private EditorWindow _editorWindow;
         private EditorSettings _editorSettings;
 
-        private const string rootPath = "Assets/Standard Assets/DNAI/";
-
         /// Should the ScriptDrawer be drawing ?
         public bool ShouldDraw
         { get; set; }
@@ -154,7 +152,7 @@ namespace Core.Plugin.Unity.Drawing
                     {
                         //await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
                         await scriptManager.CompileAsync();
-                        AssetDatabase.ImportAsset("Assets/Standard Assets/DNAI/Compiled/" + scriptManager.AssemblyName + ".dll");
+                        AssetDatabase.ImportAsset(Constants.CompiledPath + scriptManager.AssemblyName + ".dll");
                     }).ContinueWith((e) =>
                     {
                         if (e.IsFaulted)
@@ -261,16 +259,16 @@ namespace Core.Plugin.Unity.Drawing
         /// </summary>
         private void LoadSettings()
         {
-            Directory.CreateDirectory(rootPath);
-            _editorSettings = (EditorSettings)AssetDatabase.LoadAssetAtPath<EditorSettings>(rootPath + "DNAIEditor.asset");
+            Directory.CreateDirectory(Constants.RootPath);
+            _editorSettings = (EditorSettings)AssetDatabase.LoadAssetAtPath<EditorSettings>(Constants.RootPath + "DNAIEditor.asset");
             if (_editorSettings == null)
             {
                 //Debug.Log("Settings were NULL");
                 //_editorSettings = CreateInstance<EditorSettings>();
                 _editorSettings = ScriptableObject.CreateInstance<EditorSettings>();
-                AssetDatabase.CreateAsset(_editorSettings, rootPath + "DNAIEditor.asset");
+                AssetDatabase.CreateAsset(_editorSettings, Constants.RootPath + "DNAIEditor.asset");
                 AssetDatabase.SaveAssets();
-                AssetDatabase.ImportAsset(rootPath + "DNAIEditor.asset");
+                AssetDatabase.ImportAsset(Constants.RootPath + "DNAIEditor.asset");
             }
             //Debug.Log("[Settings] list => " + _editorSettings.listIA.Count);
             AssetDatabase.SaveAssets();

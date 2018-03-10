@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Net.Http;
 
 namespace Core.Plugin.Unity.API
 {
@@ -29,7 +27,7 @@ namespace Core.Plugin.Unity.API
         public string token;
         public string refreshToken;
         public string user_id;
-}
+    }
 
     internal class File
     {
@@ -60,6 +58,7 @@ namespace Core.Plugin.Unity.API
         public uint file_type_id;
         public string title;
         public bool in_store;
+
         [JsonIgnore]
         public string file;
     }

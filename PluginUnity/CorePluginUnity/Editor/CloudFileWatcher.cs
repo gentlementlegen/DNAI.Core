@@ -10,8 +10,14 @@ using UnityEngine;
 
 namespace Core.Plugin.Unity.Editor
 {
+    /// <summary>
+    /// Handles the watching of the script folder, to synchronize actions with file updates.
+    /// </summary>
     public static class CloudFileWatcher
     {
+        /// <summary>
+        /// Called on file creation.
+        /// </summary>
         public static event FileSystemEventHandler FileCreated { add => _fileWatcher.Created += value; remove => _fileWatcher.Created -= value; }
 
         private static readonly FileSystemWatcher _fileWatcher = new FileSystemWatcher();
@@ -22,7 +28,7 @@ namespace Core.Plugin.Unity.Editor
 
         static CloudFileWatcher()
         {
-            _fileWatcher.Path = ("Assets/Standard Assets/DNAI/Scripts/");
+            _fileWatcher.Path = (Constants.ScriptPath);
             _fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
             _fileWatcher.Filter = "*." + Constants.iaFileExtension;
             _fileWatcher.Created += OnFileCreated;
@@ -60,18 +66,28 @@ namespace Core.Plugin.Unity.Editor
             });
         }
 
+        /// <summary>
+        /// Downloads a file asynchronously to the script folder. Returns true on succes, false otherwise.
+        /// </summary>
+        /// <param name="userID"></param>
+        /// <param name="file"></param>
+        /// <returns></returns>
         internal static async Task<bool> DownloadFileAsync(string userID, API.File file)
         {
             var fileContent = await Access.GetFileContent(userID, file._id);
             if (fileContent == null)
                 return false;
-            var stream = System.IO.File.Create("Assets/Standard Assets/DNAI/Scripts/" + file.Title + "." + Constants.iaFileExtension);
+            var stream = System.IO.File.Create(Constants.ScriptPath + file.Title + "." + Constants.iaFileExtension);
             stream.Write(fileContent, 0, fileContent.Length);
             stream.Dispose();
-            AssetDatabase.ImportAsset("Assets/Standard Assets/DNAI/Scripts/" + file.Title + "." + Constants.iaFileExtension);
+            AssetDatabase.ImportAsset(Constants.ScriptPath + file.Title + "." + Constants.iaFileExtension);
             return true;
         }
 
+        /// <summary>
+        /// Sets the watcher on pause or active.
+        /// </summary>
+        /// <param name="watch"></param>
         public static void Watch(bool watch)
         {
             _fileWatcher.EnableRaisingEvents = watch;

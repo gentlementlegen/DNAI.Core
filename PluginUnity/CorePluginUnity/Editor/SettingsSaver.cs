@@ -15,7 +15,6 @@ namespace Core.Plugin.Unity.Editor
     /// </summary>
     internal static class SettingsSaver
     {
-        public const string RootPath = "Assets/Standard Assets/DNAI/";
         public const string FileName = "DNAIEditorSettings.asset";
 
         //private static readonly TypeBuilder _typeBuilder;
@@ -129,14 +128,14 @@ namespace Core.Plugin.Unity.Editor
         public static void LoadSettings()
         {
 #if UNITY
-            Directory.CreateDirectory(RootPath);
-            _settingsClassBuilder = AssetDatabase.LoadAssetAtPath<SettingsClassBuilder>(RootPath + FileName);
+            Directory.CreateDirectory(Constants.RootPath);
+            _settingsClassBuilder = AssetDatabase.LoadAssetAtPath<SettingsClassBuilder>(Constants.RootPath + FileName);
             if (_settingsClassBuilder == null)
             {
                 _settingsClassBuilder = ScriptableObject.CreateInstance<SettingsClassBuilder>();
-                AssetDatabase.CreateAsset(_settingsClassBuilder, RootPath + FileName);
+                AssetDatabase.CreateAsset(_settingsClassBuilder, Constants.RootPath + FileName);
                 AssetDatabase.SaveAssets();
-                AssetDatabase.ImportAsset(RootPath + FileName);
+                AssetDatabase.ImportAsset(Constants.RootPath + FileName);
             }
             AssetDatabase.SaveAssets();
             EditorUtility.SetDirty(_settingsClassBuilder);

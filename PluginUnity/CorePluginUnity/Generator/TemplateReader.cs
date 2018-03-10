@@ -20,6 +20,9 @@ namespace Core.Plugin.Unity.Generator
         public string ClassName = "DulyBehaviour";
     }
 
+    /// <summary>
+    /// Class in charge of the reading of the templated file.
+    /// </summary>
     internal class TemplateReader
     {
         private readonly Dictionary<uint, string> enumNames = new Dictionary<uint, string>();

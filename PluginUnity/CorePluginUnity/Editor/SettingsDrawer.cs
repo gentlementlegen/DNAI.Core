@@ -12,7 +12,6 @@ namespace Core.Plugin.Unity.Editor
     /// </summary>
     public class SettingsDrawer : EditorWindow
     {
-        public const string RootPath = "Assets/Standard Assets/DNAI/";
         public const string FileName = "DNAIEditorSettings.asset";
 
         public static string UserID { get; private set; }
@@ -38,14 +37,14 @@ namespace Core.Plugin.Unity.Editor
 
         private void LoadSettings()
         {
-            Directory.CreateDirectory(RootPath);
-            _settings = AssetDatabase.LoadAssetAtPath<Settings>(RootPath + FileName);
+            Directory.CreateDirectory(Constants.RootPath);
+            _settings = AssetDatabase.LoadAssetAtPath<Settings>(Constants.RootPath + FileName);
             if (_settings == null)
             {
                 _settings = ScriptableObject.CreateInstance<Settings>();
-                AssetDatabase.CreateAsset(_settings, RootPath + FileName);
+                AssetDatabase.CreateAsset(_settings, Constants.RootPath + FileName);
                 AssetDatabase.SaveAssets();
-                AssetDatabase.ImportAsset(RootPath + FileName);
+                AssetDatabase.ImportAsset(Constants.RootPath + FileName);
             }
             AssetDatabase.SaveAssets();
             EditorUtility.SetDirty(_settings);

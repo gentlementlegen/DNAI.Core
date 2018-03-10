@@ -73,7 +73,7 @@ namespace Core.Plugin.Unity.Editor
             if (_window == null)
             {
                 _window = (DulyEditor)EditorWindow.GetWindow(typeof(DulyEditor));
-                _texture = AssetDatabase.LoadAssetAtPath<Texture>(@"Assets\Standard Assets\DNAI\Resources\dnai_logo.png");
+                _texture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "dnai_logo.png");
                 _window.titleContent = new GUIContent("DNAI", _texture);
                 _window.Show();
             }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Core.Plugin.Unity.Editor
 {
     /// <summary>
-    /// Manages the loaded scripts for Duly.
+    /// Manages the loaded scripts for DNAI.
     /// </summary>
     [System.Serializable]
     public class ScriptManager
