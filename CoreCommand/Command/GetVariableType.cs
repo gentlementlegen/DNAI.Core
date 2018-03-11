@@ -16,16 +16,12 @@ namespace CoreCommand.Command
         {
             return new Reply
             {
-                Command = this,
                 TypeID = controller.GetVariableType(VariableID)
             };
         }
 
         public class Reply
         {
-            [BinarySerializer.BinaryFormat]
-            public GetVariableType Command { get; set; }
-
             [BinarySerializer.BinaryFormat]
             public UInt32 TypeID { get; set; }
         }

@@ -7,20 +7,14 @@ using CoreControl;
 
 namespace CoreCommand.Command
 {
-    public class LoadFrom : ICommand<LoadFrom.Reply>
+    public class LoadFrom : ICommand<EmptyReply>
     {
-        public Reply Resolve(Controller controller)
-        {
-            return new Reply { Command = this };
-        }
-
-        public class Reply
-        {
-            [BinarySerializer.BinaryFormat]
-            public LoadFrom Command { get; set; }
-        }
-
         [BinarySerializer.BinaryFormat]
         public string Filename { get; set; }
+        
+        public EmptyReply Resolve(Controller controller)
+        {
+            return null;
+        }
     }
 }

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace CoreCommand
 {
+    public class EmptyReply { }
+
     public interface ICommand<Reply>
     {
         Reply Resolve(CoreControl.Controller controller);

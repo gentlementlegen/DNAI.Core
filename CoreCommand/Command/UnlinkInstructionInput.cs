@@ -2,14 +2,8 @@
 
 namespace CoreCommand.Command
 {
-    public class UnlinkInstructionInput : ICommand<UnlinkInstructionInput.Reply>
+    public class UnlinkInstructionInput : ICommand<EmptyReply>
     {
-        public class Reply
-        {
-            [BinarySerializer.BinaryFormat]
-            public UnlinkInstructionInput Command { get; set; }
-        }
-
         [BinarySerializer.BinaryFormat]
         public uint FunctionID { get; set; }
 
@@ -19,13 +13,10 @@ namespace CoreCommand.Command
         [BinarySerializer.BinaryFormat]
         public string InputName { get; set; }
 
-        public Reply Resolve(Controller controller)
+        public EmptyReply Resolve(Controller controller)
         {
             controller.UnlinkInstructionInput(FunctionID, Instruction, InputName);
-            return new Reply
-            {
-                Command = this
-            };
+            return null;
         }
     }
 }

@@ -2,14 +2,8 @@
 
 namespace CoreCommand.Command
 {
-    public class RenameClassAttribute : ICommand<RenameClassAttribute.Reply>
+    public class RenameClassAttribute : ICommand<EmptyReply>
     {
-        public class Reply
-        {
-            [BinarySerializer.BinaryFormat]
-            public RenameClassAttribute Command { get; set; }
-        }
-
         [BinarySerializer.BinaryFormat]
         public uint ClassId { get; set; }
 
@@ -19,13 +13,10 @@ namespace CoreCommand.Command
         [BinarySerializer.BinaryFormat]
         public string NewName { get; set; }
 
-        public Reply Resolve(Controller controller)
+        public EmptyReply Resolve(Controller controller)
         {
             controller.RenameClassAttribute(ClassId, LastName, NewName);
-            return new Reply
-            {
-                Command = this
-            };
+            return null;
         }
     }
 }

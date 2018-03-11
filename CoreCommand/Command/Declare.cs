@@ -8,9 +8,6 @@ namespace CoreCommand.Command
         public class Reply
         {
             [BinarySerializer.BinaryFormat]
-            public Declare Command { get; set; }
-
-            [BinarySerializer.BinaryFormat]
             public UInt32 EntityID { get; set; }
         }
 
@@ -28,10 +25,8 @@ namespace CoreCommand.Command
 
         public Reply Resolve(Controller controller)
         {
-            //Console.WriteLine("Declaring: {" + EntityType.ToString() + ", " + ContainerID.ToString() + ", " + Name + ", " + Visibility.ToString() + "}");
             return new Reply
             {
-                Command = this,
                 EntityID = controller.Declare(EntityType, ContainerID, Name, Visibility)
             };
         }

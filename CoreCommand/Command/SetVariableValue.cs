@@ -8,27 +8,18 @@ using Newtonsoft.Json;
 
 namespace CoreCommand.Command
 {
-    public class SetVariableValue : ICommand<SetVariableValue.Reply>
+    public class SetVariableValue : ICommand<EmptyReply>
     {
-        public class Reply
-        {
-            [BinarySerializer.BinaryFormat]
-            public SetVariableValue Command { get; set; }
-        }
-
         [BinarySerializer.BinaryFormat]
         public UInt32 VariableID { get; set; }
 
         [BinarySerializer.BinaryFormat]
         public string Value { get; set; }
 
-        public Reply Resolve(Controller controller)
+        public EmptyReply Resolve(Controller controller)
         {
             controller.SetVariableValue(VariableID, JsonConvert.DeserializeObject(Value));
-            return new Reply
-            {
-                Command = this
-            };
+            return null;
         }
     }
 }

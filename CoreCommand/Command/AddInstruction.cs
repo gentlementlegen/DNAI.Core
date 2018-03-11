@@ -10,9 +10,6 @@ namespace CoreCommand.Command
         public class Reply
         {
             [BinarySerializer.BinaryFormat]
-            public AddInstruction Command { get; set; }
-
-            [BinarySerializer.BinaryFormat]
             public UInt32 InstructionID { get; set; }
         }
 
@@ -29,7 +26,6 @@ namespace CoreCommand.Command
         {
             return new Reply
             {
-                Command = this,
                 InstructionID = controller.AddInstruction(FunctionID, ToCreate, Arguments)
             };
         }

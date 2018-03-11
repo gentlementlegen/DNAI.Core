@@ -9,9 +9,6 @@ namespace CoreCommand.Command
         public class Reply
         {
             [BinarySerializer.BinaryFormat]
-            public GetVariableValue Command { get; set; }
-
-            [BinarySerializer.BinaryFormat]
             public string Value { get; set; }
         }
 
@@ -22,7 +19,6 @@ namespace CoreCommand.Command
         {
             return new Reply
             {
-                Command = this,
                 Value = JsonConvert.SerializeObject(controller.GetVariableValue(VariableId))
             };
         }

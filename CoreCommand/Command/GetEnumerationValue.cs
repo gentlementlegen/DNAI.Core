@@ -8,9 +8,6 @@ namespace CoreCommand.Command
         public class Reply
         {
             [BinarySerializer.BinaryFormat]
-            public GetEnumerationValue Command { get; set; }
-
-            [BinarySerializer.BinaryFormat]
             public string Value { get; set; }
         }
 
@@ -24,7 +21,6 @@ namespace CoreCommand.Command
         {
             return new Reply
             {
-                Command = this,
                 Value = JsonConvert.SerializeObject(controller.GetEnumerationValue(EnumId, Name))
             };
         }

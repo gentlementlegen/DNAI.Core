@@ -36,39 +36,65 @@ namespace CoreCommand
         /// Dictionarry that associates commands name to replies name
         /// </summary>
         private Dictionary<String, String> _commandsReply = new Dictionary<string, string>();
-
+        
         public BinaryManager()
         {
-            RegisterCommand<AddClassAttribute, AddClassAttribute.Reply>("ADD_CLASS_ATTRIBUTE", "CLASS_ATTRIBUTE_ADDED");
-            RegisterCommand<AddInstruction, AddInstruction.Reply>("ADD_INSTRUCTION", "INSTRUCTION_ADDED");
-            RegisterCommand<CallFunction, CallFunction.Reply>("CALL_FUNCTION", "FUNCTION_CALLED", false);
-            RegisterCommand<ChangeVisibility, ChangeVisibility.Reply>("CHANGE_VISIBILITY", "ENTITY_VISIBILITY_CHANGED");
-            RegisterCommand<Declare, Declare.Reply>("DECLARE", "ENTITY_DECLARED");
-            RegisterCommand<GetEnumerationValue, GetEnumerationValue.Reply>("GET_ENUMERATION_VALUE", "ENUMERATION_VALUE_GET", false);
-            RegisterCommand<GetVariableType, GetVariableType.Reply>("GET_VARIABLE_TYPE", "VARIABLE_TYPE_GET", false);
-            RegisterCommand<GetVariableValue, GetVariableValue.Reply>("GET_VARIABLE_VALUE", "VARIABLE_VALUE_GET", false);
-            RegisterCommand<LinkInstructionData, LinkInstructionData.Reply>("LINK_INSTRUCTION_DATA", "INSTRUCTION_DATA_LINKED");
-            RegisterCommand<LinkInstructionExecution, LinkInstructionExecution.Reply>("LINK_INSTRUCTION_EXECUTION", "INSTRUCTION_EXECUTION_LINKED");
-            RegisterCommand<Move, Move.Reply>("MOVE", "ENTITY_MOVED");
-            RegisterCommand<Remove, Remove.Reply>("REMOVE", "ENTITY_REMOVED");
-            RegisterCommand<RemoveClassAttribute, RemoveClassAttribute.Reply>("REMOVE_CLASS_ATTRIBUTE", "CLASS_ATTRIBUTE_REMOVED");
-            RegisterCommand<RemoveEnumerationValue, RemoveEnumerationValue.Reply>("REMOVE_ENUMERATION_VALUE", "ENUMERATION_VALUE_REMOVED");
-            RegisterCommand<RemoveFunctionInstruction, RemoveFunctionInstruction.Reply>("REMOVE_FUNCTION_INSTRUCTION", "FUNCTION_INSTRUCTION_REMOVED");
-            RegisterCommand<Rename, Rename.Reply>("RENAME", "ENTITY_RENAMED");
-            RegisterCommand<RenameClassAttribute, RenameClassAttribute.Reply>("RENAME_CLASS_ATTRIBUTE", "CLASS_ATTRIBUTE_RENAMED");
-            RegisterCommand<SetContextParent, SetContextParent.Reply>("SET_CONTEXT_PARENT", "CONTEXT_PARENT_SET");
-            RegisterCommand<SetClassFunctionAsMember, SetClassFunctionAsMember.Reply>("SET_CLASS_FUNCTION_AS_MEMBER", "CLASS_MEMBER_FUNCTION_SET");
-            RegisterCommand<SetEnumerationType, SetEnumerationType.Reply>("SET_ENUMERATION_TYPE", "ENUMERATION_TYPE_SET");
-            RegisterCommand<SetEnumerationValue, SetEnumerationValue.Reply>("SET_ENUMERATION_VALUE", "ENUMERATION_VALUE_SET");
-            RegisterCommand<SetFunctionEntryPoint, SetFunctionEntryPoint.Reply>("SET_FUNCTION_ENTRY_POINT", "FUNCTION_ENTRY_POINT_SET");
-            RegisterCommand<SetFunctionParameter, SetFunctionParameter.Reply>("SET_FUNCTION_PARAMETER", "FUNCTION_PARAMETER_SET");
-            RegisterCommand<SetFunctionReturn, SetFunctionReturn.Reply>("SET_FUNCTION_RETURN", "FUNCTION_RETURN_SET");
-            RegisterCommand<SetInstructionInputValue, SetInstructionInputValue.Reply>("SET_INSTRUCTION_INPUT_VALUE", "INSTRUCTION_INPUT_VALUE_SET");
-            RegisterCommand<SetListType, SetListType.Reply>("SET_LIST_TYPE", "LIST_TYPE_SET");
-            RegisterCommand<SetVariableType, SetVariableType.Reply>("SET_VARIABLE_TYPE", "VARIABLE_TYPE_SET");
-            RegisterCommand<SetVariableValue, SetVariableValue.Reply>("SET_VARIABLE_VALUE", "VARIABLE_VALUE_SET");
-            RegisterCommand<UnlinkInstructionFlow, UnlinkInstructionFlow.Reply>("UNLINK_INSTRUCTION_FLOW", "INSTRUCTION_FLOW_UNLINKED");
-            RegisterCommand<UnlinkInstructionInput, UnlinkInstructionInput.Reply>("UNLINK_INSTRUCTION_INPUT", "INSTRUCTION_INPUT_UNLINKED");
+            //DECLARATOR
+
+            RegisterCommand<Declare, Declare.Reply>("DECLARATOR.DECLARE", "DECLARATOR.DECLARED");
+            RegisterCommand<Move, EmptyReply>("DECLARATOR.MOVE", "DECLARATOR.MOVED");
+            RegisterCommand<Remove, Remove.Reply>("DECLARATOR.REMOVE", "DECLARATOR.REMOVED");
+            RegisterCommand<Rename, EmptyReply>("DECLARATOR.RENAME", "DECLARATOR.RENAMED");
+            RegisterCommand<ChangeVisibility, EmptyReply>("DECLARATOR.CHANGE_VISIBILITY", "DECLARATOR.VISIBILITY_CHANGED");
+
+            //CONTEXT
+
+            RegisterCommand<SetContextParent, EmptyReply>("CONTEXT.SET_PARENT", "CONTEXT.PARENT_SET");
+
+            //FUNCTION
+            
+            RegisterCommand<CallFunction, CallFunction.Reply>("FUNCTION.CALL", "FUNCTION.CALLED", false);
+            RegisterCommand<AddInstruction, AddInstruction.Reply>("FUNCTION.ADD_INSTRUCTION", "FUNCTION.INSTRUCTION_ADDED");
+            RegisterCommand<RemoveFunctionInstruction, EmptyReply>("FUNCTION.REMOVE_INSTRUCTION", "FUNCTION.INSTRUCTION_REMOVED");
+            RegisterCommand<SetFunctionEntryPoint, EmptyReply>("FUNCTION.SET_ENTRY_POINT", "FUNCTION.ENTRY_POINT_SET");
+            RegisterCommand<SetFunctionParameter, EmptyReply>("FUNCTION.SET_PARAMETER", "FUNCTION.PARAMETER_SET");
+            RegisterCommand<SetFunctionReturn, EmptyReply>("FUNCTION.SET_RETURN", "FUNCTION.RETURN_SET");
+
+            //FUNCTION.INSTRUCTION
+
+            RegisterCommand<LinkInstructionData, EmptyReply>("FUNCTION.INSTRUCTION.LINK_DATA", "FUNCTION.INSTRUCTION.DATA_LINKED");
+            RegisterCommand<LinkInstructionExecution, EmptyReply>("FUNCTION.INSTRUCTION.LINK_EXECUTION", "FUNCTION.INSTRUCTION.EXECUTION_LINKED");
+            RegisterCommand<SetInstructionInputValue, EmptyReply>("FUNCTION.INSTRUCTION.SET_INPUT_VALUE", "FUNCTION.INSTRUCTION.INPUT_VALUE_SET");
+            RegisterCommand<UnlinkInstructionFlow, EmptyReply>("FUNCTION.INSTRUCTION.UNLINK_EXECUTION", "FUNCTION.INSTRUCTION.EXECUTION_UNLINKED");
+            RegisterCommand<UnlinkInstructionInput, EmptyReply>("FUNCTION.INSTRUCTION.UNLINK_DATA", "FUNCTION.INSTRUCTION.DATA_UNLINKED");
+
+            //VARIABLE
+
+            RegisterCommand<GetVariableType, GetVariableType.Reply>("VARIABLE.GET_TYPE", "VARIABLE.TYPE_GET", false);
+            RegisterCommand<GetVariableValue, GetVariableValue.Reply>("VARIABLE.GET_VALUE", "VARIABLE.VALUE_GET", false);
+            RegisterCommand<SetVariableType, EmptyReply>("VARIABLE.SET_TYPE", "VARIABLE.TYPE_SET");
+            RegisterCommand<SetVariableValue, EmptyReply>("VARIABLE.SET_VALUE", "VARIABLE.VALUE_SET");
+
+            //CLASS
+
+            RegisterCommand<AddClassAttribute, EmptyReply>("CLASS.ADD_ATTRIBUTE", "CLASS.ATTRIBUTE_ADDED");
+            RegisterCommand<RemoveClassAttribute, EmptyReply>("CLASS.REMOVE_ATTRIBUTE", "CLASS.ATTRIBUTE_REMOVED");
+            RegisterCommand<RenameClassAttribute, EmptyReply>("CLASS.RENAME_ATTRIBUTE", "CLASS.ATTRIBUTE_RENAMED");
+            RegisterCommand<SetClassFunctionAsMember, SetClassFunctionAsMember.Reply>("CLASS.SET_FUNCTION_AS_MEMBER", "CLASS.FUNCTION_SET_AS_MEMBER");
+
+            //ENUM
+
+            RegisterCommand<GetEnumerationValue, GetEnumerationValue.Reply>("ENUM.GET_VALUE", "ENUM.VALUE_GET", false);
+            RegisterCommand<RemoveEnumerationValue, EmptyReply>("ENUM.REMOVE_VALUE", "ENUM.VALUE_REMOVED");
+            RegisterCommand<SetEnumerationType, EmptyReply>("ENUM.SET_TYPE", "ENUM.TYPE_SET");
+            RegisterCommand<SetEnumerationValue, EmptyReply>("ENUM.SET_VALUE", "ENUM.VALUE_SET");
+
+            //LIST
+
+            RegisterCommand<SetListType, EmptyReply>("LIST.SET_TYPE", "LIST.TYPE_SET");
+
+            //OTHER
+
             RegisterCommand("SERIALIZE_TO", "SERIALIZED", false, (SerializeTo cmd) =>
             {
                 SaveCommandsTo(cmd.Filename);
@@ -131,16 +157,14 @@ namespace CoreCommand
         private bool ResolveCommand<Command, Reply>(Stream inStream, Stream outStream, bool save, Func<Command, Reply> callback) where Command : ICommand<Reply>
         {
             Command message = GetMessage<Command>(inStream, save);
-
-            //Console.WriteLine("Receiving : " + typeof(Command).ToString());
+            
             try
             {
                 Reply reply = callback(message);
-
-                //Console.WriteLine("Replying : " + typeof(Reply).ToString());
-                if (outStream != null)
+                
+                if (outStream != null && reply != null)
                 {
-                    BinarySerializer.Serializer.Serialize(reply, outStream);// ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, reply, _prefix);
+                    BinarySerializer.Serializer.Serialize(reply, outStream);
                 }
                 return true;
             }
@@ -149,7 +173,6 @@ namespace CoreCommand
                 Console.WriteLine("Error");
                 if (outStream != null)
                     BinarySerializer.Serializer.Serialize(error.Message, outStream);
-                //ProtoBuf.Serializer.SerializeWithLengthPrefix(outStream, error.Message, _prefix);
                 return false;
             }
         }

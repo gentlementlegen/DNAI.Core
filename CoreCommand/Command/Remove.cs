@@ -9,9 +9,6 @@ namespace CoreCommand.Command
         public class Reply
         {
             [BinarySerializer.BinaryFormat]
-            public Remove Command { get; set; }
-
-            [BinarySerializer.BinaryFormat]
             public List<UInt32> Removed { get; set; }
         }
 
@@ -28,7 +25,6 @@ namespace CoreCommand.Command
         {
             return new Reply
             {
-                Command = this,
                 Removed = controller.Remove(EntityType, ContainerID, Name)
             };
         }

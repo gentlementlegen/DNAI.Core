@@ -7,14 +7,8 @@ using System.Threading.Tasks;
 
 namespace CoreCommand.Command
 {
-    public class ChangeVisibility : ICommand<ChangeVisibility.Reply>
+    public class ChangeVisibility : ICommand<EmptyReply>
     {
-        public class Reply
-        {
-            [BinarySerializer.BinaryFormat]
-            public ChangeVisibility Command { get; set; }
-        }
-
         [BinarySerializer.BinaryFormat]
         public EntityFactory.ENTITY EntityType { get; set; }
 
@@ -27,13 +21,10 @@ namespace CoreCommand.Command
         [BinarySerializer.BinaryFormat]
         public EntityFactory.VISIBILITY NewVisi { get; set; }
 
-        public Reply Resolve(Controller controller)
+        public EmptyReply Resolve(Controller controller)
         {
             controller.ChangeVisibility(EntityType, ContainerID, Name, NewVisi);
-            return new Reply
-            {
-                Command = this
-            };
+            return null;
         }
     }
 }

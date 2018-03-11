@@ -2,15 +2,8 @@
 
 namespace CoreCommand.Command
 {
-    public class AddClassAttribute : ICommand<AddClassAttribute.Reply>
+    public class AddClassAttribute : ICommand<EmptyReply>
     {
-
-        public class Reply
-        {
-            [BinarySerializer.BinaryFormat]
-            public AddClassAttribute Command { get; set; }
-        }
-
         [BinarySerializer.BinaryFormat]
         public uint ClassId { get; set; }
 
@@ -23,13 +16,10 @@ namespace CoreCommand.Command
         [BinarySerializer.BinaryFormat]
         public EntityFactory.VISIBILITY Visibility { get; set; }
 
-        public Reply Resolve(Controller controller)
+        public EmptyReply Resolve(Controller controller)
         {
             controller.AddClassAttribute(ClassId, Name, TypeId, Visibility);
-            return new Reply
-            {
-                Command = this
-            };
+            return null;
         }
     }
 }

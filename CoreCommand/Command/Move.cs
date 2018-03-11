@@ -7,14 +7,8 @@ using System.Threading.Tasks;
 
 namespace CoreCommand.Command
 {
-    public class Move : ICommand<Move.Reply>
+    public class Move : ICommand<EmptyReply>
     {
-        public class Reply
-        {
-            [BinarySerializer.BinaryFormat]
-            public Move Command { get; set; }
-        }
-
         [BinarySerializer.BinaryFormat]
         public EntityFactory.ENTITY EntityType { get; set; }
 
@@ -27,13 +21,10 @@ namespace CoreCommand.Command
         [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
 
-        public Reply Resolve(Controller controller)
+        public EmptyReply Resolve(Controller controller)
         {
             controller.Move(EntityType, FromID, ToID, Name);
-            return new Reply
-            {
-                Command = this
-            };
+            return null;
         }
     }
 }

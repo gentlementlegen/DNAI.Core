@@ -2,14 +2,8 @@
 
 namespace CoreCommand.Command
 {
-    public class LinkInstructionData : ICommand<LinkInstructionData.Reply>
+    public class LinkInstructionData : ICommand<EmptyReply>
     {
-        public class Reply
-        {
-            [BinarySerializer.BinaryFormat]
-            public LinkInstructionData Command { get; set; }
-        }
-
         [BinarySerializer.BinaryFormat]
         public uint FunctionID { get; set; }
 
@@ -25,13 +19,10 @@ namespace CoreCommand.Command
         [BinarySerializer.BinaryFormat]
         public string InputName { get; set; }
 
-        public Reply Resolve(Controller controller)
+        public EmptyReply Resolve(Controller controller)
         {
             controller.LinkInstructionData(FunctionID, FromId, OutputName, ToId, InputName);
-            return new Reply
-            {
-                Command = this
-            };
+            return null;
         }
     }
 }

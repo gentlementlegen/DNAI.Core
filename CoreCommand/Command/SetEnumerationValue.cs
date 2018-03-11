@@ -3,14 +3,8 @@ using Newtonsoft.Json;
 
 namespace CoreCommand.Command
 {
-    public class SetEnumerationValue : ICommand<SetEnumerationValue.Reply>
+    public class SetEnumerationValue : ICommand<EmptyReply>
     {
-        public class Reply
-        {
-            [BinarySerializer.BinaryFormat]
-            public SetEnumerationValue Command { get; set; }
-        }
-
         [BinarySerializer.BinaryFormat]
         public uint EnumId { get; set; }
 
@@ -20,13 +14,10 @@ namespace CoreCommand.Command
         [BinarySerializer.BinaryFormat]
         public string Value { get; set; }
 
-        public Reply Resolve(Controller controller)
+        public EmptyReply Resolve(Controller controller)
         {
             controller.SetEnumerationValue(EnumId, Name, JsonConvert.DeserializeObject(Value));
-            return new Reply
-            {
-                Command = this
-            };
+            return null;
         }
     }
 }

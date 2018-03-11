@@ -8,9 +8,6 @@ namespace CoreCommand.Command
         public class Reply
         {
             [BinarySerializer.BinaryFormat]
-            public SetClassFunctionAsMember Command { get; set; }
-
-            [BinarySerializer.BinaryFormat]
             public UInt32 ThisParamID { get; set; }
         }
 
@@ -27,7 +24,6 @@ namespace CoreCommand.Command
         {
             return new Reply
             {
-                Command = this,
                 ThisParamID = controller.SetClassFunctionAsMember(ClassId, Name, Visibility)
             };
         }

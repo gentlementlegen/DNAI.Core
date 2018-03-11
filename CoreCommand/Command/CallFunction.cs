@@ -7,10 +7,7 @@ namespace CoreCommand.Command
     public class CallFunction : ICommand<CallFunction.Reply>
     {
         public class Reply
-        {
-            [BinarySerializer.BinaryFormat]
-            public CallFunction Command { get; set; }
-            
+        {            
             [BinarySerializer.BinaryFormat]
             public Dictionary<string, string> Returns { get; set; }
         }
@@ -42,7 +39,6 @@ namespace CoreCommand.Command
             }
             return new Reply
             {
-                Command = this,
                 Returns = res
             };
         }
