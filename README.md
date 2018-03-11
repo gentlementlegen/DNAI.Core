@@ -45,9 +45,14 @@ Assets/Standard Assets/DNAI/Editor/
 
 You can test the plugin by opening the Unity project, then selecting Window => DNAI, or pressing **Alt+D**.
 
+**IMPORTANT**: in order to be able to understand the plugin, Unity must be in **.NET 4.6** mode. To enable it:
+```
+File -> Build settings -> Player Settings -> Other Settings -> Scripting Runtime Version (set it to Experimental .NET 4.6 Equivalent)
+```
+
 ## Running the tests
 
-Explain how to run the automated tests for this system
+How to run the automated tests for this system:
 Running the tests is made easy within Visual Studio. Press **Ctrl+R/Ctrl+A** to run all the tests.
 You can also open the **Test Window** or run a single test manually, through the Unit Tests Projects. For more information, see [how to write and use unit tests](https://msdn.microsoft.com/en-us/library/hh694602.aspx).
 
