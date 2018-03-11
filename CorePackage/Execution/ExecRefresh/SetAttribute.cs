@@ -9,7 +9,7 @@ namespace CorePackage.Execution
     public class SetAttribute : ExecutionRefreshInstruction
     {
         Entity.Variable toset;
-        Dictionary<string, Entity.DataType> attributes;
+        Dictionary<string, Global.Definition> attributes;
 
         public SetAttribute(Entity.Variable obj) :
             base(new Dictionary<string, Entity.Variable> { },
@@ -23,15 +23,15 @@ namespace CorePackage.Execution
 
             attributes = type.GetAttributes();
 
-            foreach (KeyValuePair<string, Entity.DataType> curr in attributes)
+            foreach (KeyValuePair<string, Global.Definition> curr in attributes)
             {
-                AddInput(curr.Key, new Entity.Variable(curr.Value));
+                AddInput(curr.Key, new Entity.Variable((Entity.DataType)curr.Value));
             }
         }
 
         public override void Execute()
         {
-            foreach (KeyValuePair<string, Entity.DataType> curr in attributes)
+            foreach (KeyValuePair<string, Global.Definition> curr in attributes)
             {
                 toset.Value[curr.Key] = GetInputValue(curr.Key);
                 //outputs[curr.Key].Value.definition.Value = GetInputValue(curr.Key);

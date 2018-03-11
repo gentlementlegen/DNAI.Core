@@ -140,7 +140,7 @@ namespace CoreControl
         /// <param name="parentID">Identifier of the parent context to set</param>
         public void SetContextParent(UInt32 contextID, UInt32 parentID)
         {
-            entity_factory.FindDefinitionOfType<CorePackage.Global.IContext>(contextID).SetParent(entity_factory.FindDefinitionOfType<CorePackage.Global.IContext>(parentID));
+            //entity_factory.FindDefinitionOfType<CorePackage.Entity.Context>(contextID).SetParent(entity_factory.FindDefinitionOfType<CorePackage.Entity.Context>(parentID));
         }
 
         /// <summary>

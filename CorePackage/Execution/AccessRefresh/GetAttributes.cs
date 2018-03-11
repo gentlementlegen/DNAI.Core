@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CorePackage.Global;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,9 @@ namespace CorePackage.Execution
                 new Dictionary<string, Entity.Variable>())
         {
             this._stored = typetosplit;
-            foreach (KeyValuePair<string, Entity.DataType> attr in typetosplit.GetAttributes())
+            foreach (KeyValuePair<string, Definition> attr in typetosplit.GetAttributes())
             {
-                AddOutput(attr.Key, new Entity.Variable(attr.Value));
+                AddOutput(attr.Key, new Entity.Variable((Entity.DataType)attr.Value));
             }
         }
 
@@ -29,7 +30,7 @@ namespace CorePackage.Execution
         {
             Dictionary<string, dynamic> value = GetInput("this").Value.definition.Value;
 
-            foreach (KeyValuePair<string, Entity.DataType> attr in _stored.GetAttributes())
+            foreach (KeyValuePair<string, Definition> attr in _stored.GetAttributes())
             {
                 outputs[attr.Key].Value.definition.Value = value[attr.Key];
             }

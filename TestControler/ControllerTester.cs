@@ -248,10 +248,10 @@ namespace TestControler
             uint integer = (uint)CoreControl.EntityFactory.BASE_ID.INTEGER_TYPE;
             uint floating = (uint)CoreControl.EntityFactory.BASE_ID.FLOATING_TYPE;
 
-            uint ctx = controller.Declare(ENTITY.CONTEXT, 0, "toto", VISIBILITY.PRIVATE);
-            uint fnt = controller.Declare(ENTITY.FUNCTION, 0, "toto", VISIBILITY.PRIVATE);
-            uint var = controller.Declare(ENTITY.VARIABLE, 0, "toto", VISIBILITY.PRIVATE);
-            uint enu = controller.Declare(ENTITY.ENUM_TYPE, 0, "toto", VISIBILITY.PRIVATE);
+            uint ctx = controller.Declare(ENTITY.CONTEXT, 0, "Ctoto", VISIBILITY.PRIVATE);
+            uint fnt = controller.Declare(ENTITY.FUNCTION, 0, "Ftoto", VISIBILITY.PRIVATE);
+            uint var = controller.Declare(ENTITY.VARIABLE, 0, "Vtoto", VISIBILITY.PRIVATE);
+            uint enu = controller.Declare(ENTITY.ENUM_TYPE, 0, "Etoto", VISIBILITY.PRIVATE);
             uint obj = controller.Declare(ENTITY.OBJECT_TYPE, 0, "tata", VISIBILITY.PRIVATE);
             uint lst = controller.Declare(ENTITY.LIST_TYPE, 0, "tutu", VISIBILITY.PRIVATE);
 
@@ -350,25 +350,25 @@ namespace TestControler
 
             // declarators
 
-            controller.ChangeVisibility(ENTITY.CONTEXT, 0, "toto", VISIBILITY.PUBLIC);
-            controller.ChangeVisibility(ENTITY.VARIABLE, 0, "toto", VISIBILITY.PUBLIC);
-            controller.ChangeVisibility(ENTITY.FUNCTION, 0, "toto", VISIBILITY.PUBLIC);
-            controller.ChangeVisibility(ENTITY.DATA_TYPE, 0, "toto", VISIBILITY.PUBLIC);
+            controller.ChangeVisibility(ENTITY.CONTEXT, 0, "Ctoto", VISIBILITY.PUBLIC);
+            controller.ChangeVisibility(ENTITY.VARIABLE, 0, "Ftoto", VISIBILITY.PUBLIC);
+            controller.ChangeVisibility(ENTITY.FUNCTION, 0, "Vtoto", VISIBILITY.PUBLIC);
+            controller.ChangeVisibility(ENTITY.DATA_TYPE, 0, "Etoto", VISIBILITY.PUBLIC);
             controller.ChangeVisibility(ENTITY.DATA_TYPE, 0, "tata", VISIBILITY.PUBLIC);
             controller.ChangeVisibility(ENTITY.DATA_TYPE, 0, "tutu", VISIBILITY.PUBLIC);
 
             uint cnt = controller.Declare(ENTITY.CONTEXT, 0, "Container", VISIBILITY.PUBLIC);
-            controller.Move(ENTITY.CONTEXT, 0, cnt, "toto");
-            controller.Move(ENTITY.VARIABLE, 0, cnt, "toto");
-            controller.Move(ENTITY.FUNCTION, 0, cnt, "toto");
-            controller.Move(ENTITY.DATA_TYPE, 0, cnt, "toto");
+            controller.Move(ENTITY.CONTEXT, 0, cnt, "Ctoto");
+            controller.Move(ENTITY.VARIABLE, 0, cnt, "Ftoto");
+            controller.Move(ENTITY.FUNCTION, 0, cnt, "Vtoto");
+            controller.Move(ENTITY.DATA_TYPE, 0, cnt, "Etoto");
             controller.Move(ENTITY.DATA_TYPE, 0, cnt, "tata");
             controller.Move(ENTITY.DATA_TYPE, 0, cnt, "tutu");
 
-            controller.Rename(ENTITY.CONTEXT, cnt, "toto", "titi");
-            controller.Rename(ENTITY.VARIABLE, cnt, "toto", "titi");
-            controller.Rename(ENTITY.FUNCTION, cnt, "toto", "titi");
-            controller.Rename(ENTITY.DATA_TYPE, cnt, "toto", "titi");
+            controller.Rename(ENTITY.CONTEXT, cnt, "Ctoto", "Ctiti");
+            controller.Rename(ENTITY.VARIABLE, cnt, "Ftoto", "Ftiti");
+            controller.Rename(ENTITY.FUNCTION, cnt, "Vtoto", "Vtiti");
+            controller.Rename(ENTITY.DATA_TYPE, cnt, "Etoto", "Etiti");
             controller.Rename(ENTITY.DATA_TYPE, cnt, "tata", "toto");
             controller.Rename(ENTITY.DATA_TYPE, cnt, "tutu", "tata");
 
@@ -380,10 +380,10 @@ namespace TestControler
             Assert.IsTrue(controller.GetEntitiesOfType(ENTITY.DATA_TYPE, cnt).Count == 3);
 
 
-            controller.Remove(ENTITY.CONTEXT, cnt, "titi");
-            controller.Remove(ENTITY.VARIABLE, cnt, "titi");
-            controller.Remove(ENTITY.FUNCTION, cnt, "titi");
-            controller.Remove(ENTITY.DATA_TYPE, cnt, "titi");
+            controller.Remove(ENTITY.CONTEXT, cnt, "Ctiti");
+            controller.Remove(ENTITY.VARIABLE, cnt, "Ftiti");
+            controller.Remove(ENTITY.FUNCTION, cnt, "Vtiti");
+            controller.Remove(ENTITY.DATA_TYPE, cnt, "Etiti");
             controller.Remove(ENTITY.DATA_TYPE, cnt, "toto");
             controller.Remove(ENTITY.DATA_TYPE, cnt, "tata");
         }

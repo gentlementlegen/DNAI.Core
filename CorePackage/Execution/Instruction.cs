@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using CorePackage.Entity;
+using CorePackage.Global;
+using System.Collections.Generic;
 using System.Linq;
-
-using StorageDeclarator = CorePackage.Global.Declarator<CorePackage.Entity.Variable>;
 
 namespace CorePackage.Execution
 {
@@ -14,7 +14,7 @@ namespace CorePackage.Execution
         /// Intruction as internal context where inputs and outputs
         /// references <c>context.externals</c> declarations
         /// </summary>
-        private StorageDeclarator scope = new StorageDeclarator();
+        private Declarator scope = new Declarator(new List<System.Type> { typeof(Variable) });
 
         /// <summary>
         /// Instruction inputs that reference <c>context.externals</c> declaration

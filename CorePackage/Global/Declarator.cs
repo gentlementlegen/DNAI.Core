@@ -9,16 +9,18 @@ namespace CorePackage.Global
     /// <summary>
     /// Represent a class to declare and define items
     /// </summary>
-    public class Declarator<DefinitionType> : IDeclarator<DefinitionType>
+    public class Declarator : IDeclarator
     {
         /// <summary>
         /// Class that associates a definition to its visibility
         /// </summary>
         private class Declaration
         {
-            public DefinitionType definition;
+            public Definition definition;
             public AccessMode visibility;
         };
+
+        private List<Type> handled = new List<Type>();
 
         /// <summary>
         /// Internal list of defined items referenced by <c>externals</c> and <c>internal</c>
@@ -26,6 +28,11 @@ namespace CorePackage.Global
         /// </summary>
         private Dictionary<string, Declaration> defined = new Dictionary<string, Declaration>();
         
+        public Declarator(List<Type> handled)
+        {
+            this.handled = handled;
+        }
+
         /// <summary>
         /// Internal function to retreive an Entity from its name
         /// </summary>
@@ -40,19 +47,29 @@ namespace CorePackage.Global
         }
 
         ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
-        public DefinitionType ChangeVisibility(string name, AccessMode newVisibility)
+        public void ChangeVisibility(string name, AccessMode newVisibility)
         {
             Declaration tochange = _find(name);
 
             tochange.visibility = newVisibility;
-            return tochange.definition;
         }
 
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
-        public DefinitionType Declare(DefinitionType entity, string name, AccessMode visibility)
+        public Definition Declare(Definition entity, string name, AccessMode visibility)
         {
             if (defined.ContainsKey(name))
                 throw new InvalidOperationException("Declarator.Declare : trying to redeclare \"" + name + "\"");
+
+            System.Type entityType = entity.GetType();
+            bool ok = false;
+
+            foreach (System.Type curr in handled)
+            {
+                if (ok = curr.IsAssignableFrom(entityType))
+                    break;
+            }
+            if (!ok)
+                throw new InvalidOperationException("You cannot declare " + entity.GetType().ToString() + " in this container");
 
             defined[name] = new Declaration { definition = entity, visibility = visibility };
 
@@ -60,7 +77,7 @@ namespace CorePackage.Global
         }
 
         ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
-        public DefinitionType Find(string name, AccessMode visibility)
+        public Definition Find(string name, AccessMode visibility)
         {
             Declaration toret = _find(name);
 
@@ -74,13 +91,13 @@ namespace CorePackage.Global
         /// </summary>
         /// <param name="name">Name of the entity</param>
         /// <returns>The retreived entity</returns>
-        public DefinitionType Find(string name)
+        public Definition Find(string name)
         {
             return _find(name).definition;
         }
 
         ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
-        public DefinitionType Pop(string name)
+        public Definition Pop(string name)
         {
             Declaration topop = _find(name);
 
@@ -89,7 +106,7 @@ namespace CorePackage.Global
         }
 
         ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
-        public DefinitionType Rename(string lastName, string newName)
+        public void Rename(string lastName, string newName)
         {
             if (defined.ContainsKey(newName))
                 throw new InvalidOperationException("Declarator.Rename : \"" + newName + "\" already exists in declarator");
@@ -98,21 +115,18 @@ namespace CorePackage.Global
 
             defined.Remove(lastName);
             defined[newName] = torename;
-            return torename.definition;
         }
 
         ///<see cref="IDeclarator{definitionType}.GetVisibilityOf(string, ref AccessMode)"/>
-        public DefinitionType GetVisibilityOf(string name, ref AccessMode visibility)
+        public AccessMode GetVisibilityOf(string name)
         {
-            Declaration toret = _find(name);
-            visibility = toret.visibility;
-            return toret.definition;
+            return _find(name).visibility;
         }
 
         ///<see cref="IDeclarator{definitionType}.Clear"/>
-        public List<DefinitionType> Clear()
+        public List<Definition> Clear()
         {
-            List<DefinitionType> to_ret = new List<DefinitionType>();
+            List<Definition> to_ret = new List<Definition>();
 
             foreach (Declaration curr in defined.Values)
             {
@@ -122,9 +136,9 @@ namespace CorePackage.Global
             return to_ret;
         }
 
-        public Dictionary<string, DefinitionType> GetEntities(AccessMode visibility)
+        public Dictionary<string, Definition> GetEntities(AccessMode visibility)
         {
-            Dictionary<string, DefinitionType> toret = new Dictionary<string, DefinitionType>();
+            Dictionary<string, Definition> toret = new Dictionary<string, Definition>();
 
             foreach (KeyValuePair<string, Declaration> curr in defined)
             {
@@ -134,9 +148,9 @@ namespace CorePackage.Global
             return toret;
         }
 
-        public Dictionary<string, DefinitionType> GetEntities()
+        public Dictionary<string, Definition> GetEntities()
         {
-            Dictionary<string, DefinitionType> toret = new Dictionary<string, DefinitionType>();
+            Dictionary<string, Definition> toret = new Dictionary<string, Definition>();
 
             foreach (KeyValuePair<string, Declaration> curr in defined)
             {

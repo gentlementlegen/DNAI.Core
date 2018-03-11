@@ -11,7 +11,7 @@ namespace CorePackage.Entity
     /// <summary>
     /// Class that represents a function definition
     /// </summary>
-    public class Function : Global.Definition, Global.IDeclarator<Variable>
+    public class Function : Global.Definition, Global.IDeclarator
     {
         /// <summary>
         /// Enumeration that represents function variables role
@@ -28,7 +28,7 @@ namespace CorePackage.Entity
         /// <summary>
         /// A function has an internal scope in which you can declare variables
         /// </summary>
-        private Global.Declarator<Variable> scope = new Global.Declarator<Variable>();
+        private Global.Declarator scope = new Global.Declarator(new List<System.Type>{typeof(Variable)});
 
         /// <summary>
         /// Contains function parameters which references variables declared in "scope" attribute
@@ -64,7 +64,7 @@ namespace CorePackage.Entity
         /// <returns>Declaration of the variable</returns>
         public Variable  SetVariableAs(string name, VariableRole role)
         {
-            Variable real = scope.Find(name, AccessMode.EXTERNAL);
+            Variable real = (Variable)scope.Find(name, AccessMode.EXTERNAL);
             
             if (role == VariableRole.PARAMETER)
                 this.parameters[name] = real;
@@ -368,13 +368,13 @@ namespace CorePackage.Entity
         }
 
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
-        public Variable Declare(Variable entity, string name, AccessMode visibility)
+        public Definition Declare(Definition entity, string name, AccessMode visibility)
         {
             return scope.Declare(entity, name, visibility);
         }
 
         ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
-        public Variable Pop(string name)
+        public Definition Pop(string name)
         {
             if (parameters.ContainsKey(name))
                 parameters.Remove(name);
@@ -384,36 +384,36 @@ namespace CorePackage.Entity
         }
 
         ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
-        public Variable Find(string name, AccessMode visibility)
+        public Definition Find(string name, AccessMode visibility)
         {
             return scope.Find(name, visibility);
         }
 
         ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
-        public Variable Rename(string lastName, string newName)
+        public void Rename(string lastName, string newName)
         {
-            return scope.Rename(lastName, newName);
+            scope.Rename(lastName, newName);
         }
 
         ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
-        public Variable ChangeVisibility(string name, AccessMode newVisibility)
+        public void ChangeVisibility(string name, AccessMode newVisibility)
         {
-            return scope.ChangeVisibility(name, newVisibility);
+            scope.ChangeVisibility(name, newVisibility);
         }
 
         ///<see cref="IDeclarator{definitionType}.GetVisibilityOf(string, ref AccessMode)"/>
-        public Variable GetVisibilityOf(string name, ref AccessMode visibility)
+        public AccessMode GetVisibilityOf(string name)
         {
-            return scope.ChangeVisibility(name, visibility);
+            return scope.GetVisibilityOf(name);
         }
 
         ///<see cref="IDeclarator{definitionType}.Clear"/>
-        public List<Variable> Clear()
+        public List<Definition> Clear()
         {
             return scope.Clear();
         }
 
-        public Dictionary<string, Variable> GetEntities(AccessMode visibility)
+        public Dictionary<string, Definition> GetEntities(AccessMode visibility)
         {
             return scope.GetEntities(visibility);
         }

@@ -10,7 +10,7 @@ namespace CorePackage.Global
     /// <summary>
     /// Represents the way that a context works
     /// </summary>
-    public interface IContext : IDeclarator<IContext>, IDeclarator<Variable>, IDeclarator<DataType>, IDeclarator<Function>, Definition
+    public interface IContext : IDeclarator
     {
         /// <summary>
         /// Allow to set internal parent context
