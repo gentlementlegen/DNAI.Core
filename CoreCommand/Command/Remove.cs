@@ -11,10 +11,7 @@ namespace CoreCommand.Command
             [BinarySerializer.BinaryFormat]
             public List<UInt32> Removed { get; set; }
         }
-
-        [BinarySerializer.BinaryFormat]
-        public EntityFactory.ENTITY EntityType { get; set; }
-
+        
         [BinarySerializer.BinaryFormat]
         public UInt32 ContainerID { get; set; }
 
@@ -25,7 +22,7 @@ namespace CoreCommand.Command
         {
             return new Reply
             {
-                Removed = controller.Remove(EntityType, ContainerID, Name)
+                Removed = controller.Remove(ContainerID, Name)
             };
         }
     }

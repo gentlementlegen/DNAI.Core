@@ -10,9 +10,6 @@ namespace CoreCommand.Command
     public class ChangeVisibility : ICommand<EmptyReply>
     {
         [BinarySerializer.BinaryFormat]
-        public EntityFactory.ENTITY EntityType { get; set; }
-
-        [BinarySerializer.BinaryFormat]
         public UInt32 ContainerID { get; set; }
 
         [BinarySerializer.BinaryFormat]
@@ -23,7 +20,7 @@ namespace CoreCommand.Command
 
         public EmptyReply Resolve(Controller controller)
         {
-            controller.ChangeVisibility(EntityType, ContainerID, Name, NewVisi);
+            controller.ChangeVisibility(ContainerID, Name, NewVisi);
             return null;
         }
     }

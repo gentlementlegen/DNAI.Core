@@ -118,12 +118,12 @@ namespace TestControler
             factory.Move(0, cnt, "toto");
             factory.Move(0, cnt, "tata");
 
-            factory.ChangeVisibility(cnt, "Ctiti", AccessMode.INTERNAL);
-            factory.ChangeVisibility(cnt, "Ftiti", AccessMode.INTERNAL);
-            factory.ChangeVisibility(cnt, "Vtiti", AccessMode.INTERNAL);
-            factory.ChangeVisibility(cnt, "Etiti", AccessMode.INTERNAL);
-            factory.ChangeVisibility(cnt, "toto", AccessMode.INTERNAL);
-            factory.ChangeVisibility(cnt, "tata", AccessMode.INTERNAL);
+            factory.ChangeVisibility(cnt, "Ctiti", VISIBILITY.PRIVATE);
+            factory.ChangeVisibility(cnt, "Ftiti", VISIBILITY.PRIVATE);
+            factory.ChangeVisibility(cnt, "Vtiti", VISIBILITY.PRIVATE);
+            factory.ChangeVisibility(cnt, "Etiti", VISIBILITY.PRIVATE);
+            factory.ChangeVisibility(cnt, "toto", VISIBILITY.PRIVATE);
+            factory.ChangeVisibility(cnt, "tata", VISIBILITY.PRIVATE);
 
             factory.Remove(cnt, "Ctiti");
             factory.Remove(cnt, "Ftiti");
@@ -140,34 +140,34 @@ namespace TestControler
             obj = factory.Declare(ENTITY.OBJECT_TYPE, 0, "tata", VISIBILITY.PRIVATE);
             lst = factory.Declare(ENTITY.LIST_TYPE, 0, "tutu", VISIBILITY.PRIVATE);
 
-            factory.ChangeVisibility(ENTITY.CONTEXT, 0, "Ctoto", VISIBILITY.PUBLIC);
-            factory.ChangeVisibility(ENTITY.VARIABLE, 0, "Ftoto", VISIBILITY.PUBLIC);
-            factory.ChangeVisibility(ENTITY.FUNCTION, 0, "Vtoto", VISIBILITY.PUBLIC);
-            factory.ChangeVisibility(ENTITY.DATA_TYPE, 0, "Etoto", VISIBILITY.PUBLIC);
-            factory.ChangeVisibility(ENTITY.DATA_TYPE, 0, "tata", VISIBILITY.PUBLIC);
-            factory.ChangeVisibility(ENTITY.DATA_TYPE, 0, "tutu", VISIBILITY.PUBLIC);
+            factory.ChangeVisibility(0, "Ctoto", VISIBILITY.PUBLIC);
+            factory.ChangeVisibility(0, "Ftoto", VISIBILITY.PUBLIC);
+            factory.ChangeVisibility(0, "Vtoto", VISIBILITY.PUBLIC);
+            factory.ChangeVisibility(0, "Etoto", VISIBILITY.PUBLIC);
+            factory.ChangeVisibility(0, "tata", VISIBILITY.PUBLIC);
+            factory.ChangeVisibility(0, "tutu", VISIBILITY.PUBLIC);
 
             cnt = factory.Declare(ENTITY.CONTEXT, 0, "Container", VISIBILITY.PUBLIC);
-            factory.Move(ENTITY.CONTEXT, 0, cnt, "Ctoto");
-            factory.Move(ENTITY.VARIABLE, 0, cnt, "Ftoto");
-            factory.Move(ENTITY.FUNCTION, 0, cnt, "Vtoto");
-            factory.Move(ENTITY.DATA_TYPE, 0, cnt, "Etoto");
-            factory.Move(ENTITY.DATA_TYPE, 0, cnt, "tata");
-            factory.Move(ENTITY.DATA_TYPE, 0, cnt, "tutu");
+            factory.Move(0, cnt, "Ctoto");
+            factory.Move(0, cnt, "Ftoto");
+            factory.Move(0, cnt, "Vtoto");
+            factory.Move(0, cnt, "Etoto");
+            factory.Move(0, cnt, "tata");
+            factory.Move(0, cnt, "tutu");
 
-            factory.Rename(ENTITY.CONTEXT, cnt, "Ctoto", "Ctiti");
-            factory.Rename(ENTITY.VARIABLE, cnt, "Ftoto", "Ftiti");
-            factory.Rename(ENTITY.FUNCTION, cnt, "Vtoto", "Vtiti");
-            factory.Rename(ENTITY.DATA_TYPE, cnt, "Etoto", "Etiti");
-            factory.Rename(ENTITY.DATA_TYPE, cnt, "tata", "toto");
-            factory.Rename(ENTITY.DATA_TYPE, cnt, "tutu", "tata");
+            factory.Rename(cnt, "Ctoto", "Ctiti");
+            factory.Rename(cnt, "Ftoto", "Ftiti");
+            factory.Rename(cnt, "Vtoto", "Vtiti");
+            factory.Rename(cnt, "Etoto", "Etiti");
+            factory.Rename(cnt, "tata", "toto");
+            factory.Rename(cnt, "tutu", "tata");
 
-            factory.Remove(ENTITY.CONTEXT, cnt, "Ctiti");
-            factory.Remove(ENTITY.VARIABLE, cnt, "Ftiti");
-            factory.Remove(ENTITY.FUNCTION, cnt, "Vtiti");
-            factory.Remove(ENTITY.DATA_TYPE, cnt, "Etiti");
-            factory.Remove(ENTITY.DATA_TYPE, cnt, "toto");
-            factory.Remove(ENTITY.DATA_TYPE, cnt, "tata");
+            factory.Remove(cnt, "Ctiti");
+            factory.Remove(cnt, "Ftiti");
+            factory.Remove(cnt, "Vtiti");
+            factory.Remove(cnt, "Etiti");
+            factory.Remove(cnt, "toto");
+            factory.Remove(cnt, "tata");
         }
     }
 }

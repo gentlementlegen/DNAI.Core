@@ -69,7 +69,6 @@ namespace TestCommand
                 dispatcher,
                 new CoreCommand.Command.ChangeVisibility
                 {
-                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
                     ContainerID = 0,
                     Name = "toto",
                     NewVisi = CoreControl.EntityFactory.VISIBILITY.PUBLIC
@@ -112,7 +111,6 @@ namespace TestCommand
                 dispatcher,
                 new CoreCommand.Command.Remove
                 {
-                    EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
                     ContainerID = 0,
                     Name = "toto"
                 },

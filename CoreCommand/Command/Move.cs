@@ -10,9 +10,6 @@ namespace CoreCommand.Command
     public class Move : ICommand<EmptyReply>
     {
         [BinarySerializer.BinaryFormat]
-        public EntityFactory.ENTITY EntityType { get; set; }
-
-        [BinarySerializer.BinaryFormat]
         public UInt32 FromID { get; set; }
 
         [BinarySerializer.BinaryFormat]
@@ -23,7 +20,7 @@ namespace CoreCommand.Command
 
         public EmptyReply Resolve(Controller controller)
         {
-            controller.Move(EntityType, FromID, ToID, Name);
+            controller.Move(FromID, ToID, Name);
             return null;
         }
     }

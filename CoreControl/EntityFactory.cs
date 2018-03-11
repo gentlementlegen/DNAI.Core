@@ -327,9 +327,9 @@ namespace CoreControl
         /// <param name="containerID">Identifier of the declarator in which change entity visibility</param>
         /// <param name="name">Name of the entity to which change visibility</param>
         /// <param name="newVisi">New visibility to set</param>
-        public void ChangeVisibility(UInt32 containerID, string name, CorePackage.Global.AccessMode newVisi)
+        public void ChangeVisibility(UInt32 containerID, string name, VISIBILITY newVisi)
         {
-            GetDeclaratorOf(containerID).ChangeVisibility(name, newVisi);
+            GetDeclaratorOf(containerID).ChangeVisibility(name, (CorePackage.Global.AccessMode)newVisi);
         }
         
         /// <summary>
@@ -412,54 +412,6 @@ namespace CoreControl
             if (declarators.ContainsKey(to_declare))
                 return declarators[to_declare].Invoke(this, containerID, name, visibility);
             throw new KeyNotFoundException("No such declarator for ENTITY: " + to_declare.ToString());
-        }
-
-        /// <summary>
-        /// Remove an entity declared in a container
-        /// </summary>
-        /// <param name="to_remove">Type of entity contained in the declarator</param>
-        /// <param name="containerID">Identifier of the container in which entity is declared</param>
-        /// <param name="name">Name of the entity to remove in the container</param>
-        /// <returns>List of all removed entities' id</returns>
-        public List<UInt32> Remove(ENTITY to_remove, UInt32 containerID, string name)
-        {
-            return Remove(containerID, name);
-        }
-        
-        /// <summary>
-        /// Rename an entity declared in a container
-        /// </summary>
-        /// <param name="to_rename">Type of the entity contained in the declarator</param>
-        /// <param name="containerID">Identifier of the container in which entity is declared</param>
-        /// <param name="lastName">Current name of the entity</param>
-        /// <param name="newName">New name to set</param>
-        public void Rename(ENTITY to_rename, UInt32 containerID, string lastName, string newName)
-        {
-            Rename(containerID, lastName, newName);
-        }
-        
-        /// <summary>
-        /// Move an entity from a specific container to another
-        /// </summary>
-        /// <param name="to_move">Type of the entity contained in the declarator</param>
-        /// <param name="fromID">Identifier of the entity declared in the container</param>
-        /// <param name="toID">Identifier of the declarator in which move the entity</param>
-        /// <param name="name">Name of the entity to move</param>
-        public void Move(ENTITY to_move, UInt32 fromID, UInt32 toID, string name)
-        {
-            Move(fromID, toID, name);
-        }
-        
-        /// <summary>
-        /// Change an entity visibility declared in a specific container
-        /// </summary>
-        /// <param name="to_change_visi">Type of the entity to change visibility</param>
-        /// <param name="containerID">Identifier of the container in which entity is declared</param>
-        /// <param name="name">Name of the declared entity in the container</param>
-        /// <param name="newVisi">New visibility of the declared entity</param>
-        public void ChangeVisibility(ENTITY to_change_visi, UInt32 containerID, string name, VISIBILITY newVisi)
-        {
-            ChangeVisibility(containerID, name, (CorePackage.Global.AccessMode)newVisi);
         }
 
         private static readonly Dictionary<ENTITY, System.Type> entity_types = new Dictionary<ENTITY, Type>

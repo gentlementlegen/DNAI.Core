@@ -10,9 +10,6 @@ namespace CoreCommand.Command
     public class Rename : ICommand<EmptyReply>
     {
         [BinarySerializer.BinaryFormat]
-        public EntityFactory.ENTITY EntityType { get; set; }
-
-        [BinarySerializer.BinaryFormat]
         public UInt32 ContainerID { get; set; }
 
         [BinarySerializer.BinaryFormat]
@@ -23,7 +20,7 @@ namespace CoreCommand.Command
 
         public EmptyReply Resolve(Controller controller)
         {
-            controller.Rename(EntityType, ContainerID, LastName, NewName);
+            controller.Rename(ContainerID, LastName, NewName);
             return null;
         }
     }

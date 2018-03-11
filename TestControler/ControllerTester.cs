@@ -350,27 +350,27 @@ namespace TestControler
 
             // declarators
 
-            controller.ChangeVisibility(ENTITY.CONTEXT, 0, "Ctoto", VISIBILITY.PUBLIC);
-            controller.ChangeVisibility(ENTITY.VARIABLE, 0, "Ftoto", VISIBILITY.PUBLIC);
-            controller.ChangeVisibility(ENTITY.FUNCTION, 0, "Vtoto", VISIBILITY.PUBLIC);
-            controller.ChangeVisibility(ENTITY.DATA_TYPE, 0, "Etoto", VISIBILITY.PUBLIC);
-            controller.ChangeVisibility(ENTITY.DATA_TYPE, 0, "tata", VISIBILITY.PUBLIC);
-            controller.ChangeVisibility(ENTITY.DATA_TYPE, 0, "tutu", VISIBILITY.PUBLIC);
+            controller.ChangeVisibility(0, "Ctoto", VISIBILITY.PUBLIC);
+            controller.ChangeVisibility(0, "Ftoto", VISIBILITY.PUBLIC);
+            controller.ChangeVisibility(0, "Vtoto", VISIBILITY.PUBLIC);
+            controller.ChangeVisibility(0, "Etoto", VISIBILITY.PUBLIC);
+            controller.ChangeVisibility(0, "tata", VISIBILITY.PUBLIC);
+            controller.ChangeVisibility(0, "tutu", VISIBILITY.PUBLIC);
 
             uint cnt = controller.Declare(ENTITY.CONTEXT, 0, "Container", VISIBILITY.PUBLIC);
-            controller.Move(ENTITY.CONTEXT, 0, cnt, "Ctoto");
-            controller.Move(ENTITY.VARIABLE, 0, cnt, "Ftoto");
-            controller.Move(ENTITY.FUNCTION, 0, cnt, "Vtoto");
-            controller.Move(ENTITY.DATA_TYPE, 0, cnt, "Etoto");
-            controller.Move(ENTITY.DATA_TYPE, 0, cnt, "tata");
-            controller.Move(ENTITY.DATA_TYPE, 0, cnt, "tutu");
+            controller.Move(0, cnt, "Ctoto");
+            controller.Move(0, cnt, "Ftoto");
+            controller.Move(0, cnt, "Vtoto");
+            controller.Move(0, cnt, "Etoto");
+            controller.Move(0, cnt, "tata");
+            controller.Move(0, cnt, "tutu");
 
-            controller.Rename(ENTITY.CONTEXT, cnt, "Ctoto", "Ctiti");
-            controller.Rename(ENTITY.VARIABLE, cnt, "Ftoto", "Ftiti");
-            controller.Rename(ENTITY.FUNCTION, cnt, "Vtoto", "Vtiti");
-            controller.Rename(ENTITY.DATA_TYPE, cnt, "Etoto", "Etiti");
-            controller.Rename(ENTITY.DATA_TYPE, cnt, "tata", "toto");
-            controller.Rename(ENTITY.DATA_TYPE, cnt, "tutu", "tata");
+            controller.Rename(cnt, "Ctoto", "Ctiti");
+            controller.Rename(cnt, "Ftoto", "Ftiti");
+            controller.Rename(cnt, "Vtoto", "Vtiti");
+            controller.Rename(cnt, "Etoto", "Etiti");
+            controller.Rename(cnt, "tata", "toto");
+            controller.Rename(cnt, "tutu", "tata");
 
             List<Entity> ret = controller.GetEntitiesOfType(ENTITY.CONTEXT, cnt);
 
@@ -380,12 +380,12 @@ namespace TestControler
             Assert.IsTrue(controller.GetEntitiesOfType(ENTITY.DATA_TYPE, cnt).Count == 3);
 
 
-            controller.Remove(ENTITY.CONTEXT, cnt, "Ctiti");
-            controller.Remove(ENTITY.VARIABLE, cnt, "Ftiti");
-            controller.Remove(ENTITY.FUNCTION, cnt, "Vtiti");
-            controller.Remove(ENTITY.DATA_TYPE, cnt, "Etiti");
-            controller.Remove(ENTITY.DATA_TYPE, cnt, "toto");
-            controller.Remove(ENTITY.DATA_TYPE, cnt, "tata");
+            controller.Remove(cnt, "Ctiti");
+            controller.Remove(cnt, "Ftiti");
+            controller.Remove(cnt, "Vtiti");
+            controller.Remove(cnt, "Etiti");
+            controller.Remove(cnt, "toto");
+            controller.Remove(cnt, "tata");
         }
     }
 }
