@@ -29,6 +29,7 @@ namespace Core.Plugin.Unity.Editor
         {
             hideFlags = HideFlags.HideAndDontSave;
             LoadSettings();
+            _connectionStatus = CloudFileWatcher.Access.Token != null ? "Connected." : "Disconnected.";
         }
 
         public void OnDestroy()
@@ -60,7 +61,7 @@ namespace Core.Plugin.Unity.Editor
             GUILayout.Label(_connectionStatus);
             if (GUILayout.Button("Login"))
             {
-                UnityTask.Run(async() =>
+                UnityTask.Run(async () =>
                 {
                     _connectionStatus = "Connecting...";
                     Token token = null;

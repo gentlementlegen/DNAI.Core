@@ -12,6 +12,11 @@ namespace Core.Plugin.Unity.API
     /// </summary>
     internal class ApiAccess
     {
+        /// <summary>
+        /// Retrieves the currently set token for the connection.
+        /// </summary>
+        public Token Token { get; private set; }
+
         // http://163.5.84.173/
         private const string ApiAddress = "https://api.preprod.dnai.io/";
 
@@ -123,6 +128,7 @@ namespace Core.Plugin.Unity.API
         internal void SetAuthorization(Token token)
         {
             _accessor.SetAuthorizationOAuth(token);
+            Token = token;
         }
     }
 }
