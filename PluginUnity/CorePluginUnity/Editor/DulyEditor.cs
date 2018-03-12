@@ -39,6 +39,7 @@ namespace Core.Plugin.Unity.Editor
         private SettingsDrawer _settingsDrawer;
         private static DulyEditor _window;
         private static Texture _texture;
+        private static GUIContent _settingsContent;
 
         public static DulyEditor Instance { get { return _window; } }
 
@@ -85,22 +86,25 @@ namespace Core.Plugin.Unity.Editor
 
         private void OnGUI()
         {
+            if (_settingsContent == null)
+                _settingsContent = EditorGUIUtility.IconContent("SettingsIcon", "|Settings");
+
             GUILayout.BeginHorizontal();
             DrawWindowTitle();
+            if (GUILayout.Button(_settingsContent))
+            {
+                if (_settingsDrawer == null)
+                    _settingsDrawer = CreateInstance<SettingsDrawer>();
+                _settingsDrawer?.ShowAuxWindow();
+            }
             GUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
 
             GUI.enabled = !EditorApplication.isPlaying;
             _scriptDrawer?.Draw();
+            EditorGUILayout.Space();
             _onlineScriptDrawer?.Draw();
-
-            if (GUILayout.Button("Settings"))
-            {
-                if (_settingsDrawer == null)
-                    _settingsDrawer = CreateInstance<SettingsDrawer>();
-                _settingsDrawer?.ShowAuxWindow();
-            }
         }
 
         private void OnEnable()
