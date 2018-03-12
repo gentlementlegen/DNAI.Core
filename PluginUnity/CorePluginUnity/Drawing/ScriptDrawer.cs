@@ -151,8 +151,15 @@ namespace Core.Plugin.Unity.Drawing
                     UnityTask.Run(async () =>
                     {
                         //await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
-                        await scriptManager.CompileAsync();
-                        AssetDatabase.ImportAsset(Constants.CompiledPath + scriptManager.AssemblyName + ".dll");
+                        try
+                        {
+                            await scriptManager.CompileAsync();
+                            AssetDatabase.ImportAsset(Constants.CompiledPath + scriptManager.AssemblyName + ".dll");
+                        }
+                        catch (FileNotFoundException ex)
+                        {
+                            Debug.LogError($"Could not find the DNAI file {ex.FileName}. Make sure it exists in the Scripts folder.");
+                        }
                     }).ContinueWith((e) =>
                     {
                         if (e.IsFaulted)

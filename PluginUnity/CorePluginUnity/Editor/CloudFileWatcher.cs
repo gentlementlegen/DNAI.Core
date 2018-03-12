@@ -28,6 +28,7 @@ namespace Core.Plugin.Unity.Editor
 
         static CloudFileWatcher()
         {
+            Directory.CreateDirectory(Constants.ScriptPath);
             _fileWatcher.Path = (Constants.ScriptPath);
             _fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
             _fileWatcher.Filter = "*." + Constants.iaFileExtension;
