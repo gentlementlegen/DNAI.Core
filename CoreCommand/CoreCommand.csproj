@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\AddClassAttribute.cs" />
-    <Compile Include="Command\AddClassMemberFunction.cs" />
+    <Compile Include="Command\SetClassFunctionAsMember.cs" />
     <Compile Include="Command\CallFunction.cs" />
     <Compile Include="Command\GetEnumerationValue.cs" />
     <Compile Include="Command\GetVariableType.cs" />

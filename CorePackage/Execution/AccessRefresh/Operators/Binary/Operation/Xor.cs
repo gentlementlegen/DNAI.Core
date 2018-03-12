@@ -9,7 +9,7 @@ namespace CorePackage.Execution.Operators
     /// <summary>
     /// Instruction that represents "^"
     /// </summary>
-    public class Xor : OverloadableBinaryOperator
+    public class Xor : BinaryOperator
     {
         /// <summary>
         /// Constructor that 
@@ -19,20 +19,10 @@ namespace CorePackage.Execution.Operators
         /// <param name="resType">Type of the returned value</param>
         public Xor(Entity.DataType lOpType, Entity.DataType rOpType, Entity.DataType resType) :
             base(lOpType, rOpType,
-                delegate(dynamic left, dynamic right)
+                delegate(Entity.Variable left, Entity.Variable right)
                 {
-                    return left ^ right;
+                    return left.Type.OperatorXor(left.Value, right.Value);
                 }, resType)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor used to overload the operator
-        /// </summary>
-        /// <param name="overload">Overload function</param>
-        public Xor(Entity.Function overload) :
-            base(overload)
         {
 
         }

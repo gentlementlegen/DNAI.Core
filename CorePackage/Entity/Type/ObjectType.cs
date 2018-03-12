@@ -1,4 +1,5 @@
-﻿using CorePackage.Global;
+﻿using CorePackage.Error;
+using CorePackage.Global;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,8 @@ namespace CorePackage.Entity.Type
         /// Represents the objects attributes through a declarator of DataType
         /// </summary>
         private Declarator<DataType> attributes = new Declarator<DataType>();
+
+        private Dictionary<Operator.Name, Function> overloadedOperators = new Dictionary<Operator.Name, Function>();
 
         /// <summary>
         /// Basic default constructor which is necessary for factory
@@ -81,15 +84,16 @@ namespace CorePackage.Entity.Type
             attributes.Rename(lastName, newName);
         }
 
-        public void SetFunctionAsMember(string name, Global.AccessMode visibility)
+        public Variable SetFunctionAsMember(string name, Global.AccessMode visibility)
         {
             Function func = ((IDeclarator<Function>)this).Find(name, visibility);
 
             if (func == null)
-                return;
+                throw new NotFoundException("No such function named \"" + name + "\" with visibility " + visibility.ToString());
 
-            func.Declare(new Variable(this), "this", AccessMode.EXTERNAL);
+            Variable toret = func.Declare(new Variable(this), "this", AccessMode.EXTERNAL);
             func.SetVariableAs("this", Function.VariableRole.PARAMETER);
+            return toret;
         }
 
         /// <see cref="DataType.Instantiate"/>
@@ -334,9 +338,141 @@ namespace CorePackage.Entity.Type
             context.SetParent(parent);
         }
 
-        public Dictionary<string, DataType> GetPublicAttributes()
+        public Dictionary<string, DataType> GetAttributes()
         {
-            return attributes.GetEntities(AccessMode.EXTERNAL);
+            return attributes.GetEntities();
+        }
+
+        public void OverloadOperator(Operator.Name toOverload, string externalFuncName)
+        {
+            IDeclarator<Function> that = this;
+            Function overload = that.Find(externalFuncName, AccessMode.EXTERNAL);
+
+            if (overload == null)
+                throw new NotFoundException("No such function \"" + externalFuncName + "\" in object");
+
+            if (overload.GetParameter("this") == null)
+                throw new InvalidOperationException("Overload function as to be member function (with \"this\" parameter)");
+
+            Operator.Type opType = Operator.GetTypeOf(toOverload);
+
+            if (opType == Operator.Type.UNARY
+                && overload.GetParameter("this").Type != this)
+                throw new InvalidOperatorSignature("Unary operator must have 1 parameter named`\"Operand\" of type " + this.ToString());
+
+            if (opType == Operator.Type.BINARY
+                && (overload.GetParameter("this").Type != this
+                    || overload.GetParameter(Operator.Right) == null))
+                throw new InvalidOperatorSignature("Binary operator must have 2 parameters named \"LeftOperand\" (of type " + this.ToString() + ") and \"RightOperand\"");
+
+            if (overload.GetReturn(Operator.Result) == null)
+                throw new InvalidOperatorSignature("Operator must have \"result\" return value");
+
+            overloadedOperators[toOverload] = overload;
+        }
+
+        private Dictionary<string, dynamic> CallOperator(Operator.Name tocall, Dictionary<string, dynamic> parameters)
+        {
+            if (!overloadedOperators.ContainsKey(tocall))
+                throw new OperatorNotOverloaded();
+            return overloadedOperators[tocall].Call(parameters);
+        }
+
+        private dynamic CallOperator(Operator.Name tocall, dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(tocall, new Dictionary<string, dynamic>
+            {
+                { "this", lOp },
+                { Operator.Right, rOp }
+            })[Operator.Result];
+        }
+
+        public override dynamic OperatorAdd(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.ADD, lOp, rOp);
+        }
+
+        public override dynamic OperatorSub(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.SUB, lOp, rOp);
+        }
+
+        public override dynamic OperatorMul(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.MUL, lOp, rOp);
+        }
+
+        public override dynamic OperatorDiv(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.DIV, lOp, rOp);
+        }
+
+        public override dynamic OperatorMod(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.MOD, lOp, rOp);
+        }
+
+        public override bool OperatorGt(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.GT, lOp, rOp);
+        }
+
+        public override bool OperatorGtEq(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.GT_EQ, lOp, rOp);
+        }
+
+        public override bool OperatorLt(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.LT, lOp, rOp);
+        }
+
+        public override bool OperatorLtEq(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.LT_EQ, lOp, rOp);
+        }
+
+        public override bool OperatorEqual(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.EQUAL, lOp, rOp);
+        }
+
+        public override dynamic OperatorBAnd(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.B_AND, lOp, rOp);
+        }
+
+        public override dynamic OperatorBOr(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.B_OR, lOp, rOp);
+        }
+
+        public override dynamic OperatorRightShift(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.R_SHIFT, lOp, rOp);
+        }
+
+        public override dynamic OperatorLeftShift(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.L_SHIFT, lOp, rOp);
+        }
+
+        public override dynamic OperatorXor(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.XOR, lOp, rOp);
+        }
+
+        public override dynamic OperatorBNot(dynamic op)
+        {
+            return CallOperator(Operator.Name.B_NOT, new Dictionary<string, dynamic>
+            {
+                { "Operand", op }
+            })["result"];
+        }
+
+        public override dynamic OperatorAccess(dynamic lOp, dynamic rOp)
+        {
+            return CallOperator(Operator.Name.ACCESS, lOp, rOp);
         }
     }
 }

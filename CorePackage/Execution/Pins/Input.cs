@@ -43,6 +43,11 @@ namespace CorePackage.Execution
             get { return linkedOutputName; }
         }
 
+        public bool Linked
+        {
+            get { return LinkedInstruction != null; }
+        }
+
         /// <summary>
         /// Constructor that asks for the declaration to bind
         /// </summary>

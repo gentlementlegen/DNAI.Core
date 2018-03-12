@@ -9,7 +9,7 @@ namespace CorePackage.Execution.Operators
     /// <summary>
     /// Instruction that represents "*" operator
     /// </summary>
-    public class Multiplicate : OverloadableBinaryOperator
+    public class Multiplicate : BinaryOperator
     {
         /// <summary>
         /// Constructor that 
@@ -21,21 +21,11 @@ namespace CorePackage.Execution.Operators
             base(
                 lOpType,                            //left
                 rOpType,                           //right
-                delegate(dynamic left, dynamic right)   //operation
+                delegate(Entity.Variable left, Entity.Variable right)   //operation
                 {
-                    return left * right;
+                    return left.Type.OperatorMul(left.Value, right.Value);
                 },
                 resType)                                 //return
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor used to overload the operator
-        /// </summary>
-        /// <param name="overload">Overload function</param>
-        public Multiplicate(Entity.Function overload) :
-            base(overload)
         {
 
         }

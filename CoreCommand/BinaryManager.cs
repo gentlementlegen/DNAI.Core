@@ -45,7 +45,6 @@ namespace CoreCommand
         public BinaryManager()
         {
             RegisterCommand<AddClassAttribute, AddClassAttribute.Reply>("ADD_CLASS_ATTRIBUTE", "CLASS_ATTRIBUTE_ADDED");
-            RegisterCommand<AddClassMemberFunction, AddClassMemberFunction.Reply>("ADD_CLASS_MEMBER_FUNCTION", "CLASS_MEMBER_FUNCTION_ADDED");
             RegisterCommand<AddInstruction, AddInstruction.Reply>("ADD_INSTRUCTION", "INSTRUCTION_ADDED");
             RegisterCommand<CallFunction, CallFunction.Reply>("CALL_FUNCTION", "FUNCTION_CALLED", false);
             RegisterCommand<ChangeVisibility, ChangeVisibility.Reply>("CHANGE_VISIBILITY", "ENTITY_VISIBILITY_CHANGED");
@@ -63,6 +62,7 @@ namespace CoreCommand
             RegisterCommand<Rename, Rename.Reply>("RENAME", "ENTITY_RENAMED");
             RegisterCommand<RenameClassAttribute, RenameClassAttribute.Reply>("RENAME_CLASS_ATTRIBUTE", "CLASS_ATTRIBUTE_RENAMED");
             RegisterCommand<SetContextParent, SetContextParent.Reply>("SET_CONTEXT_PARENT", "CONTEXT_PARENT_SET");
+            RegisterCommand<SetClassFunctionAsMember, SetClassFunctionAsMember.Reply>("SET_CLASS_FUNCTION_AS_MEMBER", "CLASS_MEMBER_FUNCTION_SET");
             RegisterCommand<SetEnumerationType, SetEnumerationType.Reply>("SET_ENUMERATION_TYPE", "ENUMERATION_TYPE_SET");
             RegisterCommand<SetEnumerationValue, SetEnumerationValue.Reply>("SET_ENUMERATION_VALUE", "ENUMERATION_VALUE_SET");
             RegisterCommand<SetFunctionEntryPoint, SetFunctionEntryPoint.Reply>("SET_FUNCTION_ENTRY_POINT", "FUNCTION_ENTRY_POINT_SET");

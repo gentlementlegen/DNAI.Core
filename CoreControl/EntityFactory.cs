@@ -137,7 +137,7 @@ namespace CoreControl
         /// Add an entity to the internal dictionnaries and increment current_id
         /// </summary>
         /// <param name="entity">Entity to add</param>
-        private void AddEntity(CorePackage.Global.Definition entity)
+        public void AddEntity(CorePackage.Global.Definition entity)
         {
             definitions[current_uid] = entity;
             ids[entity] = current_uid++;

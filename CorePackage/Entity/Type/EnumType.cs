@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CorePackage.Error;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -132,6 +133,122 @@ namespace CorePackage.Entity.Type
                 throw new Error.NotFoundException("No such value named \"" + name + "\" in enumeration");
 
             values.Remove(name);
+        }
+
+        public string GetNameOf(dynamic value)
+        {
+            foreach (KeyValuePair<string, Variable> curr in Values)
+            {
+                if (value == curr.Value.Value)
+                {
+                    return curr.Key;
+                }
+            }
+            return null;
+        }
+
+        public override dynamic OperatorAdd(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override dynamic OperatorSub(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override dynamic OperatorMul(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override dynamic OperatorDiv(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override dynamic OperatorMod(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override bool OperatorGt(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override bool OperatorGtEq(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override bool OperatorLt(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override bool OperatorLtEq(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override bool OperatorEqual(dynamic lOp, dynamic rOp)
+        {
+            System.Type ltype = lOp.GetType();
+            System.Type rtype = rOp.GetType();
+            
+            if (ltype == rtype)
+                return lOp == rOp;
+
+            String lkey = null;
+            String rkey = null;
+
+            if (ltype.IsEnum)
+                lkey = ltype.GetEnumName(lOp);
+            else if ((lkey = GetNameOf(lOp)) == null)
+                return false;
+
+            if (rtype.IsEnum)
+                rkey = rtype.GetEnumName(lOp);
+            else if ((rkey = GetNameOf(rOp)) == null)
+                return false;
+
+            return lkey == rkey;
+        }
+
+        public override dynamic OperatorBAnd(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override dynamic OperatorBOr(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override dynamic OperatorRightShift(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override dynamic OperatorLeftShift(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override dynamic OperatorXor(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override dynamic OperatorBNot(dynamic op)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
+        }
+
+        public override dynamic OperatorAccess(dynamic lOp, dynamic rOp)
+        {
+            throw new OperatorNotPermitted("This operator is not allowed on EnumType");
         }
     }
 }

@@ -9,7 +9,7 @@ namespace CorePackage.Execution.Operators
     /// <summary>
     /// Instruction that represents "!" operator
     /// </summary>
-    public class Not : OverloadableUnaryOperator
+    public class Not : UnaryOperator
     {
         /// <summary>
         /// Constructor that only need input type (assume that output is same type)
@@ -18,21 +18,11 @@ namespace CorePackage.Execution.Operators
         public Not(Entity.DataType opType) :
             base(
                 opType,
-                delegate(dynamic op)
+                delegate(Entity.Variable op)
                 {
-                    return !op;
+                    return !op.Value;
                 },
                 Entity.Type.Scalar.Boolean)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor used to overload the operator
-        /// </summary>
-        /// <param name="overload">Function to overload</param>
-        public Not(Entity.Function overload) :
-            base(overload)
         {
 
         }

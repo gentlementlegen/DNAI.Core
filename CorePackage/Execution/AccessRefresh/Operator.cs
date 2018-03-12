@@ -27,7 +27,7 @@ namespace CorePackage.Execution
                 inputs,
                 new Dictionary<string, Entity.Variable>
                 {
-                    { "result", new Entity.Variable(outputType) }
+                    { Global.Operator.Result, new Entity.Variable(outputType) }
                 }
             )
         {

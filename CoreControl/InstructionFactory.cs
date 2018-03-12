@@ -332,7 +332,7 @@ namespace CoreControl
             {
                 INSTRUCTION_ID.OBJECT_ATTRIBUTES, (List<Definition> args) =>
                 {
-                    return new ObjectAttributes((ObjectType)(args[0]));
+                    return new GetAttributes((ObjectType)(args[0]));
                 }
             }
         };

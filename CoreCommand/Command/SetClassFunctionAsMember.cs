@@ -3,15 +3,15 @@ using System;
 
 namespace CoreCommand.Command
 {
-    public class AddClassMemberFunction : ICommand<AddClassMemberFunction.Reply>
+    public class SetClassFunctionAsMember : ICommand<SetClassFunctionAsMember.Reply>
     {
         public class Reply
         {
             [BinarySerializer.BinaryFormat]
-            public AddClassMemberFunction Command { get; set; }
+            public SetClassFunctionAsMember Command { get; set; }
 
             [BinarySerializer.BinaryFormat]
-            public UInt32 MethodID { get; set; }
+            public UInt32 ThisParamID { get; set; }
         }
 
         [BinarySerializer.BinaryFormat]
@@ -28,7 +28,7 @@ namespace CoreCommand.Command
             return new Reply
             {
                 Command = this,
-                MethodID = controller.AddClassMemberFunction(ClassId, Name, Visibility)
+                ThisParamID = controller.SetClassFunctionAsMember(ClassId, Name, Visibility)
             };
         }
     }

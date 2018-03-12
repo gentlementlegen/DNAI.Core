@@ -133,5 +133,16 @@ namespace CorePackage.Global
             }
             return toret;
         }
+
+        public Dictionary<string, DefinitionType> GetEntities()
+        {
+            Dictionary<string, DefinitionType> toret = new Dictionary<string, DefinitionType>();
+
+            foreach (KeyValuePair<string, Declaration> curr in defined)
+            {
+                toret.Add(curr.Key, curr.Value.definition);
+            }
+            return toret;
+        }
     }
 }

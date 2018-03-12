@@ -9,7 +9,7 @@ namespace CorePackage.Execution.Operators
     /// <summary>
     /// Instruction that represents "<<" operator
     /// </summary>
-    public class LeftShift : OverloadableBinaryOperator
+    public class LeftShift : BinaryOperator
     {
         /// <summary>
         /// Constructor that 
@@ -19,20 +19,10 @@ namespace CorePackage.Execution.Operators
         /// <param name="resType">Type of the returned value</param>
         public LeftShift(Entity.DataType lOpType, Entity.DataType rOpType, Entity.DataType resType) :
             base(lOpType, rOpType,
-                delegate(dynamic left, dynamic right)
+                delegate(Entity.Variable left, Entity.Variable right)
                 {
-                    return left << right;
+                    return left.Type.OperatorLeftShift(left.Value, right.Value);
                 }, resType)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor used to overload the operator
-        /// </summary>
-        /// <param name="overload">Overload function</param>
-        public LeftShift(Entity.Function overload) :
-            base(overload)
         {
 
         }

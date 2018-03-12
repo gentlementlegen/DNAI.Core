@@ -1,8 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using System.IO.Compression;
 using System.Diagnostics;
 using System.Threading;
+using System.Security.AccessControl;
 
 namespace TestNetwork
 {
@@ -15,8 +17,26 @@ namespace TestNetwork
             CoreNetwork.ClientManager coreSide = new CoreNetwork.ClientManager(new CoreCommand.BinaryManager());
             EventServerClient.Communication.TcpManager guiSide = new EventServerClient.Communication.TcpManager();
 
-            coreSide.Connect("127.0.0.1", 8765);
-            guiSide.Connect("127.0.0.1", 8765);
+            String serverDirectory = Directory.GetCurrentDirectory() + "\\..\\..\\Server";
+            String serverZip = serverDirectory + ".zip";
+
+            Assert.IsTrue(File.Exists(serverZip));
+
+            if (Directory.Exists(serverDirectory))
+                Directory.Delete(serverDirectory, true);
+
+            ZipFile.ExtractToDirectory(serverZip, serverDirectory);
+
+            String serverExe = serverDirectory + "\\Server.exe";
+
+            Assert.IsTrue(File.Exists(serverExe));
+
+            Process server = Process.Start(serverExe, "-p 4242");
+
+            Thread.Sleep(500);
+
+            coreSide.Connect("127.0.0.1", 4242);
+            guiSide.Connect("127.0.0.1", 4242);
 
             Assert.IsTrue(coreSide.isConnected() && guiSide.isConnected());
 
@@ -35,7 +55,7 @@ namespace TestNetwork
             {
                 MemoryStream stream = new MemoryStream(data);
 
-                CoreCommand.Command.Declare.Reply reply = BinarySerializer.Serializer.Deserialize<CoreCommand.Command.Declare.Reply>(data);//ProtoBuf.Serializer.DeserializeWithLengthPrefix<CoreCommand.Reply.EntityDeclared>(stream, ProtoBuf.PrefixStyle.Base128);
+                CoreCommand.Command.Declare.Reply reply = BinarySerializer.Serializer.Deserialize<CoreCommand.Command.Declare.Reply>(data);
 
                 Debug.WriteLine("Reply: { {" + reply.Command.ContainerID + ", " + reply.Command.EntityType + ", \"" + reply.Command.Name + "\", " + reply.Command.Visibility + "}, " + reply.EntityID + "}");
                 Assert.IsTrue(
@@ -50,7 +70,6 @@ namespace TestNetwork
             MemoryStream sendstream = new MemoryStream();
 
             BinarySerializer.Serializer.Serialize(tosend, sendstream);
-            //ProtoBuf.Serializer.SerializeWithLengthPrefix(sendstream, tosend, ProtoBuf.PrefixStyle.Base128);
 
             guiSide.SendEvent("DECLARE", sendstream.GetBuffer());
 
@@ -60,6 +79,12 @@ namespace TestNetwork
                 guiSide.Update();
                 Thread.Sleep(50);
             }
+
+            server.Kill();
+
+            server.WaitForExit();
+
+            Directory.Delete(serverDirectory, true);
         }
     }
 }

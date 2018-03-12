@@ -18,20 +18,10 @@ namespace CorePackage.Execution.Operators
         /// <param name="rightOpType">Type of the right operand</param>
         public Different(Entity.DataType leftOpType, Entity.DataType rightOpType) :
             base(leftOpType, rightOpType,
-                delegate(dynamic left, dynamic right)
+                delegate(Entity.Variable left, Entity.Variable right)
                 {
-                    return left != right;
+                    return !left.Type.OperatorEqual(left.Value, right.Value);
                 })
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor to overload the operator with a function
-        /// </summary>
-        /// <param name="overload">Overload function</param>
-        public Different(Entity.Function overload) :
-            base(overload)
         {
 
         }

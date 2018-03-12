@@ -9,7 +9,7 @@ namespace CorePackage.Execution.Operators
     /// <summary>
     /// Instruction that represents "%" operator
     /// </summary>
-    public class Modulo : OverloadableBinaryOperator
+    public class Modulo : BinaryOperator
     {
         /// <summary>
         /// Constructor that 
@@ -20,20 +20,10 @@ namespace CorePackage.Execution.Operators
         public Modulo(Entity.DataType lOpType, Entity.DataType rOpType, Entity.DataType resType) :
             base(lOpType,
                 rOpType,
-                delegate(dynamic left, dynamic right)
+                delegate(Entity.Variable left, Entity.Variable right)
                 {
-                    return left % right;
+                    return left.Type.OperatorMod(left.Value, right.Value);
                 }, resType)
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor used to overload the operator
-        /// </summary>
-        /// <param name="overload">Overload function</param>
-        public Modulo(Entity.Function overload) :
-            base(overload)
         {
 
         }
