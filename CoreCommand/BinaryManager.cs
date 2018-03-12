@@ -219,6 +219,39 @@ namespace CoreCommand
             return GetCommand(command)(inStream, outStream);
         }
 
+        public bool CallCommand<Command, Reply>(Command tosend, out Reply reply) 
+            where Command : ICommand<Reply>
+        {
+            MemoryStream input = new MemoryStream();
+            MemoryStream output = new MemoryStream();
+
+            if (CallCommand(tosend, input, output))
+            {
+                output.Position = 0;
+                reply = BinarySerializer.Serializer.Deserialize<Reply>(output);
+                return true;
+            }
+            output.Position = 0;
+            Console.Error.WriteLine(BinarySerializer.Serializer.Deserialize<String>(output));
+            reply = default(Reply);
+            return false;
+        }
+        public bool CallCommand<Reply>(ICommand<Reply> tosend, MemoryStream input = null, MemoryStream output = null)
+        {
+            if (input == null)
+                input = new MemoryStream();
+            if (output == null)
+                output = new MemoryStream();
+
+            BinarySerializer.Serializer.Serialize(tosend, input);
+            input.Position = 0;
+            if (!CallCommand(GetCommandName(tosend.GetType()), input, output))
+            {
+                return false;
+            }
+            return true;
+        }
+
         public Func<Stream, Stream, bool> GetCommand(String name)
         {
             if (!_handledCommands.ContainsKey(name))

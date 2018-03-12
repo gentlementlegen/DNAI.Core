@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="TestManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestObjects.cs" />
     <Compile Include="TestSerialization.cs" />
   </ItemGroup>
   <ItemGroup>

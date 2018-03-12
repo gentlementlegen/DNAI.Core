@@ -53,7 +53,8 @@ namespace CoreControl
             REMOVE_INDEX,
             SIZE,
             FOREACH,
-            OBJECT_ATTRIBUTES
+            GET_ATTRIBUTES,
+            SET_ATTRIBUTES
         };
 
         /// <summary>
@@ -95,7 +96,8 @@ namespace CoreControl
             { INSTRUCTION_ID.REMOVE_INDEX, 0 },
             { INSTRUCTION_ID.SIZE, 0 },
             { INSTRUCTION_ID.FOREACH, 1 },
-            { INSTRUCTION_ID.OBJECT_ATTRIBUTES, 1 }
+            { INSTRUCTION_ID.GET_ATTRIBUTES, 1 },
+            { INSTRUCTION_ID.SET_ATTRIBUTES, 1 }
         };
 
         /// <summary>
@@ -330,9 +332,15 @@ namespace CoreControl
                 }
             },
             {
-                INSTRUCTION_ID.OBJECT_ATTRIBUTES, (List<Definition> args) =>
+                INSTRUCTION_ID.GET_ATTRIBUTES, (List<Definition> args) =>
                 {
                     return new GetAttributes((ObjectType)(args[0]));
+                }
+            },
+            {
+                INSTRUCTION_ID.SET_ATTRIBUTES, (List<Definition> args) =>
+                {
+                    return new SetAttribute((Variable)args[0]);
                 }
             }
         };
