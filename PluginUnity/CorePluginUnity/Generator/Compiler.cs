@@ -158,13 +158,14 @@ namespace Core.Plugin.Unity.Generator
 
             if (OperatingSystem.IsMacOS())
             {
-                _parameters.ReferencedAssemblies.Add(unityLibPath + @"UnityEngine.dll");
+                _parameters.ReferencedAssemblies.Add(unityLibPath + @"UnityEngine.dll"); //UnityEngine.CoreModule.dll
+                _parameters.ReferencedAssemblies.Add(unityLibPath + @"UnityEngine.CoreModule.dll");
 
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
 
-                _parameters.ReferencedAssemblies.Add("/Library/Frameworks/Mono.framework/Versions/5.4.0/lib/mono/4.5/System.Core.dll");
-                _parameters.ReferencedAssemblies.Add("/Library/Frameworks/Mono.framework/Versions/5.4.0/lib/mono/4.5/Microsoft.CSharp.dll");
+                _parameters.ReferencedAssemblies.Add("/Library/Frameworks/Mono.framework/Versions/5.4.0/lib/mono/4.6.1-api/System.Core.dll");
+                _parameters.ReferencedAssemblies.Add("/Library/Frameworks/Mono.framework/Versions/5.4.0/lib/mono/4.6.1-api/Microsoft.CSharp.dll");
             } else if (OperatingSystem.IsWindows()) {
                 _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEngine.dll");
 
