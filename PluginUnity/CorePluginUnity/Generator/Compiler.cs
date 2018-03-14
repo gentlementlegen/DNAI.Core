@@ -158,14 +158,16 @@ namespace Core.Plugin.Unity.Generator
 
             if (OperatingSystem.IsMacOS())
             {
-                _parameters.ReferencedAssemblies.Add(unityLibPath + @"UnityEngine.dll");
+                _parameters.ReferencedAssemblies.Add(unityLibPath + "UnityEngine.dll");
 
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
 
                 _parameters.ReferencedAssemblies.Add("/Library/Frameworks/Mono.framework/Versions/5.4.0/lib/mono/4.5/System.Core.dll");
                 _parameters.ReferencedAssemblies.Add("/Library/Frameworks/Mono.framework/Versions/5.4.0/lib/mono/4.5/Microsoft.CSharp.dll");
-            } else if (OperatingSystem.IsWindows()) {
+            }
+            else if (OperatingSystem.IsWindows())
+            {
                 _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEngine.dll");
 
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
@@ -173,11 +175,11 @@ namespace Core.Plugin.Unity.Generator
 
                 _parameters.ReferencedAssemblies.Add("System.Core.dll");
                 _parameters.ReferencedAssemblies.Add("Microsoft.CSharp.dll");
-            } else {
+            }
+            else
+            {
                 throw new DllNotFoundException("Not supported on linux.");
             }
-
-
 
             // True - memory generation, false - external file generation
             _parameters.GenerateInMemory = true;
@@ -207,8 +209,7 @@ namespace Core.Plugin.Unity.Generator
             }
             else if (OperatingSystem.IsMacOS())
             {
-                // Not sure about this path.
-                path = "/Applications/Unity/PlaybackEngines/LinuxStandaloneSupport/Managed/";
+                path = "/Applications/Unity/Contents/Frameworks/";
             }
 
             return path;
