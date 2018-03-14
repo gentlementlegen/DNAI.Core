@@ -174,11 +174,11 @@ namespace Core.Plugin.Unity.Generator
 
                 _parameters.ReferencedAssemblies.Add("System.Core.dll");
                 _parameters.ReferencedAssemblies.Add("Microsoft.CSharp.dll");
-            } else {
+            }
+            else
+            {
                 throw new DllNotFoundException("Not supported on linux.");
             }
-
-
 
             // True - memory generation, false - external file generation
             _parameters.GenerateInMemory = true;
@@ -208,8 +208,7 @@ namespace Core.Plugin.Unity.Generator
             }
             else if (OperatingSystem.IsMacOS())
             {
-                // Not sure about this path.
-                path = "/Applications/Unity/PlaybackEngines/LinuxStandaloneSupport/Managed/";
+                path = "/Applications/Unity/Contents/Frameworks/";
             }
 
             return path;
