@@ -12,8 +12,19 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
 using static CoreControl.EntityFactory;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("TestUnityPlugin")]
+
+public static class OperatingSystem
+{
+    public static bool IsWindows() => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+    public static bool IsMacOS() => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+
+    public static bool IsLinux() => RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+}
 
 namespace Core.Plugin.Unity.Generator
 {
@@ -136,12 +147,40 @@ namespace Core.Plugin.Unity.Generator
             if (string.IsNullOrEmpty(unityLibPath))
                 throw new DllNotFoundException("Unity library could not be found.");
 
-            _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEngine.dll");
+            //    _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEngine.dll");
+            //_parameters.ReferencedAssemblies.Add(unityLibPath + @"UnityEngine.dll");
+
+
             //_parameters.ReferencedAssemblies.Add(Environment.ExpandEnvironmentVariables("%ProgramW6432%") + @"\Unity\Editor\Data\Managed\UnityEngine.dll");
-            _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
-            _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
-            _parameters.ReferencedAssemblies.Add("System.Core.dll");
-            _parameters.ReferencedAssemblies.Add("Microsoft.CSharp.dll");
+          //  _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
+          //  _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
+
+
+            if (OperatingSystem.IsMacOS())
+            {
+                _parameters.ReferencedAssemblies.Add(unityLibPath + "UnityEngine.dll");
+
+                _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
+                _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
+
+                _parameters.ReferencedAssemblies.Add("/Library/Frameworks/Mono.framework/Versions/5.4.0/lib/mono/4.5/System.Core.dll");
+                _parameters.ReferencedAssemblies.Add("/Library/Frameworks/Mono.framework/Versions/5.4.0/lib/mono/4.5/Microsoft.CSharp.dll");
+            }
+            else if (OperatingSystem.IsWindows())
+            {
+                _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEngine.dll");
+
+                _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
+                _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
+
+                _parameters.ReferencedAssemblies.Add("System.Core.dll");
+                _parameters.ReferencedAssemblies.Add("Microsoft.CSharp.dll");
+            }
+            else
+            {
+                throw new DllNotFoundException("Not supported on linux.");
+            }
+
             // True - memory generation, false - external file generation
             _parameters.GenerateInMemory = true;
             // True - exe file generation, false - dll file generation
@@ -153,16 +192,24 @@ namespace Core.Plugin.Unity.Generator
         {
             var path = "";
 
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Unity Technologies\Installer\Unity"))
+            if (OperatingSystem.IsWindows())
             {
-                if (key != null)
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Unity Technologies\Installer\Unity"))
                 {
-                    Object o = key.GetValue("Location x64");
-                    if (o != null)
+                    Debug.Print(key.ToString());
+                    if (key != null)
                     {
-                        path = o as string;
+                        Object o = key.GetValue("Location x64");
+                        if (o != null)
+                        {
+                            path = o as string;
+                        }
                     }
                 }
+            }
+            else if (OperatingSystem.IsMacOS())
+            {
+                path = "/Applications/Unity/Contents/Frameworks/";
             }
 
             return path;
