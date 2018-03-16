@@ -3,6 +3,9 @@
 //using Microsoft.VisualStudio.TextTemplating.VSHost;
 //using System;
 using Core.Plugin.Unity.Extensions;
+using CoreCommand;
+using CoreControl;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -17,7 +20,7 @@ namespace Core.Plugin.Unity.Generator
         public uint FunctionId;
         public string FunctionArguments = "";
         public string Namespace = "Behaviour";
-        public string ClassName = "DulyBehaviour";
+        public string ClassName = "DNAIBehaviour";
     }
 
     /// <summary>
@@ -108,6 +111,10 @@ namespace Core.Plugin.Unity.Generator
                         template.DataTypes.Add(ret);
                         enumNames.Add(item.Id, item.Name);
                     }
+                    else if (type == CoreControl.EntityFactory.ENTITY.OBJECT_TYPE)
+                    {
+                        template.DataTypes.Add(CreateObject(manager, item));
+                    }
                 }
             }
 
@@ -144,12 +151,22 @@ namespace Core.Plugin.Unity.Generator
 
                     for (int i = 0; i < pars.Count; i++)
                         template.FunctionArguments += $"{{\"{pars[i].Name}\", ({manager.Controller.GetVariableValue(pars[i].Id).GetType().ToString()}) {pars[i].Name}}},";
-                        //template.FunctionArguments += $"{{\"{pars[i].Name}\",{manager.Controller.GetVariableValue(pars[i].Id).ToString()}}},";
                     foreach (var ret in manager.Controller.GetFunctionReturns(item.Id))
                         template.Outputs.Add(ret.ToSerialString(manager.Controller));
                 }
             }
             return template.TransformText();
+        }
+
+        private string CreateObject(BinaryManager manager, EntityFactory.Entity item)
+        {
+            var ret = "class " + item.Name + "{";
+            var funcList = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.FUNCTION, item.Id);
+            var varList = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.VARIABLE, item.Id);
+            var l = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.OBJECT_TYPE, item.Id);
+            // TODO: handle object type here
+            return ret + "}";
+
         }
     }
 }

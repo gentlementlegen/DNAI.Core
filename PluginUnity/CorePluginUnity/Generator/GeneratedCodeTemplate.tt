@@ -9,10 +9,10 @@ using UnityEngine;
 using CoreCommand;
 using System.Collections.Generic;
 
-namespace Duly.<#=Namespace#>
+namespace DNAI.<#=Namespace#>
 {
 	///<summary>
-	/// Base behaviour for Duly IA.
+	/// Base behaviour for DNAI IA.
 	///</summary>
 	public class <#=ClassName#> : MonoBehaviour
 	{
