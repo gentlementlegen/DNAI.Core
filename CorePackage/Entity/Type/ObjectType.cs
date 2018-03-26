@@ -343,6 +343,15 @@ namespace CorePackage.Entity.Type
             return attributes.GetEntities();
         }
 
+        public DataType GetAttribute(String name)
+        {
+            Dictionary<string, DataType> attrs = attributes.GetEntities();
+
+            if (!attrs.ContainsKey(name))
+                throw new NotFoundException("No such attribute in class: " + name);
+            return attrs[name];
+        }
+
         public void OverloadOperator(Operator.Name toOverload, string externalFuncName)
         {
             IDeclarator<Function> that = this;

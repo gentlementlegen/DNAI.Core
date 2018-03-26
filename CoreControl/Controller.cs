@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CoreControl
 {
@@ -254,6 +255,16 @@ namespace CoreControl
         public void RemoveClassAttribute(UInt32 classID, string name)
         {
             entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID).RemoveAttribute(name);
+        }
+
+        public List<String> GetClassAttributes(UInt32 classID)
+        {
+            return entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID).GetAttributes().Keys.ToList();
+        }
+
+        public UInt32 GetClassAttribute(UInt32 classID, String name)
+        {
+            return entity_factory.GetEntityID(entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID).GetAttribute(name));
         }
 
         /// <summary>
