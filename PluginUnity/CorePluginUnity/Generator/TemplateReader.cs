@@ -162,11 +162,49 @@ namespace Core.Plugin.Unity.Generator
         {
             var ret = "class " + item.Name + "{";
             var funcList = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.FUNCTION, item.Id);
-            var varList = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.VARIABLE, item.Id);
-            var l = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.OBJECT_TYPE, item.Id);
-            // TODO: handle object type here
+            foreach (var attrib in manager.Controller.GetClassAttributes(item.Id))
+            {
+                var obj = new ObjectHandler(attrib, (EntityFactory.BASE_ID)manager.Controller.GetClassAttribute(item.Id, attrib));
+                ret += obj.ObjectType + " " + obj.ObjectName + ";";
+            }
             return ret + "}";
+        }
 
+        private class ObjectHandler
+        {
+            public string ObjectName { get; set; }
+
+            public string ObjectType { get; private set; }
+
+            public ObjectHandler(string name, EntityFactory.BASE_ID id)
+            {
+                ObjectName = name;
+                ObjectType = SetObjectType(id);
+            }
+
+            private string SetObjectType(EntityFactory.BASE_ID typeId)
+            {
+                switch (typeId)
+                {
+                    case EntityFactory.BASE_ID.BOOLEAN_TYPE:
+                        return ObjectType = "bool";
+                        break;
+                    case EntityFactory.BASE_ID.INTEGER_TYPE:
+                        return ObjectType = "int";
+                        break;
+                    case EntityFactory.BASE_ID.FLOATING_TYPE:
+                        return ObjectType = "float";
+                        break;
+                    case EntityFactory.BASE_ID.CHARACTER_TYPE:
+                        return ObjectType = "char";
+                        break;
+                    case EntityFactory.BASE_ID.STRING_TYPE:
+                        return ObjectType = "string";
+                        break;
+                    default:
+                        return "";
+                }
+            }
         }
     }
 }

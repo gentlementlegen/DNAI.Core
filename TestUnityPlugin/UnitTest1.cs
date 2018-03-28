@@ -189,10 +189,10 @@ namespace TestUnityPlugin
             var res = compiler.Compile(code);
             res = compiler.Compile(code);
 
-            var type = res.CompiledAssembly.GetType("DNAI.MoreOrLess.Play");
-            Assert.IsNotNull(type);
-            var func = type.GetMethod("Execute");
-            Assert.IsNotNull(func);
+            var type = res.CompiledAssembly.GetType("DNAI.Vector.DNAIBehaviour");
+            Assert.IsNotNull(type, "Type not found");
+            var func = type.GetMethod("Set");
+            Assert.IsNotNull(func, "func is null");
         }
 
         private Reply HandleCommand<Reply, Command>(Command tohandle, CoreCommand.IManager manager)
