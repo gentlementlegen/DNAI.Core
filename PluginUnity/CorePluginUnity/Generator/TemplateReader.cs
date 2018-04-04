@@ -125,12 +125,13 @@ namespace Core.Plugin.Unity.Generator
                     template.Inputs.Add(item.ToSerialString(manager.Controller));
             }
 
-            if (functions != null)
+            if (functions?.Count > 0)
             {
                 template.Outputs.Clear();
+                template.FunctionId = functions[0].Id;
                 foreach (var item in functions)
                 {
-                    template.FunctionId = item.Id;
+                    //template.FunctionId = item.Id;
                     var pars = manager.Controller.GetFunctionParameters(item.Id);
 
                     // Gets the variables with the function container id
@@ -158,15 +159,61 @@ namespace Core.Plugin.Unity.Generator
             return template.TransformText();
         }
 
+        private void GetFunctionBody(BinaryManager manager, EntityFactory.Entity item,
+                                        out List<string> inputs, out List<string> outputs, out string arguments)
+        {
+            var pars = manager.Controller.GetFunctionParameters(item.Id);
+            inputs = new List<string>();
+            outputs = new List<string>();
+            arguments = "";
+
+            // Gets the variables with the function container id
+            foreach (var v in pars)
+            {
+                var typeId = manager.Controller.GetVariableType(v.Id);
+                var realType = manager.Controller.GetEntityType(typeId);
+                if (realType == CoreControl.EntityFactory.ENTITY.ENUM_TYPE)
+                {
+                    var ret = $"{enumNames[typeId]} {v.Name}";
+                    inputs.Add(ret);
+                }
+                else
+                {
+                    inputs.Add(v.ToSerialString(manager.Controller));
+                }
+            }
+
+            for (int i = 0; i < pars.Count; i++)
+                arguments += $"{{\"{pars[i].Name}\", ({manager.Controller.GetVariableValue(pars[i].Id).GetType().ToString()}) {pars[i].Name}}},";
+            foreach (var ret in manager.Controller.GetFunctionReturns(item.Id))
+                outputs.Add(ret.ToSerialString(manager.Controller));
+        }
+
+        /// <summary>
+        /// Generates a custom object from the given entity.
+        /// </summary>
+        /// <param name="manager"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private string CreateObject(BinaryManager manager, EntityFactory.Entity item)
         {
             var ret = "class " + item.Name + "{";
             var funcList = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.FUNCTION, item.Id);
+            var funcTemplate = new GenerateFunctionTemplate();
+
             foreach (var attrib in manager.Controller.GetClassAttributes(item.Id))
             {
                 var obj = new ObjectHandler(attrib, (EntityFactory.BASE_ID)manager.Controller.GetClassAttribute(item.Id, attrib));
                 ret += obj.ObjectType + " " + obj.ObjectName + ";";
             }
+            //foreach (var func in funcList)
+            //{
+            //    var inputs = new List<string>();
+            //    var outputs = new List<string>();
+            //    funcTemplate.FunctionId = func.Id;
+            //    GetFunctionBody(manager, func, out funcTemplate.Inputs, out funcTemplate.Outputs, out funcTemplate.FunctionArguments);
+            //    ret += funcTemplate.TransformText();
+            //}
             return ret + "}";
         }
 
@@ -202,7 +249,7 @@ namespace Core.Plugin.Unity.Generator
                         return ObjectType = "string";
                         break;
                     default:
-                        return "";
+                        return "object";
                 }
             }
         }

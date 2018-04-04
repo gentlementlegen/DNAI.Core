@@ -85,10 +85,16 @@
     <Compile Include="Editor\SettingsSaver.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Generator\Compiler.cs" />
+    <Compile Include="Generator\FunctionGenerator.cs" />
     <Compile Include="Generator\GeneratedCodeTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>GeneratedCodeTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Generator\GenerateFunctionTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GenerateFunctionTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Generator\TemplateReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -123,6 +129,10 @@
     <Content Include="Generator\GeneratedCodeTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>GeneratedCodeTemplate.cs</LastGenOutput>
+    </Content>
+    <Content Include="Generator\GenerateFunctionTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>GenerateFunctionTemplate.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
