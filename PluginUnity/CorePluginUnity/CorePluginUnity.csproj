@@ -85,6 +85,7 @@
     <Compile Include="Editor\SettingsSaver.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Generator\Compiler.cs" />
+    <Compile Include="Generator\CustomObject.cs" />
     <Compile Include="Generator\FunctionGenerator.cs" />
     <Compile Include="Generator\GeneratedCodeTemplate.cs">
       <AutoGen>True</AutoGen>

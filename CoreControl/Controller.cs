@@ -170,7 +170,7 @@ namespace CoreControl
             entity_factory.FindDefinitionOfType<CorePackage.Global.IContext>(contextID).SetParent(entity_factory.FindDefinitionOfType<CorePackage.Global.IContext>(parentID));
         }
 
-        public dynamic InstanciateType(UInt32 dataTypeID)
+        public dynamic InstantiateType(UInt32 dataTypeID)
         {
             return entity_factory.FindDefinitionOfType<CorePackage.Entity.DataType>(dataTypeID).Instantiate();
         }
