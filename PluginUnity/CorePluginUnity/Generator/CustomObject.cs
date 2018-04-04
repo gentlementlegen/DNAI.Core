@@ -92,6 +92,8 @@ namespace Core.Plugin.Unity.Generator
                     return ObjectType = "string";
 
                 default:
+                    if (_registeredClasses.ContainsKey((uint)typeId))
+                        return _registeredClasses[(uint)typeId];
                     return "object";
             }
         }

@@ -83,6 +83,7 @@ namespace Core.Plugin.Unity.Generator
             List<CoreControl.EntityFactory.Entity> functions = null, List<CoreControl.EntityFactory.Entity> dataTypes = null)
         {
             var template = new GeneratedCodeTemplate();
+            var customObjects = new Queue<CustomObject>();
             enumNames.Clear();
 
             if (manager != null)
@@ -113,9 +114,12 @@ namespace Core.Plugin.Unity.Generator
                     }
                     else if (type == CoreControl.EntityFactory.ENTITY.OBJECT_TYPE)
                     {
-                        template.DataTypes.Add(CreateObject(manager, item));
+                        //template.DataTypes.Add(CreateObject(manager, item));
+                        customObjects.Enqueue(new CustomObject(item, manager.Controller));
                     }
                 }
+                foreach (var obj in customObjects)
+                    template.DataTypes.Add(CreateObject(obj));
             }
 
             if (variables != null)
@@ -187,6 +191,22 @@ namespace Core.Plugin.Unity.Generator
                 arguments += $"{{\"{pars[i].Name}\", ({manager.Controller.GetVariableValue(pars[i].Id).GetType().ToString()}) {pars[i].Name}}},";
             foreach (var ret in manager.Controller.GetFunctionReturns(item.Id))
                 outputs.Add(ret.ToSerialString(manager.Controller));
+        }
+
+        /// <summary>
+        /// Retrieves the string representing the given object.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        private string CreateObject(CustomObject obj)
+        {
+            var ret = "class " + obj.ObjectName + "{";
+
+            foreach (var attrib in obj.Fields)
+            {
+                ret += obj.GetFieldType(attrib.Value) + " " + attrib.Key + ";";
+            }
+            return ret + "}";
         }
 
         /// <summary>
