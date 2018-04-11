@@ -19,6 +19,7 @@ namespace Core.Plugin.Unity.Editor
         private Settings _settings;
 
         private string _connectionStatus = "Disconnected.";
+        private string _password = "";
 
         public SettingsDrawer()
         {
@@ -73,8 +74,7 @@ namespace Core.Plugin.Unity.Editor
             GUILayout.Label("Username");
             _settings.Username = GUILayout.TextField(_settings.Username);
             GUILayout.Label("Password");
-            var password = "";
-            password = GUILayout.PasswordField(password, '*', 25);
+            _password = GUILayout.PasswordField(_password, '*', 25);
             GUILayout.Label(_connectionStatus);
             if (GUILayout.Button("Login"))
             {
@@ -84,7 +84,7 @@ namespace Core.Plugin.Unity.Editor
                     Token token = null;
                     try
                     {
-                        token = await CloudFileWatcher.Access.GetToken(_settings.Username, password);
+                        token = await CloudFileWatcher.Access.GetToken(_settings.Username, _password);
                     }
                     catch (Exception ex)
                     {
