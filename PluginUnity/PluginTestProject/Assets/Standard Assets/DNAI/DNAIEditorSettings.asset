@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Name: DNAIEditorSettings
   m_EditorClassIdentifier: 
   Username: toto
-  Password: tata
-  Token: 
-  AutoSync: 1
+  Token:
+    token: 
+    refreshToken: 
+    user_id: 
+  AutoLogin: 1

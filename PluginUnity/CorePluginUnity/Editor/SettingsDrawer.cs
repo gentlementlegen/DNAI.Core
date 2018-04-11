@@ -29,13 +29,26 @@ namespace Core.Plugin.Unity.Editor
         {
             hideFlags = HideFlags.HideAndDontSave;
             LoadSettings();
-            _connectionStatus = CloudFileWatcher.Access.Token != null ? "Connected." : "Disconnected.";
+            if (_settings.AutoLogin)
+                CloudFileWatcher.Access.SetAuthorization(_settings.Token);
+            _connectionStatus = !CloudFileWatcher.Access.Token.IsEmpty() ? "Connected." : "Disconnected.";
         }
 
+        /// <summary>
+        /// Called when the window is destroyed.
+        /// </summary>
         public void OnDestroy()
         {
+            if (!_settings.AutoLogin)
+            {
+                _settings.Username = "";
+                _settings.Token = null;
+            }
         }
 
+        /// <summary>
+        /// Allows loading the settings stored from previous session.
+        /// </summary>
         private void LoadSettings()
         {
             Directory.CreateDirectory(Constants.RootPath);
@@ -51,6 +64,9 @@ namespace Core.Plugin.Unity.Editor
             EditorUtility.SetDirty(_settings);
         }
 
+        /// <summary>
+        /// Called when drawing the GUI.
+        /// </summary>
         private void OnGUI()
         {
             GUILayout.Label("Credentials");
@@ -76,9 +92,7 @@ namespace Core.Plugin.Unity.Editor
                     }
                     if (token.token != null)
                     {
-                        _connectionStatus = "Connected.";
-                        CloudFileWatcher.Access.SetAuthorization(token);
-                        UserID = token.user_id;
+                        SetToken(token);
                     }
                     else
                     {
@@ -94,15 +108,30 @@ namespace Core.Plugin.Unity.Editor
             _settings.AutoLogin = GUILayout.Toggle(_settings.AutoLogin, "Remember me");
             //CloudFileWatcher.Watch(_settings.AutoLogin);
         }
+
+        /// <summary>
+        /// Sets a token for the current session.
+        /// </summary>
+        /// <param name="token"></param>
+        private void SetToken(Token token)
+        {
+            _connectionStatus = "Connected.";
+            CloudFileWatcher.Access.SetAuthorization(token);
+            UserID = token.user_id;
+            _settings.Token = token;
+        }
     }
 
+    /// <summary>
+    /// Class that helps saving the window settings.
+    /// </summary>
     [Serializable]
     public class Settings : ScriptableObject
     {
         [HideInInspector]
         public string Username = "";
-        [HideInInspector]
-        public string Token = "";
+        //[HideInInspector]
+        public Token Token;
         [HideInInspector]
         public bool AutoLogin = true;
     }

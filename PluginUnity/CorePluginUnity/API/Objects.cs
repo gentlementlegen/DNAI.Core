@@ -16,7 +16,8 @@ namespace Core.Plugin.Unity.API
         public string password;
     }
 
-    internal class Token
+    [System.Serializable]
+    public class Token
     {
         //public string access_token;
         //public string expires_in;
@@ -27,6 +28,15 @@ namespace Core.Plugin.Unity.API
         public string token;
         public string refreshToken;
         public string user_id;
+
+        /// <summary>
+        /// Check if the token is currently empty.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsEmpty()
+        {
+            return string.IsNullOrEmpty(token) && string.IsNullOrEmpty(refreshToken);
+        }
     }
 
     internal class File
