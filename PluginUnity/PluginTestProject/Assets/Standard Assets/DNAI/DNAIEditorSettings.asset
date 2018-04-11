@@ -13,4 +13,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Username: toto
   Password: tata
+  Token: 
   AutoSync: 1

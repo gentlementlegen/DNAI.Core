@@ -17,6 +17,7 @@ namespace Core.Plugin.Unity.Drawing
     internal class EditorSettings : ScriptableObject
     {
         [SerializeField]
+        [HideInInspector]
         public List<ScriptDrawer.ListAIHandler> listIA = new List<ScriptDrawer.ListAIHandler>();
     }
 

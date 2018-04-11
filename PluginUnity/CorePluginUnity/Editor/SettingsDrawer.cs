@@ -57,7 +57,8 @@ namespace Core.Plugin.Unity.Editor
             GUILayout.Label("Username");
             _settings.Username = GUILayout.TextField(_settings.Username);
             GUILayout.Label("Password");
-            _settings.Password = GUILayout.PasswordField(_settings.Password, '*', 25);
+            var password = "";
+            password = GUILayout.PasswordField(password, '*', 25);
             GUILayout.Label(_connectionStatus);
             if (GUILayout.Button("Login"))
             {
@@ -67,7 +68,7 @@ namespace Core.Plugin.Unity.Editor
                     Token token = null;
                     try
                     {
-                        token = await CloudFileWatcher.Access.GetToken(_settings.Username, _settings.Password);
+                        token = await CloudFileWatcher.Access.GetToken(_settings.Username, password);
                     }
                     catch (Exception ex)
                     {
@@ -90,16 +91,19 @@ namespace Core.Plugin.Unity.Editor
             {
                 CloudFileWatcher.Access.DownloadSolution();
             }
-            _settings.AutoSync = GUILayout.Toggle(_settings.AutoSync, "Automatically sync files");
-            CloudFileWatcher.Watch(_settings.AutoSync);
+            _settings.AutoLogin = GUILayout.Toggle(_settings.AutoLogin, "Remember me");
+            //CloudFileWatcher.Watch(_settings.AutoLogin);
         }
     }
 
     [Serializable]
     public class Settings : ScriptableObject
     {
+        [HideInInspector]
         public string Username = "";
-        public string Password = "";
-        public bool AutoSync = true;
+        [HideInInspector]
+        public string Token = "";
+        [HideInInspector]
+        public bool AutoLogin = true;
     }
 }
