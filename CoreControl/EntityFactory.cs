@@ -184,7 +184,7 @@ namespace CoreControl
         public CorePackage.Global.Definition Find(UInt32 definition_uid)
         {
             if (!definitions.ContainsKey(definition_uid))
-                throw new KeyNotFoundException("EntityFactory.find : given definition uid hasn't been found");
+                throw new KeyNotFoundException("EntityFactory.find : given definition of id " + definition_uid.ToString() + " hasn't been found");
 
             return definitions[definition_uid];
         }

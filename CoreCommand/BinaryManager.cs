@@ -157,7 +157,8 @@ namespace CoreCommand
         private bool ResolveCommand<Command, Reply>(Stream inStream, Stream outStream, bool save, Func<Command, Reply> callback) where Command : ICommand<Reply>
         {
             Command message = GetMessage<Command>(inStream, save);
-            
+
+            BinarySerializer.Serializer.Serialize(message, outStream);
             try
             {
                 Reply reply = callback(message);
@@ -170,7 +171,7 @@ namespace CoreCommand
             }
             catch (Exception error)
             {
-                Console.WriteLine("Error");
+                Console.WriteLine("Error: " + error.Message);
                 if (outStream != null)
                     BinarySerializer.Serializer.Serialize(error.Message, outStream);
                 return false;
