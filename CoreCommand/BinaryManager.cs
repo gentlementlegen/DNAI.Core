@@ -15,7 +15,7 @@ namespace CoreCommand
         /// <summary>
         /// Controller on which dispatch command
         /// </summary>
-        private readonly Controller _controller = new Controller();
+        private Controller _controller = new Controller();
 
         /// <summary>
         /// Internal history of dispatched commands => for serialisation
@@ -41,66 +41,64 @@ namespace CoreCommand
         {
             //DECLARATOR
 
-            RegisterCommand<Declare, Declare.Reply>("DECLARATOR.DECLARE", "DECLARATOR.DECLARED");
-            RegisterCommand<Move, EmptyReply>("DECLARATOR.MOVE", "DECLARATOR.MOVED");
-            RegisterCommand<Remove, Remove.Reply>("DECLARATOR.REMOVE", "DECLARATOR.REMOVED");
-            RegisterCommand<Rename, EmptyReply>("DECLARATOR.RENAME", "DECLARATOR.RENAMED");
-            RegisterCommand<ChangeVisibility, EmptyReply>("DECLARATOR.CHANGE_VISIBILITY", "DECLARATOR.VISIBILITY_CHANGED");
-
-            //CONTEXT
-
-            RegisterCommand<SetContextParent, EmptyReply>("CONTEXT.SET_PARENT", "CONTEXT.PARENT_SET");
-
+            RegisterCommand<Command.Declarator.Declare, Command.Declarator.Declare.Reply>("DECLARATOR.DECLARE", "DECLARATOR.DECLARED");
+            RegisterCommand<Command.Declarator.Move, EmptyReply>("DECLARATOR.MOVE", "DECLARATOR.MOVED");
+            RegisterCommand<Command.Declarator.Remove, Command.Declarator.Remove.Reply>("DECLARATOR.REMOVE", "DECLARATOR.REMOVED");
+            RegisterCommand<Command.Declarator.Rename, EmptyReply>("DECLARATOR.RENAME", "DECLARATOR.RENAMED");
+            RegisterCommand<Command.Declarator.SetVisibility, EmptyReply>("DECLARATOR.SET_VISIBILITY", "DECLARATOR.VISIBILITY_SET");
+            
             //FUNCTION
             
-            RegisterCommand<CallFunction, CallFunction.Reply>("FUNCTION.CALL", "FUNCTION.CALLED", false);
-            RegisterCommand<AddInstruction, AddInstruction.Reply>("FUNCTION.ADD_INSTRUCTION", "FUNCTION.INSTRUCTION_ADDED");
-            RegisterCommand<RemoveFunctionInstruction, EmptyReply>("FUNCTION.REMOVE_INSTRUCTION", "FUNCTION.INSTRUCTION_REMOVED");
-            RegisterCommand<SetFunctionEntryPoint, EmptyReply>("FUNCTION.SET_ENTRY_POINT", "FUNCTION.ENTRY_POINT_SET");
-            RegisterCommand<SetFunctionParameter, EmptyReply>("FUNCTION.SET_PARAMETER", "FUNCTION.PARAMETER_SET");
-            RegisterCommand<SetFunctionReturn, EmptyReply>("FUNCTION.SET_RETURN", "FUNCTION.RETURN_SET");
+            RegisterCommand<Command.Function.Call, Command.Function.Call.Reply>("FUNCTION.CALL", "FUNCTION.CALLED", false);
+            RegisterCommand<Command.Function.AddInstruction, Command.Function.AddInstruction.Reply>("FUNCTION.ADD_INSTRUCTION", "FUNCTION.INSTRUCTION_ADDED");
+            RegisterCommand<Command.Function.RemoveInstruction, EmptyReply>("FUNCTION.REMOVE_INSTRUCTION", "FUNCTION.INSTRUCTION_REMOVED");
+            RegisterCommand<Command.Function.SetEntryPoint, EmptyReply>("FUNCTION.SET_ENTRY_POINT", "FUNCTION.ENTRY_POINT_SET");
+            RegisterCommand<Command.Function.SetParameter, EmptyReply>("FUNCTION.SET_PARAMETER", "FUNCTION.PARAMETER_SET");
+            RegisterCommand<Command.Function.SetReturn, EmptyReply>("FUNCTION.SET_RETURN", "FUNCTION.RETURN_SET");
 
             //FUNCTION.INSTRUCTION
 
-            RegisterCommand<LinkInstructionData, EmptyReply>("FUNCTION.INSTRUCTION.LINK_DATA", "FUNCTION.INSTRUCTION.DATA_LINKED");
-            RegisterCommand<LinkInstructionExecution, EmptyReply>("FUNCTION.INSTRUCTION.LINK_EXECUTION", "FUNCTION.INSTRUCTION.EXECUTION_LINKED");
-            RegisterCommand<SetInstructionInputValue, EmptyReply>("FUNCTION.INSTRUCTION.SET_INPUT_VALUE", "FUNCTION.INSTRUCTION.INPUT_VALUE_SET");
-            RegisterCommand<UnlinkInstructionFlow, EmptyReply>("FUNCTION.INSTRUCTION.UNLINK_EXECUTION", "FUNCTION.INSTRUCTION.EXECUTION_UNLINKED");
-            RegisterCommand<UnlinkInstructionInput, EmptyReply>("FUNCTION.INSTRUCTION.UNLINK_DATA", "FUNCTION.INSTRUCTION.DATA_UNLINKED");
+            RegisterCommand<Command.Function.Instruction.LinkData, EmptyReply>("FUNCTION.INSTRUCTION.LINK_DATA", "FUNCTION.INSTRUCTION.DATA_LINKED");
+            RegisterCommand<Command.Function.Instruction.LinkExecution, EmptyReply>("FUNCTION.INSTRUCTION.LINK_EXECUTION", "FUNCTION.INSTRUCTION.EXECUTION_LINKED");
+            RegisterCommand<Command.Function.Instruction.SetInputValue, EmptyReply>("FUNCTION.INSTRUCTION.SET_INPUT_VALUE", "FUNCTION.INSTRUCTION.INPUT_VALUE_SET");
+            RegisterCommand<Command.Function.Instruction.UnlinkFlow, EmptyReply>("FUNCTION.INSTRUCTION.UNLINK_EXECUTION", "FUNCTION.INSTRUCTION.EXECUTION_UNLINKED");
+            RegisterCommand<Command.Function.Instruction.UnlinkData, EmptyReply>("FUNCTION.INSTRUCTION.UNLINK_DATA", "FUNCTION.INSTRUCTION.DATA_UNLINKED");
 
             //VARIABLE
 
-            RegisterCommand<GetVariableType, GetVariableType.Reply>("VARIABLE.GET_TYPE", "VARIABLE.TYPE_GET", false);
-            RegisterCommand<GetVariableValue, GetVariableValue.Reply>("VARIABLE.GET_VALUE", "VARIABLE.VALUE_GET", false);
-            RegisterCommand<SetVariableType, EmptyReply>("VARIABLE.SET_TYPE", "VARIABLE.TYPE_SET");
-            RegisterCommand<SetVariableValue, EmptyReply>("VARIABLE.SET_VALUE", "VARIABLE.VALUE_SET");
+            RegisterCommand<Command.Variable.GetType, Command.Variable.GetType.Reply>("VARIABLE.GET_TYPE", "VARIABLE.TYPE_GET", false);
+            RegisterCommand<Command.Variable.GetValue, Command.Variable.GetValue.Reply>("VARIABLE.GET_VALUE", "VARIABLE.VALUE_GET", false);
+            RegisterCommand<Command.Variable.SetType, EmptyReply>("VARIABLE.SET_TYPE", "VARIABLE.TYPE_SET");
+            RegisterCommand<Command.Variable.SetValue, EmptyReply>("VARIABLE.SET_VALUE", "VARIABLE.VALUE_SET");
 
             //CLASS
 
-            RegisterCommand<AddClassAttribute, EmptyReply>("CLASS.ADD_ATTRIBUTE", "CLASS.ATTRIBUTE_ADDED");
-            RegisterCommand<RemoveClassAttribute, EmptyReply>("CLASS.REMOVE_ATTRIBUTE", "CLASS.ATTRIBUTE_REMOVED");
-            RegisterCommand<RenameClassAttribute, EmptyReply>("CLASS.RENAME_ATTRIBUTE", "CLASS.ATTRIBUTE_RENAMED");
-            RegisterCommand<SetClassFunctionAsMember, SetClassFunctionAsMember.Reply>("CLASS.SET_FUNCTION_AS_MEMBER", "CLASS.FUNCTION_SET_AS_MEMBER");
+            RegisterCommand<Command.Class.AddAttribute, EmptyReply>("CLASS.ADD_ATTRIBUTE", "CLASS.ATTRIBUTE_ADDED");
+            RegisterCommand<Command.Class.RemoveAttribute, EmptyReply>("CLASS.REMOVE_ATTRIBUTE", "CLASS.ATTRIBUTE_REMOVED");
+            RegisterCommand<Command.Class.RenameAttribute, EmptyReply>("CLASS.RENAME_ATTRIBUTE", "CLASS.ATTRIBUTE_RENAMED");
+            RegisterCommand<Command.Class.SetFunctionAsMember, Command.Class.SetFunctionAsMember.Reply>("CLASS.SET_FUNCTION_AS_MEMBER", "CLASS.FUNCTION_SET_AS_MEMBER");
 
             //ENUM
 
-            RegisterCommand<GetEnumerationValue, GetEnumerationValue.Reply>("ENUM.GET_VALUE", "ENUM.VALUE_GET", false);
-            RegisterCommand<RemoveEnumerationValue, EmptyReply>("ENUM.REMOVE_VALUE", "ENUM.VALUE_REMOVED");
-            RegisterCommand<SetEnumerationType, EmptyReply>("ENUM.SET_TYPE", "ENUM.TYPE_SET");
-            RegisterCommand<SetEnumerationValue, EmptyReply>("ENUM.SET_VALUE", "ENUM.VALUE_SET");
+            RegisterCommand<Command.Enum.GetValue, Command.Enum.GetValue.Reply>("ENUM.GET_VALUE", "ENUM.VALUE_GET", false);
+            RegisterCommand<Command.Enum.RemoveValue, EmptyReply>("ENUM.REMOVE_VALUE", "ENUM.VALUE_REMOVED");
+            RegisterCommand<Command.Enum.SetType, EmptyReply>("ENUM.SET_TYPE", "ENUM.TYPE_SET");
+            RegisterCommand<Command.Enum.SetValue, EmptyReply >("ENUM.SET_VALUE", "ENUM.VALUE_SET");
 
             //LIST
 
-            RegisterCommand<SetListType, EmptyReply>("LIST.SET_TYPE", "LIST.TYPE_SET");
+            RegisterCommand<Command.List.SetType, EmptyReply>("LIST.SET_TYPE", "LIST.TYPE_SET");
 
             //OTHER
 
-            RegisterCommand("SERIALIZE_TO", "SERIALIZED", false, (SerializeTo cmd) =>
+            RegisterCommand<Command.Project.Create, Command.Project.Create.Reply>("PROJECT.CREATE", "PROJECT.CREATED", true);
+            RegisterCommand<Command.Project.Remove, Command.Project.Remove.Reply>("PROJECT.REMOVE", "PROJECT.REMOVED", true);
+            RegisterCommand("PROJECT.SAVE", "PROJECT.SAVED", false, (Command.Project.Save cmd) =>
             {
                 SaveCommandsTo(cmd.Filename);
                 return cmd.Resolve(null);
             });
-            RegisterCommand("LOAD_FROM", "LOADED", false, (LoadFrom cmd) =>
+            RegisterCommand("PROJECT.LOAD", "PROJECT.LOADED", true, (Command.Project.Load cmd) =>
             {
                 LoadCommandsFrom(cmd.Filename);
                 return cmd.Resolve(null);
@@ -158,7 +156,9 @@ namespace CoreCommand
         {
             Command message = GetMessage<Command>(inStream, save);
 
-            BinarySerializer.Serializer.Serialize(message, outStream);
+            if (outStream != null)
+                BinarySerializer.Serializer.Serialize(message, outStream);
+
             try
             {
                 Reply reply = callback(message);
@@ -172,6 +172,8 @@ namespace CoreCommand
             catch (Exception error)
             {
                 Console.WriteLine("Error: " + error.Message);
+                Console.Write(error.StackTrace);
+
                 if (outStream != null)
                     BinarySerializer.Serializer.Serialize(error.Message, outStream);
                 return false;
@@ -221,13 +223,18 @@ namespace CoreCommand
         {
             using (var file = new StreamReader(filename))
             {
-                _controller.Reset();
+                Controller save = _controller;
+
+                Reset();
 
                 foreach (var command in BinarySerializer.Serializer.Deserialize<List<string>>(file.BaseStream))//ProtoBuf.Serializer.DeserializeWithLengthPrefix<List<string>>(file.BaseStream, _prefix)
                 {
                     if (!CallCommand(command, file.BaseStream, null))
                         throw new InvalidOperationException("BinaryManager.LoadCommandsFrom : Error while executing command \"" + command + "\"");
                 }
+
+                save.merge(_controller);
+                _controller = save;
             }
         }
 
@@ -253,6 +260,11 @@ namespace CoreCommand
             if (!_commandsType.ContainsKey(commandType))
                 throw new KeyNotFoundException("BinaryManager.GetCommandName : No such name registered on type " + commandType.ToString());
             return _commandsType[commandType];
+        }
+
+        public void Reset()
+        {
+            _controller = new Controller();
         }
     }
 }

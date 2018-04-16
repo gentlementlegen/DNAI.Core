@@ -46,7 +46,7 @@ namespace TestNetwork
 
                 coreSide.RegisterEvents();
 
-                CoreCommand.Command.Declare tosend = new CoreCommand.Command.Declare
+                CoreCommand.Command.Declarator.Declare tosend = new CoreCommand.Command.Declarator.Declare
                 {
                     ContainerID = 0,
                     EntityType = CoreControl.EntityFactory.ENTITY.CONTEXT,
@@ -60,7 +60,7 @@ namespace TestNetwork
                 {
                     MemoryStream stream = new MemoryStream(data);
 
-                    CoreCommand.Command.Declare.Reply reply = BinarySerializer.Serializer.Deserialize<CoreCommand.Command.Declare.Reply>(data);
+                    CoreCommand.Command.Declarator.Declare.Reply reply = BinarySerializer.Serializer.Deserialize<CoreCommand.Command.Declarator.Declare.Reply>(data);
 
                     Debug.WriteLine("Reply: { {" + tosend.ContainerID + ", " + tosend.EntityType + ", \"" + tosend.Name + "\", " + tosend.Visibility + "}, " + reply.EntityID + "}");
 

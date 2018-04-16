@@ -44,41 +44,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\AddClassAttribute.cs" />
-    <Compile Include="Command\SetClassFunctionAsMember.cs" />
-    <Compile Include="Command\CallFunction.cs" />
-    <Compile Include="Command\GetEnumerationValue.cs" />
-    <Compile Include="Command\GetVariableType.cs" />
-    <Compile Include="Command\GetVariableValue.cs" />
-    <Compile Include="Command\LinkInstructionData.cs" />
-    <Compile Include="Command\LinkInstructionExecution.cs" />
-    <Compile Include="Command\LoadFrom.cs" />
-    <Compile Include="Command\RemoveClassAttribute.cs" />
-    <Compile Include="Command\RemoveEnumerationValue.cs" />
-    <Compile Include="Command\RemoveFunctionInstruction.cs" />
-    <Compile Include="Command\RenameClassAttribute.cs" />
-    <Compile Include="Command\SerializeTo.cs" />
-    <Compile Include="Command\SetContextParent.cs" />
-    <Compile Include="Command\SetEnumerationType.cs" />
-    <Compile Include="Command\SetEnumerationValue.cs" />
-    <Compile Include="Command\SetFunctionEntryPoint.cs" />
-    <Compile Include="Command\SetFunctionParameter.cs" />
-    <Compile Include="Command\SetFunctionReturn.cs" />
-    <Compile Include="Command\SetInstructionInputValue.cs" />
-    <Compile Include="Command\SetListType.cs" />
-    <Compile Include="Command\SetVariableType.cs" />
-    <Compile Include="Command\UnlinkInstructionFlow.cs" />
-    <Compile Include="Command\UnlinkInstructionInput.cs" />
+    <Compile Include="Command\Class\AddAttribute.cs" />
+    <Compile Include="Command\Project\Create.cs" />
+    <Compile Include="Command\Class\SetFunctionAsMember.cs" />
+    <Compile Include="Command\Function\Call.cs" />
+    <Compile Include="Command\Enum\GetValue.cs" />
+    <Compile Include="Command\Project\Remove.cs" />
+    <Compile Include="Command\Variable\GetType.cs" />
+    <Compile Include="Command\Variable\GetValue.cs" />
+    <Compile Include="Command\Function\Instruction\LinkData.cs" />
+    <Compile Include="Command\Function\Instruction\LinkExecution.cs" />
+    <Compile Include="Command\Project\Load.cs" />
+    <Compile Include="Command\Class\RemoveAttribute.cs" />
+    <Compile Include="Command\Enum\RemoveValue.cs" />
+    <Compile Include="Command\Function\RemoveInstruction.cs" />
+    <Compile Include="Command\Class\RenameAttribute.cs" />
+    <Compile Include="Command\Project\SerializeTo.cs" />
+    <Compile Include="Command\Enum\SetType.cs" />
+    <Compile Include="Command\Enum\SetValue.cs" />
+    <Compile Include="Command\Function\SetEntryPoint.cs" />
+    <Compile Include="Command\Function\SetParameter.cs" />
+    <Compile Include="Command\Function\SetFunctionReturn.cs" />
+    <Compile Include="Command\Function\Instruction\SetInputValue.cs" />
+    <Compile Include="Command\List\SetType.cs" />
+    <Compile Include="Command\Variable\SetType.cs" />
+    <Compile Include="Command\Function\Instruction\UnlinkFlow.cs" />
+    <Compile Include="Command\Function\Instruction\UnlinkData.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="BinaryManager.cs" />
-    <Compile Include="Command\AddInstruction.cs" />
-    <Compile Include="Command\ChangeVisibility.cs" />
-    <Compile Include="Command\Declare.cs" />
-    <Compile Include="Command\Commands.cs" />
-    <Compile Include="Command\Move.cs" />
-    <Compile Include="Command\Remove.cs" />
-    <Compile Include="Command\Rename.cs" />
-    <Compile Include="Command\SetVariableValue.cs" />
+    <Compile Include="Command\Function\AddInstruction.cs" />
+    <Compile Include="Command\Declarator\SetVisibility.cs" />
+    <Compile Include="Command\Declarator\Declare.cs" />
+    <Compile Include="Command\Declarator\Move.cs" />
+    <Compile Include="Command\Declarator\Remove.cs" />
+    <Compile Include="Command\Declarator\Rename.cs" />
+    <Compile Include="Command\Variable\SetVariableValue.cs" />
     <Compile Include="IManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -95,5 +95,6 @@
       <Name>CoreControl</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

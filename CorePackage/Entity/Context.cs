@@ -104,5 +104,11 @@ namespace CorePackage.Entity
         {
             return scope.GetEntities(visibility);
         }
+
+        ///<see cref="IDeclarator.GetEntities()"/>
+        public Dictionary<string, Definition> GetEntities()
+        {
+            return scope.GetEntities();
+        }
     }
 }

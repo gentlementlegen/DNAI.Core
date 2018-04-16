@@ -97,7 +97,7 @@ namespace CoreControl
         /// <summary>
         /// Getter for the current id
         /// </summary>
-        public UInt32 CurrentID
+        public UInt32 Size
         {
             get { return current_uid; }
         }
@@ -107,7 +107,7 @@ namespace CoreControl
         /// </summary>
         public UInt32 LastID
         {
-            get { return CurrentID - 1; }
+            get { return Size - 1; }
         }
 
         /// <summary>
@@ -445,6 +445,23 @@ namespace CoreControl
                     });
             }
             return to_ret;
+        }
+
+        public void merge(EntityFactory factory)
+        {
+            foreach (KeyValuePair<uint, CorePackage.Global.Definition> curr in factory.definitions)
+            {
+                if (curr.Key > 5)
+                    AddEntity(curr.Value);
+            }
+
+            CorePackage.Entity.Context globalContext = (CorePackage.Entity.Context)definitions[0];
+            CorePackage.Entity.Context factoryContext = (CorePackage.Entity.Context)factory.definitions[0];
+
+            foreach (KeyValuePair<string, CorePackage.Global.Definition> curr in factoryContext.GetEntities())
+            {
+                globalContext.Declare(curr.Value, curr.Key, factoryContext.GetVisibilityOf(curr.Key));
+            }
         }
     }
 }

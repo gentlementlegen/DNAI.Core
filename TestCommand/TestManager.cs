@@ -19,6 +19,7 @@ namespace TestCommand
             Assert.IsTrue(toCall(instream, outStream));
 
             outStream.Position = 0;
+            Command cmd = BinarySerializer.Serializer.Deserialize<Command>(outStream);
             Reply reply = BinarySerializer.Serializer.Deserialize<Reply>(outStream);
             //ProtoBuf.Serializer.DeserializeWithLengthPrefix<Reply>(outStream, ProtoBuf.PrefixStyle.Base128);
 
@@ -32,58 +33,71 @@ namespace TestCommand
 
             testCommand(
                 dispatcher,
-                new CoreCommand.Command.Declare
+                new CoreCommand.Command.Project.Create
                 {
-                    ContainerID = 0,
+                    ProjectName = "Testor"
+                },
+                dispatcher.GetCommand("PROJECT.CREATE"),
+                (CoreCommand.Command.Project.Create command, CoreCommand.Command.Project.Create.Reply reply) =>
+                {
+                    Assert.IsTrue(reply.RootId == 6);
+                }
+            );
+
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.Declarator.Declare
+                {
+                    ContainerID = 6,
                     EntityType = CoreControl.EntityFactory.ENTITY.VARIABLE,
                     Name = "toto",
                     Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
                 },
                 dispatcher.GetCommand("DECLARATOR.DECLARE"),
-                (CoreCommand.Command.Declare command, CoreCommand.Command.Declare.Reply reply) =>
+                (CoreCommand.Command.Declarator.Declare command, CoreCommand.Command.Declarator.Declare.Reply reply) =>
                 {
-                    Assert.IsTrue(reply.EntityID == 6);
+                    Assert.IsTrue(reply.EntityID == 7);
                 });
 
             testCommand(
                 dispatcher,
-                new CoreCommand.Command.SetVariableType
+                new CoreCommand.Command.Variable.SetType
                 {
-                    VariableID = 6,
+                    VariableID = 7,
                     TypeID = 2
                 },
                 dispatcher.GetCommand("VARIABLE.SET_TYPE"),
-                (CoreCommand.Command.SetVariableType message, CoreCommand.EmptyReply reply) => { });
+                (CoreCommand.Command.Variable.SetType message, CoreCommand.EmptyReply reply) => { });
 
             testCommand(
                 dispatcher,
-                new CoreCommand.Command.SetVariableValue
+                new CoreCommand.Command.Variable.SetValue
                 {
-                    VariableID = 6,
+                    VariableID = 7,
                     Value = "42"
                 },
                 dispatcher.GetCommand("VARIABLE.SET_VALUE"),
-                (CoreCommand.Command.SetVariableValue message, CoreCommand.EmptyReply reply) => { });
+                (CoreCommand.Command.Variable.SetValue message, CoreCommand.EmptyReply reply) => { });
 
             testCommand(
                 dispatcher,
-                new CoreCommand.Command.ChangeVisibility
+                new CoreCommand.Command.Declarator.SetVisibility
                 {
-                    ContainerID = 0,
+                    ContainerID = 6,
                     Name = "toto",
                     NewVisi = CoreControl.EntityFactory.VISIBILITY.PUBLIC
                 },
-                dispatcher.GetCommand("DECLARATOR.CHANGE_VISIBILITY"),
-                (CoreCommand.Command.ChangeVisibility message, CoreCommand.EmptyReply reply) => { });
+                dispatcher.GetCommand("DECLARATOR.SET_VISIBILITY"),
+                (CoreCommand.Command.Declarator.SetVisibility message, CoreCommand.EmptyReply reply) => { });
 
             testCommand(
                 dispatcher,
-                new CoreCommand.Command.GetVariableValue
+                new CoreCommand.Command.Variable.GetValue
                 {
-                    VariableId = 6
+                    VariableId = 7
                 },
                 dispatcher.GetCommand("VARIABLE.GET_VALUE"),
-                (CoreCommand.Command.GetVariableValue message, CoreCommand.Command.GetVariableValue.Reply reply) =>
+                (CoreCommand.Command.Variable.GetValue message, CoreCommand.Command.Variable.GetValue.Reply reply) =>
                 {
                     Assert.IsTrue(reply.Value == "42");
                 });
@@ -109,16 +123,29 @@ namespace TestCommand
 
             testCommand(
                 dispatcher,
-                new CoreCommand.Command.Remove
+                new CoreCommand.Command.Declarator.Remove
                 {
-                    ContainerID = 0,
+                    ContainerID = 6,
                     Name = "toto"
                 },
                 dispatcher.GetCommand("DECLARATOR.REMOVE"),
-                (CoreCommand.Command.Remove message, CoreCommand.EmptyReply reply) => { });
+                (CoreCommand.Command.Declarator.Remove message, CoreCommand.EmptyReply reply) => { });
 
             dispatcher.SaveCommandsTo("test.duly");
+            dispatcher.Reset();
             dispatcher.LoadCommandsFrom("test.duly");
+            
+            testCommand(
+                dispatcher,
+                new CoreCommand.Command.Project.Remove
+                {
+                    ProjectName = "Testor"
+                },
+                dispatcher.GetCommand("PROJECT.REMOVE"),
+                (CoreCommand.Command.Project.Remove cmd, CoreCommand.Command.Project.Remove.Reply reply) =>
+                {
+                    Assert.IsTrue(reply.Removed.Count == 1);
+                });
         }
     }
 }

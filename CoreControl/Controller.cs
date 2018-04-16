@@ -380,7 +380,7 @@ namespace CoreControl
         /// <param name="outputName">Name of the output to link</param>
         /// <param name="toID">Identifier of the instruction to which link to input</param>
         /// <param name="intputName">Name of the input to link</param>
-        public void LinkInstructionData(UInt32 functionID, UInt32 toID, string inputName, UInt32 fromID, string outputName)
+        public void LinkInstructionData(UInt32 functionID, UInt32 fromID, string outputName, UInt32 toID, string inputName)
         {
             CorePackage.Entity.Function func = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID);
 
@@ -424,6 +424,11 @@ namespace CoreControl
         {
             entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID).UnlinkInstructionInput(instruction, inputname);
             //entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID).findInstruction<CorePackage.Execution.Instruction>(instruction).GetInput(inputname).Unlink();
+        }
+
+        public void merge(Controller controller)
+        {
+            entity_factory.merge(controller.entity_factory);
         }
     }
 }

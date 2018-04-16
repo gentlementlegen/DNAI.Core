@@ -30,5 +30,7 @@ namespace CoreCommand
         String GetCommandName(Type commandType);
 
         Dictionary<String, String> GetRegisteredCommands();
+
+        void Reset();
     }
 }
