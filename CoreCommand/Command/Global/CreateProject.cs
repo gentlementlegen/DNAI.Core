@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoreCommand.Command.Project
+namespace CoreCommand.Command.Global
 {
-    public class Create : ICommand<Create.Reply>
+    public class CreateProject : ICommand<CreateProject.Reply>
     {
         public class Reply
         {

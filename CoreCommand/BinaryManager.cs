@@ -18,6 +18,20 @@ namespace CoreCommand
         private Controller _controller = new Controller();
 
         /// <summary>
+        /// Project access value to know if we can edit a project or not
+        /// </summary>
+        private enum PROJECT_ACCESS
+        {
+            READ_ONLY,
+            READ_WRITE
+        };
+
+        /// <summary>
+        /// Map of projects to know which one was loaded and which one was created
+        /// </summary>
+        private Dictionary<String, PROJECT_ACCESS> _projects = new Dictionary<string, PROJECT_ACCESS>();
+
+        /// <summary>
         /// Internal history of dispatched commands => for serialisation
         /// </summary>
         private readonly List<dynamic> _commands = new List<dynamic>();
@@ -89,19 +103,38 @@ namespace CoreCommand
 
             RegisterCommand<Command.List.SetType, EmptyReply>("LIST.SET_TYPE", "LIST.TYPE_SET");
 
-            //OTHER
+            //GLOBAL
 
-            RegisterCommand<Command.Project.Create, Command.Project.Create.Reply>("PROJECT.CREATE", "PROJECT.CREATED", true);
-            RegisterCommand<Command.Project.Remove, Command.Project.Remove.Reply>("PROJECT.REMOVE", "PROJECT.REMOVED", true);
-            RegisterCommand("PROJECT.SAVE", "PROJECT.SAVED", false, (Command.Project.Save cmd) =>
+            RegisterCommand("GLOBAL.CREATE_PROJECT", "GLOBAL.PROJECT_CREATED", true, (Command.Global.CreateProject cmd) =>
+            {
+                Command.Global.CreateProject.Reply rep = cmd.Resolve(_controller);
+
+                _projects[cmd.ProjectName] = PROJECT_ACCESS.READ_WRITE;
+                return rep;
+            });
+            RegisterCommand<Command.Global.RemoveProject, Command.Global.RemoveProject.Reply>("GLOBAL.REMOVE_PROJECT", "GLOBAL.PROJECT_REMOVED", true);
+            RegisterCommand<Command.Global.GetProjectEntities, Command.Global.GetProjectEntities.Reply>("GLOBAL.GET_PROJECT_ENTITIES", "GLOBAL.PROJECT_ENTITIES_GET", false);
+            RegisterCommand("GLOBAL.SAVE", "GLOBAL.SAVED", false, (Command.Global.Save cmd) =>
             {
                 SaveCommandsTo(cmd.Filename);
                 return cmd.Resolve(null);
             });
-            RegisterCommand("PROJECT.LOAD", "PROJECT.LOADED", true, (Command.Project.Load cmd) =>
+            RegisterCommand("GLOBAL.LOAD", "GLOBAL.LOADED", true, (Command.Global.Load cmd) =>
             {
                 LoadCommandsFrom(cmd.Filename);
+                foreach (dynamic curr in _commands)
+                {
+                    if (curr.GetType() == typeof(Command.Global.CreateProject))
+                    {
+                        _projects[curr.ProjectName] = PROJECT_ACCESS.READ_ONLY;
+                    }
+                }
                 return cmd.Resolve(null);
+            });
+            RegisterCommand("GLOBAL.RESET", "GLOBAL.RESET_DONE", false, (EmptyCommand cmd) =>
+            {
+                Reset();
+                return new EmptyReply();
             });
         }
 
@@ -194,7 +227,7 @@ namespace CoreCommand
             _commandsType[typeof(Command)] = name;
             _commandsReply[name] = replyName;
         }
-
+        
         ///<see cref="IManager.SaveCommandsTo(string)"/>
         public void SaveCommandsTo(string filename)
         {

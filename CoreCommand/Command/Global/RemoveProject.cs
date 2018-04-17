@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using CoreControl;
 
-namespace CoreCommand.Command.Project
+namespace CoreCommand.Command.Global
 {
-    public class Remove : ICommand<Remove.Reply>
+    public class RemoveProject : ICommand<RemoveProject.Reply>
     {
         public Reply Resolve(Controller controller)
         {

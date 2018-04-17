@@ -922,14 +922,14 @@ namespace TestCommand
 
             MoreOrLessExecuter(manager, playFunction.EntityID);
 
-            HandleCommand<EmptyReply, CoreCommand.Command.Project.Save>(new CoreCommand.Command.Project.Save
+            HandleCommand<EmptyReply, CoreCommand.Command.Global.Save>(new CoreCommand.Command.Global.Save
             {
                 Filename = "moreOrLess.duly"
             }, manager);
 
             IManager witness = new BinaryManager();
 
-            HandleCommand<EmptyReply, CoreCommand.Command.Project.Load>(new CoreCommand.Command.Project.Load
+            HandleCommand<EmptyReply, CoreCommand.Command.Global.Load>(new CoreCommand.Command.Global.Load
             {
                 Filename = "moreOrLess.duly"
             }, witness);

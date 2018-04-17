@@ -45,21 +45,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\Class\AddAttribute.cs" />
-    <Compile Include="Command\Project\Create.cs" />
+    <Compile Include="Command\Global\CreateProject.cs" />
     <Compile Include="Command\Class\SetFunctionAsMember.cs" />
     <Compile Include="Command\Function\Call.cs" />
     <Compile Include="Command\Enum\GetValue.cs" />
-    <Compile Include="Command\Project\Remove.cs" />
+    <Compile Include="Command\Global\GetProjectEntities.cs" />
+    <Compile Include="Command\Global\RemoveProject.cs" />
     <Compile Include="Command\Variable\GetType.cs" />
     <Compile Include="Command\Variable\GetValue.cs" />
     <Compile Include="Command\Function\Instruction\LinkData.cs" />
     <Compile Include="Command\Function\Instruction\LinkExecution.cs" />
-    <Compile Include="Command\Project\Load.cs" />
+    <Compile Include="Command\Global\Load.cs" />
     <Compile Include="Command\Class\RemoveAttribute.cs" />
     <Compile Include="Command\Enum\RemoveValue.cs" />
     <Compile Include="Command\Function\RemoveInstruction.cs" />
     <Compile Include="Command\Class\RenameAttribute.cs" />
-    <Compile Include="Command\Project\SerializeTo.cs" />
+    <Compile Include="Command\Global\Save.cs" />
     <Compile Include="Command\Enum\SetType.cs" />
     <Compile Include="Command\Enum\SetValue.cs" />
     <Compile Include="Command\Function\SetEntryPoint.cs" />

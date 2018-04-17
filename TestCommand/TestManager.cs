@@ -33,12 +33,12 @@ namespace TestCommand
 
             testCommand(
                 dispatcher,
-                new CoreCommand.Command.Project.Create
+                new CoreCommand.Command.Global.CreateProject
                 {
                     ProjectName = "Testor"
                 },
-                dispatcher.GetCommand("PROJECT.CREATE"),
-                (CoreCommand.Command.Project.Create command, CoreCommand.Command.Project.Create.Reply reply) =>
+                dispatcher.GetCommand("GLOBAL.CREATE_PROJECT"),
+                (CoreCommand.Command.Global.CreateProject command, CoreCommand.Command.Global.CreateProject.Reply reply) =>
                 {
                     Assert.IsTrue(reply.RootId == 6);
                 }
@@ -137,12 +137,12 @@ namespace TestCommand
             
             testCommand(
                 dispatcher,
-                new CoreCommand.Command.Project.Remove
+                new CoreCommand.Command.Global.RemoveProject
                 {
                     ProjectName = "Testor"
                 },
-                dispatcher.GetCommand("PROJECT.REMOVE"),
-                (CoreCommand.Command.Project.Remove cmd, CoreCommand.Command.Project.Remove.Reply reply) =>
+                dispatcher.GetCommand("GLOBAL.REMOVE_PROJECT"),
+                (CoreCommand.Command.Global.RemoveProject cmd, CoreCommand.Command.Global.RemoveProject.Reply reply) =>
                 {
                     Assert.IsTrue(reply.Removed.Count == 1);
                 });
