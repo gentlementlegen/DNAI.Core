@@ -48,8 +48,8 @@ public class TestDuly
         MysteryNumber = Convert.ToInt32(nbr);
     }
 
-    public void OutputChanged(EventArgs e)
+    public void OutputChanged(EventOutputChange e)
     {
-        Debug.Log("Output changed callback !");
+        Debug.Log("Output changed callback ! ==> " + e.Value + " (" + e.ValueType + ")");
     }
 }

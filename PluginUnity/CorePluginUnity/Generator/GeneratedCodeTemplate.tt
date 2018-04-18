@@ -13,10 +13,11 @@ using System.Collections.Generic;
 
 namespace DNAI.<#=Namespace#>
 {
-	public class EventOutputChange<T> : EventArgs
+	public class EventOutputChange : EventArgs
 	{
 		public <#=ClassName#> Invoker;
-		public T Value;
+		public object Value;
+		public Type ValueType;
 	}
 
 	///<summary>
@@ -25,7 +26,7 @@ namespace DNAI.<#=Namespace#>
 	public class <#=ClassName#> : MonoBehaviour
 	{
 		[Serializable]
-		public class UnityEventOutputChange : UnityEvent<EventArgs>
+		public class UnityEventOutputChange : UnityEvent<EventOutputChange>
 		{
 		}
 
@@ -55,7 +56,7 @@ namespace DNAI.<#=Namespace#>
 				private set
 				{
 					_<#=item.Split(' ')[1]#> = value;
-					OnOutputChanged.Invoke(new EventOutputChange< <#=item.Split(' ')[0] #> > { Value = value, Invoker = this });
+					OnOutputChanged.Invoke(new EventOutputChange { Value = value, ValueType = value.GetType(), Invoker = this });
 				}
 			}
 		<# } #>
