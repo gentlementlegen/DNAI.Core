@@ -348,7 +348,7 @@ namespace CoreControl
         public UInt32 AddInstruction(UInt32 functionID, InstructionFactory.INSTRUCTION_ID to_create, List<UInt32> crea_args)
         {
             CorePackage.Entity.Function func = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID);
-            List<CorePackage.Global.Definition> crea_definitions = new List<CorePackage.Global.Definition>();
+            List<CorePackage.Global.IDefinition> crea_definitions = new List<CorePackage.Global.IDefinition>();
 
             foreach (UInt32 definitionID in crea_args)
             {

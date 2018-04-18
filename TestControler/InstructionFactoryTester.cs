@@ -19,10 +19,10 @@ namespace TestControler
         [TestMethod]
         public void TestInstructionInstanciation()
         {
-            List<Definition> empty = new List<Definition>();
-            List<Definition> one_int = new List<Definition> { Scalar.Integer };
-            List<Definition> dbl_int = new List<Definition> { Scalar.Integer, Scalar.Integer };
-            List<Definition> trp_int = new List<Definition> { Scalar.Integer, Scalar.Integer, Scalar.Integer };
+            List<IDefinition> empty = new List<IDefinition>();
+            List<IDefinition> one_int = new List<IDefinition> { Scalar.Integer };
+            List<IDefinition> dbl_int = new List<IDefinition> { Scalar.Integer, Scalar.Integer };
+            List<IDefinition> trp_int = new List<IDefinition> { Scalar.Integer, Scalar.Integer, Scalar.Integer };
 
             Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.AND, empty).GetType() == typeof(And));
             Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.OR, empty).GetType() == typeof(Or));
@@ -55,12 +55,12 @@ namespace TestControler
             Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.NOT, one_int).GetType() == typeof(Not));
             Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.INVERSE, dbl_int).GetType() == typeof(Inverse));
 
-            Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.ENUM_SPLITTER, new List<Definition> { new EnumType() }).GetType() == typeof(EnumSplitter));
+            Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.ENUM_SPLITTER, new List<IDefinition> { new EnumType() }).GetType() == typeof(EnumSplitter));
 
-            Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.GETTER, new List<Definition> { new Variable() }).GetType() == typeof(Getter));
-            Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.SETTER, new List<Definition> { new Variable() }).GetType() == typeof(Setter));
+            Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.GETTER, new List<IDefinition> { new Variable() }).GetType() == typeof(Getter));
+            Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.SETTER, new List<IDefinition> { new Variable() }).GetType() == typeof(Setter));
 
-            Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.FUNCTION_CALL, new List<Definition> { new Function() }).GetType() == typeof(FunctionCall));
+            Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.FUNCTION_CALL, new List<IDefinition> { new Function() }).GetType() == typeof(FunctionCall));
 
             Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.IF, empty).GetType() == typeof(If));
             Assert.IsTrue(InstructionFactory.CreateInstruction(InstructionFactory.INSTRUCTION_ID.WHILE, empty).GetType() == typeof(While));

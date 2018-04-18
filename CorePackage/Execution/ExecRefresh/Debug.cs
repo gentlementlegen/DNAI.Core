@@ -15,18 +15,16 @@ namespace CorePackage.Execution
         /// Need an array of inputs to print
         /// </summary>
         /// <param name="inputs">Dictionarry that contains inputs</param>
-        public Debug(Dictionary<string, Entity.Variable> inputs):
-            base(inputs, null)
+        public Debug(Dictionary<string, Entity.Variable> inputs): base()
         {
-
+            AddInputs(inputs);
         }
 
         /// <summary>
         /// Constructor to print only one variable
         /// </summary>
         /// <param name="toprint">Variable to watch</param>
-        public Debug(Entity.Variable toprint) :
-            base(null, null)
+        public Debug(Entity.Variable toprint) : base()
         {
             AddInput("to_print", toprint);
         }
@@ -36,7 +34,7 @@ namespace CorePackage.Execution
         /// </summary>
         public override void Execute()
         {
-            string message = "Debug: " + GetInput("to_print").Value.definition.Value.ToString();
+            string message = "Debug: " + GetInputValue("to_print").ToString();
             System.Diagnostics.Debug.WriteLine(message);
         }
     }

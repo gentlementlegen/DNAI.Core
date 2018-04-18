@@ -74,8 +74,8 @@ namespace CorePackage.Entity
             }
         }
 
-        /// <see cref="Global.Definition.IsValid"/>
-        public bool IsValid()
+        /// <see cref="Global.IDefinition.IsValid"/>
+        public override bool IsValid()
         {
             return this.value != null && this.type != null && this.type.IsValueOfType(this.value);
         }

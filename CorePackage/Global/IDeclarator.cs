@@ -28,14 +28,14 @@ namespace CorePackage.Global
         /// <param name="name">Declaration name</param>
         /// <param name="visibility">Declaration visibility</param>
         /// <returns>Given entity (usefull if you inherit many times of this interface)</returns>
-        Definition Declare(Definition entity, string name, AccessMode visibility);
+        IDefinition Declare(IDefinition entity, string name, AccessMode visibility);
 
         /// <summary>
         /// Will remove and return the entity of the given name
         /// </summary>
         /// <param name="name">Declaration name</param>
         /// <returns>Poped entity</returns>
-        Definition Pop(string name);
+        IDefinition Pop(string name);
 
         /// <summary>
         /// Allow to find an entity from it's name and visibility
@@ -43,7 +43,7 @@ namespace CorePackage.Global
         /// <param name="name">Name of the entity to find</param>
         /// <param name="visibility">Visbility of the entity to find</param>
         /// <returns>Found entity</returns>
-        Definition Find(string name, AccessMode visibility);
+        IDefinition Find(string name, AccessMode visibility);
 
         /// <summary>
         /// Rename a entity in the declarator
@@ -73,12 +73,19 @@ namespace CorePackage.Global
         /// Remove all declared entities
         /// </summary>
         /// <returns>A list of removed entities</returns>
-        List<Definition> Clear();
+        List<IDefinition> Clear();
 
         /// <summary>
         /// Allow to expose entities with a specific visibility
         /// </summary>
         /// <returns>List of entities with the given visibility</returns>
-        Dictionary<string, Definition> GetEntities(AccessMode visibility);
+        Dictionary<string, IDefinition> GetEntities(AccessMode visibility);
+
+        /// <summary>
+        /// Checks if an entity is in the declarator
+        /// </summary>
+        /// <param name="name">Name of the entity to check existence</param>
+        /// <returns>True if entity exists</returns>
+        bool Contains(string name);
     }
 }

@@ -247,8 +247,8 @@ namespace CorePackage.Entity
             return returns;
         }
 
-        /// <see cref="Global.Definition.IsValid"/>
-        public bool IsValid()
+        /// <see cref="Global.IDefinition.IsValid"/>
+        public override bool IsValid()
         {
             throw new NotImplementedException();
         }
@@ -281,26 +281,26 @@ namespace CorePackage.Entity
                 string inputs = "";
 
                 //resolve inputs declaration
-                foreach (Execution.Input curr in node.Inputs)
+                foreach (KeyValuePair<string, Execution.Input> curr in node.Inputs)
                 {
                     //input name that depends on node name
                     string inpName = name + "_var_" + inputId.ToString();
                     //label of the input in order to be able to link it
-                    string label = "<" + inpName + "> " + curr.Value.name + (curr.LinkedInstruction == null ? " = " + curr.Value.definition.Value.ToString() : "");
+                    string label = "<" + inpName + "> " + curr.Key + (curr.Value.IsLinked ? " = " + curr.Value.ToString() : "");
 
                     ++inputId;
                     //concatenate label to inputs for splitted box effect
                     inputs += label + (inputId < node.Inputs.Count ? "|" : "");
 
-                    if (curr.LinkedInstruction == null)
+                    if (curr.Value.IsLinked)
                         continue;
 
                     //in case there is a linked node to the input, declare it
-                    if (!declared.ContainsKey(curr.LinkedInstruction))
-                        decl += DeclareNode(curr.LinkedInstruction, ref id, declared);
+                    if (!declared.ContainsKey(curr.Value.Link.Instruction))
+                        decl += DeclareNode(curr.Value.Link.Instruction, ref id, declared);
 
                     //link this node to the labeled input
-                    links += declared[curr.LinkedInstruction] + " -> " + name + ":" + inpName + " [style=dotted;label=\"" + curr.LinkedOutputName + "\"];\r\n";
+                    links += declared[curr.Value.Link.Instruction] + " -> " + name + ":" + inpName + " [style=dotted;label=\"" + curr.Value.Link.Output + "\"];\r\n";
                 }
 
                 //splitted box format with each inputs labeled and linked to their node
@@ -342,7 +342,7 @@ namespace CorePackage.Entity
                 string decname = declared[toprocess];
                 
                 //Add each instruction linked to the current one
-                foreach (Execution.ExecutionRefreshInstruction curr in toprocess.OutPoints)
+                foreach (Execution.ExecutionRefreshInstruction curr in toprocess.ExecutionPins)
                 {
                     if (curr == null)
                         continue;
@@ -368,13 +368,13 @@ namespace CorePackage.Entity
         }
 
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
-        public Definition Declare(Definition entity, string name, AccessMode visibility)
+        public IDefinition Declare(IDefinition entity, string name, AccessMode visibility)
         {
             return scope.Declare(entity, name, visibility);
         }
 
         ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
-        public Definition Pop(string name)
+        public IDefinition Pop(string name)
         {
             if (parameters.ContainsKey(name))
                 parameters.Remove(name);
@@ -384,7 +384,7 @@ namespace CorePackage.Entity
         }
 
         ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
-        public Definition Find(string name, AccessMode visibility)
+        public IDefinition Find(string name, AccessMode visibility)
         {
             return scope.Find(name, visibility);
         }
@@ -408,14 +408,20 @@ namespace CorePackage.Entity
         }
 
         ///<see cref="IDeclarator{definitionType}.Clear"/>
-        public List<Definition> Clear()
+        public List<IDefinition> Clear()
         {
             return scope.Clear();
         }
 
-        public Dictionary<string, Definition> GetEntities(AccessMode visibility)
+        public Dictionary<string, IDefinition> GetEntities(AccessMode visibility)
         {
             return scope.GetEntities(visibility);
+        }
+
+        ///<see cref="IDeclarator.Contains(string)"/>
+        public bool Contains(string name)
+        {
+            return scope.Contains(name);
         }
     }
 }

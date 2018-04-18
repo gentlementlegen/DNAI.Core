@@ -18,14 +18,7 @@ namespace CorePackage.Execution.Operators
         /// <param name="rOpType">Type of the right operand</param>
         /// <param name="resType">Type of the returned value</param>
         public Multiplicate(Entity.DataType lOpType, Entity.DataType rOpType, Entity.DataType resType) :
-            base(
-                lOpType,                            //left
-                rOpType,                           //right
-                delegate(Entity.Variable left, Entity.Variable right)   //operation
-                {
-                    return left.Type.OperatorMul(left.Value, right.Value);
-                },
-                resType)                                 //return
+            base(lOpType, rOpType, (dynamic left, dynamic right) => lOpType.OperatorMul(left, right), resType)
         {
 
         }

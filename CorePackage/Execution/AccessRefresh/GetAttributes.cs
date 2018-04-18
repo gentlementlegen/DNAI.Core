@@ -11,16 +11,11 @@ namespace CorePackage.Execution
     {
         private Entity.Type.ObjectType _stored;
 
-        public GetAttributes(Entity.Type.ObjectType typetosplit) :
-            base(
-                new Dictionary<string, Entity.Variable>
-                {
-                    { "this", new Entity.Variable(typetosplit) }
-                },
-                new Dictionary<string, Entity.Variable>())
+        public GetAttributes(Entity.Type.ObjectType typetosplit) : base()
         {
+            AddInput("this", new Entity.Variable(typetosplit));
             this._stored = typetosplit;
-            foreach (KeyValuePair<string, Definition> attr in typetosplit.GetAttributes())
+            foreach (KeyValuePair<string, IDefinition> attr in typetosplit.GetAttributes())
             {
                 AddOutput(attr.Key, new Entity.Variable((Entity.DataType)attr.Value));
             }
@@ -28,11 +23,11 @@ namespace CorePackage.Execution
 
         public override void Execute()
         {
-            Dictionary<string, dynamic> value = GetInput("this").Value.definition.Value;
+            Dictionary<string, dynamic> value = GetInputValue("this");
 
-            foreach (KeyValuePair<string, Definition> attr in _stored.GetAttributes())
+            foreach (KeyValuePair<string, IDefinition> attr in _stored.GetAttributes())
             {
-                outputs[attr.Key].Value.definition.Value = value[attr.Key];
+                SetOutputValue(attr.Key, value[attr.Key]);
             }
         }
     }

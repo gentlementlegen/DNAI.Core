@@ -32,16 +32,7 @@ namespace CorePackage.Entity.Type
         {
 
         }
-
-        /// <summary>
-        /// Constructor that asks for the object parent context in order to link his internal context
-        /// </summary>
-        /// <param name="parent">Parent context of the object</param>
-        public ObjectType(IContext parent)
-        {
-            this.context.SetParent(parent);
-        }
-        
+                
         /// <summary>
         /// Allow user to add an attribute with a name, a type and a visibility
         /// </summary>
@@ -99,11 +90,11 @@ namespace CorePackage.Entity.Type
         {
             Dictionary<string, dynamic> data = new Dictionary<string, dynamic>();
 
-            foreach(KeyValuePair<string, Definition> attrtype in attributes.GetEntities(AccessMode.EXTERNAL))
+            foreach(KeyValuePair<string, IDefinition> attrtype in attributes.GetEntities(AccessMode.EXTERNAL))
             {
                 data[attrtype.Key] = ((DataType)attrtype.Value).Instantiate();
             }
-            foreach (KeyValuePair<string, Definition> attrtype in attributes.GetEntities(AccessMode.INTERNAL))
+            foreach (KeyValuePair<string, IDefinition> attrtype in attributes.GetEntities(AccessMode.INTERNAL))
             {
                 data[attrtype.Key] = ((DataType)attrtype.Value).Instantiate();
             }
@@ -113,14 +104,14 @@ namespace CorePackage.Entity.Type
         /// <see cref="DataType.IsValueOfType(dynamic)"/>
         public override bool IsValueOfType(dynamic value)
         {
-            foreach (KeyValuePair<string, Definition> attrtype in attributes.GetEntities(AccessMode.EXTERNAL))
+            foreach (KeyValuePair<string, IDefinition> attrtype in attributes.GetEntities(AccessMode.EXTERNAL))
             {
                 if (!value.ContainsKey(attrtype.Key)
                     || !((DataType)attrtype.Value).IsValueOfType(value[attrtype.Key]))
                     return false;
             }
             
-            foreach (KeyValuePair<string, Definition> attrtype in attributes.GetEntities(AccessMode.INTERNAL))
+            foreach (KeyValuePair<string, IDefinition> attrtype in attributes.GetEntities(AccessMode.INTERNAL))
             {
                 if (!value.ContainsKey(attrtype.Key)
                     || !((DataType)attrtype.Value).IsValueOfType(value[attrtype.Key]))
@@ -129,26 +120,26 @@ namespace CorePackage.Entity.Type
             return true;
         }
 
-        /// <see cref="Global.Definition.IsValid"/>
+        /// <see cref="Global.IDefinition.IsValid"/>
         public override bool IsValid()
         {
             throw new NotImplementedException();
         }
 
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
-        public Definition Declare(Definition entity, string name, AccessMode visibility)
+        public IDefinition Declare(IDefinition entity, string name, AccessMode visibility)
         {
             return context.Declare(entity, name, visibility);
         }
 
         ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
-        public Definition Pop(string name)
+        public IDefinition Pop(string name)
         {
             return context.Pop(name);
         }
 
         ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
-        public Definition Find(string name, AccessMode visibility)
+        public IDefinition Find(string name, AccessMode visibility)
         {
             return context.Find(name, visibility);
         }
@@ -172,27 +163,18 @@ namespace CorePackage.Entity.Type
         }
 
         ///<see cref="IDeclarator{definitionType}.Clear"/>
-        public List<Definition> Clear()
+        public List<IDefinition> Clear()
         {
             return context.Clear();
         }
 
         ///<see cref="IDeclarator{definitionType}.GetEntities(AccessMode)"/>
-        public Dictionary<string, Definition> GetEntities(AccessMode visibility)
+        public Dictionary<string, IDefinition> GetEntities(AccessMode visibility)
         {
             return context.GetEntities(visibility);
         }
 
-        /// <summary>
-        /// Set parent context
-        /// </summary>
-        /// <param name="parent">Parent context to set</param>
-        public void SetParent(IContext parent)
-        {
-            context.SetParent(parent);
-        }
-
-        public Dictionary<string, Definition> GetAttributes()
+        public Dictionary<string, IDefinition> GetAttributes()
         {
             return attributes.GetEntities();
         }
@@ -326,6 +308,12 @@ namespace CorePackage.Entity.Type
         public override dynamic OperatorAccess(dynamic lOp, dynamic rOp)
         {
             return CallOperator(Operator.Name.ACCESS, lOp, rOp);
+        }
+
+        ///<see cref="IDeclarator.Contains(string)"/>
+        public bool Contains(string name)
+        {
+            return context.Contains(name);
         }
     }
 }

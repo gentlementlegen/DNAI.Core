@@ -30,7 +30,7 @@ namespace CorePackage.Execution
             private set
             {
                 _index = value;
-                outputs["index"].Value.definition.Value = value;
+                SetOutputValue("index", value);
             }
         }
 
@@ -44,7 +44,7 @@ namespace CorePackage.Execution
             private set
             {
                 _element = value;
-                outputs["element"].Value.definition.Value = value;
+                SetOutputValue("element", value);
             }
         }
 
@@ -57,8 +57,8 @@ namespace CorePackage.Execution
             get { return _containerType; }
             set
             {
-                ((Entity.Type.ListType)GetInput("array").Value.definition.Type).Stored = value;
-                GetOutput("element").Value.definition.Type = value;
+                ((Entity.Type.ListType)GetInput("array").Definition.Type).Stored = value;
+                GetOutput("element").Definition.Type = value;
                 _containerType = value;
             }
         }
@@ -71,18 +71,11 @@ namespace CorePackage.Execution
         /// <summary>
         /// Default constructor that initialises input "array" as array and set 2 outpoints capacity
         /// </summary>
-        public Foreach(DataType stored = null) :
-            base(
-                new Dictionary<string, Variable>
-                {
-                    { "array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)) }
-                },
-                new Dictionary<string, Variable>
-                {
-                    { "index", new Variable(Entity.Type.Scalar.Integer) },
-                    { "element", new Variable() }
-                }, 2)
+        public Foreach(DataType stored = null) : base(2)
         {
+            AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)));
+            AddOutput("index", new Variable(Entity.Type.Scalar.Integer));
+            AddOutput("element", new Variable());
             if (stored != null)
                 ContainerType = stored;
         }
@@ -100,14 +93,14 @@ namespace CorePackage.Execution
             {
                 _shouldReset = false;
                 nextToExecute[0] = this;
-                nextToExecute[1] = OutPoints[(int)ForeachIndexes.INLOOP];
+                nextToExecute[1] = ExecutionPins[(int)ForeachIndexes.INLOOP];
                 Element = currList[Index];
                 Index++;
             }
             else //if foreach condition is false
             {
                 //you only have to execute the code "out loop"
-                nextToExecute[0] = OutPoints[(int)ForeachIndexes.OUTLOOP];
+                nextToExecute[0] = ExecutionPins[(int)ForeachIndexes.OUTLOOP];
                 nextToExecute[1] = null;
                 _shouldReset = true;
             }

@@ -81,7 +81,7 @@ namespace CoreTest.TestEntities
         [TestMethod]
         public void TestObjectActions()
         {
-            CorePackage.Entity.Type.ObjectType type = new CorePackage.Entity.Type.ObjectType(null);
+            CorePackage.Entity.Type.ObjectType type = new CorePackage.Entity.Type.ObjectType();
             CorePackage.Entity.DataType integer = CorePackage.Entity.Type.Scalar.Integer;
 
             type.AddAttribute("x", integer, CorePackage.Global.AccessMode.EXTERNAL);

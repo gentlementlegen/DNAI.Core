@@ -17,11 +17,7 @@ namespace CorePackage.Execution.Operators
         /// <param name="leftOpType">Type of the left operand</param>
         /// <param name="rightOpType">Type of the right operand</param>
         public LessEqual(Entity.DataType leftOpType, Entity.DataType rightOpType) :
-            base(leftOpType, rightOpType,
-                delegate(Entity.Variable left, Entity.Variable right)
-                {
-                    return left.Type.OperatorLtEq(left.Value, right.Value);
-                })
+            base(leftOpType, rightOpType, (dynamic left, dynamic right) => leftOpType.OperatorLtEq(left, right))
         {
 
         }

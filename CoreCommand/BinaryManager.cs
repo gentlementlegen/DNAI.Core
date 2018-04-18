@@ -121,15 +121,21 @@ namespace CoreCommand
             });
             RegisterCommand("GLOBAL.LOAD", "GLOBAL.LOADED", true, (Command.Global.Load cmd) =>
             {
+                Command.Global.Load.Reply toret = new Command.Global.Load.Reply
+                {
+                    Projects = new List<uint>()
+                };
+
                 LoadCommandsFrom(cmd.Filename);
                 foreach (dynamic curr in _commands)
                 {
                     if (curr.GetType() == typeof(Command.Global.CreateProject))
                     {
                         _projects[curr.ProjectName] = PROJECT_ACCESS.READ_ONLY;
+                        //toret.Projects.Add(_controller.GetEntity(0, curr.ProjectName).Id);
                     }
                 }
-                return cmd.Resolve(null);
+                return toret;
             });
             RegisterCommand("GLOBAL.RESET", "GLOBAL.RESET_DONE", false, (EmptyCommand cmd) =>
             {

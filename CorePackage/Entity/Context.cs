@@ -14,16 +14,11 @@ namespace CorePackage.Entity
     public class Context : Definition, IDeclarator
     {
         /// <summary>
-        /// A reference on its parent create a contexte access network
-        /// </summary>
-        private IContext parent = null;
-
-        /// <summary>
         /// Each context knows who are their children to be able
         /// to retreive children's externals items 
         /// </summary>
         private Declarator scope = new Declarator(new List<System.Type> { typeof(Context), typeof(Variable), typeof(Function), typeof(DataType) });
-
+        
         /// <summary>
         /// Basic default constructor which is necessary for factory
         /// </summary>
@@ -31,29 +26,11 @@ namespace CorePackage.Entity
         {
 
         }
-        
-        /// <summary>
-        /// Constructor ask for its parent context
-        /// </summary>
-        /// <param name="parent">Parent context of the new one</param>
-        public Context(IContext parent)
-        {
-            this.parent = parent;
-        }
 
-        /// <see cref="Global.Definition"/>
-        public bool IsValid()
+        /// <see cref="Global.IDefinition"/>
+        public override bool IsValid()
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Allow to set parent context
-        /// </summary>
-        /// <param name="parent">parent context to set</param>
-        public void SetParent(IContext parent)
-        {
-            this.parent = parent;
         }
 
         ///<see cref="IDeclarator{definitionType}.ChangeVisibility(string, AccessMode)"/>
@@ -63,19 +40,19 @@ namespace CorePackage.Entity
         }
 
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
-        public Definition Declare(Definition entity, string name, AccessMode visibility)
+        public IDefinition Declare(IDefinition entity, string name, AccessMode visibility)
         {
             return scope.Declare(entity, name, visibility);
         }
 
         ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
-        public Definition Find(string name, AccessMode visibility)
+        public IDefinition Find(string name, AccessMode visibility)
         {
             return scope.Find(name, visibility);
         }
 
         ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
-        public Definition Pop(string name)
+        public IDefinition Pop(string name)
         {
             return scope.Pop(name);
         }
@@ -93,22 +70,27 @@ namespace CorePackage.Entity
         }
 
         ///<see cref="IDeclarator{definitionType}.Clear"/>
-        public List<Definition> Clear()
+        public List<IDefinition> Clear()
         {
             return scope.Clear();
         }
 
 
         ///<see cref="IDeclarator{definitionType}.GetEntities(AccessMode)"/>
-        public Dictionary<string, Definition> GetEntities(AccessMode visibility)
+        public Dictionary<string, IDefinition> GetEntities(AccessMode visibility)
         {
             return scope.GetEntities(visibility);
         }
 
         ///<see cref="IDeclarator.GetEntities()"/>
-        public Dictionary<string, Definition> GetEntities()
+        public Dictionary<string, IDefinition> GetEntities()
         {
             return scope.GetEntities();
+        }
+
+        public bool Contains(string name)
+        {
+            return scope.Contains(name);
         }
     }
 }

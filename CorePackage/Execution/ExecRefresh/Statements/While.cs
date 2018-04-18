@@ -24,16 +24,9 @@ namespace CorePackage.Execution
         /// <summary>
         /// Default constructor that initialises input "condition" as boolean and set 2 outpoints capacity
         /// </summary>
-        public While() :
-            base(
-                new Dictionary<string, Entity.Variable>
-                {
-                    { "condition", new Entity.Variable(Entity.Type.Scalar.Boolean) }
-                },
-                null,
-                2
-            )
+        public While() : base(2)
         {
+            AddInput("condition", new Entity.Variable(Entity.Type.Scalar.Boolean));
         }
 
         /// <see cref="ExecutionRefreshInstruction.GetNextInstructions"/>
@@ -46,12 +39,12 @@ namespace CorePackage.Execution
                 //
                 //order is reverse here because execution is performed with a stack
                 nextToExecute[0] = this;
-                nextToExecute[1] = this.OutPoints[(int)WhileIndexes.INLOOP];
+                nextToExecute[1] = this.ExecutionPins[(int)WhileIndexes.INLOOP];
             }
             else //if while condition is false
             {
                 //you only have to execute the code "out loop"
-                nextToExecute[0] = this.OutPoints[(int)WhileIndexes.OUTLOOP];
+                nextToExecute[0] = this.ExecutionPins[(int)WhileIndexes.OUTLOOP];
                 nextToExecute[1] = null;
             }
             return this.nextToExecute;

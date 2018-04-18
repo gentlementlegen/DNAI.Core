@@ -16,7 +16,7 @@ namespace CorePackage.Global
         /// </summary>
         private class Declaration
         {
-            public Definition definition;
+            public IDefinition definition;
             public AccessMode visibility;
         };
 
@@ -55,7 +55,7 @@ namespace CorePackage.Global
         }
 
         ///<see cref="IDeclarator{definitionType}.Declare(definitionType, string, AccessMode)"/>
-        public Definition Declare(Definition entity, string name, AccessMode visibility)
+        public IDefinition Declare(IDefinition entity, string name, AccessMode visibility)
         {
             if (defined.ContainsKey(name))
                 throw new InvalidOperationException("Declarator.Declare : trying to redeclare \"" + name + "\"");
@@ -77,7 +77,7 @@ namespace CorePackage.Global
         }
 
         ///<see cref="IDeclarator{definitionType}.Find(string, AccessMode)"/>
-        public Definition Find(string name, AccessMode visibility)
+        public IDefinition Find(string name, AccessMode visibility)
         {
             Declaration toret = _find(name);
 
@@ -91,13 +91,13 @@ namespace CorePackage.Global
         /// </summary>
         /// <param name="name">Name of the entity</param>
         /// <returns>The retreived entity</returns>
-        public Definition Find(string name)
+        public IDefinition Find(string name)
         {
             return _find(name).definition;
         }
 
         ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
-        public Definition Pop(string name)
+        public IDefinition Pop(string name)
         {
             Declaration topop = _find(name);
 
@@ -124,9 +124,9 @@ namespace CorePackage.Global
         }
 
         ///<see cref="IDeclarator{definitionType}.Clear"/>
-        public List<Definition> Clear()
+        public List<IDefinition> Clear()
         {
-            List<Definition> to_ret = new List<Definition>();
+            List<IDefinition> to_ret = new List<IDefinition>();
 
             foreach (Declaration curr in defined.Values)
             {
@@ -136,9 +136,9 @@ namespace CorePackage.Global
             return to_ret;
         }
 
-        public Dictionary<string, Definition> GetEntities(AccessMode visibility)
+        public Dictionary<string, IDefinition> GetEntities(AccessMode visibility)
         {
-            Dictionary<string, Definition> toret = new Dictionary<string, Definition>();
+            Dictionary<string, IDefinition> toret = new Dictionary<string, IDefinition>();
 
             foreach (KeyValuePair<string, Declaration> curr in defined)
             {
@@ -148,15 +148,21 @@ namespace CorePackage.Global
             return toret;
         }
 
-        public Dictionary<string, Definition> GetEntities()
+        public Dictionary<string, IDefinition> GetEntities()
         {
-            Dictionary<string, Definition> toret = new Dictionary<string, Definition>();
+            Dictionary<string, IDefinition> toret = new Dictionary<string, IDefinition>();
 
             foreach (KeyValuePair<string, Declaration> curr in defined)
             {
                 toret.Add(curr.Key, curr.Value.definition);
             }
             return toret;
+        }
+
+        ///<see cref="IDeclarator.Contains(string)"/>
+        public bool Contains(string name)
+        {
+            return defined.ContainsKey(name);
         }
     }
 }

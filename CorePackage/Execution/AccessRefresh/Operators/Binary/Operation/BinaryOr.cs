@@ -18,12 +18,7 @@ namespace CorePackage.Execution.Operators
         /// <param name="rOpType">Type of the right operand</param>
         /// <param name="resType">Type of the returned value</param>
         public BinaryOr(Entity.DataType lOpType, Entity.DataType rOpType, Entity.DataType resType) :
-            base(lOpType, rOpType,
-                delegate(Entity.Variable left, Entity.Variable right)
-                {
-                    return left.Type.OperatorBOr(left.Value, right.Value);
-                },
-                resType)
+            base(lOpType, rOpType, (dynamic left, dynamic right) => lOpType.OperatorBOr(left, right), resType)
         {
 
         }

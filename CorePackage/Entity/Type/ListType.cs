@@ -61,7 +61,7 @@ namespace CorePackage.Entity.Type
             return Activator.CreateInstance(_listType);
         }
 
-        /// <see cref="Global.Definition.IsValid"/>
+        /// <see cref="Global.IDefinition.IsValid"/>
         public override bool IsValid()
         {
             return Stored != null;

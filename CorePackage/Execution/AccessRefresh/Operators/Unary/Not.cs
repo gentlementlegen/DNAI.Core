@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CorePackage.Entity.Type;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,14 +16,7 @@ namespace CorePackage.Execution.Operators
         /// Constructor that only need input type (assume that output is same type)
         /// </summary>
         /// <param name="opType">Operand type</param>
-        public Not(Entity.DataType opType) :
-            base(
-                opType,
-                delegate(Entity.Variable op)
-                {
-                    return !op.Value;
-                },
-                Entity.Type.Scalar.Boolean)
+        public Not(Entity.DataType opType) : base(opType, (dynamic op) => !op, Scalar.Boolean)
         {
 
         }

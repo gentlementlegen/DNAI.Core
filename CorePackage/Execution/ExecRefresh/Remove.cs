@@ -15,8 +15,8 @@ namespace CorePackage.Execution
             get { return _containerType; }
             set
             {
-                GetInput("array").Value.definition.Type = new Entity.Type.ListType(value);
-                GetInput("element").Value.definition.Type = value;
+                GetInput("array").Definition.Type = new Entity.Type.ListType(value);
+                GetInput("element").Definition.Type = value;
                 _containerType = value;
             }
         }
@@ -32,9 +32,7 @@ namespace CorePackage.Execution
         /// <see cref="ARemove.RemoveElement"/>
         protected override bool RemoveElement()
         {
-            var array = inputs["array"].Value.definition.Value;
-            var elem = inputs["element"].Value.definition.Value;
-            return array.Remove(elem);
+            return GetInputValue("array").Remove(GetInputValue("element"));
         }
     }
 }

@@ -9,11 +9,9 @@ namespace CorePackage.Execution
     public class SetAttribute : ExecutionRefreshInstruction
     {
         Entity.Variable toset;
-        Dictionary<string, Global.Definition> attributes;
+        Dictionary<string, Global.IDefinition> attributes;
 
-        public SetAttribute(Entity.Variable obj) :
-            base(new Dictionary<string, Entity.Variable> { },
-                new Dictionary<string, Entity.Variable> { })
+        public SetAttribute(Entity.Variable obj) : base()
         {
             toset = obj;
             Entity.Type.ObjectType type = obj.Type as Entity.Type.ObjectType;
@@ -23,18 +21,19 @@ namespace CorePackage.Execution
 
             attributes = type.GetAttributes();
 
-            foreach (KeyValuePair<string, Global.Definition> curr in attributes)
+            foreach (KeyValuePair<string, Global.IDefinition> curr in attributes)
             {
-                AddInput(curr.Key, new Entity.Variable((Entity.DataType)curr.Value));
+                Entity.Variable definition = new Entity.Variable((Entity.DataType)curr.Value);
+                AddInput(curr.Key, definition); //each time the node is executed, input are refreshed
+                AddOutput(curr.Key, definition); //if the definition of output is the same as the input they will be refreshed too
             }
         }
 
         public override void Execute()
         {
-            foreach (KeyValuePair<string, Global.Definition> curr in attributes)
+            foreach (KeyValuePair<string, Global.IDefinition> curr in attributes)
             {
                 toset.Value[curr.Key] = GetInputValue(curr.Key);
-                //outputs[curr.Key].Value.definition.Value = GetInputValue(curr.Key);
             }
         }
     }

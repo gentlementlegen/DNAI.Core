@@ -20,9 +20,10 @@ namespace CorePackage.Execution
         /// </summary>
         public override void Execute()
         {
-            var val = inputs["array"].Value.definition.Value;
-            val?.Insert(inputs["index"].Value.definition.Value, inputs["element"].Value.definition.Value);
-            outputs["count"].Value.definition.Value = val?.Count;
+            var val = GetInputValue("array");
+
+            val?.Insert(GetInputValue("index"), GetInputValue("element"));
+            SetOutputValue("count", val?.Count);
         }
     }
 }

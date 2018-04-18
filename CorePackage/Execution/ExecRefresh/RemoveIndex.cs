@@ -8,7 +8,7 @@
         /// <summary>
         /// Basic default constructor which will add an integer 'index' input
         /// </summary>
-        public RemoveIndex()
+        public RemoveIndex() : base()
         {
             AddInput("index", new Entity.Variable(Entity.Type.Scalar.Integer));
         }
@@ -16,11 +16,9 @@
         ///<see cref="ARemove.RemoveElement"/>
         protected override bool RemoveElement()
         {
-            var array = inputs["array"].Value.definition.Value;
-            var idx = inputs["index"].Value.definition.Value;
             try
             {
-                array.RemoveAt(idx);
+                GetInputValue("array").RemoveAt(GetInputValue("index"));
             }
             catch
             {

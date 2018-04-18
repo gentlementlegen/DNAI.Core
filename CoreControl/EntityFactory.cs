@@ -58,12 +58,12 @@ namespace CoreControl
         /// <summary>
         /// Associates an id to its entity definition
         /// </summary>
-        private Dictionary<UInt32, CorePackage.Global.Definition> definitions = new Dictionary<uint, CorePackage.Global.Definition>();
+        private Dictionary<UInt32, CorePackage.Global.IDefinition> definitions = new Dictionary<uint, CorePackage.Global.IDefinition>();
 
         /// <summary>
         /// Associates an entity definition to its id
         /// </summary>
-        private Dictionary<CorePackage.Global.Definition, UInt32> ids = new Dictionary<CorePackage.Global.Definition, uint>();
+        private Dictionary<CorePackage.Global.IDefinition, UInt32> ids = new Dictionary<CorePackage.Global.IDefinition, uint>();
 
         /// <summary>
         /// Represents the id of the next entity that will be declared
@@ -115,7 +115,7 @@ namespace CoreControl
         /// </summary>
         /// <typeparam name="T">Type of the entity to declare</typeparam>
         /// <returns>Freshly instanciated entity</returns>
-        public T Create<T>() where T : CorePackage.Global.Definition
+        public T Create<T>() where T : CorePackage.Global.IDefinition
         {
             T toadd = (T)Activator.CreateInstance(typeof(T));
 
@@ -127,7 +127,7 @@ namespace CoreControl
         /// Add an entity to the internal dictionnaries and increment current_id
         /// </summary>
         /// <param name="entity">Entity to add</param>
-        public void AddEntity(CorePackage.Global.Definition entity)
+        public void AddEntity(CorePackage.Global.IDefinition entity)
         {
             definitions[current_uid] = entity;
             ids[entity] = current_uid++;
@@ -161,7 +161,7 @@ namespace CoreControl
         /// Throws an InvalidOperationException if the given entity is a default added entity
         /// </remarks>
         /// <param name="entity">Entity to remove</param>
-        public void RemoveEntity(CorePackage.Global.Definition entity)
+        public void RemoveEntity(CorePackage.Global.IDefinition entity)
         {
             if (!ids.ContainsKey(entity))
                 throw new KeyNotFoundException("EntityFactory.remove : given definition uid hasn't been found");
@@ -181,7 +181,7 @@ namespace CoreControl
         /// <remarks>Throws a KeyNotFoundException if entity hasn't been found</remarks>
         /// <param name="definition_uid">Identifier of an entity</param>
         /// <returns>The entity to find</returns>
-        public CorePackage.Global.Definition Find(UInt32 definition_uid)
+        public CorePackage.Global.IDefinition Find(UInt32 definition_uid)
         {
             if (!definitions.ContainsKey(definition_uid))
                 throw new KeyNotFoundException("EntityFactory.find : given definition of id " + definition_uid.ToString() + " hasn't been found");
@@ -194,7 +194,7 @@ namespace CoreControl
         /// </summary>
         /// <param name="definition_uid">Identifier of the basic entity</param>
         /// <returns>Basic entity to find</returns>
-        public CorePackage.Global.Definition Find(BASE_ID definition_uid)
+        public CorePackage.Global.IDefinition Find(BASE_ID definition_uid)
         {
             return Find((uint)definition_uid);
         }
@@ -204,7 +204,7 @@ namespace CoreControl
         /// </summary>
         /// <param name="entity">Entity for which find the id</param>
         /// <returns>Id of the given entity</returns>
-        public UInt32 GetEntityID(CorePackage.Global.Definition entity)
+        public UInt32 GetEntityID(CorePackage.Global.IDefinition entity)
         {
             if (ids.ContainsKey(entity))
                 return ids[entity];
@@ -220,7 +220,7 @@ namespace CoreControl
         /// <returns>The entity to find</returns>
         public T FindDefinitionOfType<T>(UInt32 id) where T : class
         {
-            CorePackage.Global.Definition to_find = Find(id);
+            CorePackage.Global.IDefinition to_find = Find(id);
             T to_ret = to_find as T;
 
             if (to_ret == null)
@@ -249,7 +249,7 @@ namespace CoreControl
         /// <param name="visibility">Visibility of the entity to declare</param>
         /// <returns>The identifier of the freshly declared entity</returns>
         public UInt32 Declare<Entity>(UInt32 containerID, string name, CorePackage.Global.AccessMode visibility)
-            where Entity : CorePackage.Global.Definition
+            where Entity : CorePackage.Global.IDefinition
         {
             GetDeclaratorOf(containerID).Declare(Create<Entity>(), name, visibility);
             return LastID;
@@ -264,7 +264,7 @@ namespace CoreControl
         /// <returns>List of all removed entities' id</returns>
         public List<UInt32> Remove(UInt32 containerID, string name)
         {
-            CorePackage.Global.Definition entity = GetDeclaratorOf(containerID).Pop(name);
+            CorePackage.Global.IDefinition entity = GetDeclaratorOf(containerID).Pop(name);
             List<UInt32> removed = new List<uint> { GetEntityID(entity) };
 
             RemoveEntity(entity);
@@ -280,7 +280,7 @@ namespace CoreControl
             {
                 CorePackage.Global.IDeclarator declarator = toclear.Pop();
 
-                foreach (CorePackage.Global.Definition curr in declarator.Clear())
+                foreach (CorePackage.Global.IDefinition curr in declarator.Clear())
                 {
                     removed.Add(GetEntityID(curr));
                     decl = curr as CorePackage.Global.IDeclarator;
@@ -316,7 +316,7 @@ namespace CoreControl
             CorePackage.Global.IDeclarator to = GetDeclaratorOf(toID);
 
             CorePackage.Global.AccessMode visibility = from.GetVisibilityOf(name);
-            CorePackage.Global.Definition definition = from.Pop(name);
+            CorePackage.Global.IDefinition definition = from.Pop(name);
             to.Declare(definition, name, visibility);
         }
 
@@ -340,10 +340,10 @@ namespace CoreControl
         /// <returns>List of declared entities</returns>
         public Dictionary<string, dynamic> GetEntitiesOfType(UInt32 containerID)
         {
-            Dictionary<string, CorePackage.Global.Definition> real = GetDeclaratorOf(containerID).GetEntities(CorePackage.Global.AccessMode.EXTERNAL);
+            Dictionary<string, CorePackage.Global.IDefinition> real = GetDeclaratorOf(containerID).GetEntities(CorePackage.Global.AccessMode.EXTERNAL);
             Dictionary<string, dynamic> to_ret = new Dictionary<string, dynamic>();
 
-            foreach (KeyValuePair<string, CorePackage.Global.Definition> curr in real)
+            foreach (KeyValuePair<string, CorePackage.Global.IDefinition> curr in real)
             {
                 to_ret.Add(curr.Key, curr.Value);
             }
@@ -449,7 +449,7 @@ namespace CoreControl
 
         public void merge(EntityFactory factory)
         {
-            foreach (KeyValuePair<uint, CorePackage.Global.Definition> curr in factory.definitions)
+            foreach (KeyValuePair<uint, CorePackage.Global.IDefinition> curr in factory.definitions)
             {
                 if (curr.Key > 5)
                     AddEntity(curr.Value);
@@ -458,9 +458,10 @@ namespace CoreControl
             CorePackage.Entity.Context globalContext = (CorePackage.Entity.Context)definitions[0];
             CorePackage.Entity.Context factoryContext = (CorePackage.Entity.Context)factory.definitions[0];
 
-            foreach (KeyValuePair<string, CorePackage.Global.Definition> curr in factoryContext.GetEntities())
+            foreach (KeyValuePair<string, CorePackage.Global.IDefinition> curr in factoryContext.GetEntities())
             {
-                globalContext.Declare(curr.Value, curr.Key, factoryContext.GetVisibilityOf(curr.Key));
+                if (!globalContext.Contains(curr.Key))
+                    globalContext.Declare(curr.Value, curr.Key, factoryContext.GetVisibilityOf(curr.Key));
             }
         }
     }
