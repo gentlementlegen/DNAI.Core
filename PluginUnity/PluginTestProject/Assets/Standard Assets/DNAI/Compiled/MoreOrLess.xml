@@ -4,12 +4,17 @@
         <name>MoreOrLess</name>
     </assembly>
     <members>
-        <member name="T:Duly.MoreOrLess.Play">
+        <member name="T:DNAI.MoreOrLess.Play">
             <summary>
-             Base behaviour for Duly IA.
+             Base behaviour for DNAI IA.
             </summary>
             </member>
-        <member name="M:Duly.MoreOrLess.Play.Execute">
+        <member name="F:DNAI.MoreOrLess.Play.OnOutputChanged">
+            <summary>
+             Called when output values of the DNAI script change.
+            </summary>
+            </member>
+        <member name="M:DNAI.MoreOrLess.Play.Execute">
             <summary>
              Executes the Duly Behaviour by calling the created function.
              Updates Outputs accordingly.

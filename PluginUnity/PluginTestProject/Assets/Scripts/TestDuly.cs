@@ -1,7 +1,7 @@
-﻿//#define COMPILE
+﻿#define COMPILE
 
 #if COMPILE
-using Duly.MoreOrLess;
+using DNAI.MoreOrLess;
 #endif
 using System;
 using System.Collections;
@@ -46,5 +46,10 @@ public class TestDuly
         if (string.IsNullOrEmpty(nbr))
             return;
         MysteryNumber = Convert.ToInt32(nbr);
+    }
+
+    public void OutputChanged(EventArgs e)
+    {
+        Debug.Log("Output changed callback !");
     }
 }

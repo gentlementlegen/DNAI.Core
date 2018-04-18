@@ -88,6 +88,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
+    m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -109,6 +110,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    debug:
+      m_Flags: 0
   m_NavMeshData: {fileID: 0}
 --- !u!1 &9154627
 GameObject:
@@ -648,6 +651,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111426321cc73704fb583c54f25e4a81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnOutputChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 917421106}
+        m_MethodName: OutputChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: DNAI.MoreOrLess.Play+UnityEventOutputChange, MoreOrLess, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   lastResult: 0
   TextNumber: {fileID: 1421208212}
   Tries: 10
@@ -954,11 +973,11 @@ Camera:
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
-  m_StereoMirrorMode: 0
 --- !u!4 &1626389572
 Transform:
   m_ObjectHideFlags: 0

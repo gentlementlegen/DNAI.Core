@@ -1,6 +1,8 @@
-﻿using System;
+﻿using DNAI.MoreOrLess;
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Pacman
@@ -10,6 +12,8 @@ namespace Assets.Scripts.Pacman
         public GameManager.GameState CurrentState;
         public GameManager.GameState PreviousState;
     }
+
+
 
     public class GameManager : MonoBehaviour
     {
@@ -122,6 +126,11 @@ namespace Assets.Scripts.Pacman
         {
             SetGameState(GameState.Death);
             SoundManager.Instance.PlayDeathSound();
+        }
+
+        public void OnOutputChanged(EventArgs e)
+        {
+            Debug.Log("Callback output changed");
         }
     }
 }

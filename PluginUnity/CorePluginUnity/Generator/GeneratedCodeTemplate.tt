@@ -5,17 +5,35 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@parameter type="System.String" name="parameter1" #>
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 using CoreCommand;
 using System.Collections.Generic;
 
 namespace DNAI.<#=Namespace#>
 {
+	public class EventOutputChange<T> : EventArgs
+	{
+		public <#=ClassName#> Invoker;
+		public T Value;
+	}
+
 	///<summary>
 	/// Base behaviour for DNAI IA.
 	///</summary>
 	public class <#=ClassName#> : MonoBehaviour
 	{
+		[Serializable]
+		public class UnityEventOutputChange : UnityEvent<EventArgs>
+		{
+		}
+
+		///<summary>
+		/// Called when output values of the DNAI script change.
+		///</summary>
+		public UnityEventOutputChange OnOutputChanged;
+
 		<# foreach (var item in DataTypes)
 		{#>
 			public <#=item#>
@@ -30,7 +48,16 @@ namespace DNAI.<#=Namespace#>
 		//[Header("Output variables")]
 		<# foreach (var item in Outputs)
 		{ #>
-			public <#=item #> { get; private set; }
+			private <#=item.Split(' ')[0] #> _<#=item.Split(' ')[1] #>;
+			public <#=item #>
+			{
+				get { return _<#=item.Split(' ')[1] #>; }
+				private set
+				{
+					_<#=item.Split(' ')[1]#> = value;
+					OnOutputChanged.Invoke(new EventOutputChange< <#=item.Split(' ')[0] #> > { Value = value, Invoker = this });
+				}
+			}
 		<# } #>
 
 		private BinaryManager _manager;
