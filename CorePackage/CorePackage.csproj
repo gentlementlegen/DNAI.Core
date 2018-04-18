@@ -105,7 +105,6 @@
     <Compile Include="Execution\Pins\Input.cs" />
     <Compile Include="Execution\Pins\Link.cs" />
     <Compile Include="Execution\Pins\Output.cs" />
-    <Compile Include="Global\Declaration.cs" />
     <Compile Include="Global\Declarator.cs" />
     <Compile Include="Global\Definition.cs" />
     <Compile Include="Global\IDefinition.cs" />
