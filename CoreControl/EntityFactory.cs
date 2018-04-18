@@ -282,7 +282,9 @@ namespace CoreControl
 
                 foreach (CorePackage.Global.IDefinition curr in declarator.Clear())
                 {
-                    removed.Add(GetEntityID(curr));
+                    UInt32 id = GetEntityID(curr);
+                    removed.Add(id);
+                    RemoveEntity(id);
                     decl = curr as CorePackage.Global.IDeclarator;
                     if (decl != null)
                         toclear.Push(decl);
