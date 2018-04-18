@@ -92,7 +92,6 @@ namespace CorePackage.Entity.Type
         /// <see cref="DataType.IsValueOfType(dynamic)"/>
         public override bool IsValueOfType(dynamic value)
         {
-            //return value.GetType() != typeof(string) && values.Keys.Contains((string)value);
             if (value.GetType() != values.Values.First().Value.GetType())
                 return false;
             foreach (Variable curr in values.Values)

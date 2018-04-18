@@ -82,7 +82,9 @@ namespace CorePackage.Execution
         public void LinkTo(Instruction linked, string outputname)
         {
             if (!linked.HasOutput(outputname))
-                throw new Error.NotFoundException("Input.LinkTo : Couldn't link inexistant output named " + outputname);
+                throw new Error.NotFoundException("Couldn't link inexistant output named " + outputname);
+            if (!definition.Type.IsValueOfType(linked.GetOutputValue(outputname)))
+                throw new InvalidOperationException("Want to link an input to an incompatible output: "+ Value.ToString() + "(" + definition.Type.ToString() + ") incompatible with " + linked.GetOutputValue(outputname) + "(" + linked.GetOutput(outputname).Definition.Type.ToString() + ")");
             link = new Link(linked, outputname);
         }
 

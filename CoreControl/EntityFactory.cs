@@ -460,8 +460,10 @@ namespace CoreControl
 
             foreach (KeyValuePair<string, CorePackage.Global.IDefinition> curr in factoryContext.GetEntities())
             {
-                if (!globalContext.Contains(curr.Key))
-                    globalContext.Declare(curr.Value, curr.Key, factoryContext.GetVisibilityOf(curr.Key));
+                string key = curr.Key;
+                while (globalContext.Contains(key)) key += "_copy"; //handles circular references
+
+                globalContext.Declare(curr.Value, key, factoryContext.GetVisibilityOf(curr.Key));
             }
         }
     }
