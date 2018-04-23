@@ -204,7 +204,7 @@ namespace Core.Plugin.Unity.Generator
 
             foreach (var attrib in obj.Fields)
             {
-                ret += obj.GetFieldType(attrib.Value) + " " + attrib.Key + ";";
+                ret += "public " + obj.GetFieldType(attrib.Value) + " " + attrib.Key + ";";
             }
             return ret + "}";
         }
@@ -225,7 +225,7 @@ namespace Core.Plugin.Unity.Generator
 
             foreach (var attrib in custom.Fields)
             {
-                ret += custom.GetFieldType(attrib.Value) + " " + attrib.Key + ";";
+                ret += "public " + custom.GetFieldType(attrib.Value) + " " + attrib.Key + ";";
             }
 
             //foreach (var func in funcList)

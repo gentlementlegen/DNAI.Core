@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using static DNAI.Vertex.DNAIBehaviour;
 
 public class TestDuly
 #if COMPILE
@@ -17,6 +18,8 @@ public class TestDuly
 
     public int Tries = 10;
     public int MysteryNumber = 42;
+
+    Vertex v;
 
     public void Play()
     {

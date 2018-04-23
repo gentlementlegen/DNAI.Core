@@ -80,7 +80,7 @@ namespace TestUnityPlugin
             var dataTypes = new List<Entity>();
             //GenerateDulyFile();
             GenerateMoreOrLess();
-            _manager.LoadCommandsFrom("moreOrLess.duly");
+            _manager.LoadCommandsFrom("moreOrLess.dnai");
             //GenerateMoreOrLess(_manager, out variables, out functions);
 
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);

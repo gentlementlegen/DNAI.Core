@@ -130,7 +130,7 @@ namespace Core.Plugin.Unity.Editor
     {
         [HideInInspector]
         public string Username = "";
-        //[HideInInspector]
+        [HideInInspector]
         public Token Token;
         [HideInInspector]
         public bool AutoLogin = true;

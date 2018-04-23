@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: -2021544108, guid: 428b0ae85a99ff3429c93ae485c64c81, type: 3}
   m_Name: DNAIEditorSettings
   m_EditorClassIdentifier: 
-  Username: tete
+  Username: fernandveyrier96@gmail.com
   Token:
     token: 
     refreshToken: 
