@@ -88,6 +88,7 @@ namespace TestNetwork
             catch (Exception error)
             {
                 err = error;
+                Console.Error.WriteLine(error.Message);
             }
             
             if (server != null)
@@ -95,7 +96,7 @@ namespace TestNetwork
                 server.Kill();
                 server.WaitForExit();
             }
-
+            
             Directory.Delete(serverDirectory, true);
 
             if (err != null)

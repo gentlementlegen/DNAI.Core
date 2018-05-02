@@ -77,13 +77,13 @@ namespace CoreNetwork
         /// <param name="data">Command body that correspond to consumer data</param>
         /// <param name="callback">Manager command to call</param>
         /// <param name="replyEventName">Name of the event to reply</param>
-        private void HandleEvent(byte[] data, Func<Stream, Stream, bool> callback, string command, string replyEventName)
+        private void HandleEvent(byte[] data, string command, string replyEventName)
         {
             MemoryStream inStream = new MemoryStream(data);
             MemoryStream outStream = new MemoryStream();
 
             Console.WriteLine("Handling event for: " + replyEventName);
-            if (callback(inStream, outStream))
+            if (commandManager.CallCommand(command, inStream, outStream))
             {
                 Console.WriteLine("Sending reply " + replyEventName);
                 eventProtocolClient.SendEvent(replyEventName, outStream.ToArray());
@@ -97,11 +97,9 @@ namespace CoreNetwork
 
         private void Register(String command, String reply)
         {
-            Func<Stream, Stream, bool> cb = commandManager.GetCommand(command);
-
             eventProtocolClient.RegisterEvent(command, (byte[] data) =>
             {
-                HandleEvent(data, cb, command, reply);
+                HandleEvent(data, command, reply);
             }, 0);
         }
     }

@@ -71,6 +71,7 @@
     <Compile Include="Command\Variable\SetType.cs" />
     <Compile Include="Command\Function\Instruction\UnlinkFlow.cs" />
     <Compile Include="Command\Function\Instruction\UnlinkData.cs" />
+    <Compile Include="Resolver\ACommandResolver.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="BinaryManager.cs" />
     <Compile Include="Command\Function\AddInstruction.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Command\Variable\SetVariableValue.cs" />
     <Compile Include="IManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resolver\V1_0_0.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -12,25 +12,13 @@ namespace CoreCommand
     /// </summary>
     public class BinaryManager : IManager
     {
+        private static UInt32 MagicNumber = 0xFA7BEA57; //FATBEAST
+
         /// <summary>
         /// Controller on which dispatch command
         /// </summary>
         private Controller _controller = new Controller();
-
-        /// <summary>
-        /// Project access value to know if we can edit a project or not
-        /// </summary>
-        private enum PROJECT_ACCESS
-        {
-            READ_ONLY,
-            READ_WRITE
-        };
-
-        /// <summary>
-        /// Map of projects to know which one was loaded and which one was created
-        /// </summary>
-        private Dictionary<String, PROJECT_ACCESS> _projects = new Dictionary<string, PROJECT_ACCESS>();
-
+        
         /// <summary>
         /// Internal history of dispatched commands => for serialisation
         /// </summary>
@@ -39,7 +27,7 @@ namespace CoreCommand
         /// <summary>
         /// Dictionnary that contains all handled commands of the manager
         /// </summary>
-        private Dictionary<String, Func<Stream, Stream, bool>> _handledCommands = new Dictionary<string, Func<Stream, Stream, bool>>();
+        private Resolver.ACommandResolver _resolver = new Resolver.V1_0_0();
 
         /// <summary>
         /// Dictionnary that contains commands name, synchronized with _handledCommands dictionnary
@@ -51,93 +39,84 @@ namespace CoreCommand
         /// </summary>
         private Dictionary<String, String> _commandsReply = new Dictionary<string, string>();
         
+        /// <summary>
+        /// Constructor that register the core commands with the right version
+        /// </summary>
         public BinaryManager()
         {
             //DECLARATOR
 
-            RegisterCommand<Command.Declarator.Declare, Command.Declarator.Declare.Reply>("DECLARATOR.DECLARE", "DECLARATOR.DECLARED");
-            RegisterCommand<Command.Declarator.Move, EmptyReply>("DECLARATOR.MOVE", "DECLARATOR.MOVED");
-            RegisterCommand<Command.Declarator.Remove, Command.Declarator.Remove.Reply>("DECLARATOR.REMOVE", "DECLARATOR.REMOVED");
-            RegisterCommand<Command.Declarator.Rename, EmptyReply>("DECLARATOR.RENAME", "DECLARATOR.RENAMED");
-            RegisterCommand<Command.Declarator.SetVisibility, EmptyReply>("DECLARATOR.SET_VISIBILITY", "DECLARATOR.VISIBILITY_SET");
+            RegisterCommand<Command.Declarator.Declare, Command.Declarator.Declare.Reply>               (Resolver.V1_0_0.Code, "DECLARATOR.DECLARE", "DECLARATOR.DECLARED");
+            RegisterCommand<Command.Declarator.Move, EmptyReply>                                        (Resolver.V1_0_0.Code, "DECLARATOR.MOVE", "DECLARATOR.MOVED");
+            RegisterCommand<Command.Declarator.Remove, Command.Declarator.Remove.Reply>                 (Resolver.V1_0_0.Code, "DECLARATOR.REMOVE", "DECLARATOR.REMOVED");
+            RegisterCommand<Command.Declarator.Rename, EmptyReply>                                      (Resolver.V1_0_0.Code, "DECLARATOR.RENAME", "DECLARATOR.RENAMED");
+            RegisterCommand<Command.Declarator.SetVisibility, EmptyReply>                               (Resolver.V1_0_0.Code, "DECLARATOR.SET_VISIBILITY", "DECLARATOR.VISIBILITY_SET");
             
             //FUNCTION
             
-            RegisterCommand<Command.Function.Call, Command.Function.Call.Reply>("FUNCTION.CALL", "FUNCTION.CALLED", false);
-            RegisterCommand<Command.Function.AddInstruction, Command.Function.AddInstruction.Reply>("FUNCTION.ADD_INSTRUCTION", "FUNCTION.INSTRUCTION_ADDED");
-            RegisterCommand<Command.Function.RemoveInstruction, EmptyReply>("FUNCTION.REMOVE_INSTRUCTION", "FUNCTION.INSTRUCTION_REMOVED");
-            RegisterCommand<Command.Function.SetEntryPoint, EmptyReply>("FUNCTION.SET_ENTRY_POINT", "FUNCTION.ENTRY_POINT_SET");
-            RegisterCommand<Command.Function.SetParameter, EmptyReply>("FUNCTION.SET_PARAMETER", "FUNCTION.PARAMETER_SET");
-            RegisterCommand<Command.Function.SetReturn, EmptyReply>("FUNCTION.SET_RETURN", "FUNCTION.RETURN_SET");
+            RegisterCommand<Command.Function.Call, Command.Function.Call.Reply>                         (Resolver.V1_0_0.Code, "FUNCTION.CALL", "FUNCTION.CALLED", false);
+            RegisterCommand<Command.Function.AddInstruction, Command.Function.AddInstruction.Reply>     (Resolver.V1_0_0.Code, "FUNCTION.ADD_INSTRUCTION", "FUNCTION.INSTRUCTION_ADDED");
+            RegisterCommand<Command.Function.RemoveInstruction, EmptyReply>                             (Resolver.V1_0_0.Code, "FUNCTION.REMOVE_INSTRUCTION", "FUNCTION.INSTRUCTION_REMOVED");
+            RegisterCommand<Command.Function.SetEntryPoint, EmptyReply>                                 (Resolver.V1_0_0.Code, "FUNCTION.SET_ENTRY_POINT", "FUNCTION.ENTRY_POINT_SET");
+            RegisterCommand<Command.Function.SetParameter, EmptyReply>                                  (Resolver.V1_0_0.Code, "FUNCTION.SET_PARAMETER", "FUNCTION.PARAMETER_SET");
+            RegisterCommand<Command.Function.SetReturn, EmptyReply>                                     (Resolver.V1_0_0.Code, "FUNCTION.SET_RETURN", "FUNCTION.RETURN_SET");
 
             //FUNCTION.INSTRUCTION
 
-            RegisterCommand<Command.Function.Instruction.LinkData, EmptyReply>("FUNCTION.INSTRUCTION.LINK_DATA", "FUNCTION.INSTRUCTION.DATA_LINKED");
-            RegisterCommand<Command.Function.Instruction.LinkExecution, EmptyReply>("FUNCTION.INSTRUCTION.LINK_EXECUTION", "FUNCTION.INSTRUCTION.EXECUTION_LINKED");
-            RegisterCommand<Command.Function.Instruction.SetInputValue, EmptyReply>("FUNCTION.INSTRUCTION.SET_INPUT_VALUE", "FUNCTION.INSTRUCTION.INPUT_VALUE_SET");
-            RegisterCommand<Command.Function.Instruction.UnlinkFlow, EmptyReply>("FUNCTION.INSTRUCTION.UNLINK_EXECUTION", "FUNCTION.INSTRUCTION.EXECUTION_UNLINKED");
-            RegisterCommand<Command.Function.Instruction.UnlinkData, EmptyReply>("FUNCTION.INSTRUCTION.UNLINK_DATA", "FUNCTION.INSTRUCTION.DATA_UNLINKED");
+            RegisterCommand<Command.Function.Instruction.LinkData, EmptyReply>                          (Resolver.V1_0_0.Code, "FUNCTION.INSTRUCTION.LINK_DATA", "FUNCTION.INSTRUCTION.DATA_LINKED");
+            RegisterCommand<Command.Function.Instruction.LinkExecution, EmptyReply>                     (Resolver.V1_0_0.Code, "FUNCTION.INSTRUCTION.LINK_EXECUTION", "FUNCTION.INSTRUCTION.EXECUTION_LINKED");
+            RegisterCommand<Command.Function.Instruction.SetInputValue, EmptyReply>                     (Resolver.V1_0_0.Code, "FUNCTION.INSTRUCTION.SET_INPUT_VALUE", "FUNCTION.INSTRUCTION.INPUT_VALUE_SET");
+            RegisterCommand<Command.Function.Instruction.UnlinkFlow, EmptyReply>                        (Resolver.V1_0_0.Code, "FUNCTION.INSTRUCTION.UNLINK_EXECUTION", "FUNCTION.INSTRUCTION.EXECUTION_UNLINKED");
+            RegisterCommand<Command.Function.Instruction.UnlinkData, EmptyReply>                        (Resolver.V1_0_0.Code, "FUNCTION.INSTRUCTION.UNLINK_DATA", "FUNCTION.INSTRUCTION.DATA_UNLINKED");
 
             //VARIABLE
 
-            RegisterCommand<Command.Variable.GetType, Command.Variable.GetType.Reply>("VARIABLE.GET_TYPE", "VARIABLE.TYPE_GET", false);
-            RegisterCommand<Command.Variable.GetValue, Command.Variable.GetValue.Reply>("VARIABLE.GET_VALUE", "VARIABLE.VALUE_GET", false);
-            RegisterCommand<Command.Variable.SetType, EmptyReply>("VARIABLE.SET_TYPE", "VARIABLE.TYPE_SET");
-            RegisterCommand<Command.Variable.SetValue, EmptyReply>("VARIABLE.SET_VALUE", "VARIABLE.VALUE_SET");
+            RegisterCommand<Command.Variable.GetType, Command.Variable.GetType.Reply>                   (Resolver.V1_0_0.Code, "VARIABLE.GET_TYPE", "VARIABLE.TYPE_GET", false);
+            RegisterCommand<Command.Variable.GetValue, Command.Variable.GetValue.Reply>                 (Resolver.V1_0_0.Code, "VARIABLE.GET_VALUE", "VARIABLE.VALUE_GET", false);
+            RegisterCommand<Command.Variable.SetType, EmptyReply>                                       (Resolver.V1_0_0.Code, "VARIABLE.SET_TYPE", "VARIABLE.TYPE_SET");
+            RegisterCommand<Command.Variable.SetValue, EmptyReply>                                      (Resolver.V1_0_0.Code, "VARIABLE.SET_VALUE", "VARIABLE.VALUE_SET");
 
             //CLASS
 
-            RegisterCommand<Command.Class.AddAttribute, EmptyReply>("CLASS.ADD_ATTRIBUTE", "CLASS.ATTRIBUTE_ADDED");
-            RegisterCommand<Command.Class.RemoveAttribute, EmptyReply>("CLASS.REMOVE_ATTRIBUTE", "CLASS.ATTRIBUTE_REMOVED");
-            RegisterCommand<Command.Class.RenameAttribute, EmptyReply>("CLASS.RENAME_ATTRIBUTE", "CLASS.ATTRIBUTE_RENAMED");
-            RegisterCommand<Command.Class.SetFunctionAsMember, Command.Class.SetFunctionAsMember.Reply>("CLASS.SET_FUNCTION_AS_MEMBER", "CLASS.FUNCTION_SET_AS_MEMBER");
+            RegisterCommand<Command.Class.AddAttribute, EmptyReply>                                     (Resolver.V1_0_0.Code, "CLASS.ADD_ATTRIBUTE", "CLASS.ATTRIBUTE_ADDED");
+            RegisterCommand<Command.Class.RemoveAttribute, EmptyReply>                                  (Resolver.V1_0_0.Code, "CLASS.REMOVE_ATTRIBUTE", "CLASS.ATTRIBUTE_REMOVED");
+            RegisterCommand<Command.Class.RenameAttribute, EmptyReply>                                  (Resolver.V1_0_0.Code, "CLASS.RENAME_ATTRIBUTE", "CLASS.ATTRIBUTE_RENAMED");
+            RegisterCommand<Command.Class.SetFunctionAsMember, Command.Class.SetFunctionAsMember.Reply> (Resolver.V1_0_0.Code, "CLASS.SET_FUNCTION_AS_MEMBER", "CLASS.FUNCTION_SET_AS_MEMBER");
 
             //ENUM
 
-            RegisterCommand<Command.Enum.GetValue, Command.Enum.GetValue.Reply>("ENUM.GET_VALUE", "ENUM.VALUE_GET", false);
-            RegisterCommand<Command.Enum.RemoveValue, EmptyReply>("ENUM.REMOVE_VALUE", "ENUM.VALUE_REMOVED");
-            RegisterCommand<Command.Enum.SetType, EmptyReply>("ENUM.SET_TYPE", "ENUM.TYPE_SET");
-            RegisterCommand<Command.Enum.SetValue, EmptyReply >("ENUM.SET_VALUE", "ENUM.VALUE_SET");
+            RegisterCommand<Command.Enum.GetValue, Command.Enum.GetValue.Reply>                         (Resolver.V1_0_0.Code, "ENUM.GET_VALUE", "ENUM.VALUE_GET", false);
+            RegisterCommand<Command.Enum.RemoveValue, EmptyReply>                                       (Resolver.V1_0_0.Code, "ENUM.REMOVE_VALUE", "ENUM.VALUE_REMOVED");
+            RegisterCommand<Command.Enum.SetType, EmptyReply>                                           (Resolver.V1_0_0.Code, "ENUM.SET_TYPE", "ENUM.TYPE_SET");
+            RegisterCommand<Command.Enum.SetValue, EmptyReply >                                         (Resolver.V1_0_0.Code, "ENUM.SET_VALUE", "ENUM.VALUE_SET");
 
             //LIST
 
-            RegisterCommand<Command.List.SetType, EmptyReply>("LIST.SET_TYPE", "LIST.TYPE_SET");
+            RegisterCommand<Command.List.SetType, EmptyReply>                                           (Resolver.V1_0_0.Code, "LIST.SET_TYPE", "LIST.TYPE_SET");
 
             //GLOBAL
 
-            RegisterCommand("GLOBAL.CREATE_PROJECT", "GLOBAL.PROJECT_CREATED", true, (Command.Global.CreateProject cmd) =>
-            {
-                Command.Global.CreateProject.Reply rep = cmd.Resolve(_controller);
-
-                _projects[cmd.ProjectName] = PROJECT_ACCESS.READ_WRITE;
-                return rep;
-            });
-            RegisterCommand<Command.Global.RemoveProject, Command.Global.RemoveProject.Reply>("GLOBAL.REMOVE_PROJECT", "GLOBAL.PROJECT_REMOVED", true);
-            RegisterCommand<Command.Global.GetProjectEntities, Command.Global.GetProjectEntities.Reply>("GLOBAL.GET_PROJECT_ENTITIES", "GLOBAL.PROJECT_ENTITIES_GET", false);
-            RegisterCommand("GLOBAL.SAVE", "GLOBAL.SAVED", false, (Command.Global.Save cmd) =>
+            RegisterCommand<Command.Global.CreateProject, Command.Global.CreateProject.Reply>           (Resolver.V1_0_0.Code, "GLOBAL.CREATE_PROJECT", "GLOBAL.PROJECT_CREATED", true);
+            RegisterCommand<Command.Global.RemoveProject, Command.Global.RemoveProject.Reply>           (Resolver.V1_0_0.Code, "GLOBAL.REMOVE_PROJECT", "GLOBAL.PROJECT_REMOVED", true);
+            RegisterCommand<Command.Global.GetProjectEntities, Command.Global.GetProjectEntities.Reply> (Resolver.V1_0_0.Code, "GLOBAL.GET_PROJECT_ENTITIES", "GLOBAL.PROJECT_ENTITIES_GET", false);
+            RegisterCommand                                                                             (Resolver.V1_0_0.Code, "GLOBAL.SAVE", "GLOBAL.SAVED", false, (Command.Global.Save cmd) =>
             {
                 SaveCommandsTo(cmd.Filename);
                 return cmd.Resolve(null);
             });
-            RegisterCommand("GLOBAL.LOAD", "GLOBAL.LOADED", true, (Command.Global.Load cmd) =>
+            RegisterCommand                                                                             (Resolver.V1_0_0.Code, "GLOBAL.LOAD", "GLOBAL.LOADED", true, (Command.Global.Load cmd) =>
             {
                 Command.Global.Load.Reply toret = new Command.Global.Load.Reply
                 {
                     Projects = new List<uint>()
                 };
 
+                //make LoadCommandsFrom return project list in order to return it
                 LoadCommandsFrom(cmd.Filename);
-                foreach (dynamic curr in _commands)
-                {
-                    if (curr.GetType() == typeof(Command.Global.CreateProject))
-                    {
-                        _projects[curr.ProjectName] = PROJECT_ACCESS.READ_ONLY;
-                        //toret.Projects.Add(_controller.GetEntity(0, curr.ProjectName).Id);
-                    }
-                }
+
                 return toret;
             });
-            RegisterCommand("GLOBAL.RESET", "GLOBAL.RESET_DONE", false, (EmptyCommand cmd) =>
+            RegisterCommand                                                                             (Resolver.V1_0_0.Code, "GLOBAL.RESET", "GLOBAL.RESET_DONE", false, (EmptyCommand cmd) =>
             {
                 Reset();
                 return new EmptyReply();
@@ -219,17 +198,27 @@ namespace CoreCommand
             }
         }
 
-        private void RegisterCommand<Command, Reply>(String name, String replyName, bool save = true, Func<Command, Reply> callback = null) where Command : ICommand<Reply>
+        /// <summary>
+        /// Register a specific command in the resolver
+        /// </summary>
+        /// <typeparam name="Command">Type of the command to register</typeparam>
+        /// <typeparam name="Reply">Type of the reply associated</typeparam>
+        /// <param name="version">Version of the command</param>
+        /// <param name="name">Name of the command</param>
+        /// <param name="replyName">Name of the reply associated</param>
+        /// <param name="save">Tells if we need to save the command for file serialization (default: true)</param>
+        /// <param name="callback">Function to call on resolution (optionnal)</param>
+        private void RegisterCommand<Command, Reply>(String version, String name, String replyName, bool save = true, Func<Command, Reply> callback = null) where Command : ICommand<Reply>
         {
             if (callback == null)
                 callback = (Command message) =>
                 {
                     return message.Resolve(_controller);
                 };
-            _handledCommands[name] = (Stream inS, Stream ouS) =>
+            _resolver.Register(version, name, (Stream inS, Stream ouS) =>
             {
                 return ResolveCommand(inS, ouS, save, callback);
-            };
+            });
             _commandsType[typeof(Command)] = name;
             _commandsReply[name] = replyName;
         }
@@ -241,6 +230,8 @@ namespace CoreCommand
 
             using (var stream = File.Create(filename))
             {
+                BinarySerializer.Serializer.Serialize(MagicNumber, stream);
+
                 foreach (var command in _commands)
                 {
                     if (!_commandsType.ContainsKey(command.GetType()))
@@ -262,6 +253,14 @@ namespace CoreCommand
         {
             using (var file = new StreamReader(filename))
             {
+                UInt32 magic = BinarySerializer.Serializer.Deserialize<UInt32>(file.BaseStream);
+
+                if (magic != MagicNumber)
+                {
+                    file.Close();
+                    return;
+                }
+
                 Controller save = _controller;
 
                 Reset();
@@ -274,26 +273,24 @@ namespace CoreCommand
 
                 save.merge(_controller);
                 _controller = save;
+
+                file.Close();
             }
         }
 
+        /// <see cref="IManager.CallCommand(string, Stream, Stream)"/>
         public bool CallCommand(string command, Stream inStream, Stream outStream)
         {
-            return GetCommand(command)(inStream, outStream);
-        }
-
-        public Func<Stream, Stream, bool> GetCommand(String name)
-        {
-            if (!_handledCommands.ContainsKey(name))
-                throw new InvalidDataException("BinaryManager.GetCommand : Given command \"" + name + "\" is not registered");
-            return _handledCommands[name];
+            return _resolver.Resolve(command, inStream, outStream);// GetCommand(command)(inStream, outStream);
         }
         
+        /// <see cref="IManager.GetRegisteredCommands"/>
         public Dictionary<String, String> GetRegisteredCommands()
         {
             return _commandsReply;
         }
 
+        /// <see cref="IManager.GetCommandName(Type)"/>
         public String GetCommandName(Type commandType)
         {
             if (!_commandsType.ContainsKey(commandType))
@@ -301,9 +298,11 @@ namespace CoreCommand
             return _commandsType[commandType];
         }
 
+        /// <see cref="IManager.Reset"/>
         public void Reset()
         {
             _controller = new Controller();
+            _commands.Clear();
         }
     }
 }

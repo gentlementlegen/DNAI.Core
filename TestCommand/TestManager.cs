@@ -7,7 +7,7 @@ namespace TestCommand
     [TestClass]
     public class TestManager
     {
-        private void testCommand<Command, Reply>(CoreCommand.IManager manager, Command toserial, Func<Stream, Stream, bool> toCall, Action<Command, Reply> check)
+        private void testCommand<Command, Reply>(CoreCommand.IManager manager, Command toserial, String toCall, Action<Command, Reply> check)
         {
             Stream instream = new MemoryStream();
             Stream outStream = new MemoryStream();
@@ -16,7 +16,7 @@ namespace TestCommand
             //ProtoBuf.Serializer.SerializeWithLengthPrefix(instream, toserial, ProtoBuf.PrefixStyle.Base128);
             instream.Position = 0;
 
-            Assert.IsTrue(toCall(instream, outStream));
+            Assert.IsTrue(manager.CallCommand(toCall, instream, outStream));
 
             outStream.Position = 0;
             Command cmd = BinarySerializer.Serializer.Deserialize<Command>(outStream);
@@ -37,7 +37,7 @@ namespace TestCommand
                 {
                     ProjectName = "Testor"
                 },
-                dispatcher.GetCommand("GLOBAL.CREATE_PROJECT"),
+                "GLOBAL.CREATE_PROJECT",
                 (CoreCommand.Command.Global.CreateProject command, CoreCommand.Command.Global.CreateProject.Reply reply) =>
                 {
                     Assert.IsTrue(reply.RootId == 6);
@@ -53,7 +53,7 @@ namespace TestCommand
                     Name = "toto",
                     Visibility = CoreControl.EntityFactory.VISIBILITY.PUBLIC
                 },
-                dispatcher.GetCommand("DECLARATOR.DECLARE"),
+                "DECLARATOR.DECLARE",
                 (CoreCommand.Command.Declarator.Declare command, CoreCommand.Command.Declarator.Declare.Reply reply) =>
                 {
                     Assert.IsTrue(reply.EntityID == 7);
@@ -66,7 +66,7 @@ namespace TestCommand
                     VariableID = 7,
                     TypeID = 2
                 },
-                dispatcher.GetCommand("VARIABLE.SET_TYPE"),
+                "VARIABLE.SET_TYPE",
                 (CoreCommand.Command.Variable.SetType message, CoreCommand.EmptyReply reply) => { });
 
             testCommand(
@@ -76,7 +76,7 @@ namespace TestCommand
                     VariableID = 7,
                     Value = "42"
                 },
-                dispatcher.GetCommand("VARIABLE.SET_VALUE"),
+                "VARIABLE.SET_VALUE",
                 (CoreCommand.Command.Variable.SetValue message, CoreCommand.EmptyReply reply) => { });
 
             testCommand(
@@ -87,7 +87,7 @@ namespace TestCommand
                     Name = "toto",
                     NewVisi = CoreControl.EntityFactory.VISIBILITY.PUBLIC
                 },
-                dispatcher.GetCommand("DECLARATOR.SET_VISIBILITY"),
+                "DECLARATOR.SET_VISIBILITY",
                 (CoreCommand.Command.Declarator.SetVisibility message, CoreCommand.EmptyReply reply) => { });
 
             testCommand(
@@ -96,7 +96,7 @@ namespace TestCommand
                 {
                     VariableId = 7
                 },
-                dispatcher.GetCommand("VARIABLE.GET_VALUE"),
+                "VARIABLE.GET_VALUE",
                 (CoreCommand.Command.Variable.GetValue message, CoreCommand.Command.Variable.GetValue.Reply reply) =>
                 {
                     Assert.IsTrue(reply.Value == "42");
@@ -128,7 +128,7 @@ namespace TestCommand
                     ContainerID = 6,
                     Name = "toto"
                 },
-                dispatcher.GetCommand("DECLARATOR.REMOVE"),
+                "DECLARATOR.REMOVE",
                 (CoreCommand.Command.Declarator.Remove message, CoreCommand.EmptyReply reply) => { });
 
             dispatcher.SaveCommandsTo("test.duly");
@@ -141,7 +141,7 @@ namespace TestCommand
                 {
                     ProjectName = "Testor"
                 },
-                dispatcher.GetCommand("GLOBAL.REMOVE_PROJECT"),
+                "GLOBAL.REMOVE_PROJECT",
                 (CoreCommand.Command.Global.RemoveProject cmd, CoreCommand.Command.Global.RemoveProject.Reply reply) =>
                 {
                     Assert.IsTrue(reply.Removed.Count == 1);
