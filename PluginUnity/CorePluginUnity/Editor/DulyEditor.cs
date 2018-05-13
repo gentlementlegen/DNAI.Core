@@ -1,4 +1,5 @@
-﻿using Core.Plugin.Unity.Drawing;
+﻿using System;
+using Core.Plugin.Unity.Drawing;
 using UnityEditor;
 using UnityEngine;
 
@@ -101,10 +102,43 @@ namespace Core.Plugin.Unity.Editor
 
             EditorGUILayout.Space();
 
+            DrawBuildButton();
             GUI.enabled = !EditorApplication.isPlaying;
             _scriptDrawer?.Draw();
             EditorGUILayout.Space();
             _onlineScriptDrawer?.Draw();
+        }
+
+        /// <summary>
+        /// Draws the build button to the window.
+        /// </summary>
+        private void DrawBuildButton()
+        {
+            if (GUILayout.Button("Build"))
+            {
+                Context.UnityTask.Run(async () =>
+                {
+                    //await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
+                    try
+                    {
+                        foreach (var script in _scriptDrawer.ListAI)
+                        {
+                            await script.scriptManager.CompileAsync();
+                            AssetDatabase.ImportAsset(Constants.CompiledPath + script.scriptManager.AssemblyName + ".dll");
+                        }
+                    }
+                    catch (System.IO.FileNotFoundException ex)
+                    {
+                        Debug.LogError($"Could not find the DNAI file {ex.FileName}. Make sure it exists in the Scripts folder.");
+                    }
+                }).ContinueWith((e) =>
+                {
+                    if (e.IsFaulted)
+                    {
+                        Debug.LogError(e?.Exception.GetBaseException().Message + " " + e?.Exception.GetBaseException().StackTrace);
+                    }
+                });
+            }
         }
 
         private void OnEnable()

@@ -40,6 +40,8 @@ namespace Core.Plugin.Unity.Drawing
         private EditorWindow _editorWindow;
         private EditorSettings _editorSettings;
 
+        internal IReadOnlyList<ListAIHandler> ListAI { get => listIA; }
+
         /// Should the ScriptDrawer be drawing ?
         public bool ShouldDraw
         { get; set; }
@@ -147,28 +149,28 @@ namespace Core.Plugin.Unity.Drawing
                 if (_selectedScripts?.Count != SubScriptList.list.Count)
                     _selectedScripts = Enumerable.Repeat(false, SubScriptList.list.Count).ToList();
 
-                if (GUI.Button(refreshRect, refreshButton))
-                {
-                    UnityTask.Run(async () =>
-                    {
-                        //await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
-                        try
-                        {
-                            await scriptManager.CompileAsync();
-                            AssetDatabase.ImportAsset(Constants.CompiledPath + scriptManager.AssemblyName + ".dll");
-                        }
-                        catch (FileNotFoundException ex)
-                        {
-                            Debug.LogError($"Could not find the DNAI file {ex.FileName}. Make sure it exists in the Scripts folder.");
-                        }
-                    }).ContinueWith((e) =>
-                    {
-                        if (e.IsFaulted)
-                        {
-                            Debug.LogError(e?.Exception.GetBaseException().Message + " " + e?.Exception.GetBaseException().StackTrace);
-                        }
-                    });
-                }
+                //if (GUI.Button(refreshRect, refreshButton))
+                //{
+                //    UnityTask.Run(async () =>
+                //    {
+                //        //await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
+                //        try
+                //        {
+                //            await scriptManager.CompileAsync();
+                //            AssetDatabase.ImportAsset(Constants.CompiledPath + scriptManager.AssemblyName + ".dll");
+                //        }
+                //        catch (FileNotFoundException ex)
+                //        {
+                //            Debug.LogError($"Could not find the DNAI file {ex.FileName}. Make sure it exists in the Scripts folder.");
+                //        }
+                //    }).ContinueWith((e) =>
+                //    {
+                //        if (e.IsFaulted)
+                //        {
+                //            Debug.LogError(e?.Exception.GetBaseException().Message + " " + e?.Exception.GetBaseException().StackTrace);
+                //        }
+                //    });
+                //}
             }
 
             /// <summary>
