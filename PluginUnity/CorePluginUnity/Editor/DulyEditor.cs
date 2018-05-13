@@ -85,11 +85,14 @@ namespace Core.Plugin.Unity.Editor
             }
         }
 
+        Vector2 scrollPos;
+
         private void OnGUI()
         {
             if (_settingsContent == null)
                 _settingsContent = EditorGUIUtility.IconContent("SettingsIcon", "|Settings");
 
+            scrollPos = GUILayout.BeginScrollView(scrollPos);
             GUILayout.BeginHorizontal();
             DrawWindowTitle();
             if (GUILayout.Button(_settingsContent))
@@ -107,38 +110,8 @@ namespace Core.Plugin.Unity.Editor
             _scriptDrawer?.Draw();
             EditorGUILayout.Space();
             _onlineScriptDrawer?.Draw();
-        }
 
-        /// <summary>
-        /// Draws the build button to the window.
-        /// </summary>
-        private void DrawBuildButton()
-        {
-            if (GUILayout.Button("Build"))
-            {
-                Context.UnityTask.Run(async () =>
-                {
-                    //await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
-                    try
-                    {
-                        foreach (var script in _scriptDrawer.ListAI)
-                        {
-                            await script.scriptManager.CompileAsync();
-                            AssetDatabase.ImportAsset(Constants.CompiledPath + script.scriptManager.AssemblyName + ".dll");
-                        }
-                    }
-                    catch (System.IO.FileNotFoundException ex)
-                    {
-                        Debug.LogError($"Could not find the DNAI file {ex.FileName}. Make sure it exists in the Scripts folder.");
-                    }
-                }).ContinueWith((e) =>
-                {
-                    if (e.IsFaulted)
-                    {
-                        Debug.LogError(e?.Exception.GetBaseException().Message + " " + e?.Exception.GetBaseException().StackTrace);
-                    }
-                });
-            }
+            GUILayout.EndScrollView();
         }
 
         private void OnEnable()
@@ -181,6 +154,38 @@ namespace Core.Plugin.Unity.Editor
             GUILayout.FlexibleSpace();
             GUILayout.Label("DNAI Editor", EditorStyles.largeLabel);
             GUILayout.FlexibleSpace();
+        }
+
+        /// <summary>
+        /// Draws the build button to the window.
+        /// </summary>
+        private void DrawBuildButton()
+        {
+            if (GUILayout.Button("Build"))
+            {
+                Context.UnityTask.Run(async () =>
+                {
+                    //await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
+                    try
+                    {
+                        foreach (var script in _scriptDrawer.ListAI)
+                        {
+                            await script.scriptManager.CompileAsync();
+                            AssetDatabase.ImportAsset(Constants.CompiledPath + script.scriptManager.AssemblyName + ".dll");
+                        }
+                    }
+                    catch (System.IO.FileNotFoundException ex)
+                    {
+                        Debug.LogError($"Could not find the DNAI file {ex.FileName}. Make sure it exists in the Scripts folder.");
+                    }
+                }).ContinueWith((e) =>
+                {
+                    if (e.IsFaulted)
+                    {
+                        Debug.LogError(e?.Exception.GetBaseException().Message + " " + e?.Exception.GetBaseException().StackTrace);
+                    }
+                });
+            }
         }
 
         #endregion Editor Drawing
