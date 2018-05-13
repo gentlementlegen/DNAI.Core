@@ -42,6 +42,9 @@ namespace Core.Plugin.Unity.Editor
         private static Texture _texture;
         private static GUIContent _settingsContent;
 
+        private Vector2 scrollPos;
+        private bool _isCompiling;
+
         public static DulyEditor Instance { get { return _window; } }
 
         public DulyEditor()
@@ -85,14 +88,15 @@ namespace Core.Plugin.Unity.Editor
             }
         }
 
-        Vector2 scrollPos;
-
         private void OnGUI()
         {
+            GUI.enabled = !EditorApplication.isPlaying;
+
             if (_settingsContent == null)
                 _settingsContent = EditorGUIUtility.IconContent("SettingsIcon", "|Settings");
 
             scrollPos = GUILayout.BeginScrollView(scrollPos);
+
             GUILayout.BeginHorizontal();
             DrawWindowTitle();
             if (GUILayout.Button(_settingsContent))
@@ -106,10 +110,13 @@ namespace Core.Plugin.Unity.Editor
             EditorGUILayout.Space();
 
             DrawBuildButton();
-            GUI.enabled = !EditorApplication.isPlaying;
+
+            GUI.enabled = !_isCompiling;
+
             _scriptDrawer?.Draw();
             EditorGUILayout.Space();
             _onlineScriptDrawer?.Draw();
+            EditorGUI.EndDisabledGroup();
 
             GUILayout.EndScrollView();
         }
@@ -168,11 +175,13 @@ namespace Core.Plugin.Unity.Editor
                     //await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
                     try
                     {
+                        _isCompiling = true;
                         foreach (var script in _scriptDrawer.ListAI)
                         {
                             await script.scriptManager.CompileAsync();
                             AssetDatabase.ImportAsset(Constants.CompiledPath + script.scriptManager.AssemblyName + ".dll");
                         }
+                        _isCompiling = false;
                     }
                     catch (System.IO.FileNotFoundException ex)
                     {
@@ -184,6 +193,7 @@ namespace Core.Plugin.Unity.Editor
                     {
                         Debug.LogError(e?.Exception.GetBaseException().Message + " " + e?.Exception.GetBaseException().StackTrace);
                     }
+                    _isCompiling = false;
                 });
             }
         }
