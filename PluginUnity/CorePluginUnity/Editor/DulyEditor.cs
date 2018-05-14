@@ -163,6 +163,9 @@ namespace Core.Plugin.Unity.Editor
             GUILayout.FlexibleSpace();
         }
 
+        private int _currentScriptCount;
+        private int _maxScriptCount;
+
         /// <summary>
         /// Draws the build button to the window.
         /// </summary>
@@ -176,11 +179,23 @@ namespace Core.Plugin.Unity.Editor
                     try
                     {
                         _isCompiling = true;
-                        foreach (var script in _scriptDrawer.ListAI)
+                        _maxScriptCount = _scriptDrawer.ListAI.Count;
+                        for (int i = 0; i < _scriptDrawer.ListAI.Count; i++)
                         {
-                            await script.scriptManager.CompileAsync();
-                            AssetDatabase.ImportAsset(Constants.CompiledPath + script.scriptManager.AssemblyName + ".dll");
+                            _currentScriptCount = i + 1;
+
+                            if (EditorUtility.DisplayCancelableProgressBar("Compiling DNAI scripts",
+                                    $"Processed {_currentScriptCount}/{_maxScriptCount} scripts", _currentScriptCount / (float)_maxScriptCount))
+                            {
+                                Debug.Log("Compilation canceled");
+                                i = _scriptDrawer.ListAI.Count;
+                                continue;
+                            }
+
+                            await _scriptDrawer.ListAI[i].scriptManager.CompileAsync();
+                            AssetDatabase.ImportAsset(Constants.CompiledPath + _scriptDrawer.ListAI[i].scriptManager.AssemblyName + ".dll");
                         }
+                        EditorUtility.ClearProgressBar();
                         _isCompiling = false;
                     }
                     catch (System.IO.FileNotFoundException ex)
@@ -196,6 +211,20 @@ namespace Core.Plugin.Unity.Editor
                     _isCompiling = false;
                 });
             }
+
+            //if (_isCompiling)
+            //{
+            //    if (EditorUtility.DisplayCancelableProgressBar("Compiling DNAI scripts",
+            //        $"Processed {_currentScriptCount}/{_maxScriptCount} scripts", _currentScriptCount / (float)_maxScriptCount))
+            //    {
+            //        Debug.Log("Compilation canceled");
+            //    }
+            //}
+            //else
+            //{
+            //    EditorUtility.ClearProgressBar();
+            //    //EditorGUIUtility.ExitGUI();
+            //}
         }
 
         #endregion Editor Drawing
