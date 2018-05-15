@@ -202,6 +202,10 @@ namespace Core.Plugin.Unity.Editor
                     {
                         Debug.LogError($"Could not find the DNAI file {ex.FileName}. Make sure it exists in the Scripts folder.");
                     }
+                    finally
+                    {
+                        EditorUtility.ClearProgressBar();
+                    }
                 }).ContinueWith((e) =>
                 {
                     if (e.IsFaulted)

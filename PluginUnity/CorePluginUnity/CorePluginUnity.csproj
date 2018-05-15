@@ -77,6 +77,11 @@
     <Compile Include="Drawing\OnlineScriptDrawer.cs" />
     <Compile Include="Drawing\ScriptDrawer.cs" />
     <Compile Include="Editor\CloudFileWatcher.cs" />
+    <Compile Include="Editor\Conditions\ACondition.cs" />
+    <Compile Include="Editor\Conditions\ConditionInput.cs" />
+    <Compile Include="Editor\Conditions\Inspector\ConditionList.cs" />
+    <Compile Include="Editor\Conditions\IntCondition.cs" />
+    <Compile Include="Editor\Conditions\VoidCondition.cs" />
     <Compile Include="Editor\Constants.cs" />
     <Compile Include="Editor\DulyEditor.cs" />
     <Compile Include="Editor\ScriptManager.cs" />

@@ -10,9 +10,91 @@ using UnityEngine;
 using UnityEngine.Events;
 using CoreCommand;
 using System.Collections.Generic;
+using UnityEditorInternal;
+using UnityEditor;
+using Core.Plugin.Unity.Editor.Conditions.Inspector;
+using Core.Plugin.Unity.Editor.Conditions;
 
 namespace DNAI.<#=Namespace#>
 {
+	[System.Serializable]
+    public class ConditionItem
+    {
+        public ACondition cdt;
+        public string Test;
+    }
+
+	[CustomEditor(typeof(<#=ClassName#>), true)]
+    public class ListExampleInspector : UnityEditor.Editor
+    {
+        private ReorderableList reorderableList;
+
+        private <#=ClassName#> listExample
+        {
+            get
+            {
+                return target as <#=ClassName#>;
+            }
+        }
+
+		private void OnEnable()
+        {
+            reorderableList = new ReorderableList(listExample._cdtList, typeof(ConditionItem), true, true, true, true);
+
+            reorderableList.drawHeaderCallback += DrawHeader;
+            reorderableList.drawElementCallback += DrawElement;
+
+            reorderableList.onAddCallback += AddItem;
+            reorderableList.onRemoveCallback += RemoveItem;
+        }
+
+		private void OnDisable()
+        {
+            reorderableList.drawHeaderCallback -= DrawHeader;
+            reorderableList.drawElementCallback -= DrawElement;
+
+            reorderableList.onAddCallback -= AddItem;
+            reorderableList.onRemoveCallback -= RemoveItem;
+        }
+
+        private void DrawHeader(Rect rect)
+        {
+            GUI.Label(rect, "Our fancy reorderable list");
+        }
+
+        private void DrawElement(Rect rect, int index, bool active, bool focused)
+        {
+            ConditionItem item = listExample._cdtList[index];
+
+            EditorGUI.BeginChangeCheck();
+            item.Test = EditorGUI.TextField(new Rect(rect.x + 18, rect.y, rect.width - 18, rect.height), item.Test);
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorUtility.SetDirty(target);
+            }
+        }
+
+        private void AddItem(ReorderableList list)
+        {
+            listExample._cdtList.Add(new ConditionItem());
+
+            EditorUtility.SetDirty(target);
+        }
+
+        private void RemoveItem(ReorderableList list)
+        {
+            listExample._cdtList.RemoveAt(list.index);
+
+            EditorUtility.SetDirty(target);
+        }
+
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            reorderableList.DoLayoutList();
+        }
+    }
+
 	public class EventOutputChange : EventArgs
 	{
 		public <#=ClassName#> Invoker;
@@ -25,6 +107,8 @@ namespace DNAI.<#=Namespace#>
 	///</summary>
 	public class <#=ClassName#> : MonoBehaviour
 	{
+	    public List<ConditionItem> _cdtList = new List<ConditionItem>();// { new ConditionItem() { cdt = new IntCondition() } };
+
 		[Serializable]
 		public class UnityEventOutputChange : UnityEvent<EventOutputChange>
 		{
@@ -87,5 +171,5 @@ namespace DNAI.<#=Namespace#>
 				<# }
 			} #>
 		}
-	}
+	}	
 }
