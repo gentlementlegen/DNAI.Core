@@ -22,6 +22,14 @@ namespace DNAI.<#=Namespace#>
     {
         public ACondition cdt;
         public string Test;
+
+        public static readonly string[] Outputs = new string[]
+        {
+			<# foreach (var item in Outputs)
+			{ #>
+				"<#=item#>",
+			<# } #>
+        };
     }
 
 	[CustomEditor(typeof(<#=ClassName#>), true)]
@@ -59,7 +67,7 @@ namespace DNAI.<#=Namespace#>
 
         private void DrawHeader(Rect rect)
         {
-            GUI.Label(rect, "Our fancy reorderable list");
+            GUI.Label(rect, "On Output Changed (EventOutputChanged)");
         }
 
         private void DrawElement(Rect rect, int index, bool active, bool focused)
@@ -67,7 +75,8 @@ namespace DNAI.<#=Namespace#>
             ConditionItem item = listExample._cdtList[index];
 
             EditorGUI.BeginChangeCheck();
-            item.Test = EditorGUI.TextField(new Rect(rect.x + 18, rect.y, rect.width - 18, rect.height), item.Test);
+            //item.Test = EditorGUI.TextField(new Rect(rect.x + 18, rect.y, rect.width - 18, rect.height), ConditionItem.Outputs[0].Item1);
+			EditorGUI.Popup(new Rect(rect.x + 18, rect.y + 2, rect.width - 18, rect.height), 0, ConditionItem.Outputs);
             if (EditorGUI.EndChangeCheck())
             {
                 EditorUtility.SetDirty(target);

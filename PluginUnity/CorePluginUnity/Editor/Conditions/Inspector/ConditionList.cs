@@ -73,6 +73,11 @@ namespace Core.Plugin.Unity.Editor.Conditions.Inspector
             GUI.Label(rect, "Our fancy reorderable list");
         }
 
+        private static readonly string[] outputs = new string[]
+            {
+                "int myInt"
+            };
+
         /// <summary>
         /// Draws one element of the list (ListItemExample)
         /// </summary>
@@ -87,6 +92,8 @@ namespace Core.Plugin.Unity.Editor.Conditions.Inspector
             EditorGUI.BeginChangeCheck();
             //item.boolValue = EditorGUI.Toggle(new Rect(rect.x, rect.y, 18, rect.height), item.boolValue);
             item.Test = EditorGUI.TextField(new Rect(rect.x + 18, rect.y, rect.width - 18, rect.height), item.Test);
+            var genericMenu = new GenericMenu();
+            EditorGUI.Popup(rect, 0, outputs);
             if (EditorGUI.EndChangeCheck())
             {
                 EditorUtility.SetDirty(target);
