@@ -28,6 +28,9 @@ namespace Core.Plugin.Unity.Editor.Conditions.Inspector
         {
             get { return 10f; }
         }
+
+        public string AssociatedVariable { get; internal set; }
+
         public UnityEvent Callback;
     }
 
@@ -115,6 +118,8 @@ namespace Core.Plugin.Unity.Editor.Conditions.Inspector
             SerializedObject s = new SerializedObject(listExample);
             var p = s.FindProperty("_cdtList").GetArrayElementAtIndex(index);
             EditorGUI.PropertyField(rect, p.FindPropertyRelative("Callback"));
+
+            listExample._cdtList.FindAll((x) => x.AssociatedVariable == nameof(item)).ForEach((y) => y.Callback?.Invoke());
 
             Object obj = null;
             EditorGUI.ObjectField(rect, obj, typeof(Object), true);
