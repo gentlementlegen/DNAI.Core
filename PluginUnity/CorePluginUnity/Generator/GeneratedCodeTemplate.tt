@@ -37,10 +37,11 @@ namespace DNAI.<#=Namespace#>
         };
 
 		public UnityEventOutputChange OnOutputChanged;
+		public int CallbackCount = 0;
 
 		public float ItemSize
         {
-            get { return 120f; }
+            get { return 110f + CallbackCount * 90f; }
         }
 
 		public int SelectedIndex = 0;
@@ -105,6 +106,16 @@ namespace DNAI.<#=Namespace#>
 			SerializedObject s = new SerializedObject(listExample);
             var p = s.FindProperty("_cdtList").GetArrayElementAtIndex(index);
             EditorGUI.PropertyField(new Rect(rect.x + 18, rect.y + 20, rect.width - 18, 20), p.FindPropertyRelative("OnOutputChanged"));
+
+			foreach (var x in p.FindPropertyRelative("OnOutputChanged"))
+			{
+				var u = x as SerializedProperty;
+				if (u.name == "size")
+				{
+					Debug.Log("found size " + u.intValue);
+					item.CallbackCount = u.intValue;
+				}
+			}
 
             if (EditorGUI.EndChangeCheck())
             {
