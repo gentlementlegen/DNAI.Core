@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Core.Plugin.Unity.Editor.Conditions.Inspector
 {
@@ -21,7 +22,13 @@ namespace Core.Plugin.Unity.Editor.Conditions.Inspector
     public class ConditionItem
     {
         private ACondition cdt;
+
         public string Test;
+        public float ItemSize
+        {
+            get { return 10f; }
+        }
+        public UnityEvent Callback;
     }
 
     [CustomEditor(typeof(Play))]
@@ -52,6 +59,13 @@ namespace Core.Plugin.Unity.Editor.Conditions.Inspector
 
             reorderableList.onAddCallback += AddItem;
             reorderableList.onRemoveCallback += RemoveItem;
+
+            reorderableList.elementHeightCallback += ElementHeightCallback;
+        }
+
+        private float ElementHeightCallback(int idx)
+        {
+            return listExample._cdtList[idx].ItemSize;
         }
 
         private void OnDisable()
@@ -62,6 +76,8 @@ namespace Core.Plugin.Unity.Editor.Conditions.Inspector
 
             reorderableList.onAddCallback -= AddItem;
             reorderableList.onRemoveCallback -= RemoveItem;
+
+            reorderableList.elementHeightCallback -= ElementHeightCallback;
         }
 
         /// <summary>
@@ -94,6 +110,14 @@ namespace Core.Plugin.Unity.Editor.Conditions.Inspector
             item.Test = EditorGUI.TextField(new Rect(rect.x + 18, rect.y, rect.width - 18, rect.height), item.Test);
             var genericMenu = new GenericMenu();
             EditorGUI.Popup(rect, 0, outputs);
+
+            // https://answers.unity.com/questions/969563/custom-inspector-unity-events.html
+            SerializedObject s = new SerializedObject(listExample);
+            var p = s.FindProperty("_cdtList").GetArrayElementAtIndex(index);
+            EditorGUI.PropertyField(rect, p.FindPropertyRelative("Callback"));
+
+            Object obj = null;
+            EditorGUI.ObjectField(rect, obj, typeof(Object), true);
             if (EditorGUI.EndChangeCheck())
             {
                 EditorUtility.SetDirty(target);

@@ -1171,7 +1171,7 @@ MonoBehaviour:
   OnOutputChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 7400000, guid: 3c522c3d0765100438bc5c4ca7bc0938, type: 2}
         m_MethodName: 
         m_Mode: 1
         m_Arguments:

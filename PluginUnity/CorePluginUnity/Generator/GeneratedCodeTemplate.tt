@@ -17,6 +17,11 @@ using Core.Plugin.Unity.Editor.Conditions;
 
 namespace DNAI.<#=Namespace#>
 {
+	[Serializable]
+	public class UnityEventOutputChange : UnityEvent<EventOutputChange>
+	{
+	}
+
 	[System.Serializable]
     public class ConditionItem
     {
@@ -30,12 +35,20 @@ namespace DNAI.<#=Namespace#>
 				"<#=item#>",
 			<# } #>
         };
+
+		public UnityEventOutputChange OnOutputChanged;
+
+		public float ItemSize
+        {
+            get { return 120f; }
+        }
     }
 
 	[CustomEditor(typeof(<#=ClassName#>), true)]
     public class ListExampleInspector : UnityEditor.Editor
     {
         private ReorderableList reorderableList;
+		private int _selectedIndex;
 
         private <#=ClassName#> listExample
         {
@@ -54,6 +67,8 @@ namespace DNAI.<#=Namespace#>
 
             reorderableList.onAddCallback += AddItem;
             reorderableList.onRemoveCallback += RemoveItem;
+
+			reorderableList.elementHeightCallback += ElementHeightCallback;
         }
 
 		private void OnDisable()
@@ -63,11 +78,13 @@ namespace DNAI.<#=Namespace#>
 
             reorderableList.onAddCallback -= AddItem;
             reorderableList.onRemoveCallback -= RemoveItem;
+
+			reorderableList.elementHeightCallback -= ElementHeightCallback;
         }
 
         private void DrawHeader(Rect rect)
         {
-            GUI.Label(rect, "On Output Changed (EventOutputChanged)");
+            GUI.Label(rect, "Callbacks invoked when output changes");
         }
 
         private void DrawElement(Rect rect, int index, bool active, bool focused)
@@ -76,7 +93,15 @@ namespace DNAI.<#=Namespace#>
 
             EditorGUI.BeginChangeCheck();
             //item.Test = EditorGUI.TextField(new Rect(rect.x + 18, rect.y, rect.width - 18, rect.height), ConditionItem.Outputs[0].Item1);
-			EditorGUI.Popup(new Rect(rect.x + 18, rect.y + 2, rect.width - 18, rect.height), 0, ConditionItem.Outputs);
+
+			// Draws the condition item selector
+			_selectedIndex = EditorGUI.Popup(new Rect(rect.x + 18, rect.y + 2, rect.width - 18, 10), _selectedIndex, ConditionItem.Outputs);
+
+			// Draws the callback zone to assign it
+			SerializedObject s = new SerializedObject(listExample);
+            var p = s.FindProperty("_cdtList").GetArrayElementAtIndex(index);
+            EditorGUI.PropertyField(new Rect(rect.x + 18, rect.y + 20, rect.width - 18, 20), p.FindPropertyRelative("OnOutputChanged"));
+
             if (EditorGUI.EndChangeCheck())
             {
                 EditorUtility.SetDirty(target);
@@ -95,6 +120,11 @@ namespace DNAI.<#=Namespace#>
             listExample._cdtList.RemoveAt(list.index);
 
             EditorUtility.SetDirty(target);
+        }
+		
+        private float ElementHeightCallback(int idx)
+        {
+            return listExample._cdtList[idx].ItemSize;
         }
 
         public override void OnInspectorGUI()
@@ -118,10 +148,10 @@ namespace DNAI.<#=Namespace#>
 	{
 	    public List<ConditionItem> _cdtList = new List<ConditionItem>();// { new ConditionItem() { cdt = new IntCondition() } };
 
-		[Serializable]
-		public class UnityEventOutputChange : UnityEvent<EventOutputChange>
-		{
-		}
+		//[Serializable]
+		//public class UnityEventOutputChange : UnityEvent<EventOutputChange>
+		//{
+		//}
 
 		///<summary>
 		/// Called when output values of the DNAI script change.
