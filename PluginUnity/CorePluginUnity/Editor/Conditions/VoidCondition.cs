@@ -5,6 +5,11 @@
     /// </summary>
     public class VoidCondition : ACondition
     {
+        public override float Draw(UnityEngine.Rect rect)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override bool Evaluate()
         {
             return true;

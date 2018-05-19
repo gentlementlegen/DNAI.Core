@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Core.Plugin.Unity.Editor.Conditions
 {
@@ -7,25 +8,49 @@ namespace Core.Plugin.Unity.Editor.Conditions
 
     /// <summary>
     /// Abstract class for conditions related to Unity GUI callbacks.
+    /// Unity does not support Serialization for derived classes,
+    /// so this class handles every time that can be used within the editor.
     /// </summary>
     [Serializable]
     public class ACondition
     {
         private static readonly Dictionary<Type, Type> _matchingTypes = new Dictionary<Type, Type>
         {
-            { typeof(int), typeof(IntCondition)  },
-            { typeof(void), typeof(VoidCondition) }
+            { typeof(int), typeof(ConditionEvaluator)  },
+        };
+
+        [SerializeField]
+        private List<ConditionEvaluator> _matchingInstanceTypes = new List<ConditionEvaluator>
+        {
+            { new ConditionEvaluator()  },
         };
 
         public CallbackFunc Callback;
 
         public string TestACondition;
 
+        [SerializeField]
+        private string _currentTypeStr = "System.Int64";
+
+        [SerializeField]
+        private Type _currentType = typeof(int);
+
+        private ConditionEvaluator _currentEvaluator;
+
+        public ACondition()
+        {
+            Debug.Log("Ctor " + _currentTypeStr);
+            _currentType = Type.GetType(_currentTypeStr);
+        }
+
         /// <summary>
         /// Evaluates if the condition is satisfied.
         /// </summary>
         /// <returns></returns>
-        public virtual bool Evaluate() { return false; }
+        public virtual bool Evaluate()
+        {
+            return _matchingInstanceTypes[0].Evaluate();
+        }
 
         /// <summary>
         /// Retrives a class instance corresponding to the input type given.
@@ -50,6 +75,23 @@ namespace Core.Plugin.Unity.Editor.Conditions
                     return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Draws the condition and return its size.
+        /// </summary>
+        /// <returns></returns>
+        public virtual float Draw(UnityEngine.Rect rect)
+        {
+            UnityEngine.Debug.Log("drawing");
+            if (_currentType != null)
+                _matchingInstanceTypes[0].Draw(rect);
+            return 0;
+        }
+
+        public void SetRefOutput<T>(ConditionInput<T> cdt)
+        {
+            _currentEvaluator.SetRefOutput(cdt);
         }
     }
 }

@@ -4,6 +4,7 @@
     /// Represents an input wrapper for a condition.
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [System.Serializable]
     public class ConditionInput<T>
     {
         public T Value;

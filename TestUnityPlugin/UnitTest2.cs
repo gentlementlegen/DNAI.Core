@@ -17,13 +17,13 @@ namespace TestUnityPlugin
                 Value = 42
             };
 
-            var intCdt = new IntCondition
+            var intCdt = new ConditionEvaluator
             {
-                Condition = IntCondition.CONDITION.EQUAL,
+                Condition = ConditionEvaluator.CONDITION.EQUAL,
                 Input = 42
             };
             intCdt.SetRefOutput(i);
-            cdts.Add(intCdt);
+            //cdts.Add(intCdt);
 
             Assert.IsTrue(ACondition.EvaluateSet(cdts), "1 Conditions are not satisfied");
 
@@ -37,18 +37,18 @@ namespace TestUnityPlugin
             List<ACondition> cdts = new List<ACondition>();
             ConditionInput<int> i = 128;
 
-            var intCdt = new IntCondition
+            var intCdt = new ConditionEvaluator
             {
-                Condition = IntCondition.CONDITION.MORE,
+                Condition = ConditionEvaluator.CONDITION.MORE,
                 Input = 127
             };
             intCdt.SetRefOutput(i);
-            intCdt.Callback = () => intCdt.Input++;
+            //intCdt.Callback = () => intCdt.Input++;
 
-            cdts.Add(intCdt);
+            //cdts.Add(intCdt);
 
             Assert.IsTrue(ACondition.EvaluateSet(cdts), "1 Conditions are not satisfied");
-            intCdt.Callback();
+            //intCdt.Callback();
             Assert.IsFalse(ACondition.EvaluateSet(cdts), "2 Conditions are not satisfied");
         }
     }

@@ -55,6 +55,7 @@ namespace DNAI.");
 	[System.Serializable]
     public class ConditionItem
     {
+		[SerializeField]
         public ACondition cdt;
         public string Test;
 
@@ -62,7 +63,7 @@ namespace DNAI.");
         {
 			");
             
-            #line 33 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 34 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Outputs)
 			{ 
             
@@ -70,14 +71,14 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t\"");
             
-            #line 35 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 36 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
-            this.Write("\",\r\n\t\t\t");
+            this.Write("\",\r\n\t\t\t\t\"System.String str\",\r\n\t\t\t");
             
-            #line 36 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 38 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
@@ -87,19 +88,36 @@ namespace DNAI.");
 		public UnityEventOutputChange OnOutputChanged;
 		public int CallbackCount = 0;
 
+		private float drawSize = 0;
+
 		public float ItemSize
         {
-            get { return 110f + CallbackCount * 90f; }
+            get { return 110f + CallbackCount * 90f + drawSize; }
         }
 
 		public int SelectedIndex = 0;
 
 		public string SelectedOutput { get { return Outputs[SelectedIndex]; } }
+
+		public float Draw(Rect rect)
+		{
+			//if (cdt != null)
+			Debug.Log(""cdt type = "" + cdt.GetType());
+				drawSize = cdt.Draw(rect);
+			return drawSize;
+		}
+
+		public bool Evaluate()
+		{
+			if (cdt != null)
+				return cdt.Evaluate();
+			return true;
+		}
     }
 
 	[CustomEditor(typeof(");
             
-            #line 52 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 71 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -108,7 +126,7 @@ namespace DNAI.");
                     "     private ReorderableList reorderableList;\r\n\t\tprivate int _selectedIndex;\r\n\r\n" +
                     "        private ");
             
-            #line 58 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 77 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -116,7 +134,7 @@ namespace DNAI.");
             this.Write(" listExample\r\n        {\r\n            get\r\n            {\r\n                return t" +
                     "arget as ");
             
-            #line 62 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 81 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -135,32 +153,34 @@ namespace DNAI.");
                     "   }\r\n\r\n        private void DrawHeader(Rect rect)\r\n        {\r\n            GUI.L" +
                     "abel(rect, \"Callbacks invoked when output changes\");\r\n        }\r\n\r\n        priva" +
                     "te void DrawElement(Rect rect, int index, bool active, bool focused)\r\n        {\r" +
-                    "\n            ConditionItem item = listExample._cdtList[index];\r\n\r\n            Ed" +
-                    "itorGUI.BeginChangeCheck();\r\n            //item.Test = EditorGUI.TextField(new R" +
-                    "ect(rect.x + 18, rect.y, rect.width - 18, rect.height), ConditionItem.Outputs[0]" +
-                    ".Item1);\r\n\r\n\t\t\t// Draws the condition item selector\r\n\t\t\titem.SelectedIndex = Edi" +
-                    "torGUI.Popup(new Rect(rect.x + 18, rect.y + 2, rect.width - 18, 10), item.Select" +
-                    "edIndex, ConditionItem.Outputs);\r\n\r\n\t\t\t// Draws the callback zone to assign it\r\n" +
-                    "\t\t\tSerializedObject s = new SerializedObject(listExample);\r\n            var p = " +
-                    "s.FindProperty(\"_cdtList\").GetArrayElementAtIndex(index);\r\n            EditorGUI" +
-                    ".PropertyField(new Rect(rect.x + 18, rect.y + 20, rect.width - 18, 20), p.FindPr" +
-                    "opertyRelative(\"OnOutputChanged\"));\r\n\r\n\t\t\tforeach (var x in p.FindPropertyRelati" +
-                    "ve(\"OnOutputChanged\"))\r\n\t\t\t{\r\n\t\t\t\tvar u = x as SerializedProperty;\r\n\t\t\t\tif (u.na" +
-                    "me == \"size\")\r\n\t\t\t\t{\r\n\t\t\t\t\tDebug.Log(\"found size \" + u.intValue);\r\n\t\t\t\t\titem.Cal" +
-                    "lbackCount = u.intValue;\r\n\t\t\t\t}\r\n\t\t\t}\r\n\r\n            if (EditorGUI.EndChangeChec" +
-                    "k())\r\n            {\r\n                EditorUtility.SetDirty(target);\r\n          " +
-                    "  }\r\n        }\r\n\r\n        private void AddItem(ReorderableList list)\r\n        {\r" +
-                    "\n            listExample._cdtList.Add(new ConditionItem());\r\n\r\n            Edito" +
-                    "rUtility.SetDirty(target);\r\n        }\r\n\r\n        private void RemoveItem(Reorder" +
-                    "ableList list)\r\n        {\r\n            listExample._cdtList.RemoveAt(list.index)" +
-                    ";\r\n\r\n            EditorUtility.SetDirty(target);\r\n        }\r\n\t\t\r\n        private" +
-                    " float ElementHeightCallback(int idx)\r\n        {\r\n            return listExample" +
-                    "._cdtList[idx].ItemSize;\r\n        }\r\n\r\n        public override void OnInspectorG" +
-                    "UI()\r\n        {\r\n            base.OnInspectorGUI();\r\n            reorderableList" +
-                    ".DoLayoutList();\r\n        }\r\n    }\r\n\r\n\tpublic class EventOutputChange : EventArg" +
-                    "s\r\n\t{\r\n\t\tpublic ");
+                    "\n            ConditionItem item = listExample._cdtList[index];\r\n\t\t\tRect newRect " +
+                    "= rect;\r\n\r\n            EditorGUI.BeginChangeCheck();\r\n\t\t\tnewRect.y += 20;\r\n\t\t\tne" +
+                    "wRect.x += 18;\r\n            //item.Test = EditorGUI.TextField(new Rect(rect.x + " +
+                    "18, rect.y, rect.width - 18, rect.height), ConditionItem.Outputs[0].Item1);\r\n\r\n\t" +
+                    "\t\t// Draws the condition item selector\r\n\t\t\titem.SelectedIndex = EditorGUI.Popup(" +
+                    "new Rect(rect.x + 18, rect.y + 2, rect.width - 18, 10), item.SelectedIndex, Cond" +
+                    "itionItem.Outputs);\r\n\r\n\t\t\tnewRect.y += item.Draw(newRect);\r\n\r\n\t\t\t// Draws the ca" +
+                    "llback zone to assign it\r\n\t\t\t//SerializedObject s = new SerializedObject(listExa" +
+                    "mple);\r\n            //var p = s.FindProperty(\"_cdtList\").GetArrayElementAtIndex(" +
+                    "index);\r\n            //EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y +" +
+                    " 5, rect.width - 18, 20), p.FindPropertyRelative(\"OnOutputChanged\"));\r\n\r\n\t\t\t//fo" +
+                    "reach (var x in p.FindPropertyRelative(\"OnOutputChanged\"))\r\n\t\t\t//{\r\n\t\t\t//\tvar u " +
+                    "= x as SerializedProperty;\r\n\t\t\t//\tif (u.name == \"size\")\r\n\t\t\t//\t{\r\n\t\t\t//\t\tDebug.L" +
+                    "og(\"found size \" + u.intValue);\r\n\t\t\t//\t\titem.CallbackCount = u.intValue;\r\n\t\t\t//\t" +
+                    "}\r\n\t\t\t//}\r\n\r\n            if (EditorGUI.EndChangeCheck())\r\n            {\r\n\t\t\t\tDeb" +
+                    "ug.Log(\"end change check true\");\r\n                EditorUtility.SetDirty(target)" +
+                    ";\r\n            }\r\n        }\r\n\r\n        private void AddItem(ReorderableList list" +
+                    ")\r\n        {\r\n            listExample._cdtList.Add(new ConditionItem());\r\n\r\n    " +
+                    "        EditorUtility.SetDirty(target);\r\n        }\r\n\r\n        private void Remov" +
+                    "eItem(ReorderableList list)\r\n        {\r\n            listExample._cdtList.RemoveA" +
+                    "t(list.index);\r\n\r\n            EditorUtility.SetDirty(target);\r\n        }\r\n\t\t\r\n  " +
+                    "      private float ElementHeightCallback(int idx)\r\n        {\r\n            retur" +
+                    "n listExample._cdtList[idx].ItemSize;\r\n        }\r\n\r\n        public override void" +
+                    " OnInspectorGUI()\r\n        {\r\n            base.OnInspectorGUI();\r\n            re" +
+                    "orderableList.DoLayoutList();\r\n        }\r\n    }\r\n\r\n\tpublic class EventOutputChan" +
+                    "ge : EventArgs\r\n\t{\r\n\t\tpublic ");
             
-            #line 154 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 179 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -168,7 +188,7 @@ namespace DNAI.");
             this.Write(" Invoker;\r\n\t\tpublic object Value;\r\n\t\tpublic Type ValueType;\r\n\t}\r\n\r\n\t///<summary>\r" +
                     "\n\t/// Base behaviour for DNAI IA.\r\n\t///</summary>\r\n\tpublic class ");
             
-            #line 162 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 187 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -189,7 +209,7 @@ namespace DNAI.");
 
 		");
             
-            #line 176 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 201 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in DataTypes)
 		{
             
@@ -197,21 +217,21 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\tpublic ");
             
-            #line 178 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 203 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t");
             
-            #line 179 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 204 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\n\t\t//[Header(\"Input variables\")]\r\n\t\t");
             
-            #line 182 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 207 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Inputs)
 		{ 
             
@@ -219,21 +239,21 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\tpublic ");
             
-            #line 184 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 209 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t");
             
-            #line 185 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 210 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\n\t\t//[Header(\"Output variables\")]\r\n\t\t");
             
-            #line 188 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 213 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Outputs)
 		{ 
             
@@ -241,35 +261,35 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\tprivate ");
             
-            #line 190 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 215 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[0]));
             
             #line default
             #line hidden
             this.Write(" _");
             
-            #line 190 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 215 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[1]));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t\tpublic ");
             
-            #line 191 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 216 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\t{\r\n\t\t\t\tget { return _");
             
-            #line 193 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 218 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[1]));
             
             #line default
             #line hidden
             this.Write("; }\r\n\t\t\t\tprivate set\r\n\t\t\t\t{\r\n\t\t\t\t\t_");
             
-            #line 196 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 221 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[1]));
             
             #line default
@@ -278,22 +298,23 @@ namespace DNAI.");
                     "alueType = value.GetType(), Invoker = this });\r\n\t\t\t\t\t_cdtList.FindAll((x) => x.S" +
                     "electedOutput == \"");
             
-            #line 198 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 223 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
-            this.Write("\").ForEach((y) => y.OnOutputChanged?.Invoke(new EventOutputChange { Value = value" +
-                    ", ValueType = value.GetType(), Invoker = this }));\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t");
+            this.Write("\").ForEach((y) =>\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\tif (y.Evaluate())\r\n\t\t\t\t\t\t\ty.OnOutputChanged?.Inv" +
+                    "oke(new EventOutputChange { Value = value, ValueType = value.GetType(), Invoker " +
+                    "= this });\r\n\t\t\t\t\t});\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t");
             
-            #line 201 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 230 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\n\t\tprivate BinaryManager _manager;\r\n\r\n\t\tpublic ");
             
-            #line 205 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 234 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -301,7 +322,7 @@ namespace DNAI.");
             this.Write("()\r\n\t\t{\r\n\t\t\t_manager = new BinaryManager();\r\n\t\t\t_manager.LoadCommandsFrom(@\"Asset" +
                     "s/Standard Assets/DNAI/Scripts/\" + \"");
             
-            #line 208 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 237 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FilePath));
             
             #line default
@@ -319,21 +340,21 @@ namespace DNAI.");
 
 			results = _manager.Controller.CallFunction(");
             
-            #line 219 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 248 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FunctionId));
             
             #line default
             #line hidden
             this.Write(", new Dictionary<string, dynamic>{ ");
             
-            #line 219 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 248 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FunctionArguments));
             
             #line default
             #line hidden
             this.Write(" });\r\n\t\t\t");
             
-            #line 220 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 249 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  if (Outputs.Count > 0)
 			{
 				foreach (var output in Outputs)
@@ -344,21 +365,21 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t\t");
             
-            #line 225 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 254 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write(" = results[\"");
             
-            #line 225 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 254 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write("\"];\r\n\t\t\t\t");
             
-            #line 226 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 255 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  }
 			} 
             
