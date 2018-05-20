@@ -653,7 +653,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cdtList:
   - cdt:
-      TestACondition: 
+      _matchingInstanceTypes:
+      - Input: 0
+        Condition: 0
+        _selectedIdx: 0
+      _selectedIdx: 1
+      ConditionNumber: 1
+      ConditionString: 1
+      InputInt: 55
+      InputFloat: 0
+      InputString: toto
+      _currentTypeStr: System.Int64
     Test: 
     OnOutputChanged:
       m_PersistentCalls:
@@ -671,7 +681,8 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: DNAI.MoreOrLess.UnityEventOutputChange, MoreOrLess, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-    SelectedIndex: 0
+    CallbackCount: 0
+    _selectedIndex: 0
   OnOutputChanged:
     m_PersistentCalls:
       m_Calls:
@@ -1177,7 +1188,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cdtList:
   - cdt:
-      TestACondition: 
+      _matchingInstanceTypes:
+      - Input: 0
+        Condition: 0
+        _selectedIdx: 0
+      _selectedIdx: 0
+      ConditionNumber: 0
+      ConditionString: 0
+      InputInt: 0
+      InputFloat: 0
+      InputString: 
+      _currentTypeStr: System.String
     Test: 
     OnOutputChanged:
       m_PersistentCalls:
@@ -1195,7 +1216,8 @@ MonoBehaviour:
           m_CallState: 2
       m_TypeName: DNAI.MoreOrLess.UnityEventOutputChange, MoreOrLess, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-    SelectedIndex: 0
+    CallbackCount: 0
+    _selectedIndex: 0
   OnOutputChanged:
     m_PersistentCalls:
       m_Calls: []

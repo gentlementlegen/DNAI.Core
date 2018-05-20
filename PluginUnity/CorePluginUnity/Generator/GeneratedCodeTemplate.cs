@@ -107,6 +107,7 @@ namespace DNAI.");
 				{
 					_selectedIndex = value;
 					cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
+					cdt.SetRefOutput(value);
 				}
 			}
 		}
@@ -116,14 +117,13 @@ namespace DNAI.");
 		public float Draw(Rect rect)
 		{
 			//if (cdt != null)
-			Debug.Log(""cdt type = "" + cdt.GetType());
-				drawSize = cdt.Draw(rect);
+			drawSize = cdt.Draw(rect);
 			return drawSize;
 		}
 
 		public bool Evaluate()
 		{
-			if (cdt != null)
+			//if (cdt != null)
 				return cdt.Evaluate();
 			return true;
 		}
@@ -174,25 +174,25 @@ namespace DNAI.");
                     "\t\t// Draws the condition item selector\r\n\t\t\titem.SelectedIndex = EditorGUI.Popup(" +
                     "new Rect(rect.x + 18, rect.y + 2, rect.width - 18, 10), item.SelectedIndex, Cond" +
                     "itionItem.Outputs);\r\n\r\n\t\t\tnewRect.y += item.Draw(newRect);\r\n\r\n\t\t\t// Draws the ca" +
-                    "llback zone to assign it\r\n\t\t\tSerializedObject s = new SerializedObject(listExamp" +
-                    "le);\r\n            var p = s.FindProperty(\"_cdtList\").GetArrayElementAtIndex(inde" +
-                    "x);\r\n            EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, re" +
-                    "ct.width - 18, 20), p.FindPropertyRelative(\"OnOutputChanged\"));\r\n\r\n\t\t\t//foreach " +
-                    "(var x in p.FindPropertyRelative(\"OnOutputChanged\"))\r\n\t\t\t//{\r\n\t\t\t//\tvar u = x as" +
-                    " SerializedProperty;\r\n\t\t\t//\tif (u.name == \"size\")\r\n\t\t\t//\t{\r\n\t\t\t//\t\tDebug.Log(\"fo" +
-                    "und size \" + u.intValue);\r\n\t\t\t//\t\titem.CallbackCount = u.intValue;\r\n\t\t\t//\t}\r\n\t\t\t" +
-                    "//}\r\n\r\n            if (EditorGUI.EndChangeCheck())\r\n            {\r\n\t\t\t\tDebug.Log" +
-                    "(\"end change check true\");\r\n                EditorUtility.SetDirty(target);\r\n   " +
-                    "         }\r\n        }\r\n\r\n        private void AddItem(ReorderableList list)\r\n   " +
-                    "     {\r\n            listExample._cdtList.Add(new ConditionItem());\r\n\r\n          " +
-                    "  EditorUtility.SetDirty(target);\r\n        }\r\n\r\n        private void RemoveItem(" +
-                    "ReorderableList list)\r\n        {\r\n            listExample._cdtList.RemoveAt(list" +
-                    ".index);\r\n\r\n            EditorUtility.SetDirty(target);\r\n        }\r\n\t\t\r\n        " +
-                    "private float ElementHeightCallback(int idx)\r\n        {\r\n            return list" +
-                    "Example._cdtList[idx].ItemSize;\r\n        }\r\n\r\n        public override void OnIns" +
-                    "pectorGUI()\r\n        {\r\n            base.OnInspectorGUI();\r\n            reordera" +
-                    "bleList.DoLayoutList();\r\n        }\r\n    }\r\n\r\n\tpublic class EventOutputChange : E" +
-                    "ventArgs\r\n\t{\r\n\t\tpublic ");
+                    "llback zone to assign it\r\n\t\t\t//SerializedObject s = new SerializedObject(listExa" +
+                    "mple);\r\n            //var p = s.FindProperty(\"_cdtList\").GetArrayElementAtIndex(" +
+                    "index);\r\n            //EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y +" +
+                    " 5, rect.width - 18, 20), p.FindPropertyRelative(\"OnOutputChanged\"));\r\n\r\n\t\t\t//fo" +
+                    "reach (var x in p.FindPropertyRelative(\"OnOutputChanged\"))\r\n\t\t\t//{\r\n\t\t\t//\tvar u " +
+                    "= x as SerializedProperty;\r\n\t\t\t//\tif (u.name == \"size\")\r\n\t\t\t//\t{\r\n\t\t\t//\t\tDebug.L" +
+                    "og(\"found size \" + u.intValue);\r\n\t\t\t//\t\titem.CallbackCount = u.intValue;\r\n\t\t\t//\t" +
+                    "}\r\n\t\t\t//}\r\n\r\n            if (EditorGUI.EndChangeCheck())\r\n            {\r\n\t\t\t\tDeb" +
+                    "ug.Log(\"end change check true\");\r\n                EditorUtility.SetDirty(target)" +
+                    ";\r\n            }\r\n        }\r\n\r\n        private void AddItem(ReorderableList list" +
+                    ")\r\n        {\r\n            listExample._cdtList.Add(new ConditionItem());\r\n\r\n    " +
+                    "        EditorUtility.SetDirty(target);\r\n        }\r\n\r\n        private void Remov" +
+                    "eItem(ReorderableList list)\r\n        {\r\n            listExample._cdtList.RemoveA" +
+                    "t(list.index);\r\n\r\n            EditorUtility.SetDirty(target);\r\n        }\r\n\t\t\r\n  " +
+                    "      private float ElementHeightCallback(int idx)\r\n        {\r\n            retur" +
+                    "n listExample._cdtList[idx].ItemSize;\r\n        }\r\n\r\n        public override void" +
+                    " OnInspectorGUI()\r\n        {\r\n            base.OnInspectorGUI();\r\n            re" +
+                    "orderableList.DoLayoutList();\r\n        }\r\n    }\r\n\r\n\tpublic class EventOutputChan" +
+                    "ge : EventArgs\r\n\t{\r\n\t\tpublic ");
             
             #line 193 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));

@@ -34,6 +34,8 @@ namespace Core.Plugin.Unity.Editor.Conditions
         public enum CONDITION_NUMBER { NO_CONDITION, MORE, LESS, EQUAL, DIFFERENT }
         public CONDITION_NUMBER ConditionNumber;
         private string[] optionsNumber = new string[] { "No condition", "More than", "Less than", "Equal to", "Different than" };
+        [SerializeField]
+        private ConditionInput<int> refOutputInt;
         #endregion
 
         #region String Options
@@ -41,6 +43,8 @@ namespace Core.Plugin.Unity.Editor.Conditions
         public enum CONDITION_STRING { NO_CONDITION, EQUAL, DIFFERENT }
         public CONDITION_STRING ConditionString;
         private string[] optionsString = new string[] { "No condition", "Equal to", "Different than" };
+        [SerializeField]
+        private ConditionInput<string> refOutputString;
         #endregion
 
         #region Input Serialized Values
@@ -58,20 +62,25 @@ namespace Core.Plugin.Unity.Editor.Conditions
         public CallbackFunc Callback;
 
         [SerializeField]
-        private string _currentTypeStr = "System.String";
-        private Type _currentType = typeof(int);
+        private string _currentTypeStr;// = "System.Int64";
+        private Type _currentType;// = typeof(int);
 
         private ConditionEvaluator _currentEvaluator;
 
         public ACondition()
         {
-            Debug.Log("Ctor " + _currentTypeStr);
-            _currentType = Type.GetType(_currentTypeStr);
+            Debug.Log("Ctor [" + _currentTypeStr + "]");
+            if (!string.IsNullOrEmpty(_currentTypeStr))
+            {
+                Debug.Log("str is not null or empty");
+                _currentType = Type.GetType(_currentTypeStr);
+            }
 
+            #region Drawing Actions
             _drawingActions.Add(typeof(Int64), new Func<Rect, float>((Rect rect) =>
             {
                 var mid = rect.width / 2f;
-                Debug.Log("int => " + mid);
+                Debug.Log("int");
                 _selectedIdx = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsNumber);
                 if (_selectedIdx != 0)
                     InputInt = EditorGUI.IntField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), InputInt);
@@ -93,13 +102,39 @@ namespace Core.Plugin.Unity.Editor.Conditions
             _drawingActions.Add(typeof(string), new Func<Rect, float>((Rect rect) =>
             {
                 var mid = rect.width / 2f;
-                Debug.Log("string => " + mid);
+                Debug.Log("string");
                 _selectedIdx = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsString);
                 if (_selectedIdx != 0)
                     InputString = EditorGUI.TextField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), InputString);
                 ConditionString = (CONDITION_STRING)_selectedIdx;
                 return 15;
             }));
+            #endregion
+
+            #region Evaluate Actions
+            _evaluateActions.Add(typeof(Int64), new Func<bool>(() =>
+            {
+                switch (ConditionNumber)
+                {
+                    case CONDITION_NUMBER.NO_CONDITION:
+                        return true;
+
+                    case CONDITION_NUMBER.MORE:
+                        return refOutputInt.Value > InputInt;
+
+                    case CONDITION_NUMBER.LESS:
+                        return refOutputInt.Value < InputInt;
+
+                    case CONDITION_NUMBER.EQUAL:
+                        return refOutputInt.Value == InputInt;
+
+                    case CONDITION_NUMBER.DIFFERENT:
+                        return refOutputInt.Value != InputInt;
+                }
+                return false;
+            }));
+            _evaluateActions.Add(typeof(int), new Func<bool> (() => _evaluateActions[typeof(Int64)].Invoke()));
+            #endregion
         }
 
         /// <summary>
@@ -114,13 +149,24 @@ namespace Core.Plugin.Unity.Editor.Conditions
             _selectedIdx = 0;
         }
 
+        public void SetRefOutput(ConditionInput<int> output)
+        {
+            refOutputInt = output;
+        }
+
+        public void SetRefOutput(ConditionInput<string> output)
+        {
+            refOutputString = output;
+        }
+
         /// <summary>
         /// Evaluates if the condition is satisfied.
         /// </summary>
         /// <returns></returns>
         public virtual bool Evaluate()
         {
-            return _matchingInstanceTypes[0].Evaluate();
+            Debug.Log("Evaluate with type => " + _currentType);
+            return _evaluateActions[_currentType].Invoke();
         }
 
         /// <summary>
@@ -154,7 +200,9 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// <returns></returns>
         public virtual float Draw(UnityEngine.Rect rect)
         {
-            Debug.Log("drawing");
+            Debug.Log("Drawing => " + _currentTypeStr);
+            if (_currentType == null && _currentTypeStr != "")
+                _currentType = Type.GetType(_currentTypeStr);
             if (_currentType != null)
                 return _drawingActions[_currentType].Invoke(rect);
             return 0;

@@ -60,6 +60,7 @@ namespace DNAI.<#=Namespace#>
 				{
 					_selectedIndex = value;
 					cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
+					cdt.SetRefOutput(value);
 				}
 			}
 		}
@@ -69,14 +70,13 @@ namespace DNAI.<#=Namespace#>
 		public float Draw(Rect rect)
 		{
 			//if (cdt != null)
-			Debug.Log("cdt type = " + cdt.GetType());
-				drawSize = cdt.Draw(rect);
+			drawSize = cdt.Draw(rect);
 			return drawSize;
 		}
 
 		public bool Evaluate()
 		{
-			if (cdt != null)
+			//if (cdt != null)
 				return cdt.Evaluate();
 			return true;
 		}
@@ -141,9 +141,9 @@ namespace DNAI.<#=Namespace#>
 			newRect.y += item.Draw(newRect);
 
 			// Draws the callback zone to assign it
-			SerializedObject s = new SerializedObject(listExample);
-            var p = s.FindProperty("_cdtList").GetArrayElementAtIndex(index);
-            EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p.FindPropertyRelative("OnOutputChanged"));
+			//SerializedObject s = new SerializedObject(listExample);
+            //var p = s.FindProperty("_cdtList").GetArrayElementAtIndex(index);
+            //EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p.FindPropertyRelative("OnOutputChanged"));
 
 			//foreach (var x in p.FindPropertyRelative("OnOutputChanged"))
 			//{
