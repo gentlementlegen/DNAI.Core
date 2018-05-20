@@ -48,7 +48,21 @@ namespace DNAI.<#=Namespace#>
             get { return 110f + CallbackCount * 90f + drawSize; }
         }
 
-		public int SelectedIndex = 0;
+		[SerializeField]
+		private int _selectedIndex;
+
+		public int SelectedIndex
+		{
+			get { return _selectedIndex; }
+			set
+			{
+				if (value != _selectedIndex)
+				{
+					_selectedIndex = value;
+					cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
+				}
+			}
+		}
 
 		public string SelectedOutput { get { return Outputs[SelectedIndex]; } }
 
@@ -127,9 +141,9 @@ namespace DNAI.<#=Namespace#>
 			newRect.y += item.Draw(newRect);
 
 			// Draws the callback zone to assign it
-			//SerializedObject s = new SerializedObject(listExample);
-            //var p = s.FindProperty("_cdtList").GetArrayElementAtIndex(index);
-            //EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p.FindPropertyRelative("OnOutputChanged"));
+			SerializedObject s = new SerializedObject(listExample);
+            var p = s.FindProperty("_cdtList").GetArrayElementAtIndex(index);
+            EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p.FindPropertyRelative("OnOutputChanged"));
 
 			//foreach (var x in p.FindPropertyRelative("OnOutputChanged"))
 			//{

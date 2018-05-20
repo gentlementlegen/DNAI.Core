@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Core.Plugin.Unity.Editor.Conditions
@@ -25,14 +26,39 @@ namespace Core.Plugin.Unity.Editor.Conditions
             { new ConditionEvaluator()  },
         };
 
+        [SerializeField]
+        private int _selectedIdx;
+
+        #region Number Options
+        [SerializeField]
+        public enum CONDITION_NUMBER { NO_CONDITION, MORE, LESS, EQUAL, DIFFERENT }
+        public CONDITION_NUMBER ConditionNumber;
+        private string[] optionsNumber = new string[] { "No condition", "More than", "Less than", "Equal to", "Different than" };
+        #endregion
+
+        #region String Options
+        [SerializeField]
+        public enum CONDITION_STRING { NO_CONDITION, EQUAL, DIFFERENT }
+        public CONDITION_STRING ConditionString;
+        private string[] optionsString = new string[] { "No condition", "Equal to", "Different than" };
+        #endregion
+
+        #region Input Serialized Values
+        public int InputInt;
+        public float InputFloat;
+        public string InputString;
+        #endregion
+
+        /// <summary>
+        /// List of drawing actions for given types.
+        /// </summary>
+        private readonly Dictionary<Type, Func<Rect, float>> _drawingActions = new Dictionary<Type, Func<Rect, float>>();
+        private readonly Dictionary<Type, Func<bool>> _evaluateActions = new Dictionary<Type, Func<bool>>();
+
         public CallbackFunc Callback;
 
-        public string TestACondition;
-
         [SerializeField]
-        private string _currentTypeStr = "System.Int64";
-
-        [SerializeField]
+        private string _currentTypeStr = "System.String";
         private Type _currentType = typeof(int);
 
         private ConditionEvaluator _currentEvaluator;
@@ -41,6 +67,51 @@ namespace Core.Plugin.Unity.Editor.Conditions
         {
             Debug.Log("Ctor " + _currentTypeStr);
             _currentType = Type.GetType(_currentTypeStr);
+
+            _drawingActions.Add(typeof(Int64), new Func<Rect, float>((Rect rect) =>
+            {
+                var mid = rect.width / 2f;
+                Debug.Log("int => " + mid);
+                _selectedIdx = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsNumber);
+                if (_selectedIdx != 0)
+                    InputInt = EditorGUI.IntField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), InputInt);
+                ConditionNumber = (CONDITION_NUMBER)_selectedIdx;
+                return 15;
+            }));
+            _drawingActions.Add(typeof(int), new Func<Rect, float>((Rect rect) => _drawingActions[typeof(Int64)].Invoke(rect)));
+            _drawingActions.Add(typeof(float), new Func<Rect, float>((Rect rect) =>
+            {
+                var mid = rect.width / 2f;
+                Debug.Log("float => " + mid);
+                _selectedIdx = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsNumber);
+                if (_selectedIdx != 0)
+                    InputFloat = EditorGUI.FloatField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), InputFloat);
+                ConditionNumber = (CONDITION_NUMBER)_selectedIdx;
+                return 15;
+            }));
+            _drawingActions.Add(typeof(double), new Func<Rect, float>((Rect rect) => _drawingActions[typeof(float)].Invoke(rect)));
+            _drawingActions.Add(typeof(string), new Func<Rect, float>((Rect rect) =>
+            {
+                var mid = rect.width / 2f;
+                Debug.Log("string => " + mid);
+                _selectedIdx = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsString);
+                if (_selectedIdx != 0)
+                    InputString = EditorGUI.TextField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), InputString);
+                ConditionString = (CONDITION_STRING)_selectedIdx;
+                return 15;
+            }));
+        }
+
+        /// <summary>
+        /// Sets the current type used, such as string, int...
+        /// </summary>
+        /// <param name="type"></param>
+        public void SetCurrentType(string type)
+        {
+            Debug.Log("Set current type to => " + type);
+            _currentTypeStr = type;
+            _currentType = Type.GetType(_currentTypeStr);
+            _selectedIdx = 0;
         }
 
         /// <summary>
@@ -83,9 +154,9 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// <returns></returns>
         public virtual float Draw(UnityEngine.Rect rect)
         {
-            UnityEngine.Debug.Log("drawing");
+            Debug.Log("drawing");
             if (_currentType != null)
-                _matchingInstanceTypes[0].Draw(rect);
+                return _drawingActions[_currentType].Invoke(rect);
             return 0;
         }
 
