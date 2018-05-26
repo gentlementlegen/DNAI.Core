@@ -22,15 +22,9 @@ namespace CorePackage.Execution
         /// <param name="inputs">Dictionnary of all inputs</param>
         /// <param name="outputType">Dictionnary of all outputs</param>
         /// <param name="operation">Operation to execute</param>
-        public Operator(Dictionary<string, Entity.Variable> inputs, Entity.DataType outputType, Delegate operation):
-            base(
-                inputs,
-                new Dictionary<string, Entity.Variable>
-                {
-                    { Global.Operator.Result, new Entity.Variable(outputType) }
-                }
-            )
+        public Operator(Entity.DataType outputType, Delegate operation): base()
         {
+            AddOutput(Global.Operator.Result, new Entity.Variable(outputType));
             this.operation = operation;
         }
     }

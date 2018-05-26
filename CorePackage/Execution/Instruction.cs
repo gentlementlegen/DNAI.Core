@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using CorePackage.Entity;
+using CorePackage.Global;
+using System.Collections.Generic;
 using System.Linq;
-
-using StorageDeclarator = CorePackage.Global.Declarator<CorePackage.Entity.Variable>;
 
 namespace CorePackage.Execution
 {
@@ -11,59 +11,29 @@ namespace CorePackage.Execution
     public abstract class Instruction
     {
         /// <summary>
-        /// Intruction as internal context where inputs and outputs
-        /// references <c>context.externals</c> declarations
-        /// </summary>
-        private StorageDeclarator scope = new StorageDeclarator();
-
-        /// <summary>
         /// Instruction inputs that reference <c>context.externals</c> declaration
         /// </summary>
-        protected Dictionary<string, Input> inputs = new Dictionary<string, Input>();
+        private Dictionary<string, Input> inputs = new Dictionary<string, Input>();
 
         /// <summary>
         /// Instruction outputs that reference <c>context.externals</c> declaration
         /// </summary>
-        protected Dictionary<string, Output> outputs = new Dictionary<string, Output>();
-
-        /// <summary>
-        /// Constructor that asks for inputs and outputs
-        /// </summary>
-        /// <param name="inputs">Dictionarry that contains all inputs</param>
-        /// <param name="outputs">Dictionarry that contains all outputs</param>
-        protected Instruction(Dictionary<string, Entity.Variable> inputs = null, Dictionary<string, Entity.Variable> outputs = null)
-        {
-            if (inputs != null)
-            {
-                foreach (KeyValuePair<string, Entity.Variable> curr in inputs)
-                {
-                    AddInput(curr.Key, curr.Value);
-                }
-            }
-
-            if (outputs != null)
-            {
-                foreach (KeyValuePair<string, Entity.Variable> curr in outputs)
-                {
-                    AddOutput(curr.Key, curr.Value);
-                }
-            }
-        }
+        private Dictionary<string, Output> outputs = new Dictionary<string, Output>();
 
         /// <summary>
         /// Getter for inputs attribute
         /// </summary>
-        public List<Input> Inputs
+        public Dictionary<string, Input> Inputs
         {
-            get { return inputs.Values.ToList(); }
+            get { return inputs; }
         }
 
         /// <summary>
         /// Getter for outputs attribute
         /// </summary>
-        public List<Output> Outputs
+        public Dictionary<string, Output> Outputs
         {
-            get { return outputs.Values.ToList(); }
+            get { return outputs; }
         }
 
         /// <summary>
@@ -73,16 +43,19 @@ namespace CorePackage.Execution
         /// <param name="definition">Variable definition of the input</param>
         public void AddInput(string name, Entity.Variable definition)
         {
-            AddInput(new Global.Declaration<Entity.Variable> { name = name, definition = definition });
+            this.inputs[name] = new Input(definition);
         }
 
         /// <summary>
-        /// Allow to add an input from a declaration
+        /// Allow to add inputs to the instruction
         /// </summary>
-        /// <param name="declaration">Declaration linked to the input</param>
-        public void AddInput(Global.Declaration<Entity.Variable> declaration)
+        /// <param name="inputs">Dictionnary of inputs</param>
+        public void AddInputs(Dictionary<string, Entity.Variable> inputs)
         {
-            this.inputs[declaration.name] = new Input(declaration);
+            foreach (KeyValuePair<string, Entity.Variable> input in inputs)
+            {
+                AddInput(input.Key, input.Value);
+            }
         }
 
         /// <summary>
@@ -92,16 +65,19 @@ namespace CorePackage.Execution
         /// <param name="definition">Variable definition of the output</param>
         public void AddOutput(string name, Entity.Variable definition)
         {
-            AddOutput(new Global.Declaration<Entity.Variable> { name = name, definition = definition });
+            this.outputs[name] = new Output(definition);
         }
 
         /// <summary>
-        /// Allow to add an output from a declaration
+        /// Allow to add outputs to the instruction
         /// </summary>
-        /// <param name="declaration">Declaration to bind to the input</param>
-        public void AddOutput(Global.Declaration<Entity.Variable> declaration)
+        /// <param name="outputs">Dictionnary of outputs to set</param>
+        public void AddOutputs(Dictionary<string, Entity.Variable> outputs)
         {
-            this.outputs[declaration.name] = new Output(declaration);
+            foreach (KeyValuePair<string, Entity.Variable> output in outputs)
+            {
+                AddOutput(output.Key, output.Value);
+            }
         }
 
         /// <summary>
@@ -137,7 +113,9 @@ namespace CorePackage.Execution
         /// <param name="value">Value to set to the input</param>
         public void SetInputValue(string name, dynamic value)
         {
-            GetInput(name).Value.definition.Value = value;
+            if (!inputs.ContainsKey(name))
+                throw new Error.NotFoundException("No such input named: " + name);
+            inputs[name].Value = value;
         }
 
         /// <summary>
@@ -147,7 +125,20 @@ namespace CorePackage.Execution
         /// <returns>Value of the input</returns>
         public dynamic GetInputValue(string name)
         {
-            return this.GetInput(name).Value.definition.Value;
+            return GetInput(name).Value;
+        }
+        
+        /// <summary>
+        /// Set the value of a specific output
+        /// Protected because only an instruction can set the value of its output
+        /// </summary>
+        /// <param name="name">Name of the output to set the value</param>
+        /// <param name="value">Value to set to the output</param>
+        protected void SetOutputValue(string name, dynamic value)
+        {
+            if (!outputs.ContainsKey(name))
+                throw new Error.NotFoundException("No such output named: " + name);
+            outputs[name].Value = value;
         }
 
         /// <summary>
@@ -157,7 +148,7 @@ namespace CorePackage.Execution
         /// <returns>Desired output value</returns>
         public dynamic GetOutputValue(string name)
         {
-            return this.GetOutput(name).Value.definition.Value;
+            return GetOutput(name).Value;
         }
 
         /// <summary>

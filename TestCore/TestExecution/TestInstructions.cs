@@ -395,11 +395,10 @@ namespace CoreTest
 
             add.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
             add.GetInput("element").LinkTo(new CorePackage.Execution.Getter(j), "reference");
-            var n = add.GetOutput("count").Value;
 
             whileTester.setEntryPoint(whileTester.addInstruction(add));
             whileTester.Call();
-            Assert.IsTrue(n.definition.Value == 4);
+            Assert.IsTrue(add.GetOutputValue("count") == 4);
         }
 
         [TestMethod]
@@ -420,11 +419,9 @@ namespace CoreTest
             insert.GetInput("element").LinkTo(new CorePackage.Execution.Getter(j), "reference");
             insert.GetInput("index").LinkTo(new CorePackage.Execution.Getter(idx), "reference");
 
-            var n = insert.GetOutput("count").Value;
-
             whileTester.setEntryPoint(whileTester.addInstruction(insert));
             whileTester.Call();
-            Assert.IsTrue(n.definition.Value == 4);
+            Assert.IsTrue(insert.GetOutputValue("count") == 4);
         }
 
         [TestMethod]
@@ -440,12 +437,10 @@ namespace CoreTest
             size.ContainerType = CorePackage.Entity.Type.Scalar.Floating;
 
             size.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
-
-            var n = size.GetOutput("count").Value;
-
+            
             whileTester.setEntryPoint(whileTester.addInstruction(size));
             whileTester.Call();
-            Assert.IsTrue(n.definition.Value == 3);
+            Assert.IsTrue(size.GetOutputValue("count") == 3);
         }
 
         [TestMethod]
@@ -463,12 +458,10 @@ namespace CoreTest
 
             remove.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
             remove.GetInput("element").LinkTo(new CorePackage.Execution.Getter(idx), "reference");
-
-            var n = remove.GetOutput("removed").Value;
-
+            
             whileTester.setEntryPoint(whileTester.addInstruction(remove));
             whileTester.Call();
-            Assert.IsTrue(n.definition.Value);
+            Assert.IsTrue(remove.GetOutputValue("removed"));
         }
 
         [TestMethod]
@@ -486,12 +479,10 @@ namespace CoreTest
 
             remove.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
             remove.GetInput("index").LinkTo(new CorePackage.Execution.Getter(idx), "reference");
-
-            var n = remove.GetOutput("removed").Value;
-
+            
             whileTester.setEntryPoint(whileTester.addInstruction(remove));
             whileTester.Call();
-            Assert.IsTrue(n.definition.Value);
+            Assert.IsTrue(remove.GetOutputValue("removed"));
         }
     }
 }

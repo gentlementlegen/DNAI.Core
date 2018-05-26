@@ -77,7 +77,7 @@ namespace CorePackage.Entity.Type
             return values.Values.First().Value;
         }
 
-        /// <see cref="Global.Definition.IsValid"/>
+        /// <see cref="Global.IDefinition.IsValid"/>
         public override bool IsValid()
         {
             //incohérence des types stockés par rapport à celui défini

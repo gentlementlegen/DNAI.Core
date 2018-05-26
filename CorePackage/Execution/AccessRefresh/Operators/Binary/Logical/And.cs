@@ -14,12 +14,7 @@ namespace CorePackage.Execution.Operators
         /// <summary>
         /// Basic constructor that doesn't need anything because inputs and output are booleans
         /// </summary>
-        public And() :
-            base(Entity.Type.Scalar.Boolean, Entity.Type.Scalar.Boolean,
-                delegate(Entity.Variable left, Entity.Variable right)
-                {
-                    return left.Value && right.Value; //logical and is not overloadable
-                })
+        public And() : base(Entity.Type.Scalar.Boolean, Entity.Type.Scalar.Boolean, (dynamic left, dynamic right) => (left && right))
         {
 
         }

@@ -46,9 +46,9 @@ namespace CoreNetwork
         /// </summary>
         public void RegisterEvents()
         {
-            //eventProtocolClient.RegisterEvent("DECLARE", this.DeclareEvent, 0);
             foreach (KeyValuePair<String, String> command in commandManager.GetRegisteredCommands())
             {
+                Console.WriteLine("Registering event: " + command.Key);
                 Register(command.Key, command.Value);
             }
         }
@@ -77,24 +77,29 @@ namespace CoreNetwork
         /// <param name="data">Command body that correspond to consumer data</param>
         /// <param name="callback">Manager command to call</param>
         /// <param name="replyEventName">Name of the event to reply</param>
-        private void HandleEvent(byte[] data, Func<Stream, Stream, bool> callback, string replyEventName)
+        private void HandleEvent(byte[] data, string command, string replyEventName)
         {
             MemoryStream inStream = new MemoryStream(data);
             MemoryStream outStream = new MemoryStream();
 
-            if (callback(inStream, outStream))
-                eventProtocolClient.SendEvent(replyEventName, outStream.GetBuffer());
+            Console.WriteLine("Handling event for: " + replyEventName);
+            if (commandManager.CallCommand(command, inStream, outStream))
+            {
+                Console.WriteLine("Sending reply " + replyEventName);
+                eventProtocolClient.SendEvent(replyEventName, outStream.ToArray());
+            }
             else
-                eventProtocolClient.SendEvent("ERROR", outStream.GetBuffer());
+            {
+                Console.WriteLine("Error");
+                eventProtocolClient.SendEvent(command + ".ERROR", outStream.ToArray());
+            }
         }
 
         private void Register(String command, String reply)
         {
-            Func<Stream, Stream, bool> cb = commandManager.GetCommand(command);
-
             eventProtocolClient.RegisterEvent(command, (byte[] data) =>
             {
-                HandleEvent(data, cb, reply);
+                HandleEvent(data, command, reply);
             }, 0);
         }
     }

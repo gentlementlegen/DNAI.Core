@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace CorePackage.Global
 {
-    /// <summary>
-    /// Represents a definition object
-    /// </summary>
-    public interface Definition
+    public abstract class Definition : IDefinition
     {
-        /// <summary>
-        /// Checks if a definition content is valid
-        /// </summary>
-        /// <returns>True if it's valid, false either</returns>
-        bool IsValid();
+        public string Name { get; set; }
+
+        public IDeclarator Parent { get; set; }
+
+        public abstract bool IsValid();
     }
 }

@@ -17,7 +17,7 @@ namespace CorePackage.Execution.Operators
         /// <param name="opType">Type of the operand</param>
         /// <param name="resType">Type of the returned value</param>
         public BinaryNot(Entity.DataType opType, Entity.DataType resType) :
-            base(opType, delegate(Entity.Variable opr) { return opr.Type.OperatorBNot(opr.Value); }, resType)
+            base(opType, (dynamic op) => opType.OperatorBNot(op), resType)
         {
 
         }

@@ -12,8 +12,7 @@ namespace CorePackage.Execution
     public abstract class Statement : ExecutionRefreshInstruction
     {
         /// <see cref="Execution.ExecutionRefreshInstruction"/>
-        public Statement(Dictionary<string, Entity.Variable> inputs, Dictionary<string, Entity.Variable> outputs, uint outPointsCapacity):
-            base(inputs, outputs, outPointsCapacity)
+        public Statement(uint outPointsCapacity): base(outPointsCapacity)
         {
 
         }

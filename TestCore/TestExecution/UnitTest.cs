@@ -25,14 +25,14 @@ namespace CoreTest
             Variable ctx_max = new Variable(Scalar.Integer, 100);
             Variable ctx_lastGiven = new Variable(Scalar.Integer, -1);
 
-            ((IDeclarator<DataType>)moreOrLessCtx).Declare(cmp, "COMPARISON", AccessMode.EXTERNAL);
-            ((IDeclarator<Variable>)moreOrLessCtx).Declare(ctx_min, "min", AccessMode.INTERNAL);
-            ((IDeclarator<Variable>)moreOrLessCtx).Declare(ctx_max, "max", AccessMode.INTERNAL);
-            ((IDeclarator<Variable>)moreOrLessCtx).Declare(ctx_lastGiven, "lastGiven", AccessMode.INTERNAL);
+            moreOrLessCtx.Declare(cmp, "COMPARISON", AccessMode.EXTERNAL);
+            moreOrLessCtx.Declare(ctx_min, "min", AccessMode.INTERNAL);
+            moreOrLessCtx.Declare(ctx_max, "max", AccessMode.INTERNAL);
+            moreOrLessCtx.Declare(ctx_lastGiven, "lastGiven", AccessMode.INTERNAL);
 
             Function play = new Function();
 
-            ((IDeclarator<Function>)moreOrLessCtx).Declare(play, "Play", AccessMode.EXTERNAL);
+            moreOrLessCtx.Declare(play, "Play", AccessMode.EXTERNAL);
 
             play.Declare(new Variable(cmp, cmp.GetValue("NONE").Value), "lastResult", AccessMode.EXTERNAL);
             play.SetVariableAs("lastResult", Function.VariableRole.PARAMETER);

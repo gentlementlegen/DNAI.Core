@@ -18,8 +18,8 @@ namespace CorePackage.Execution
             get { return _containerType; }
             set
             {
-                GetInput("element").Value.definition.Type = value;
-                GetInput("array").Value.definition.Type = new Entity.Type.ListType(value);
+                GetInput("element").Definition.Type = value;
+                GetInput("array").Definition.Type = new Entity.Type.ListType(value);
                 _containerType = value;
             }
         }
@@ -27,27 +27,11 @@ namespace CorePackage.Execution
         /// <summary>
         /// The Add node has two inputs : the collection and the element to add.
         /// </summary>
-        public Append() : base(
-            new Dictionary<string, Variable>
-            {
-                {
-                    "array",
-                    new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer))
-                },
-                {
-                    "element",
-                    new Variable(Entity.Type.Scalar.Integer)
-                }
-            },
-            new Dictionary<string, Variable>
-            {
-                {
-                    "count",
-                    new Variable(Entity.Type.Scalar.Integer)
-                }
-            })
+        public Append() : base()
         {
-
+            AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)));
+            AddInput("element", new Variable(Entity.Type.Scalar.Integer));
+            AddOutput("count", new Variable(Entity.Type.Scalar.Integer));
         }
 
         /// <summary>
@@ -55,9 +39,10 @@ namespace CorePackage.Execution
         /// </summary>
         public override void Execute()
         {
-            var val = inputs["array"].Value.definition.Value;
-            val?.Add(inputs["element"].Value.definition.Value);
-            outputs["count"].Value.definition.Value = val?.Count;
+            var val = GetInputValue("array");
+
+            val?.Add(GetInputValue("element"));
+            SetOutputValue("count", val?.Count);
         }
     }
 }

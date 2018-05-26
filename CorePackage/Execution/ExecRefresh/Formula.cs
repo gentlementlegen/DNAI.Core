@@ -9,16 +9,13 @@ namespace CorePackage.Execution
     public class Formula : ExecutionRefreshInstruction
     {
   
-        public Formula(Dictionary<string, Entity.Variable> inputs, Entity.Variable output):
-            base(
-                inputs,
-                new Dictionary<string, Entity.Variable>
-                {
-                    { "result", output }
-                }
-            )
+        public Formula(Dictionary<string, Entity.Variable> inputs, Entity.Variable output): base()
         {
-
+            foreach (KeyValuePair<string, Entity.Variable> input in inputs)
+            {
+                AddInput(input.Key, input.Value);
+            }
+            AddOutput("result", output);
         }
 
         public override void Execute()

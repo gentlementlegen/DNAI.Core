@@ -81,7 +81,7 @@ namespace CoreTest.TestEntities
         [TestMethod]
         public void TestObjectActions()
         {
-            CorePackage.Entity.Type.ObjectType type = new CorePackage.Entity.Type.ObjectType(null);
+            CorePackage.Entity.Type.ObjectType type = new CorePackage.Entity.Type.ObjectType();
             CorePackage.Entity.DataType integer = CorePackage.Entity.Type.Scalar.Integer;
 
             type.AddAttribute("x", integer, CorePackage.Global.AccessMode.EXTERNAL);
@@ -89,7 +89,7 @@ namespace CoreTest.TestEntities
             type.AddAttribute("z", integer, CorePackage.Global.AccessMode.EXTERNAL);
             
             CorePackage.Entity.Function getAttrSum = new CorePackage.Entity.Function();
-            ((CorePackage.Global.IDeclarator<CorePackage.Entity.Function>)type).Declare(getAttrSum, "getAttrSum", CorePackage.Global.AccessMode.EXTERNAL);
+            type.Declare(getAttrSum, "getAttrSum", CorePackage.Global.AccessMode.EXTERNAL);
             type.SetFunctionAsMember("getAttrSum", CorePackage.Global.AccessMode.EXTERNAL);
 
             CorePackage.Entity.Variable res = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer);
@@ -135,7 +135,7 @@ namespace CoreTest.TestEntities
             Console.WriteLine(getAttrSum.GetReturnValue("res"));
             Assert.IsTrue(getAttrSum.GetReturnValue("res") == 16);
 
-            CorePackage.Entity.Function addOp = ((CorePackage.Global.IDeclarator<CorePackage.Entity.Function>)type).Declare(new CorePackage.Entity.Function(), "Add", CorePackage.Global.AccessMode.EXTERNAL);
+            CorePackage.Entity.Function addOp = (CorePackage.Entity.Function)type.Declare(new CorePackage.Entity.Function(), "Add", CorePackage.Global.AccessMode.EXTERNAL);
 
             // Object Add(Object this, Objet RightOperand);
             type.SetFunctionAsMember("Add", CorePackage.Global.AccessMode.EXTERNAL);

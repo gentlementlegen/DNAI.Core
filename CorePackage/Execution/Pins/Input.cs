@@ -14,60 +14,63 @@ namespace CorePackage.Execution
         /// <summary>
         /// Reference a variable declaration
         /// </summary>
-        private Global.Declaration<Entity.Variable> value;
+        private Entity.Variable definition;
 
         /// <summary>
-        /// Reference an output to set the <c>value</c>
-        /// Can be null to keep default <c>value</c>
+        /// Input link
         /// </summary>
-        private Instruction linkedInstruction;
-
-        /// <summary>
-        /// Name of the output linked
-        /// </summary>
-        private string linkedOutputName;
-
-        /// <summary>
-        /// Getter for linked instruction
-        /// </summary>
-        public Instruction LinkedInstruction
-        {
-            get { return linkedInstruction; }
-        }
-
-        /// <summary>
-        /// Getter for linked output name
-        /// </summary>
-        public string LinkedOutputName
-        {
-            get { return linkedOutputName; }
-        }
-
-        public bool Linked
-        {
-            get { return LinkedInstruction != null; }
-        }
-
+        private Link link;
+        
         /// <summary>
         /// Constructor that asks for the declaration to bind
         /// </summary>
         /// <param name="value"></param>
-        public Input(Global.Declaration<Entity.Variable> value)
+        public Input(Entity.Variable value)
         {
-            this.value = value;
+            this.definition = value;
+        }
+
+        public Entity.Variable Definition
+        {
+            get
+            {
+                return definition;
+            }
         }
 
         /// <summary>
         /// Getter for the input value that refresh it with linked instruction
         /// </summary>
-        public Global.Declaration<Entity.Variable> Value
+        public dynamic Value
         {
             get
             {
-                if (this.linkedInstruction != null && this.linkedOutputName != null)
-                    value.definition.Value = this.linkedInstruction.GetOutput(this.linkedOutputName).Value.definition.Value;
-                return value;
+                if (IsLinked)
+                    definition.Value = link.Value;
+                return definition.Value;
             }
+            set
+            {
+                if (IsLinked)
+                    throw new InvalidOperationException("You cant set value of a linked input");
+                definition.Value = value;
+            }
+        }
+        
+        /// <summary>
+        /// Getter for the instruction link
+        /// </summary>
+        public Link Link
+        {
+            get { return link; }
+        }
+
+        /// <summary>
+        /// Checks if an input is linked
+        /// </summary>
+        public bool IsLinked
+        {
+            get { return link != null; }
         }
 
         /// <summary>
@@ -79,9 +82,10 @@ namespace CorePackage.Execution
         public void LinkTo(Instruction linked, string outputname)
         {
             if (!linked.HasOutput(outputname))
-                throw new Error.NotFoundException("Input.LinkTo : Input " + value.name + " : No such output named " + outputname);
-            this.linkedInstruction = linked;
-            this.linkedOutputName = outputname;
+                throw new Error.NotFoundException("Couldn't link inexistant output named " + outputname);
+            if (!definition.Type.IsValueOfType(linked.GetOutputValue(outputname)))
+                throw new InvalidOperationException("Want to link an input to an incompatible output: "+ Value.ToString() + "(" + definition.Type.ToString() + ") incompatible with " + linked.GetOutputValue(outputname) + "(" + linked.GetOutput(outputname).Definition.Type.ToString() + ")");
+            link = new Link(linked, outputname);
         }
 
         /// <summary>
@@ -89,8 +93,7 @@ namespace CorePackage.Execution
         /// </summary>
         public void Unlink()
         {
-            this.linkedInstruction = null;
-            this.linkedOutputName = null;
+            link = null;
         }
     }
 }

@@ -12,8 +12,7 @@ namespace CorePackage.Execution
     public abstract class AccessRefreshInstruction : Instruction
     {
         /// <see cref="Instruction"/>
-        public AccessRefreshInstruction(Dictionary<string, Entity.Variable> inputs, Dictionary<string, Entity.Variable> outputs) :
-            base(inputs, outputs)
+        public AccessRefreshInstruction() : base()
         {
 
         }
