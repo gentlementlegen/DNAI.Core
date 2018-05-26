@@ -17,7 +17,7 @@ namespace CoreCommand
         /// <summary>
         /// Controller on which dispatch command
         /// </summary>
-        public Controller Controller { get; } = new Controller();
+        public Controller Controller { get; private set; } = new Controller();
 
         /// <summary>
         /// Path to the loaded file.
@@ -263,10 +263,10 @@ namespace CoreCommand
                 if (magic != MagicNumber)
                 {
                     file.Close();
-                    return;
+                    throw new InvalidOperationException("Given file \"" + filename + "\" is not a DNAI file or is corrupted");
                 }
 
-                Controller save = _controller;
+                Controller save = Controller;
 
                 Reset();
 
@@ -278,8 +278,8 @@ namespace CoreCommand
 
                 FilePath = filename;
 
-                save.merge(_controller);
-                _controller = save;
+                save.merge(Controller);
+                Controller = save;
 
                 file.Close();
             }
@@ -300,10 +300,12 @@ namespace CoreCommand
             if (CallCommand(tosend, input, output))
             {
                 output.Position = 0;
+                BinarySerializer.Serializer.Deserialize<Command>(output);
                 reply = BinarySerializer.Serializer.Deserialize<Reply>(output);
                 return true;
             }
             output.Position = 0;
+            BinarySerializer.Serializer.Deserialize<Command>(output);
             Console.Error.WriteLine(BinarySerializer.Serializer.Deserialize<String>(output));
             reply = default(Reply);
             return false;
@@ -323,13 +325,6 @@ namespace CoreCommand
             }
             return true;
         }
-
-        public Func<Stream, Stream, bool> GetCommand(String name)
-        {
-            if (!_handledCommands.ContainsKey(name))
-                throw new InvalidDataException("BinaryManager.GetCommand : Given command \"" + name + "\" is not registered");
-            return _handledCommands[name];
-        }
         
         /// <see cref="IManager.GetRegisteredCommands"/>
         public Dictionary<String, String> GetRegisteredCommands()
@@ -348,7 +343,7 @@ namespace CoreCommand
         /// <see cref="IManager.Reset"/>
         public void Reset()
         {
-            _controller = new Controller();
+            Controller = new Controller();
             _commands.Clear();
         }
     }

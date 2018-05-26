@@ -90,13 +90,12 @@ namespace CorePackage.Entity.Type
         {
             Dictionary<string, dynamic> data = new Dictionary<string, dynamic>();
 
-            foreach(KeyValuePair<string, IDefinition> attrtype in attributes.GetEntities(AccessMode.EXTERNAL))
+            Console.Error.WriteLine("===== Instanciate obj =====");
+
+            foreach (KeyValuePair<string, IDefinition> attrtype in attributes.GetEntities())
             {
                 data[attrtype.Key] = ((DataType)attrtype.Value).Instantiate();
-            }
-            foreach (KeyValuePair<string, IDefinition> attrtype in attributes.GetEntities(AccessMode.INTERNAL))
-            {
-                data[attrtype.Key] = ((DataType)attrtype.Value).Instantiate();
+                Console.Error.WriteLine(attrtype.Key + ": " + attrtype.Value.ToString());
             }
             return data;
         }
@@ -104,7 +103,29 @@ namespace CorePackage.Entity.Type
         /// <see cref="DataType.IsValueOfType(dynamic)"/>
         public override bool IsValueOfType(dynamic value)
         {
-            foreach (KeyValuePair<string, IDefinition> attrtype in attributes.GetEntities(AccessMode.EXTERNAL))
+            Console.Error.WriteLine("========");
+
+            foreach (KeyValuePair<string, dynamic> val in value)
+            {
+                Console.Error.WriteLine(val.Key + ": " + val.Value.ToString());
+            }
+
+            foreach (KeyValuePair<string, IDefinition> attr in attributes.GetEntities())
+            {
+                if (!value.ContainsKey(attr.Key))
+                {
+                    Console.Error.WriteLine("No such attribute named: \"" + attr.Key + "\" in value");
+                    return false;
+                }
+
+                if (!((DataType)attr.Value).IsValueOfType(value[attr.Key]))
+                {
+                    Console.Error.WriteLine("Value of the attribute " + attr.Key + " is of type " + value[attr.Key].GetType().ToString() + " instead of " + attr.Value.ToString());
+                    return false;
+                }
+            }
+
+            /*foreach (KeyValuePair<string, IDefinition> attrtype in attributes.GetEntities(AccessMode.EXTERNAL))
             {
                 if (!value.ContainsKey(attrtype.Key)
                     || !((DataType)attrtype.Value).IsValueOfType(value[attrtype.Key]))
@@ -116,7 +137,7 @@ namespace CorePackage.Entity.Type
                 if (!value.ContainsKey(attrtype.Key)
                     || !((DataType)attrtype.Value).IsValueOfType(value[attrtype.Key]))
                     return false;
-            }
+            }*/
             return true;
         }
 
@@ -181,11 +202,17 @@ namespace CorePackage.Entity.Type
 
         public DataType GetAttribute(String name)
         {
-            Dictionary<string, DataType> attrs = attributes.GetEntities();
+            Dictionary<string, IDefinition> attrs = attributes.GetEntities();
 
             if (!attrs.ContainsKey(name))
                 throw new NotFoundException("No such attribute in class: " + name);
-            return attrs[name];
+
+            DataType toret = attrs[name] as DataType;
+
+            if (toret == null)
+                throw new InvalidOperationException("Given name is not an attribute");
+
+            return toret;
         }
 
         public void OverloadOperator(Operator.Name toOverload, string externalFuncName)

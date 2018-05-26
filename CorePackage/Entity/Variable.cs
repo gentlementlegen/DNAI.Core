@@ -37,8 +37,7 @@ namespace CorePackage.Entity
         public Variable(DataType type, dynamic value = null)
         {
             Type = type;
-            if (value != null)
-                Value = value;
+            if (value != null) Value = value;
         }
 
         /// <summary>
@@ -49,8 +48,7 @@ namespace CorePackage.Entity
             get { return type; }
             set {
                 type = value;
-                if (Type != null && Value == null)
-                    Value = type.Instantiate();
+                if (Type != null) Value = Type.Instantiate();
             }
         }
 

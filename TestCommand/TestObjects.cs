@@ -6,6 +6,10 @@ using System.IO;
 using CoreControl;
 using static CoreControl.EntityFactory;
 using CoreCommand.Command;
+using CoreCommand.Command.Declarator;
+using CoreCommand.Command.Class;
+using CoreCommand.Command.Function;
+using CoreCommand.Command.Function.Instruction;
 
 namespace TestCommand
 {
@@ -77,6 +81,19 @@ namespace TestCommand
             if (attributes.Count == 0)
                 return objDeclared.EntityID;
 
+
+            //declare each attribute
+            foreach (KeyValuePair<string, uint> curr in attributes)
+            {
+                Assert.IsTrue(manager.CallCommand(new AddAttribute
+                {
+                    ClassId = objDeclared.EntityID,
+                    Name = curr.Key,
+                    TypeId = curr.Value,
+                    Visibility = VISIBILITY.PUBLIC
+                }));
+            }
+
             //Declare the set function
             Declare.Reply setFunction;
             Assert.IsTrue(manager.CallCommand(new Declare
@@ -88,8 +105,8 @@ namespace TestCommand
             }, out setFunction));
 
             //Set as member
-            SetClassFunctionAsMember.Reply thisParam;
-            Assert.IsTrue(manager.CallCommand(new SetClassFunctionAsMember
+            SetFunctionAsMember.Reply thisParam;
+            Assert.IsTrue(manager.CallCommand(new SetFunctionAsMember
             {
                 ClassId = objDeclared.EntityID,
                 Name = "Set",
@@ -105,29 +122,17 @@ namespace TestCommand
                 Name = "tocopy",
                 Visibility = VISIBILITY.PUBLIC
             }, out tocopyParameter));
-            Assert.IsTrue(manager.CallCommand(new SetVariableType
+            Assert.IsTrue(manager.CallCommand(new CoreCommand.Command.Variable.SetType
             {
                 VariableID = tocopyParameter.EntityID,
                 TypeID = objDeclared.EntityID
             }));
-            Assert.IsTrue(manager.CallCommand(new SetFunctionParameter
+            Assert.IsTrue(manager.CallCommand(new SetParameter
             {
                 FuncId = setFunction.EntityID,
                 ExternalVarName = "tocopy"
             }));
             
-            //declare each attribute
-            foreach (KeyValuePair<string, uint> curr in attributes)
-            {
-                Assert.IsTrue(manager.CallCommand(new AddClassAttribute
-                {
-                    ClassId = objDeclared.EntityID,
-                    Name = curr.Key,
-                    TypeId = curr.Value,
-                    Visibility = VISIBILITY.PUBLIC
-                }));
-            }
-
             //get tocopy parameter
             AddInstruction.Reply gettocopy;
             Assert.IsTrue(manager.CallCommand(new AddInstruction
@@ -145,7 +150,7 @@ namespace TestCommand
                 ToCreate = InstructionFactory.INSTRUCTION_ID.GET_ATTRIBUTES,
                 Arguments = new List<uint> { objDeclared.EntityID }
             }, out getattr));
-            Assert.IsTrue(manager.CallCommand(new LinkInstructionData
+            Assert.IsTrue(manager.CallCommand(new LinkData
             {
                 FunctionID = setFunction.EntityID,
                 FromId = gettocopy.InstructionID,
@@ -166,7 +171,7 @@ namespace TestCommand
             //link each attributes
             foreach (string curr in attributes.Keys)
             {
-                Assert.IsTrue(manager.CallCommand(new LinkInstructionData
+                Assert.IsTrue(manager.CallCommand(new LinkData
                 {
                     FunctionID = setFunction.EntityID,
                     FromId = getattr.InstructionID,
@@ -177,7 +182,7 @@ namespace TestCommand
             }
 
             //set the function entry point
-            Assert.IsTrue(manager.CallCommand(new SetFunctionEntryPoint
+            Assert.IsTrue(manager.CallCommand(new SetEntryPoint
             {
                 FunctionId = setFunction.EntityID,
                 Instruction = setattr.InstructionID
@@ -253,7 +258,7 @@ namespace TestCommand
                 Name = "PositionList",
                 Visibility = VISIBILITY.PUBLIC
             }, out posList));
-            Assert.IsTrue(manager.CallCommand(new SetListType
+            Assert.IsTrue(manager.CallCommand(new CoreCommand.Command.List.SetType
             {
                 ListId = posList.EntityID,
                 TypeId = Position
@@ -267,7 +272,7 @@ namespace TestCommand
                 Name = "IndexList",
                 Visibility = VISIBILITY.PUBLIC
             }, out indexList));
-            Assert.IsTrue(manager.CallCommand(new SetListType
+            Assert.IsTrue(manager.CallCommand(new CoreCommand.Command.List.SetType
             {
                 ListId = indexList.EntityID,
                 TypeId = (uint)BASE_ID.INTEGER_TYPE
@@ -281,7 +286,7 @@ namespace TestCommand
                 Name = "AdjacentList",
                 Visibility = VISIBILITY.PUBLIC
             }, out adjList));
-            Assert.IsTrue(manager.CallCommand(new SetListType
+            Assert.IsTrue(manager.CallCommand(new CoreCommand.Command.List.SetType
             {
                 ListId = adjList.EntityID,
                 TypeId = indexList.EntityID

@@ -332,13 +332,13 @@ namespace CoreControl
                 }
             },
             {
-                INSTRUCTION_ID.OBJECT_ATTRIBUTES, (List<IDefinition> args) =>
+                INSTRUCTION_ID.GET_ATTRIBUTES, (List<IDefinition> args) =>
                 {
                     return new GetAttributes((ObjectType)(args[0]));
                 }
             },
             {
-                INSTRUCTION_ID.SET_ATTRIBUTES, (List<Definition> args) =>
+                INSTRUCTION_ID.SET_ATTRIBUTES, (List<IDefinition> args) =>
                 {
                     return new SetAttribute((Variable)args[0]);
                 }

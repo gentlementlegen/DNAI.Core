@@ -27,9 +27,9 @@ namespace TestCommand
         }
 
         //[TestMethod]
-        //public void ManagerCoverage()
-        //{
-        //    CoreCommand.IManager dispatcher = new CoreCommand.BinaryManager();
+        public void ManagerCoverage()
+        {
+            CoreCommand.IManager dispatcher = new CoreCommand.BinaryManager();
 
             testCommand(
                 dispatcher,

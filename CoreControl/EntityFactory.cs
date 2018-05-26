@@ -457,7 +457,7 @@ namespace CoreControl
                     });
             }
             return to_ret;
-        };
+        }
 
         /// <summary>
         /// Retrieves entity ids according to the given filters.
@@ -476,7 +476,7 @@ namespace CoreControl
                     {
                         if (id.Key.GetType() == typeof(CorePackage.Entity.Context))
                         {
-                            var dec = GetDeclaratorOf<CorePackage.Global.IContext>(id.Value);
+                            var dec = GetDeclaratorOf(id.Value);
                             // TODO : check acessibility
                             //if ((flags & EntityType.PUBLIC) != 0)
                                 ret.Add(id.Value);
@@ -503,12 +503,8 @@ namespace CoreControl
         /// <param name="newName">New name to set</param>
         public void Rename(ENTITY to_rename, UInt32 containerID, string lastName, string newName)
         {
-            if (!renamers.ContainsKey(to_rename))
-                throw new KeyNotFoundException("No such renamer for ENTITY: " + to_rename.ToString());
-            renamers[to_rename].Invoke(this, containerID, lastName, newName);
+            Rename(containerID, lastName, newName);
         }
-
-
 
         public void merge(EntityFactory factory)
         {

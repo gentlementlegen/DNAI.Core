@@ -5,6 +5,10 @@ using Core.Plugin.Unity.Extensions;
 using Core.Plugin.Unity.Generator;
 using CoreCommand;
 using CoreCommand.Command;
+using CoreCommand.Command.Declarator;
+using CoreCommand.Command.Function;
+using CoreCommand.Command.Function.Instruction;
+using CoreCommand.Command.Global;
 using CoreControl;
 using CorePackage.Execution;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -208,6 +212,7 @@ namespace TestUnityPlugin
                 throw new Exception(BinarySerializer.Serializer.Deserialize<String>(oup));
             }
             oup.Position = 0;
+            BinarySerializer.Serializer.Deserialize<Command>(oup);
             return BinarySerializer.Serializer.Deserialize<Reply>(oup);
         }
 
@@ -217,7 +222,7 @@ namespace TestUnityPlugin
 
             int i = 0;
 
-            CallFunction command = new CallFunction
+            CoreCommand.Command.Function.Call command = new CoreCommand.Command.Function.Call
             {
                 FuncId = funcID,
                 Parameters = new Dictionary<string, string>
@@ -225,12 +230,12 @@ namespace TestUnityPlugin
                     { "lastResult", "2" }
                 }
             };
-            CallFunction.Reply reply;
+            CoreCommand.Command.Function.Call.Reply reply;
             int given;
 
             do
             {
-                reply = HandleCommand<CallFunction.Reply, CallFunction>(command, manager);
+                reply = HandleCommand<CoreCommand.Command.Function.Call.Reply, CoreCommand.Command.Function.Call>(command, manager);
 
                 given = Int32.Parse(reply.Returns["result"]);
 
@@ -279,14 +284,14 @@ namespace TestUnityPlugin
                     Name = "min",
                     Visibility = EntityFactory.VISIBILITY.PRIVATE
                 }, manager);
-            HandleCommand<SetVariableType.Reply, SetVariableType>(
-                new SetVariableType
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetType>(
+                new CoreCommand.Command.Variable.SetType
                 {
                     VariableID = minVariable.EntityID,
                     TypeID = integer
                 }, manager);
-            HandleCommand<SetVariableValue.Reply, SetVariableValue>(
-                new SetVariableValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetValue>(
+                new CoreCommand.Command.Variable.SetValue
                 {
                     VariableID = minVariable.EntityID,
                     Value = "0"
@@ -301,14 +306,14 @@ namespace TestUnityPlugin
                     Name = "max",
                     Visibility = EntityFactory.VISIBILITY.PRIVATE
                 }, manager);
-            HandleCommand<SetVariableType.Reply, SetVariableType>(
-                new SetVariableType
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetType>(
+                new CoreCommand.Command.Variable.SetType
                 {
                     VariableID = maxVariable.EntityID,
                     TypeID = integer
                 }, manager);
-            HandleCommand<SetVariableValue.Reply, SetVariableValue>(
-                new SetVariableValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetValue>(
+                new CoreCommand.Command.Variable.SetValue
                 {
                     VariableID = maxVariable.EntityID,
                     Value = "100"
@@ -323,14 +328,14 @@ namespace TestUnityPlugin
                     Name = "lastGiven",
                     Visibility = EntityFactory.VISIBILITY.PRIVATE
                 }, manager);
-            HandleCommand<SetVariableType.Reply, SetVariableType>(
-                new SetVariableType
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetType>(
+                new CoreCommand.Command.Variable.SetType
                 {
                     VariableID = lastGivenVariable.EntityID,
                     TypeID = integer
                 }, manager);
-            HandleCommand<SetVariableValue.Reply, SetVariableValue>(
-                new SetVariableValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetValue>(
+                new CoreCommand.Command.Variable.SetValue
                 {
                     VariableID = lastGivenVariable.EntityID,
                     Value = "-1"
@@ -352,22 +357,22 @@ namespace TestUnityPlugin
                     Name = "COMPARISON",
                     Visibility = EntityFactory.VISIBILITY.PUBLIC
                 }, manager);
-            HandleCommand<SetEnumerationValue.Reply, SetEnumerationValue>(
-                new SetEnumerationValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Enum.SetValue>(
+                new CoreCommand.Command.Enum.SetValue
                 {
                     EnumId = COMPARISONenum.EntityID,
                     Name = "MORE",
                     Value = "0"
                 }, manager);
-            HandleCommand<SetEnumerationValue.Reply, SetEnumerationValue>(
-                new SetEnumerationValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Enum.SetValue>(
+                new CoreCommand.Command.Enum.SetValue
                 {
                     EnumId = COMPARISONenum.EntityID,
                     Name = "LESS",
                     Value = "1"
                 }, manager);
-            HandleCommand<SetEnumerationValue.Reply, SetEnumerationValue>(
-                new SetEnumerationValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Enum.SetValue>(
+                new CoreCommand.Command.Enum.SetValue
                 {
                     EnumId = COMPARISONenum.EntityID,
                     Name = "NONE",
@@ -393,20 +398,20 @@ namespace TestUnityPlugin
                     Name = "lastResult",
                     Visibility = EntityFactory.VISIBILITY.PUBLIC
                 }, manager);
-            HandleCommand<SetFunctionParameter.Reply, SetFunctionParameter>(
-                new SetFunctionParameter
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.SetParameter>(
+                new CoreCommand.Command.Function.SetParameter
                 {
                     FuncId = playFunction.EntityID,
                     ExternalVarName = "lastResult"
                 }, manager);
-            HandleCommand<SetVariableType.Reply, SetVariableType>(
-                new SetVariableType
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetType>(
+                new CoreCommand.Command.Variable.SetType
                 {
                     VariableID = play_lastResultVariable.EntityID,
                     TypeID = COMPARISONenum.EntityID
                 }, manager);
-            HandleCommand<SetVariableValue.Reply, SetVariableValue>(
-                new SetVariableValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetValue>(
+                new CoreCommand.Command.Variable.SetValue
                 {
                     VariableID = play_lastResultVariable.EntityID,
                     Value = "2"
@@ -419,14 +424,14 @@ namespace TestUnityPlugin
                     Name = "result",
                     Visibility = EntityFactory.VISIBILITY.PUBLIC
                 }, manager);
-            HandleCommand<SetFunctionReturn.Reply, SetFunctionReturn>(
-                new SetFunctionReturn
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.SetReturn>(
+                new CoreCommand.Command.Function.SetReturn
                 {
                     FuncId = playFunction.EntityID,
                     ExternalVarName = "result"
                 }, manager);
-            HandleCommand<SetVariableType.Reply, SetVariableType>(
-                new SetVariableType
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetType>(
+                new CoreCommand.Command.Variable.SetType
                 {
                     VariableID = play_resultVariable.EntityID,
                     TypeID = integer
@@ -455,8 +460,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.EQUAL,
                     Arguments = new List<uint> { COMPARISONenum.EntityID, COMPARISONenum.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = splitCOMPARISON.InstructionID,
@@ -464,8 +469,8 @@ namespace TestUnityPlugin
                     ToId = lr_eq_more.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastResult.InstructionID,
@@ -480,8 +485,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.IF,
                     Arguments = new List<uint> { }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = lr_eq_more.InstructionID,
@@ -505,8 +510,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { minVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastGiven.InstructionID,
@@ -523,8 +528,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.EQUAL,
                     Arguments = new List<uint> { COMPARISONenum.EntityID, COMPARISONenum.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastResult.InstructionID,
@@ -532,8 +537,8 @@ namespace TestUnityPlugin
                     ToId = lr_eq_less.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = splitCOMPARISON.InstructionID,
@@ -548,8 +553,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.IF,
                     Arguments = new List<uint> { }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = lr_eq_less.InstructionID,
@@ -566,8 +571,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { maxVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastGiven.InstructionID,
@@ -591,8 +596,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.DIV,
                     Arguments = new List<uint> { integer, integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getMin.InstructionID,
@@ -600,8 +605,8 @@ namespace TestUnityPlugin
                     ToId = minHalf.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<SetInstructionInputValue.Reply, SetInstructionInputValue>(
-                new SetInstructionInputValue
+            HandleCommand<EmptyReply, SetInputValue>(
+                new SetInputValue
                 {
                     FunctionID = playFunction.EntityID,
                     Instruction = minHalf.InstructionID,
@@ -624,8 +629,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.DIV,
                     Arguments = new List<uint> { integer, integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getMax.InstructionID,
@@ -633,8 +638,8 @@ namespace TestUnityPlugin
                     ToId = maxHalf.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<SetInstructionInputValue.Reply, SetInstructionInputValue>(
-                new SetInstructionInputValue
+            HandleCommand<EmptyReply, SetInputValue>(
+                new SetInputValue
                 {
                     FunctionID = playFunction.EntityID,
                     Instruction = maxHalf.InstructionID,
@@ -650,8 +655,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.ADD,
                     Arguments = new List<uint> { integer, integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = minHalf.InstructionID,
@@ -659,8 +664,8 @@ namespace TestUnityPlugin
                     ToId = minHalfPlusMaxHalf.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = maxHalf.InstructionID,
@@ -677,8 +682,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { play_resultVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = minHalfPlusMaxHalf.InstructionID,
@@ -702,8 +707,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.EQUAL,
                     Arguments = new List<uint> { integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastGiven.InstructionID,
@@ -711,8 +716,8 @@ namespace TestUnityPlugin
                     ToId = resEqLastGiven.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getResult.InstructionID,
@@ -729,8 +734,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.IF,
                     Arguments = new List<uint> { }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = resEqLastGiven.InstructionID,
@@ -747,8 +752,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.EQUAL,
                     Arguments = new List<uint> { COMPARISONenum.EntityID, COMPARISONenum.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastResult.InstructionID,
@@ -756,8 +761,8 @@ namespace TestUnityPlugin
                     ToId = lastResultEqMore.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = splitCOMPARISON.InstructionID,
@@ -774,8 +779,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.IF,
                     Arguments = new List<uint> { }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = lastResultEqMore.InstructionID,
@@ -792,8 +797,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.ADD,
                     Arguments = new List<uint> { integer, integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getResult.InstructionID,
@@ -801,8 +806,8 @@ namespace TestUnityPlugin
                     ToId = resultPP.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<SetInstructionInputValue.Reply, SetInstructionInputValue>(
-                new SetInstructionInputValue
+            HandleCommand<EmptyReply, SetInputValue>(
+                new SetInputValue
                 {
                     FunctionID = playFunction.EntityID,
                     Instruction = resultPP.InstructionID,
@@ -818,8 +823,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { play_resultVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = resultPP.InstructionID,
@@ -836,8 +841,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SUB,
                     Arguments = new List<uint> { integer, integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getResult.InstructionID,
@@ -845,8 +850,8 @@ namespace TestUnityPlugin
                     ToId = resultMM.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<SetInstructionInputValue.Reply, SetInstructionInputValue>(
-                new SetInstructionInputValue
+            HandleCommand<EmptyReply, SetInputValue>(
+                new SetInputValue
                 {
                     FunctionID = playFunction.EntityID,
                     Instruction = resultMM.InstructionID,
@@ -862,8 +867,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { play_resultVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = resultMM.InstructionID,
@@ -880,8 +885,8 @@ namespace TestUnityPlugin
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { lastGivenVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, LinkData>(
+                new LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getResult.InstructionID,
@@ -920,16 +925,16 @@ namespace TestUnityPlugin
              * lastGiven = number
              */
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = if_lr_eq_more.InstructionID,
                     OutIndex = 0, //on true
                     ToId = setMin.InstructionID
                 }, manager);
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = if_lr_eq_more.InstructionID,
@@ -937,8 +942,8 @@ namespace TestUnityPlugin
                     ToId = if_lr_eq_less.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = setMin.InstructionID,
@@ -946,16 +951,16 @@ namespace TestUnityPlugin
                     ToId = setResult.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = if_lr_eq_less.InstructionID,
                     OutIndex = 0, //on true
                     ToId = set_max.InstructionID
                 }, manager);
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = if_lr_eq_less.InstructionID,
@@ -963,8 +968,8 @@ namespace TestUnityPlugin
                     ToId = setResult.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = set_max.InstructionID,
@@ -972,8 +977,8 @@ namespace TestUnityPlugin
                     ToId = setResult.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = setResult.InstructionID,
@@ -981,16 +986,16 @@ namespace TestUnityPlugin
                     ToId = ifResEqLastGiven.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = ifResEqLastGiven.InstructionID,
                     OutIndex = 0, //on true
                     ToId = ifLastResultEqMore.InstructionID
                 }, manager);
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = ifResEqLastGiven.InstructionID,
@@ -998,16 +1003,16 @@ namespace TestUnityPlugin
                     ToId = setLastGiven.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = ifLastResultEqMore.InstructionID,
                     OutIndex = 0, //on true
                     ToId = setResultPP.InstructionID
                 }, manager);
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = ifLastResultEqMore.InstructionID,
@@ -1015,16 +1020,16 @@ namespace TestUnityPlugin
                     ToId = setResultMM.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = setResultPP.InstructionID,
                     OutIndex = 0,
                     ToId = setLastGiven.InstructionID
                 }, manager);
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, LinkExecution>(
+                new LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = setResultMM.InstructionID,
@@ -1032,8 +1037,8 @@ namespace TestUnityPlugin
                     ToId = setLastGiven.InstructionID
                 }, manager);
 
-            HandleCommand<SetFunctionEntryPoint.Reply, SetFunctionEntryPoint>(
-                new SetFunctionEntryPoint
+            HandleCommand<EmptyReply, SetEntryPoint>(
+                new SetEntryPoint
                 {
                     FunctionId = playFunction.EntityID,
                     Instruction = if_lr_eq_more.InstructionID
@@ -1041,14 +1046,14 @@ namespace TestUnityPlugin
 
             MoreOrLessExecuter(manager, playFunction.EntityID);
 
-            HandleCommand<SerializeTo.Reply, SerializeTo>(new SerializeTo
+            HandleCommand<EmptyReply, Save>(new Save
             {
                 Filename = "moreOrLess.duly"
             }, manager);
 
             CoreCommand.IManager witness = new CoreCommand.BinaryManager();
 
-            HandleCommand<LoadFrom.Reply, LoadFrom>(new LoadFrom
+            HandleCommand<EmptyReply, Load>(new Load
             {
                 Filename = "moreOrLess.duly"
             }, witness);
@@ -1183,13 +1188,13 @@ namespace TestUnityPlugin
 
         //    TestCommand(
         //        dispatcher,
-        //        new CoreCommand.Command.SetVariableType
+        //        new CoreCommand.Command.CoreCommand.Command.Variable.SetType
         //        {
         //            VariableID = 6,
         //            TypeID = 2
         //        },
-        //        dispatcher.OnSetVariableType,
-        //        (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
+        //        dispatcher.OnCoreCommand.Command.Variable.SetType,
+        //        (CoreCommand.Command.CoreCommand.Command.Variable.SetType message, CoreCommand.Reply.VariableTypeSet reply) =>
         //        {
         //            Assert.IsTrue(
         //                reply.Command.VariableID == message.VariableID
@@ -1198,13 +1203,13 @@ namespace TestUnityPlugin
 
         //    TestCommand(
         //        dispatcher,
-        //        new CoreCommand.Command.SetVariableValue
+        //        new CoreCommand.Command.CoreCommand.Command.Variable.SetValue
         //        {
         //            VariableID = 6,
         //            Value = "42"
         //        },
-        //        dispatcher.OnSetVariableValue,
-        //        (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
+        //        dispatcher.OnCoreCommand.Command.Variable.SetValue,
+        //        (CoreCommand.Command.CoreCommand.Command.Variable.SetValue message, CoreCommand.Reply.VariableValueSet reply) =>
         //        {
         //            Assert.IsTrue(
         //                message.VariableID == reply.Command.VariableID
@@ -1214,13 +1219,13 @@ namespace TestUnityPlugin
 
         //    TestCommand(
         //        dispatcher,
-        //        new CoreCommand.Command.SetVariableType
+        //        new CoreCommand.Command.CoreCommand.Command.Variable.SetType
         //        {
         //            VariableID = 7,
         //            TypeID = 2
         //        },
-        //        dispatcher.OnSetVariableType,
-        //        (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
+        //        dispatcher.OnCoreCommand.Command.Variable.SetType,
+        //        (CoreCommand.Command.CoreCommand.Command.Variable.SetType message, CoreCommand.Reply.VariableTypeSet reply) =>
         //        {
         //            Assert.IsTrue(
         //                reply.Command.VariableID == message.VariableID
@@ -1229,13 +1234,13 @@ namespace TestUnityPlugin
 
         //    TestCommand(
         //        dispatcher,
-        //        new CoreCommand.Command.SetVariableValue
+        //        new CoreCommand.Command.CoreCommand.Command.Variable.SetValue
         //        {
         //            VariableID = 7,
         //            Value = "42"
         //        },
-        //        dispatcher.OnSetVariableValue,
-        //        (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
+        //        dispatcher.OnCoreCommand.Command.Variable.SetValue,
+        //        (CoreCommand.Command.CoreCommand.Command.Variable.SetValue message, CoreCommand.Reply.VariableValueSet reply) =>
         //        {
         //            Assert.IsTrue(
         //                message.VariableID == reply.Command.VariableID
@@ -1245,13 +1250,13 @@ namespace TestUnityPlugin
 
         //    TestCommand(
         //        dispatcher,
-        //        new CoreCommand.Command.SetVariableType
+        //        new CoreCommand.Command.CoreCommand.Command.Variable.SetType
         //        {
         //            VariableID = 9,
         //            TypeID = 2
         //        },
-        //        dispatcher.OnSetVariableType,
-        //        (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
+        //        dispatcher.OnCoreCommand.Command.Variable.SetType,
+        //        (CoreCommand.Command.CoreCommand.Command.Variable.SetType message, CoreCommand.Reply.VariableTypeSet reply) =>
         //        {
         //            Assert.IsTrue(
         //                reply.Command.VariableID == message.VariableID
@@ -1260,13 +1265,13 @@ namespace TestUnityPlugin
 
         //    TestCommand(
         //        dispatcher,
-        //        new CoreCommand.Command.SetVariableValue
+        //        new CoreCommand.Command.CoreCommand.Command.Variable.SetValue
         //        {
         //            VariableID = 9,
         //            Value = "666"
         //        },
-        //        dispatcher.OnSetVariableValue,
-        //        (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
+        //        dispatcher.OnCoreCommand.Command.Variable.SetValue,
+        //        (CoreCommand.Command.CoreCommand.Command.Variable.SetValue message, CoreCommand.Reply.VariableValueSet reply) =>
         //        {
         //            Assert.IsTrue(
         //                message.VariableID == reply.Command.VariableID
@@ -1276,13 +1281,13 @@ namespace TestUnityPlugin
 
         //    TestCommand(
         //        dispatcher,
-        //        new CoreCommand.Command.SetVariableType
+        //        new CoreCommand.Command.CoreCommand.Command.Variable.SetType
         //        {
         //            VariableID = 10,
         //            TypeID = 2
         //        },
-        //        dispatcher.OnSetVariableType,
-        //        (CoreCommand.Command.SetVariableType message, CoreCommand.Reply.VariableTypeSet reply) =>
+        //        dispatcher.OnCoreCommand.Command.Variable.SetType,
+        //        (CoreCommand.Command.CoreCommand.Command.Variable.SetType message, CoreCommand.Reply.VariableTypeSet reply) =>
         //        {
         //            Assert.IsTrue(
         //                reply.Command.VariableID == message.VariableID
@@ -1291,13 +1296,13 @@ namespace TestUnityPlugin
 
         //    TestCommand(
         //        dispatcher,
-        //        new CoreCommand.Command.SetVariableValue
+        //        new CoreCommand.Command.CoreCommand.Command.Variable.SetValue
         //        {
         //            VariableID = 10,
         //            Value = "-1"
         //        },
-        //        dispatcher.OnSetVariableValue,
-        //        (CoreCommand.Command.SetVariableValue message, CoreCommand.Reply.VariableValueSet reply) =>
+        //        dispatcher.OnCoreCommand.Command.Variable.SetValue,
+        //        (CoreCommand.Command.CoreCommand.Command.Variable.SetValue message, CoreCommand.Reply.VariableValueSet reply) =>
         //        {
         //            Assert.IsTrue(
         //                message.VariableID == reply.Command.VariableID
@@ -1359,13 +1364,13 @@ namespace TestUnityPlugin
 
         //    TestCommand(
         //        dispatcher,
-        //        new CoreCommand.Command.SetFunctionParameter
+        //        new CoreCommand.Command.CoreCommand.Command.Function.SetParameter
         //        {
         //            ExternalVarName = "param1",
         //            FuncId = 8
         //        },
-        //        dispatcher.OnSetFunctionParameter,
-        //        (CoreCommand.Command.SetFunctionParameter command, CoreCommand.Reply.SetFunctionParameter reply) =>
+        //        dispatcher.OnCoreCommand.Command.Function.SetParameter,
+        //        (CoreCommand.Command.CoreCommand.Command.Function.SetParameter command, CoreCommand.Reply.CoreCommand.Command.Function.SetParameter reply) =>
         //        {
         //            Assert.IsTrue(
         //               reply.Command.ExternalVarName == command.ExternalVarName
@@ -1374,13 +1379,13 @@ namespace TestUnityPlugin
 
         //    TestCommand(
         //        dispatcher,
-        //        new CoreCommand.Command.SetFunctionReturn
+        //        new CoreCommand.Command.CoreCommand.Command.Function.SetReturn
         //        {
         //            ExternalVarName = "return1",
         //            FuncId = 8
         //        },
-        //        dispatcher.OnSetFunctionReturn,
-        //        (CoreCommand.Command.SetFunctionReturn command, CoreCommand.Reply.SetFunctionReturn reply) =>
+        //        dispatcher.OnCoreCommand.Command.Function.SetReturn,
+        //        (CoreCommand.Command.CoreCommand.Command.Function.SetReturn command, CoreCommand.Reply.CoreCommand.Command.Function.SetReturn reply) =>
         //        {
         //            Assert.IsTrue(
         //               reply.Command.ExternalVarName == command.ExternalVarName
@@ -1407,13 +1412,13 @@ namespace TestUnityPlugin
 
         //    TestCommand(
         //        dispatcher,
-        //        new CoreCommand.Command.SetFunctionEntryPoint
+        //        new CoreCommand.Command.SetEntryPoint
         //        {
         //            FunctionId = 8,
         //            Instruction = 0
         //        },
-        //        dispatcher.OnSetFunctionEntryPoint,
-        //        (CoreCommand.Command.SetFunctionEntryPoint message, CoreCommand.Reply.SetFunctionEntryPoint reply) =>
+        //        dispatcher.OnSetEntryPoint,
+        //        (CoreCommand.Command.SetEntryPoint message, CoreCommand.Reply.SetEntryPoint reply) =>
         //        {
         //            Assert.IsTrue(
         //                message.FunctionId == reply.Command.FunctionId
@@ -1443,15 +1448,15 @@ namespace TestUnityPlugin
 
         //    //variable
 
-        //    controller.SetVariableType(var, integer);
+        //    controller.CoreCommand.Command.Variable.SetType(var, integer);
         //    Assert.IsTrue(controller.GetVariableType(var) == integer);
-        //    controller.SetVariableValue(var, 42);
+        //    controller.CoreCommand.Command.Variable.SetValue(var, 42);
         //    Assert.IsTrue(controller.GetVariableValue(var) == 42);
 
         //    //enum
 
         //    controller.SetEnumerationType(enu, floating);
-        //    controller.SetEnumerationValue(enu, "TUTU", 43.2);
+        //    controller.CoreCommand.Command.Enum.SetValue(enu, "TUTU", 43.2);
         //    Assert.IsTrue(controller.GetEnumerationValue(enu, "TUTU") == 43.2);
         //    controller.RemoveEnumerationValue(enu, "TUTU");
 
@@ -1472,50 +1477,50 @@ namespace TestUnityPlugin
 
         //    //function
 
-        //    controller.SetVariableType(var, floating);
+        //    controller.CoreCommand.Command.Variable.SetType(var, floating);
         //    uint entry = controller.AddInstruction(fnt, INSTRUCTION_ID.SETTER, new List<uint> { var });
-        //    controller.SetInstructionInputValue(fnt, entry, "value", 3.14);
-        //    controller.SetFunctionEntryPoint(fnt, entry);
+        //    controller.SetInputValue(fnt, entry, "value", 3.14);
+        //    controller.SetEntryPoint(fnt, entry);
 
         //    controller.CallFunction(fnt, new Dictionary<string, dynamic> { });
 
         //    Assert.IsTrue(controller.GetVariableValue(var) == 3.14);
 
         //    uint val = controller.Declare(ENTITY.VARIABLE, fnt, "value", VISIBILITY.PUBLIC);
-        //    controller.SetFunctionParameter(fnt, "value");
-        //    controller.SetVariableType(val, floating);
+        //    controller.CoreCommand.Command.Function.SetParameter(fnt, "value");
+        //    controller.CoreCommand.Command.Variable.SetType(val, floating);
 
         //    uint get_value = controller.AddInstruction(fnt, INSTRUCTION_ID.GETTER, new List<uint> { val });
-        //    controller.LinkInstructionData(fnt, get_value, "reference", entry, "value");
+        //    controller.LinkData(fnt, get_value, "reference", entry, "value");
 
         //    controller.CallFunction(fnt, new Dictionary<string, dynamic> { { "value", 42.3 } });
 
         //    Assert.IsTrue(controller.GetVariableValue(var) == 42.3);
 
         //    uint res = controller.Declare(ENTITY.VARIABLE, fnt, "res", VISIBILITY.PUBLIC);
-        //    controller.SetFunctionReturn(fnt, "res");
-        //    controller.SetVariableType(res, floating);
+        //    controller.CoreCommand.Command.Function.SetReturn(fnt, "res");
+        //    controller.CoreCommand.Command.Variable.SetType(res, floating);
 
         //    controller.RemoveFunctionInstruction(fnt, entry);
         //    entry = controller.AddInstruction(fnt, INSTRUCTION_ID.SETTER, new List<uint> { res });
-        //    controller.SetFunctionEntryPoint(fnt, entry);
+        //    controller.SetEntryPoint(fnt, entry);
 
-        //    controller.LinkInstructionData(fnt, get_value, "reference", entry, "value");
+        //    controller.LinkData(fnt, get_value, "reference", entry, "value");
 
         //    controller.CallFunction(fnt, new Dictionary<string, dynamic> { { "value", 56.3 } });
 
         //    Assert.IsTrue(controller.GetVariableValue(res) == 56.3);
 
         //    controller.UnlinkInstructionInput(fnt, entry, "value");
-        //    controller.SetInstructionInputValue(fnt, entry, "value", 71.2);
+        //    controller.SetInputValue(fnt, entry, "value", 71.2);
 
         //    controller.CallFunction(fnt, new Dictionary<string, dynamic> { { "value", 31.2 } });
 
         //    Assert.IsTrue(controller.GetVariableValue(res) == 71.2);
 
         //    uint new_set = controller.AddInstruction(fnt, INSTRUCTION_ID.SETTER, new List<uint> { val });
-        //    controller.LinkInstructionData(fnt, get_value, "reference", new_set, "value");
-        //    controller.LinkInstructionExecution(fnt, entry, 0, new_set);
+        //    controller.LinkData(fnt, get_value, "reference", new_set, "value");
+        //    controller.LinkExecution(fnt, entry, 0, new_set);
 
         //    controller.CallFunction(fnt, new Dictionary<string, dynamic> { { "value", 32.2 } });
 
@@ -1581,122 +1586,122 @@ namespace TestUnityPlugin
 
         //    //declaring global variables min, max and lastGiven in moreOrLess context
         //    uint min = controller.Declare(ENTITY.VARIABLE, ctx, "min", VISIBILITY.PRIVATE);
-        //    controller.SetVariableType(min, integer);
-        //    controller.SetVariableValue(min, 0);
+        //    controller.CoreCommand.Command.Variable.SetType(min, integer);
+        //    controller.CoreCommand.Command.Variable.SetValue(min, 0);
         //    uint max = controller.Declare(ENTITY.VARIABLE, ctx, "max", VISIBILITY.PRIVATE);
-        //    controller.SetVariableType(max, integer);
-        //    controller.SetVariableValue(max, 100);
+        //    controller.CoreCommand.Command.Variable.SetType(max, integer);
+        //    controller.CoreCommand.Command.Variable.SetValue(max, 100);
         //    uint lastGiven = controller.Declare(ENTITY.VARIABLE, ctx, "lastGiven", VISIBILITY.PRIVATE);
-        //    controller.SetVariableType(lastGiven, integer);
-        //    controller.SetVariableValue(lastGiven, -1);
+        //    controller.CoreCommand.Command.Variable.SetType(lastGiven, integer);
+        //    controller.CoreCommand.Command.Variable.SetValue(lastGiven, -1);
 
         //    //declaring enumeration COMPARISON in moreOrLess context
         //    uint COMPARISON = controller.Declare(ENTITY.ENUM_TYPE, ctx, "COMPARISON", VISIBILITY.PUBLIC);
-        //    controller.SetEnumerationValue(COMPARISON, "MORE", 0);
-        //    controller.SetEnumerationValue(COMPARISON, "LESS", 1);
-        //    controller.SetEnumerationValue(COMPARISON, "NONE", 2);
+        //    controller.CoreCommand.Command.Enum.SetValue(COMPARISON, "MORE", 0);
+        //    controller.CoreCommand.Command.Enum.SetValue(COMPARISON, "LESS", 1);
+        //    controller.CoreCommand.Command.Enum.SetValue(COMPARISON, "NONE", 2);
 
         //    //declaring function play in moreOrLess context
         //    uint play = controller.Declare(ENTITY.FUNCTION, ctx, "Play", VISIBILITY.PUBLIC);
 
         //    //declaring parameter lastResult in play function
         //    uint play_lastResult = controller.Declare(ENTITY.VARIABLE, play, "lastResult", VISIBILITY.PUBLIC);
-        //    controller.SetFunctionParameter(play, "lastResult");
-        //    controller.SetVariableType(play_lastResult, COMPARISON);
-        //    controller.SetVariableValue(play_lastResult, controller.GetEnumerationValue(COMPARISON, "NONE"));
+        //    controller.CoreCommand.Command.Function.SetParameter(play, "lastResult");
+        //    controller.CoreCommand.Command.Variable.SetType(play_lastResult, COMPARISON);
+        //    controller.CoreCommand.Command.Variable.SetValue(play_lastResult, controller.GetEnumerationValue(COMPARISON, "NONE"));
 
         //    //declaring return result in play function
         //    uint play_result = controller.Declare(ENTITY.VARIABLE, play, "result", VISIBILITY.PUBLIC);
-        //    controller.SetFunctionReturn(play, "result");
-        //    controller.SetVariableType(play_result, integer);
+        //    controller.CoreCommand.Command.Function.SetReturn(play, "result");
+        //    controller.CoreCommand.Command.Variable.SetType(play_result, integer);
 
         //    uint split_COMPARISON = controller.AddInstruction(play, INSTRUCTION_ID.ENUM_SPLITTER, new List<uint> { COMPARISON });
         //    uint get_last_result = controller.AddInstruction(play, INSTRUCTION_ID.GETTER, new List<uint> { play_lastResult });
 
         //    //if (lastResult == COMPARISION::MORE)
         //    uint lr_eq_more = controller.AddInstruction(play, INSTRUCTION_ID.EQUAL, new List<uint> { COMPARISON, COMPARISON });
-        //    controller.LinkInstructionData(play, split_COMPARISON, "MORE", lr_eq_more, "LeftOperand");
-        //    controller.LinkInstructionData(play, get_last_result, "reference", lr_eq_more, "RightOperand");
+        //    controller.LinkData(play, split_COMPARISON, "MORE", lr_eq_more, "LeftOperand");
+        //    controller.LinkData(play, get_last_result, "reference", lr_eq_more, "RightOperand");
         //    uint if_lr_eq_more = controller.AddInstruction(play, INSTRUCTION_ID.IF, empty);
-        //    controller.LinkInstructionData(play, lr_eq_more, "result", if_lr_eq_more, "condition");
+        //    controller.LinkData(play, lr_eq_more, "result", if_lr_eq_more, "condition");
 
         //    //min = lastGiven
         //    uint get_lastGiven = controller.AddInstruction(play, INSTRUCTION_ID.GETTER, new List<uint> { lastGiven });
         //    uint set_min = controller.AddInstruction(play, INSTRUCTION_ID.SETTER, new List<uint> { min });
-        //    controller.LinkInstructionData(play, get_lastGiven, "reference", set_min, "value");
+        //    controller.LinkData(play, get_lastGiven, "reference", set_min, "value");
 
         //    //if (lastResult == COMPARISON::LESS)
         //    uint lr_eq_less = controller.AddInstruction(play, INSTRUCTION_ID.EQUAL, new List<uint> { COMPARISON, COMPARISON });
-        //    controller.LinkInstructionData(play, get_last_result, "reference", lr_eq_less, "LeftOperand");
-        //    controller.LinkInstructionData(play, split_COMPARISON, "LESS", lr_eq_less, "RightOperand");
+        //    controller.LinkData(play, get_last_result, "reference", lr_eq_less, "LeftOperand");
+        //    controller.LinkData(play, split_COMPARISON, "LESS", lr_eq_less, "RightOperand");
         //    uint if_lr_eq_less = controller.AddInstruction(play, INSTRUCTION_ID.IF, empty);
-        //    controller.LinkInstructionData(play, lr_eq_less, "result", if_lr_eq_less, "condition");
+        //    controller.LinkData(play, lr_eq_less, "result", if_lr_eq_less, "condition");
 
         //    //max = lastGiven
         //    uint set_max = controller.AddInstruction(play, INSTRUCTION_ID.SETTER, new List<uint> { max });
-        //    controller.LinkInstructionData(play, get_lastGiven, "reference", set_max, "value");
+        //    controller.LinkData(play, get_lastGiven, "reference", set_max, "value");
 
         //    //min / 2
         //    uint get_min = controller.AddInstruction(play, INSTRUCTION_ID.GETTER, new List<uint> { min });
         //    uint min_half = controller.AddInstruction(play, INSTRUCTION_ID.DIV, new List<uint> { integer, integer, integer });
-        //    controller.LinkInstructionData(play, get_min, "reference", min_half, "LeftOperand");
-        //    controller.SetInstructionInputValue(play, min_half, "RightOperand", 2);
+        //    controller.LinkData(play, get_min, "reference", min_half, "LeftOperand");
+        //    controller.SetInputValue(play, min_half, "RightOperand", 2);
 
         //    //max / 2
         //    uint get_max = controller.AddInstruction(play, INSTRUCTION_ID.GETTER, new List<uint> { max });
         //    uint max_half = controller.AddInstruction(play, INSTRUCTION_ID.DIV, new List<uint> { integer, integer, integer });
-        //    controller.LinkInstructionData(play, get_max, "reference", max_half, "LeftOperand");
-        //    controller.SetInstructionInputValue(play, max_half, "RightOperand", 2);
+        //    controller.LinkData(play, get_max, "reference", max_half, "LeftOperand");
+        //    controller.SetInputValue(play, max_half, "RightOperand", 2);
 
         //    //min / 2 + max / 2
         //    uint min_half_plus_max_half = controller.AddInstruction(play, INSTRUCTION_ID.ADD, new List<uint> { integer, integer, integer });
-        //    controller.LinkInstructionData(play, min_half, "result", min_half_plus_max_half, "LeftOperand");
-        //    controller.LinkInstructionData(play, max_half, "result", min_half_plus_max_half, "RightOperand");
+        //    controller.LinkData(play, min_half, "result", min_half_plus_max_half, "LeftOperand");
+        //    controller.LinkData(play, max_half, "result", min_half_plus_max_half, "RightOperand");
 
         //    //result = min / 2 + max / 2
         //    uint result_calculation = controller.AddInstruction(play, INSTRUCTION_ID.SETTER, new List<uint> { play_result });
-        //    controller.LinkInstructionData(play, min_half_plus_max_half, "result", result_calculation, "value");
+        //    controller.LinkData(play, min_half_plus_max_half, "result", result_calculation, "value");
 
         //    //result == lastGiven
         //    uint get_result = controller.AddInstruction(play, INSTRUCTION_ID.GETTER, new List<uint> { play_result });
         //    uint res_eq_last_given = controller.AddInstruction(play, INSTRUCTION_ID.EQUAL, new List<uint> { integer, integer });
-        //    controller.LinkInstructionData(play, get_lastGiven, "reference", res_eq_last_given, "LeftOperand");
-        //    controller.LinkInstructionData(play, get_result, "reference", res_eq_last_given, "RightOperand");
+        //    controller.LinkData(play, get_lastGiven, "reference", res_eq_last_given, "LeftOperand");
+        //    controller.LinkData(play, get_result, "reference", res_eq_last_given, "RightOperand");
 
         //    //if (result == lastGiven)
         //    uint if_res_eq_last_given = controller.AddInstruction(play, INSTRUCTION_ID.IF, empty);
-        //    controller.LinkInstructionData(play, res_eq_last_given, "result", if_res_eq_last_given, "condition");
+        //    controller.LinkData(play, res_eq_last_given, "result", if_res_eq_last_given, "condition");
 
         //    //lastResult == MORE
         //    uint last_result_eq_more = controller.AddInstruction(play, INSTRUCTION_ID.EQUAL, new List<uint> { COMPARISON, COMPARISON });
-        //    controller.LinkInstructionData(play, get_last_result, "reference", last_result_eq_more, "LeftOperand");
-        //    controller.LinkInstructionData(play, split_COMPARISON, "MORE", last_result_eq_more, "RightOperand");
+        //    controller.LinkData(play, get_last_result, "reference", last_result_eq_more, "LeftOperand");
+        //    controller.LinkData(play, split_COMPARISON, "MORE", last_result_eq_more, "RightOperand");
 
         //    //if (lastResult == MORE)
         //    uint if_last_result_eq_more = controller.AddInstruction(play, INSTRUCTION_ID.IF, empty);
-        //    controller.LinkInstructionData(play, last_result_eq_more, "result", if_last_result_eq_more, "condition");
+        //    controller.LinkData(play, last_result_eq_more, "result", if_last_result_eq_more, "condition");
 
         //    //result + 1
         //    uint result_pp = controller.AddInstruction(play, INSTRUCTION_ID.ADD, new List<uint> { integer, integer, integer });
-        //    controller.LinkInstructionData(play, get_result, "reference", result_pp, "LeftOperand");
-        //    controller.SetInstructionInputValue(play, result_pp, "RightOperand", 1);
+        //    controller.LinkData(play, get_result, "reference", result_pp, "LeftOperand");
+        //    controller.SetInputValue(play, result_pp, "RightOperand", 1);
 
         //    //result = result + 1
         //    uint set_result_pp = controller.AddInstruction(play, INSTRUCTION_ID.SETTER, new List<uint> { play_result });
-        //    controller.LinkInstructionData(play, result_pp, "result", set_result_pp, "value");
+        //    controller.LinkData(play, result_pp, "result", set_result_pp, "value");
 
         //    //result - 1
         //    uint result_mm = controller.AddInstruction(play, INSTRUCTION_ID.SUB, new List<uint> { integer, integer, integer });
-        //    controller.LinkInstructionData(play, get_result, "reference", result_mm, "LeftOperand");
-        //    controller.SetInstructionInputValue(play, result_mm, "RightOperand", 1);
+        //    controller.LinkData(play, get_result, "reference", result_mm, "LeftOperand");
+        //    controller.SetInputValue(play, result_mm, "RightOperand", 1);
 
         //    //result = result - 1
         //    uint set_result_mm = controller.AddInstruction(play, INSTRUCTION_ID.SETTER, new List<uint> { play_result });
-        //    controller.LinkInstructionData(play, result_mm, "result", set_result_mm, "value");
+        //    controller.LinkData(play, result_mm, "result", set_result_mm, "value");
 
         //    //lastGiven = result
         //    uint set_last_given = controller.AddInstruction(play, INSTRUCTION_ID.SETTER, new List<uint> { lastGiven });
-        //    controller.LinkInstructionData(play, get_result, "reference", set_last_given, "value");
+        //    controller.LinkData(play, get_result, "reference", set_last_given, "value");
 
         //    /*
         //     * if (lastResult == More)
@@ -1727,28 +1732,28 @@ namespace TestUnityPlugin
         //     *
         //     * lastGiven = number
         //     */
-        //    controller.LinkInstructionExecution(play, if_lr_eq_more, (uint)If.ConditionIndexes.OnTrue, set_min);
-        //    controller.LinkInstructionExecution(play, if_lr_eq_more, (uint)If.ConditionIndexes.OnFalse, if_lr_eq_less);
+        //    controller.LinkExecution(play, if_lr_eq_more, (uint)If.ConditionIndexes.OnTrue, set_min);
+        //    controller.LinkExecution(play, if_lr_eq_more, (uint)If.ConditionIndexes.OnFalse, if_lr_eq_less);
 
-        //    controller.LinkInstructionExecution(play, set_min, 0, if_lr_eq_less);
+        //    controller.LinkExecution(play, set_min, 0, if_lr_eq_less);
 
-        //    controller.LinkInstructionExecution(play, if_lr_eq_less, (uint)If.ConditionIndexes.OnTrue, set_max);
-        //    controller.LinkInstructionExecution(play, if_lr_eq_less, (uint)If.ConditionIndexes.OnFalse, result_calculation);
+        //    controller.LinkExecution(play, if_lr_eq_less, (uint)If.ConditionIndexes.OnTrue, set_max);
+        //    controller.LinkExecution(play, if_lr_eq_less, (uint)If.ConditionIndexes.OnFalse, result_calculation);
 
-        //    controller.LinkInstructionExecution(play, set_max, 0, result_calculation);
+        //    controller.LinkExecution(play, set_max, 0, result_calculation);
 
-        //    controller.LinkInstructionExecution(play, result_calculation, 0, if_res_eq_last_given);
+        //    controller.LinkExecution(play, result_calculation, 0, if_res_eq_last_given);
 
-        //    controller.LinkInstructionExecution(play, if_res_eq_last_given, (uint)If.ConditionIndexes.OnTrue, if_last_result_eq_more);
-        //    controller.LinkInstructionExecution(play, if_res_eq_last_given, (uint)If.ConditionIndexes.OnFalse, set_last_given);
+        //    controller.LinkExecution(play, if_res_eq_last_given, (uint)If.ConditionIndexes.OnTrue, if_last_result_eq_more);
+        //    controller.LinkExecution(play, if_res_eq_last_given, (uint)If.ConditionIndexes.OnFalse, set_last_given);
 
-        //    controller.LinkInstructionExecution(play, if_last_result_eq_more, (uint)If.ConditionIndexes.OnTrue, set_result_pp);
-        //    controller.LinkInstructionExecution(play, if_last_result_eq_more, (uint)If.ConditionIndexes.OnFalse, set_result_mm);
+        //    controller.LinkExecution(play, if_last_result_eq_more, (uint)If.ConditionIndexes.OnTrue, set_result_pp);
+        //    controller.LinkExecution(play, if_last_result_eq_more, (uint)If.ConditionIndexes.OnFalse, set_result_mm);
 
-        //    controller.LinkInstructionExecution(play, set_result_pp, 0, set_last_given);
-        //    controller.LinkInstructionExecution(play, set_result_mm, 0, set_last_given);
+        //    controller.LinkExecution(play, set_result_pp, 0, set_last_given);
+        //    controller.LinkExecution(play, set_result_mm, 0, set_last_given);
 
-        //    controller.SetFunctionEntryPoint(play, if_lr_eq_more);
+        //    controller.SetEntryPoint(play, if_lr_eq_more);
 
         //    //int mystery_number = 47;
 
