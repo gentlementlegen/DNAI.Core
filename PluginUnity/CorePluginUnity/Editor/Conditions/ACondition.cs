@@ -61,6 +61,8 @@ namespace Core.Plugin.Unity.Editor.Conditions
 
         public CallbackFunc Callback;
 
+        public Type CurrentType => _currentType;
+
         [SerializeField]
         private string _currentTypeStr;// = "System.Int64";
         private Type _currentType;// = typeof(int);
@@ -69,12 +71,12 @@ namespace Core.Plugin.Unity.Editor.Conditions
 
         public ACondition()
         {
-            Debug.Log("Ctor [" + _currentTypeStr + "]");
-            if (!string.IsNullOrEmpty(_currentTypeStr))
-            {
-                Debug.Log("str is not null or empty");
-                _currentType = Type.GetType(_currentTypeStr);
-            }
+            //Debug.Log("Ctor [" + _currentTypeStr + "]");
+            //if (!string.IsNullOrEmpty(_currentTypeStr))
+            //{
+            //    Debug.Log("str is not null or empty");
+            //    _currentType = Type.GetType(_currentTypeStr);
+            //}
 
             #region Drawing Actions
             _drawingActions.Add(typeof(Int64), new Func<Rect, float>((Rect rect) =>
@@ -244,7 +246,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         public virtual float Draw(UnityEngine.Rect rect)
         {
             //Debug.Log("Drawing => " + _currentTypeStr);
-            if (_currentType == null && _currentTypeStr != "")
+            if (_currentType == null && !string.IsNullOrEmpty(_currentTypeStr))
                 _currentType = Type.GetType(_currentTypeStr);
             if (_currentType != null)
                 return _drawingActions[_currentType].Invoke(rect);
