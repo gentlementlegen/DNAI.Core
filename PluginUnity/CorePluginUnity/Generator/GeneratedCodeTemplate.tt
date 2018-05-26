@@ -23,7 +23,7 @@ namespace DNAI.<#=Namespace#>
 	}
 
 	[System.Serializable]
-    public class ConditionItem
+    public class ConditionItem : ScriptableObject
     {
 		[SerializeField]
         public ACondition cdt;
@@ -46,7 +46,7 @@ namespace DNAI.<#=Namespace#>
 
 		public float ItemSize
         {
-            get { return 110f + CallbackCount * 90f + drawSize; }
+            get { return 110f + ((CallbackCount > 1) ? (CallbackCount - 1) * 45f : 0f) + drawSize; }
         }
 
 		[SerializeField]
@@ -135,6 +135,9 @@ namespace DNAI.<#=Namespace#>
             ConditionItem item = listExample._cdtList[index];
 			Rect newRect = rect;
 
+			var s = new SerializedObject(item);
+			s.Update();
+
             EditorGUI.BeginChangeCheck();
 			newRect.y += 20;
 			newRect.x += 18;
@@ -149,27 +152,33 @@ namespace DNAI.<#=Namespace#>
 			//SerializedObject s = new SerializedObject(listExample);
             //var p = s.FindProperty("_cdtList").GetArrayElementAtIndex(index);
             //EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p.FindPropertyRelative("OnOutputChanged"));
+            var p = s.FindProperty("OnOutputChanged");
+			EditorGUIUtility.LookLikeControls();
 
-			//foreach (var x in p.FindPropertyRelative("OnOutputChanged"))
-			//{
-			//	var u = x as SerializedProperty;
-			//	if (u.name == "size")
-			//	{
-			//		Debug.Log("found size " + u.intValue);
-			//		item.CallbackCount = u.intValue;
-			//	}
-			//}
+            EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p);
+
+			foreach (var x in p)
+			{
+				var u = x as SerializedProperty;
+				if (u.name == "size")
+				{
+					Debug.Log("found size " + u.intValue);
+					item.CallbackCount = u.intValue;
+				}
+			}
 
             if (EditorGUI.EndChangeCheck())
             {
 				//Debug.Log("end change check true");
                 EditorUtility.SetDirty(target);
+				Debug.Log("End change check");
             }
+			s.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private void AddItem(ReorderableList list)
         {
-            listExample._cdtList.Add(new ConditionItem());
+            listExample._cdtList.Add(ScriptableObject.CreateInstance<ConditionItem>());
 
             EditorUtility.SetDirty(target);
         }
