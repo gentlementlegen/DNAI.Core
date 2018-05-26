@@ -44,6 +44,7 @@ Assets/Standard Assets/DNAI/Editor/
 ```
 
 You can test the plugin by opening the Unity project, then selecting Window => DNAI, or pressing **Alt+D**.
+The Unity project root location is ```!YourRootFolderName\PluginUnity\PluginTestProject```.
 
 **IMPORTANT**: in order to be able to understand the plugin, Unity must be in **.NET 4.6** mode. To enable it:
 ```
