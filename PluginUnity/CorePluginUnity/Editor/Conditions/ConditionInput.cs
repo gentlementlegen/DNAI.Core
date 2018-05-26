@@ -15,6 +15,7 @@
         /// <param name="input"></param>
         public static implicit operator ConditionInput<T>(T input)
         {
+            UnityEngine.Debug.Log("Implicit operator Condition Input with value => " + input);
             return new ConditionInput<T>() { Value = input };
         }
 

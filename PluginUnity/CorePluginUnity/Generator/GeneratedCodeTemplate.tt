@@ -60,7 +60,7 @@ namespace DNAI.<#=Namespace#>
 				{
 					_selectedIndex = value;
 					cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
-					cdt.SetRefOutput(value);
+					cdt.SetRefOutput(SelectedOutput[value]);
 				}
 			}
 		}
@@ -74,10 +74,10 @@ namespace DNAI.<#=Namespace#>
 			return drawSize;
 		}
 
-		public bool Evaluate()
+		public bool Evaluate<T>(T value)
 		{
 			//if (cdt != null)
-				return cdt.Evaluate();
+				return cdt.Evaluate(value);
 			return true;
 		}
     }
@@ -157,7 +157,7 @@ namespace DNAI.<#=Namespace#>
 
             if (EditorGUI.EndChangeCheck())
             {
-				Debug.Log("end change check true");
+				//Debug.Log("end change check true");
                 EditorUtility.SetDirty(target);
             }
         }
@@ -236,7 +236,7 @@ namespace DNAI.<#=Namespace#>
 					//OnOutputChanged.Invoke(new EventOutputChange { Value = value, ValueType = value.GetType(), Invoker = this });
 					_cdtList.FindAll((x) => x.SelectedOutput == "<#=item#>").ForEach((y) =>
 					{
-						if (y.Evaluate())
+						if (y.Evaluate(value))
 							y.OnOutputChanged?.Invoke(new EventOutputChange { Value = value, ValueType = value.GetType(), Invoker = this });
 					});
 				}

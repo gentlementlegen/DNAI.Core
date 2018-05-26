@@ -9,10 +9,5 @@
         {
             throw new System.NotImplementedException();
         }
-
-        public override bool Evaluate()
-        {
-            return true;
-        }
     }
 }

@@ -107,7 +107,7 @@ namespace DNAI.");
 				{
 					_selectedIndex = value;
 					cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
-					cdt.SetRefOutput(value);
+					cdt.SetRefOutput(SelectedOutput[value]);
 				}
 			}
 		}
@@ -121,10 +121,10 @@ namespace DNAI.");
 			return drawSize;
 		}
 
-		public bool Evaluate()
+		public bool Evaluate<T>(T value)
 		{
 			//if (cdt != null)
-				return cdt.Evaluate();
+				return cdt.Evaluate(value);
 			return true;
 		}
     }
@@ -181,18 +181,18 @@ namespace DNAI.");
                     "reach (var x in p.FindPropertyRelative(\"OnOutputChanged\"))\r\n\t\t\t//{\r\n\t\t\t//\tvar u " +
                     "= x as SerializedProperty;\r\n\t\t\t//\tif (u.name == \"size\")\r\n\t\t\t//\t{\r\n\t\t\t//\t\tDebug.L" +
                     "og(\"found size \" + u.intValue);\r\n\t\t\t//\t\titem.CallbackCount = u.intValue;\r\n\t\t\t//\t" +
-                    "}\r\n\t\t\t//}\r\n\r\n            if (EditorGUI.EndChangeCheck())\r\n            {\r\n\t\t\t\tDeb" +
-                    "ug.Log(\"end change check true\");\r\n                EditorUtility.SetDirty(target)" +
-                    ";\r\n            }\r\n        }\r\n\r\n        private void AddItem(ReorderableList list" +
-                    ")\r\n        {\r\n            listExample._cdtList.Add(new ConditionItem());\r\n\r\n    " +
-                    "        EditorUtility.SetDirty(target);\r\n        }\r\n\r\n        private void Remov" +
-                    "eItem(ReorderableList list)\r\n        {\r\n            listExample._cdtList.RemoveA" +
-                    "t(list.index);\r\n\r\n            EditorUtility.SetDirty(target);\r\n        }\r\n\t\t\r\n  " +
-                    "      private float ElementHeightCallback(int idx)\r\n        {\r\n            retur" +
-                    "n listExample._cdtList[idx].ItemSize;\r\n        }\r\n\r\n        public override void" +
-                    " OnInspectorGUI()\r\n        {\r\n            base.OnInspectorGUI();\r\n            re" +
-                    "orderableList.DoLayoutList();\r\n        }\r\n    }\r\n\r\n\tpublic class EventOutputChan" +
-                    "ge : EventArgs\r\n\t{\r\n\t\tpublic ");
+                    "}\r\n\t\t\t//}\r\n\r\n            if (EditorGUI.EndChangeCheck())\r\n            {\r\n\t\t\t\t//D" +
+                    "ebug.Log(\"end change check true\");\r\n                EditorUtility.SetDirty(targe" +
+                    "t);\r\n            }\r\n        }\r\n\r\n        private void AddItem(ReorderableList li" +
+                    "st)\r\n        {\r\n            listExample._cdtList.Add(new ConditionItem());\r\n\r\n  " +
+                    "          EditorUtility.SetDirty(target);\r\n        }\r\n\r\n        private void Rem" +
+                    "oveItem(ReorderableList list)\r\n        {\r\n            listExample._cdtList.Remov" +
+                    "eAt(list.index);\r\n\r\n            EditorUtility.SetDirty(target);\r\n        }\r\n\t\t\r\n" +
+                    "        private float ElementHeightCallback(int idx)\r\n        {\r\n            ret" +
+                    "urn listExample._cdtList[idx].ItemSize;\r\n        }\r\n\r\n        public override vo" +
+                    "id OnInspectorGUI()\r\n        {\r\n            base.OnInspectorGUI();\r\n            " +
+                    "reorderableList.DoLayoutList();\r\n        }\r\n    }\r\n\r\n\tpublic class EventOutputCh" +
+                    "ange : EventArgs\r\n\t{\r\n\t\tpublic ");
             
             #line 193 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
@@ -317,9 +317,9 @@ namespace DNAI.");
             
             #line default
             #line hidden
-            this.Write("\").ForEach((y) =>\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\tif (y.Evaluate())\r\n\t\t\t\t\t\t\ty.OnOutputChanged?.Inv" +
-                    "oke(new EventOutputChange { Value = value, ValueType = value.GetType(), Invoker " +
-                    "= this });\r\n\t\t\t\t\t});\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t");
+            this.Write("\").ForEach((y) =>\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\tif (y.Evaluate(value))\r\n\t\t\t\t\t\t\ty.OnOutputChanged" +
+                    "?.Invoke(new EventOutputChange { Value = value, ValueType = value.GetType(), Inv" +
+                    "oker = this });\r\n\t\t\t\t\t});\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t");
             
             #line 244 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
