@@ -61,6 +61,11 @@ namespace CorePackage.Entity
             get { return value; }
             set
             {
+                if (type == null)
+                {
+                    throw new InvalidOperationException("Type haven't been set to variable yet");
+                }
+
                 if (type.IsValueOfType(value))
                 {
                     this.value = value;
