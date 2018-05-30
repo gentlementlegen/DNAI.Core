@@ -632,7 +632,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 917421107}
-  - component: {fileID: 917421106}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -640,69 +639,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &917421106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 917421105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 111426321cc73704fb583c54f25e4a81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _cdtList:
-  - cdt:
-      _matchingInstanceTypes:
-      - Input: 0
-        Condition: 0
-        _selectedIdx: 0
-      _selectedIdx: 1
-      ConditionNumber: 1
-      ConditionString: 1
-      InputInt: 55
-      InputFloat: 0
-      InputString: toto
-      _currentTypeStr: System.Int64
-    Test: 
-    OnOutputChanged:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 917421106}
-          m_MethodName: OutputChanged
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: DNAI.MoreOrLess.UnityEventOutputChange, MoreOrLess, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    CallbackCount: 0
-    _selectedIndex: 0
-  OnOutputChanged:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 917421106}
-        m_MethodName: OutputChanged
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_TypeName: DNAI.MoreOrLess.UnityEventOutputChange, MoreOrLess, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  lastResult: 0
-  TextNumber: {fileID: 1421208212}
-  Tries: 10
-  MysteryNumber: 42
 --- !u!4 &917421107
 Transform:
   m_ObjectHideFlags: 0
@@ -1187,42 +1123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cdtList:
-  - cdt:
-      _matchingInstanceTypes:
-      - Input: 0
-        Condition: 0
-        _selectedIdx: 0
-      _selectedIdx: 0
-      ConditionNumber: 0
-      ConditionString: 0
-      InputInt: 0
-      InputFloat: 0
-      InputString: 
-      _currentTypeStr: System.String
-    Test: 
-    OnOutputChanged:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1971101216}
-          m_MethodName: OutputChanged
-          m_Mode: 0
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: DNAI.MoreOrLess.UnityEventOutputChange, MoreOrLess, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    CallbackCount: 0
-    _selectedIndex: 0
-  OnOutputChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: DNAI.MoreOrLess.UnityEventOutputChange, MoreOrLess, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
+  - {fileID: 0}
   lastResult: 0
   TextNumber: {fileID: 0}
   Tries: 10
@@ -1316,7 +1217,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 917421106}
+      - m_Target: {fileID: 0}
         m_MethodName: Play
         m_Mode: 1
         m_Arguments:

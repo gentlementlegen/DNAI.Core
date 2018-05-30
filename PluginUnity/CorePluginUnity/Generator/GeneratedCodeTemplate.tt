@@ -68,6 +68,12 @@ namespace DNAI.<#=Namespace#>
 
 		public string SelectedOutput { get { return Outputs[SelectedIndex]; } }
 
+		public void Initialize()
+		{
+			cdt = new ACondition();
+			cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
+		}
+
 		public float Draw(Rect rect)
 		{
 			//if (cdt != null)
@@ -178,7 +184,9 @@ namespace DNAI.<#=Namespace#>
 
         private void AddItem(ReorderableList list)
         {
-            listExample._cdtList.Add(ScriptableObject.CreateInstance<ConditionItem>());
+			var item = ScriptableObject.CreateInstance<ConditionItem>();
+			item.Initialize();
+            listExample._cdtList.Add(item);
 
             EditorUtility.SetDirty(target);
         }
