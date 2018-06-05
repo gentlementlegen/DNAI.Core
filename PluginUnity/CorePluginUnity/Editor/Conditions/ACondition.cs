@@ -57,6 +57,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         public int InputInt;
         public float InputFloat;
         public string InputString;
+        public string InputEnum;
         #endregion
 
         /// <summary>
@@ -191,6 +192,49 @@ namespace Core.Plugin.Unity.Editor.Conditions
         public void AddDrawAction(Type type, DrawingAction action)
         {
             _drawingActions.Add(type, action);
+        }
+
+        /// <summary>
+        /// Registers an enum to the list of handled types.
+        /// </summary>
+        /// <param name="enumType"></param>
+        public void RegisterEnum(Type enumType)
+        {
+            _drawingActions.Add(enumType, new DrawingAction((Rect rect, out int selectedIndex) =>
+            {
+                var mid = rect.width / 2f;
+                //Debug.Log("enum");
+                selectedIndex = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsString);
+                if (string.IsNullOrEmpty(InputEnum))
+                {
+                    InputEnum = Activator.CreateInstance(enumType).ToString();
+                }
+                if (_selectedIdx != 0)
+                    InputEnum = EditorGUI.EnumPopup(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), (Enum)Enum.Parse(enumType, InputEnum)).ToString();
+                return 15;
+            }));
+            _evaluateActions.Add(enumType, new Func<object, bool>((obj) =>
+            {
+                var ConditionEnum = (CONDITION_STRING)_selectedIdx;
+                Debug.Log("Evaluate enum : " + ConditionEnum + " Input=" + InputEnum + " Value=" + obj);
+                switch (ConditionEnum)
+                {
+                    case CONDITION_STRING.NO_CONDITION:
+                        return true;
+
+                    case CONDITION_STRING.EQUAL:
+                        return (string)obj == InputEnum;
+
+                    case CONDITION_STRING.DIFFERENT:
+                        return (string)obj != InputEnum;
+                }
+                return false;
+            }));
+        }
+
+        private T ConvertVariableType<T>(object input)
+        {
+            return (T)Convert.ChangeType(input, typeof(T));
         }
 
         /// <summary>
