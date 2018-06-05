@@ -8,6 +8,14 @@ namespace Core.Plugin.Unity.Editor.Conditions
     public delegate void CallbackFunc();
 
     /// <summary>
+    /// Callback for drawing actions in the inspector.
+    /// </summary>
+    /// <param name="rect">The last rect drawned by the inspector.</param>
+    /// <param name="selectedIdx">The current selected index.</param>
+    /// <returns></returns>
+    public delegate float DrawingAction(Rect rect, out int selectedIdx);
+
+    /// <summary>
     /// Abstract class for conditions related to Unity GUI callbacks.
     /// Unity does not support Serialization for derived classes,
     /// so this class handles every time that can be used within the editor.
@@ -32,7 +40,6 @@ namespace Core.Plugin.Unity.Editor.Conditions
         #region Number Options
         [SerializeField]
         public enum CONDITION_NUMBER { NO_CONDITION, MORE, LESS, EQUAL, DIFFERENT }
-        public CONDITION_NUMBER ConditionNumber;
         private string[] optionsNumber = new string[] { "No condition", "More than", "Less than", "Equal to", "Different than" };
         [SerializeField]
         private ConditionInput<int> refOutputInt;
@@ -41,7 +48,6 @@ namespace Core.Plugin.Unity.Editor.Conditions
         #region String Options
         [SerializeField]
         public enum CONDITION_STRING { NO_CONDITION, EQUAL, DIFFERENT }
-        public CONDITION_STRING ConditionString;
         private string[] optionsString = new string[] { "No condition", "Equal to", "Different than" };
         [SerializeField]
         private ConditionInput<string> refOutputString;
@@ -56,7 +62,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// <summary>
         /// List of drawing actions for given types.
         /// </summary>
-        private readonly Dictionary<Type, Func<Rect, float>> _drawingActions = new Dictionary<Type, Func<Rect, float>>();
+        private readonly Dictionary<Type, DrawingAction> _drawingActions = new Dictionary<Type, DrawingAction>();
         private readonly Dictionary<Type, Func<object, bool>> _evaluateActions = new Dictionary<Type, Func<object, bool>>();
 
         public CallbackFunc Callback;
@@ -79,36 +85,33 @@ namespace Core.Plugin.Unity.Editor.Conditions
             //}
 
             #region Drawing Actions
-            _drawingActions.Add(typeof(Int64), new Func<Rect, float>((Rect rect) =>
+            _drawingActions.Add(typeof(Int64), new DrawingAction((Rect rect, out int selectedIndex) =>
             {
                 var mid = rect.width / 2f;
                 //Debug.Log("int");
-                _selectedIdx = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsNumber);
+                selectedIndex = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsNumber);
                 if (_selectedIdx != 0)
                     InputInt = EditorGUI.IntField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), InputInt);
-                ConditionNumber = (CONDITION_NUMBER)_selectedIdx;
                 return 15;
             }));
-            _drawingActions.Add(typeof(int), new Func<Rect, float>((Rect rect) => _drawingActions[typeof(Int64)].Invoke(rect)));
-            _drawingActions.Add(typeof(float), new Func<Rect, float>((Rect rect) =>
+            _drawingActions.Add(typeof(int), new DrawingAction((Rect rect, out int selectedIndex) => _drawingActions[typeof(Int64)].Invoke(rect, out selectedIndex)));
+            _drawingActions.Add(typeof(float), new DrawingAction((Rect rect, out int selectedIndex) =>
             {
                 var mid = rect.width / 2f;
                 //Debug.Log("float => " + mid);
-                _selectedIdx = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsNumber);
+                selectedIndex = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsNumber);
                 if (_selectedIdx != 0)
                     InputFloat = EditorGUI.FloatField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), InputFloat);
-                ConditionNumber = (CONDITION_NUMBER)_selectedIdx;
                 return 15;
             }));
-            _drawingActions.Add(typeof(double), new Func<Rect, float>((Rect rect) => _drawingActions[typeof(float)].Invoke(rect)));
-            _drawingActions.Add(typeof(string), new Func<Rect, float>((Rect rect) =>
+            _drawingActions.Add(typeof(double), new DrawingAction((Rect rect, out int selectedIndex) => _drawingActions[typeof(float)].Invoke(rect, out selectedIndex)));
+            _drawingActions.Add(typeof(string), new DrawingAction((Rect rect, out int selectedIndex) =>
             {
                 var mid = rect.width / 2f;
                 //Debug.Log("string");
-                _selectedIdx = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsString);
+                selectedIndex = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsString);
                 if (_selectedIdx != 0)
                     InputString = EditorGUI.TextField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), InputString);
-                ConditionString = (CONDITION_STRING)_selectedIdx;
                 return 15;
             }));
             #endregion
@@ -116,6 +119,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             #region Evaluate Actions
             _evaluateActions.Add(typeof(Int64), new Func<object, bool>((obj) =>
             {
+                var ConditionNumber = (CONDITION_NUMBER)_selectedIdx;
                 Debug.Log("Evaluate int : " + ConditionNumber + " Input=" + InputInt + " Value=" + obj);
                 switch (ConditionNumber)
                 {
@@ -139,6 +143,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             _evaluateActions.Add(typeof(int), new Func<object, bool> ((obj) => _evaluateActions[typeof(Int64)].Invoke(obj)));
             _evaluateActions.Add(typeof(string), new Func<object, bool>((obj) =>
             {
+                var ConditionString = (CONDITION_STRING)_selectedIdx;
                 Debug.Log("Evaluate string : " + ConditionString + " Input=" + InputString + " Value=" + obj);
                 switch (ConditionString)
                 {
@@ -155,6 +160,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             }));
             _evaluateActions.Add(typeof(float), new Func<object, bool>((obj) =>
             {
+                var ConditionNumber = (CONDITION_NUMBER)_selectedIdx;
                 Debug.Log("Evaluate float : " + ConditionNumber + " Input=" + InputFloat + " Value=" + obj);
                 switch (ConditionNumber)
                 {
@@ -177,6 +183,14 @@ namespace Core.Plugin.Unity.Editor.Conditions
             }));
             _evaluateActions.Add(typeof(double), new Func<object, bool>((obj) => _evaluateActions[typeof(float)].Invoke(obj)));
             #endregion
+        }
+
+        /// <summary>
+        /// Adds a drawing action to the list.
+        /// </summary>
+        public void AddDrawAction(Type type, DrawingAction action)
+        {
+            _drawingActions.Add(type, action);
         }
 
         /// <summary>
@@ -208,6 +222,8 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// <returns></returns>
         public virtual bool Evaluate<T>(T val)
         {
+            if (_currentType == null && !string.IsNullOrEmpty(_currentTypeStr))
+                _currentType = Type.GetType(_currentTypeStr);
             Debug.Log("1. Evaluate with type => " + _currentType);
             Debug.Log("2. Evaluate with type => " + _evaluateActions[_currentType]);
             return _evaluateActions[_currentType].Invoke(val);
@@ -249,7 +265,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             if (_currentType == null && !string.IsNullOrEmpty(_currentTypeStr))
                 _currentType = Type.GetType(_currentTypeStr);
             if (_currentType != null)
-                return _drawingActions[_currentType].Invoke(rect);
+                return _drawingActions[_currentType].Invoke(rect, out _selectedIdx);
             return 0;
         }
 
