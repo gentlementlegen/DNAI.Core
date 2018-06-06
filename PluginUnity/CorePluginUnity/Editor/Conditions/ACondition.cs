@@ -21,7 +21,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
     /// so this class handles every time that can be used within the editor.
     /// </summary>
     [Serializable]
-    public partial class ACondition
+    public partial class ACondition : ISerializationCallbackReceiver
     {
         private static readonly Dictionary<Type, Type> _matchingTypes = new Dictionary<Type, Type>
         {
@@ -36,6 +36,9 @@ namespace Core.Plugin.Unity.Editor.Conditions
 
         [SerializeField]
         private int _selectedIdx;
+
+        [SerializeField]
+        private List<string> _registeredTypes = new List<string>();
 
         #region Number Options
         [SerializeField]
@@ -198,12 +201,17 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// Registers an enum to the list of handled types.
         /// </summary>
         /// <param name="enumType"></param>
-        public void RegisterEnum(string enumType, string assembly = "")
+        public void RegisterEnum(string enumType)
         {
-            Debug.Log("Registering enumeration type =======> " + enumType.ToString());
-            _drawingActions.Add(enumType, new DrawingAction((Rect rect, out int selectedIndex) =>
+            var enumName = enumType.Split(',')[0];
+            Debug.Log("Registering enumeration type =======> " + enumType + " enum name => " + enumName);
+            if (!_registeredTypes.Contains(enumType))
             {
-                var t = string.IsNullOrEmpty(assembly) ? Type.GetType(enumType) : Type.GetType(assembly);
+                _registeredTypes.Add(enumType);
+            }
+            _drawingActions.Add(enumName, new DrawingAction((Rect rect, out int selectedIndex) =>
+            {
+                var t = Type.GetType(enumType);
                 var mid = rect.width / 2f;
                 //Debug.Log("enum");
                 selectedIndex = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsString);
@@ -216,7 +224,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
                     InputEnum = EditorGUI.EnumPopup(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), (Enum)Enum.Parse(t, InputEnum)).ToString();
                 return 15;
             }));
-            _evaluateActions.Add(enumType, new Func<object, bool>((obj) =>
+            _evaluateActions.Add(enumName, new Func<object, bool>((obj) =>
             {
                 var ConditionEnum = (CONDITION_STRING)_selectedIdx;
                 Debug.Log("Evaluate enum : " + ConditionEnum + " Input=" + InputEnum + " Value=" + obj);
@@ -321,6 +329,19 @@ namespace Core.Plugin.Unity.Editor.Conditions
         public void SetRefOutput<T>(ConditionInput<T> cdt)
         {
             _currentEvaluator.SetRefOutput(cdt);
+        }
+
+        public void OnBeforeSerialize()
+        {
+        }
+
+        public void OnAfterDeserialize()
+        {
+            //Debug.Log("On after desserialize !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + _registeredTypes.Count);
+            foreach (var item in _registeredTypes)
+            {
+                RegisterEnum(item);
+            }
         }
     }
 }

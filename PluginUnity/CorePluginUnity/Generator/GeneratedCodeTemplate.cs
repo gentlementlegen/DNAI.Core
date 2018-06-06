@@ -135,13 +135,6 @@ namespace DNAI.");
             
             #line default
             #line hidden
-            this.Write(").ToString(), typeof(");
-            
-            #line 78 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(item));
-            
-            #line default
-            #line hidden
             this.Write(").AssemblyQualifiedName);\r\n\t\t\t");
             
             #line 79 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"

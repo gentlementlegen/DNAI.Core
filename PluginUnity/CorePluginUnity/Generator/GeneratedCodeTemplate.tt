@@ -75,7 +75,7 @@ namespace DNAI.<#=Namespace#>
 			
 			<# foreach (var item in EnumNames)
 			{#>
-				cdt.RegisterEnum(typeof(<#=item#>).ToString(), typeof(<#=item#>).AssemblyQualifiedName);
+				cdt.RegisterEnum(typeof(<#=item#>).AssemblyQualifiedName);
 			<# } #>
 		}
 
