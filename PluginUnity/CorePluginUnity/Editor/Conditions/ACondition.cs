@@ -63,7 +63,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// <summary>
         /// List of drawing actions for given types.
         /// </summary>
-        private readonly Dictionary<Type, DrawingAction> _drawingActions = new Dictionary<Type, DrawingAction>();
+        private readonly Dictionary<string, DrawingAction> _drawingActions = new Dictionary<string, DrawingAction>();
         private readonly Dictionary<Type, Func<object, bool>> _evaluateActions = new Dictionary<Type, Func<object, bool>>();
 
         public CallbackFunc Callback;
@@ -86,7 +86,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             //}
 
             #region Drawing Actions
-            _drawingActions.Add(typeof(Int64), new DrawingAction((Rect rect, out int selectedIndex) =>
+            _drawingActions.Add(typeof(Int64).ToString(), new DrawingAction((Rect rect, out int selectedIndex) =>
             {
                 var mid = rect.width / 2f;
                 //Debug.Log("int");
@@ -95,8 +95,8 @@ namespace Core.Plugin.Unity.Editor.Conditions
                     InputInt = EditorGUI.IntField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), InputInt);
                 return 15;
             }));
-            _drawingActions.Add(typeof(int), new DrawingAction((Rect rect, out int selectedIndex) => _drawingActions[typeof(Int64)].Invoke(rect, out selectedIndex)));
-            _drawingActions.Add(typeof(float), new DrawingAction((Rect rect, out int selectedIndex) =>
+            _drawingActions.Add(typeof(int).ToString(), new DrawingAction((Rect rect, out int selectedIndex) => _drawingActions[typeof(Int64).ToString()].Invoke(rect, out selectedIndex)));
+            _drawingActions.Add(typeof(float).ToString(), new DrawingAction((Rect rect, out int selectedIndex) =>
             {
                 var mid = rect.width / 2f;
                 //Debug.Log("float => " + mid);
@@ -105,8 +105,8 @@ namespace Core.Plugin.Unity.Editor.Conditions
                     InputFloat = EditorGUI.FloatField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), InputFloat);
                 return 15;
             }));
-            _drawingActions.Add(typeof(double), new DrawingAction((Rect rect, out int selectedIndex) => _drawingActions[typeof(float)].Invoke(rect, out selectedIndex)));
-            _drawingActions.Add(typeof(string), new DrawingAction((Rect rect, out int selectedIndex) =>
+            _drawingActions.Add(typeof(double).ToString(), new DrawingAction((Rect rect, out int selectedIndex) => _drawingActions[typeof(float).ToString()].Invoke(rect, out selectedIndex)));
+            _drawingActions.Add(typeof(string).ToString(), new DrawingAction((Rect rect, out int selectedIndex) =>
             {
                 var mid = rect.width / 2f;
                 //Debug.Log("string");
@@ -189,7 +189,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// <summary>
         /// Adds a drawing action to the list.
         /// </summary>
-        public void AddDrawAction(Type type, DrawingAction action)
+        public void AddDrawAction(string type, DrawingAction action)
         {
             _drawingActions.Add(type, action);
         }
@@ -198,38 +198,41 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// Registers an enum to the list of handled types.
         /// </summary>
         /// <param name="enumType"></param>
-        public void RegisterEnum(Type enumType)
+        public void RegisterEnum(string enumType, string assembly = "")
         {
+            Debug.Log("Registering enumeration type =======> " + enumType.ToString());
             _drawingActions.Add(enumType, new DrawingAction((Rect rect, out int selectedIndex) =>
             {
+                var t = string.IsNullOrEmpty(assembly) ? Type.GetType(enumType) : Type.GetType(assembly);
                 var mid = rect.width / 2f;
                 //Debug.Log("enum");
                 selectedIndex = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsString);
                 if (string.IsNullOrEmpty(InputEnum))
                 {
-                    InputEnum = Activator.CreateInstance(enumType).ToString();
+                    Debug.Log("Activator is receiving type " + t.ToString());
+                    InputEnum = Activator.CreateInstance(t).ToString();
                 }
                 if (_selectedIdx != 0)
-                    InputEnum = EditorGUI.EnumPopup(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), (Enum)Enum.Parse(enumType, InputEnum)).ToString();
+                    InputEnum = EditorGUI.EnumPopup(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), (Enum)Enum.Parse(t, InputEnum)).ToString();
                 return 15;
             }));
-            _evaluateActions.Add(enumType, new Func<object, bool>((obj) =>
-            {
-                var ConditionEnum = (CONDITION_STRING)_selectedIdx;
-                Debug.Log("Evaluate enum : " + ConditionEnum + " Input=" + InputEnum + " Value=" + obj);
-                switch (ConditionEnum)
-                {
-                    case CONDITION_STRING.NO_CONDITION:
-                        return true;
+            //_evaluateActions.Add(Type.GetType(enumType), new Func<object, bool>((obj) =>
+            //{
+            //    var ConditionEnum = (CONDITION_STRING)_selectedIdx;
+            //    Debug.Log("Evaluate enum : " + ConditionEnum + " Input=" + InputEnum + " Value=" + obj);
+            //    switch (ConditionEnum)
+            //    {
+            //        case CONDITION_STRING.NO_CONDITION:
+            //            return true;
 
-                    case CONDITION_STRING.EQUAL:
-                        return (string)obj == InputEnum;
+            //        case CONDITION_STRING.EQUAL:
+            //            return (string)obj == InputEnum;
 
-                    case CONDITION_STRING.DIFFERENT:
-                        return (string)obj != InputEnum;
-                }
-                return false;
-            }));
+            //        case CONDITION_STRING.DIFFERENT:
+            //            return (string)obj != InputEnum;
+            //    }
+            //    return false;
+            //}));
         }
 
         private T ConvertVariableType<T>(object input)
@@ -296,7 +299,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             //    if (!cdt.Evaluate())
             //        return false;
             //}
-            return true;
+            //return true;
         }
 
         /// <summary>
@@ -305,11 +308,12 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// <returns></returns>
         public virtual float Draw(UnityEngine.Rect rect)
         {
-            //Debug.Log("Drawing => " + _currentTypeStr);
+            Debug.Log("1. Drawing => " + _currentTypeStr);
             if (_currentType == null && !string.IsNullOrEmpty(_currentTypeStr))
                 _currentType = Type.GetType(_currentTypeStr);
-            if (_currentType != null)
-                return _drawingActions[_currentType].Invoke(rect, out _selectedIdx);
+            Debug.Log("2. Drawing => " + Type.GetType(_currentTypeStr));
+            //if (_currentType != null)
+                return _drawingActions[_currentTypeStr].Invoke(rect, out _selectedIdx);
             return 0;
         }
 

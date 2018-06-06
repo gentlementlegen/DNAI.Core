@@ -35,7 +35,7 @@ namespace DNAI.<#=Namespace#>
 			<# foreach (var item in Outputs)
 			{ #>
 				"<#=item#>",
-				"System.String str",
+				"DNAI.MoreOrLess.COMPARISON enum",
 			<# } #>
         };
 
@@ -72,6 +72,11 @@ namespace DNAI.<#=Namespace#>
 		{
 			cdt = new ACondition();
 			cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
+			
+			<# foreach (var item in EnumNames)
+			{#>
+				cdt.RegisterEnum(typeof(<#=item#>).ToString(), typeof(<#=item#>).AssemblyQualifiedName);
+			<# } #>
 		}
 
 		public float Draw(Rect rect)
@@ -217,6 +222,11 @@ namespace DNAI.<#=Namespace#>
 		public Type ValueType;
 	}
 
+	<# foreach (var item in DataTypes)
+	{#>
+		public <#=item#>
+	<# } #>
+
 	///<summary>
 	/// Base behaviour for DNAI IA.
 	///</summary>
@@ -233,11 +243,6 @@ namespace DNAI.<#=Namespace#>
 		/// Called when output values of the DNAI script change.
 		///</summary>
 		//public UnityEventOutputChange OnOutputChanged;
-
-		<# foreach (var item in DataTypes)
-		{#>
-			public <#=item#>
-		<# } #>
 
 		//[Header("Input variables")]
 		<# foreach (var item in Inputs)
