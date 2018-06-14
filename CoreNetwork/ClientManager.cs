@@ -82,15 +82,17 @@ namespace CoreNetwork
             MemoryStream inStream = new MemoryStream(data);
             MemoryStream outStream = new MemoryStream();
 
-            Console.WriteLine("Handling event for: " + replyEventName);
+            Console.WriteLine("");
+
+            Console.WriteLine("==Network.Receiving(" + command + ")==");
             if (commandManager.CallCommand(command, inStream, outStream))
             {
-                Console.WriteLine("Sending reply " + replyEventName);
                 eventProtocolClient.SendEvent(replyEventName, outStream.ToArray());
+                Console.WriteLine("==Network.Replied(" + replyEventName + ")==");
             }
             else
             {
-                Console.WriteLine("Error");
+                Console.WriteLine("==Network.Error==");
                 eventProtocolClient.SendEvent(command + ".ERROR", outStream.ToArray());
             }
         }

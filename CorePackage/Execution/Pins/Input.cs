@@ -83,7 +83,7 @@ namespace CorePackage.Execution
         {
             if (!linked.HasOutput(outputname))
                 throw new Error.NotFoundException("Couldn't link inexistant output named " + outputname);
-            if (!definition.Type.IsValueOfType(linked.GetOutputValue(outputname)))
+            if (!linked.IsOutputCompatible(outputname, definition.Type))
                 throw new InvalidOperationException("Want to link an input to an incompatible output: "+ Value.ToString() + "(" + definition.Type.ToString() + ") incompatible with " + linked.GetOutputValue(outputname) + "(" + linked.GetOutput(outputname).Definition.Type.ToString() + ")");
             link = new Link(linked, outputname);
         }

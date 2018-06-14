@@ -1,12 +1,13 @@
 ﻿using CoreCommand.Command;
 using CoreControl;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
 namespace CoreCommand
-{
+{   
     /// <summary>
     /// Dispatcher that handles the command events, updating the watcher accordingly.
     /// </summary>
@@ -179,13 +180,17 @@ namespace CoreCommand
         {
             Command message = GetMessage<Command>(inStream, save);
 
+            Console.WriteLine("==Manager.Command== : " + JsonConvert.SerializeObject(message, Formatting.Indented));
+
             if (outStream != null)
                 BinarySerializer.Serializer.Serialize(message, outStream);
 
             try
             {
                 Reply reply = callback(message);
-                
+
+                Console.WriteLine("==Manager.Reply== : " + JsonConvert.SerializeObject(reply, Formatting.Indented));
+
                 if (outStream != null && reply != null)
                 {
                     BinarySerializer.Serializer.Serialize(reply, outStream);

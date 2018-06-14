@@ -172,6 +172,28 @@ namespace CorePackage.Execution
         }
 
         /// <summary>
+        /// Checks if an input type is compatible with a given type
+        /// </summary>
+        /// <param name="name">Name of the input</param>
+        /// <param name="type">Type to check</param>
+        /// <returns>True if types are compatibles, false either</returns>
+        public bool IsInputCompatible(string name, Entity.DataType type)
+        {
+            return type.IsValueOfType(inputs[name].Value);
+        }
+
+        /// <summary>
+        /// Checks if an output type is compatible with a given type
+        /// </summary>
+        /// <param name="name">Name of the ouput</param>
+        /// <param name="type">Type to check</param>
+        /// <returns>Treue if types are compatibles, false either</returns>
+        public bool IsOutputCompatible(string name, Entity.DataType type)
+        {
+            return type.IsValueOfType(outputs[name].Value);
+        }
+
+        /// <summary>
         /// Abstract method used to execute the instruction
         /// </summary>
         public abstract void Execute();

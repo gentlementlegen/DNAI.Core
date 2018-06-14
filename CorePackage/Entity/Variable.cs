@@ -58,7 +58,12 @@ namespace CorePackage.Entity
         /// </summary>
         public dynamic Value
         {
-            get { return value; }
+            get
+            {
+                if (Type == null)
+                    throw new InvalidOperationException("Cannot get the value of a variable without a type");
+                return value;
+            }
             set
             {
                 if (type == null)
