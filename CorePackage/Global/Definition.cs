@@ -10,6 +10,14 @@ namespace CorePackage.Global
     {
         public string Name { get; set; }
 
+        public String FullName
+        {
+            get
+            {
+                return (Parent != null ? ((Definition)Parent).FullName : "") + "/" + Name;
+            }
+        }
+
         public IDeclarator Parent { get; set; }
 
         public abstract bool IsValid();

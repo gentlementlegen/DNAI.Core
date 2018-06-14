@@ -87,21 +87,26 @@ namespace CoreControl
         {
             //global context is in 0
             AddEntity(new CorePackage.Entity.Context());
-
+            
             //boolean type is in 1
             AddEntity(CorePackage.Entity.Type.Scalar.Boolean);
+            GetDeclaratorOf(0).Declare(CorePackage.Entity.Type.Scalar.Boolean, "Bool", CorePackage.Global.AccessMode.EXTERNAL);
 
             //integer type is in 2
             AddEntity(CorePackage.Entity.Type.Scalar.Integer);
+            GetDeclaratorOf(0).Declare(CorePackage.Entity.Type.Scalar.Integer, "Integer", CorePackage.Global.AccessMode.EXTERNAL);
 
             //floating type is in 3
             AddEntity(CorePackage.Entity.Type.Scalar.Floating);
+            GetDeclaratorOf(0).Declare(CorePackage.Entity.Type.Scalar.Floating, "Floating", CorePackage.Global.AccessMode.EXTERNAL);
 
             //character type is in 4
             AddEntity(CorePackage.Entity.Type.Scalar.Character);
+            GetDeclaratorOf(0).Declare(CorePackage.Entity.Type.Scalar.Character, "Character", CorePackage.Global.AccessMode.EXTERNAL);
 
             //string type is in 5
             AddEntity(CorePackage.Entity.Type.Scalar.String);
+            GetDeclaratorOf(0).Declare(CorePackage.Entity.Type.Scalar.String, "String", CorePackage.Global.AccessMode.EXTERNAL);
         }
 
         /// <summary>

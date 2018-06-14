@@ -100,13 +100,15 @@ namespace CoreControl
                 return EntityFactory.ENTITY.LIST_TYPE;
             else if (entity.GetType() == typeof(CorePackage.Entity.DataType))
                 return EntityFactory.ENTITY.DATA_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ScalarType))
+                return EntityFactory.ENTITY.DATA_TYPE;
             else if (entity.GetType() == typeof(CorePackage.Entity.Function))
                 return EntityFactory.ENTITY.FUNCTION;
             else if (entity.GetType() == typeof(CorePackage.Entity.Variable))
                 return EntityFactory.ENTITY.VARIABLE;
             else if (entity.GetType() == typeof(CorePackage.Entity.Context))
                 return EntityFactory.ENTITY.CONTEXT;
-            throw new InvalidOperationException("Controller.GetEntityType : Given entity as no declared type");
+            throw new InvalidOperationException("Controller.GetEntityType : Entity " + entity.FullName + " as invalid entity type " + entity.GetType().ToString());
         }
 
         /// <summary>

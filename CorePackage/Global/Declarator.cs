@@ -73,6 +73,8 @@ namespace CorePackage.Global
 
             defined[name] = new Declaration { definition = entity, visibility = visibility };
 
+            entity.Name = name;
+
             return entity;
         }
 
