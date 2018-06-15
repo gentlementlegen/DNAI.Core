@@ -66,7 +66,7 @@ Tests for the Core library.
 Tests for the Unity plugin. If you want to run the tests inside Visual Studio, comment the line:
 
 ```
-#define UNITY
+#define UNITY_ENGINE
 ```
 
 ### Network tests
