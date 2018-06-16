@@ -41,9 +41,9 @@ namespace CorePackage.Execution
         /// </summary>
         /// <param name="name">Name of the input</param>
         /// <param name="definition">Variable definition of the input</param>
-        public void AddInput(string name, Entity.Variable definition)
+        public void AddInput(string name, Entity.Variable definition, bool reference = false)
         {
-            this.inputs[name] = new Input(definition);
+            this.inputs[name] = new Input(name, definition, reference);
         }
 
         /// <summary>

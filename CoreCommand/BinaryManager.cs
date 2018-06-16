@@ -199,8 +199,8 @@ namespace CoreCommand
             }
             catch (Exception error)
             {
-                Console.WriteLine("Error: " + error.Message);
-                Console.Write(error.StackTrace);
+                Console.Error.WriteLine("Error: " + error.Message);
+                Console.Error.Write(error.StackTrace);
 
                 if (outStream != null)
                     BinarySerializer.Serializer.Serialize(error.Message, outStream);

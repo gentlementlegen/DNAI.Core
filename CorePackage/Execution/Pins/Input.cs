@@ -20,20 +20,36 @@ namespace CorePackage.Execution
         /// Input link
         /// </summary>
         private Link link;
+
+        /// <summary>
+        /// Input name
+        /// </summary>
+        private string name;
+
+        /// <summary>
+        /// Is input passed by reference
+        /// </summary>
+        private bool reference;
         
         /// <summary>
         /// Constructor that asks for the declaration to bind
         /// </summary>
         /// <param name="value"></param>
-        public Input(Entity.Variable value)
+        public Input(string name, Entity.Variable value, bool reference)
         {
+            this.name = name;
             this.definition = value;
+            this.reference = reference;
         }
 
         public Entity.Variable Definition
         {
             get
             {
+                if (reference && IsLinked)
+                {
+                    return link.Instruction.GetOutput(link.Output).Definition;
+                }
                 return definition;
             }
         }
@@ -45,15 +61,17 @@ namespace CorePackage.Execution
         {
             get
             {
-                if (IsLinked)
-                    definition.Value = link.Value;
-                return definition.Value;
+                if (IsLinked && !reference)
+                {
+                    Definition.Value = link.Value;
+                }
+                return Definition.Value;
             }
             set
             {
                 if (IsLinked)
                     throw new InvalidOperationException("You cant set value of a linked input");
-                definition.Value = value;
+                Definition.Value = value;
             }
         }
         
@@ -94,6 +112,17 @@ namespace CorePackage.Execution
         public void Unlink()
         {
             link = null;
+        }
+
+        /// <summary>
+        /// Getter for name
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
         }
     }
 }

@@ -165,7 +165,7 @@ namespace TestCommand
             {
                 FunctionID = setFunction.EntityID,
                 ToCreate = InstructionFactory.INSTRUCTION_ID.SET_ATTRIBUTES,
-                Arguments = new List<uint> { thisParam.ThisParamID }
+                Arguments = new List<uint> { objDeclared.EntityID }
             }, out setattr));
 
             //link each attributes

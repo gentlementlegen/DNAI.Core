@@ -181,7 +181,8 @@ namespace CoreTest.TestEntities
             uint splitRes = addOp.addInstruction(new CorePackage.Execution.GetAttributes(type));
             addOp.LinkInstructionData(getRes, "reference", splitRes, "this");
 
-            uint setResult = addOp.addInstruction(new CorePackage.Execution.SetAttribute(addOp.GetReturn(CorePackage.Global.Operator.Result)));
+            uint setResult = addOp.addInstruction(new CorePackage.Execution.SetAttribute(type));
+            addOp.LinkInstructionData(getRes, "reference", setResult, "this");
             addOp.LinkInstructionData(addX, CorePackage.Global.Operator.Result, setResult, "x");
             addOp.LinkInstructionData(addY, CorePackage.Global.Operator.Result, setResult, "y");
             addOp.LinkInstructionData(addZ, CorePackage.Global.Operator.Result, setResult, "z");

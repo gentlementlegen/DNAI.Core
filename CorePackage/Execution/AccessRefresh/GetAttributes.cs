@@ -13,7 +13,7 @@ namespace CorePackage.Execution
 
         public GetAttributes(Entity.Type.ObjectType typetosplit) : base()
         {
-            AddInput("this", new Entity.Variable(typetosplit));
+            AddInput("this", new Entity.Variable(typetosplit), true);
             this._stored = typetosplit;
             foreach (KeyValuePair<string, IDefinition> attr in typetosplit.GetAttributes())
             {

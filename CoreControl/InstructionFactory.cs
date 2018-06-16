@@ -340,7 +340,7 @@ namespace CoreControl
             {
                 INSTRUCTION_ID.SET_ATTRIBUTES, (List<IDefinition> args) =>
                 {
-                    return new SetAttribute((Variable)args[0]);
+                    return new SetAttribute((ObjectType)args[0]);
                 }
             }
         };

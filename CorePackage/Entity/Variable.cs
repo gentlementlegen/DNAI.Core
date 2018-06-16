@@ -20,7 +20,7 @@ namespace CorePackage.Entity
         /// Represents a variable value
         /// </summary>
         private dynamic value = null;
-
+        
         /// <summary>
         /// Basic default construction which is needed by factory
         /// </summary>
