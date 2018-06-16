@@ -87,26 +87,37 @@ namespace CoreControl
         {
             //global context is in 0
             AddEntity(new CorePackage.Entity.Context());
-            
+            CorePackage.Global.IDeclarator root = GetDeclaratorOf(0);
+
             //boolean type is in 1
             AddEntity(CorePackage.Entity.Type.Scalar.Boolean);
-            GetDeclaratorOf(0).Declare(CorePackage.Entity.Type.Scalar.Boolean, "Bool", CorePackage.Global.AccessMode.EXTERNAL);
+            CorePackage.Entity.Type.Scalar.Boolean.Parent = root;
+            CorePackage.Entity.Type.Scalar.Boolean.Name = "Bool";
+            root.Declare(CorePackage.Entity.Type.Scalar.Boolean, "Bool", CorePackage.Global.AccessMode.EXTERNAL);
 
             //integer type is in 2
             AddEntity(CorePackage.Entity.Type.Scalar.Integer);
-            GetDeclaratorOf(0).Declare(CorePackage.Entity.Type.Scalar.Integer, "Integer", CorePackage.Global.AccessMode.EXTERNAL);
+            CorePackage.Entity.Type.Scalar.Integer.Parent = root;
+            CorePackage.Entity.Type.Scalar.Integer.Name = "Integer";
+            root.Declare(CorePackage.Entity.Type.Scalar.Integer, "Integer", CorePackage.Global.AccessMode.EXTERNAL);
 
             //floating type is in 3
             AddEntity(CorePackage.Entity.Type.Scalar.Floating);
-            GetDeclaratorOf(0).Declare(CorePackage.Entity.Type.Scalar.Floating, "Floating", CorePackage.Global.AccessMode.EXTERNAL);
+            CorePackage.Entity.Type.Scalar.Floating.Parent = root;
+            CorePackage.Entity.Type.Scalar.Floating.Name = "Floating";
+            root.Declare(CorePackage.Entity.Type.Scalar.Floating, "Floating", CorePackage.Global.AccessMode.EXTERNAL);
 
             //character type is in 4
             AddEntity(CorePackage.Entity.Type.Scalar.Character);
-            GetDeclaratorOf(0).Declare(CorePackage.Entity.Type.Scalar.Character, "Character", CorePackage.Global.AccessMode.EXTERNAL);
+            CorePackage.Entity.Type.Scalar.Character.Parent = root;
+            CorePackage.Entity.Type.Scalar.Character.Name = "Character";
+            root.Declare(CorePackage.Entity.Type.Scalar.Character, "Character", CorePackage.Global.AccessMode.EXTERNAL);
 
             //string type is in 5
             AddEntity(CorePackage.Entity.Type.Scalar.String);
-            GetDeclaratorOf(0).Declare(CorePackage.Entity.Type.Scalar.String, "String", CorePackage.Global.AccessMode.EXTERNAL);
+            CorePackage.Entity.Type.Scalar.String.Parent = root;
+            CorePackage.Entity.Type.Scalar.String.Name = "String";
+            root.Declare(CorePackage.Entity.Type.Scalar.String, "String", CorePackage.Global.AccessMode.EXTERNAL);
         }
 
         /// <summary>
@@ -266,7 +277,11 @@ namespace CoreControl
         public UInt32 Declare<Entity>(UInt32 containerID, string name, CorePackage.Global.AccessMode visibility)
             where Entity : CorePackage.Global.IDefinition
         {
-            GetDeclaratorOf(containerID).Declare(Create<Entity>(), name, visibility);
+            Entity todecl = Create<Entity>();
+
+            todecl.Name = name;
+            todecl.Parent = GetDeclaratorOf(containerID);
+            todecl.Parent.Declare(todecl, name, visibility);
             return LastID;
         }
 

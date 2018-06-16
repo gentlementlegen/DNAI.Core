@@ -24,13 +24,38 @@ namespace CorePackage.Entity.Type
         private Declarator attributes = new Declarator(new List<System.Type> { typeof(DataType) });
 
         private Dictionary<Operator.Name, Function> overloadedOperators = new Dictionary<Operator.Name, Function>();
-
+        
         /// <summary>
         /// Basic default constructor which is necessary for factory
         /// </summary>
         public ObjectType()
         {
 
+        }
+
+        /// <summary>
+        /// Checks if there is an attribute of the same type in this object
+        /// </summary>
+        /// <param name="type">Type to check</param>
+        /// <param name="recursive">Check recursively in ObjectType</param>
+        public bool HasAttributeOfType(DataType type, bool recursive = false)
+        {
+            foreach (KeyValuePair<String, IDefinition> currAttr in attributes.GetEntities())
+            {
+                if (currAttr.Value == type)
+                    return true;
+
+                if (recursive)
+                {
+                    ObjectType attrType = currAttr.Value as ObjectType;
+
+                    if (attrType != null && attrType.HasAttributeOfType(type, recursive))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
                 
         /// <summary>
@@ -41,6 +66,18 @@ namespace CorePackage.Entity.Type
         /// <param name="visibility">Visibility of the attribute (INTERNAL, EXTERNAL)</param>
         public void AddAttribute(string name, DataType attrType, Global.AccessMode visibility)
         {
+            if (attrType == this)
+            {
+                throw new InvalidOperationException("Cannot set an attribute of the same type");
+            }
+
+            ObjectType atType = attrType as ObjectType;
+
+            if (atType != null && atType.HasAttributeOfType(this, true))
+            {
+                throw new InvalidOperationException("Circular reference detected: cannot add an attribute of type " + attrType.Name + " in " + Name);
+            }
+
             attributes.Declare(attrType, name, visibility);
         }
 
@@ -84,7 +121,7 @@ namespace CorePackage.Entity.Type
             func.SetVariableAs("this", Function.VariableRole.PARAMETER);
             return toret;
         }
-
+        
         /// <see cref="DataType.Instantiate"/>
         public override dynamic Instantiate()
         {

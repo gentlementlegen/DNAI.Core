@@ -72,9 +72,7 @@ namespace CorePackage.Global
                 throw new InvalidOperationException("You cannot declare " + entity.GetType().ToString() + " in this container");
 
             defined[name] = new Declaration { definition = entity, visibility = visibility };
-
-            entity.Name = name;
-
+            
             return entity;
         }
 
