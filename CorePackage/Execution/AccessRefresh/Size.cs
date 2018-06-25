@@ -6,7 +6,7 @@ namespace CorePackage.Execution
     /// <summary>
     /// Retrieves the size of a collection.
     /// </summary>
-    public class Size : ExecutionRefreshInstruction
+    public class Size : AccessRefreshInstruction
     {
         /// <summary>
         /// Type contained in the list
@@ -29,10 +29,12 @@ namespace CorePackage.Execution
         /// <summary>
         /// Basic default constructor that add a list 'array' input and an integer 'count' output
         /// </summary>
-        public Size() : base()
+        public Size(DataType type = null) : base()
         {
             AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)));
             AddOutput("count", new Variable(Entity.Type.Scalar.Integer));
+            if (type != null)
+                ContainerType = type;
         }
 
         /// <summary>

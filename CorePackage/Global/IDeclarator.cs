@@ -46,6 +46,13 @@ namespace CorePackage.Global
         IDefinition Find(string name, AccessMode visibility);
 
         /// <summary>
+        /// Allow to find an entity from it's name
+        /// </summary>
+        /// <param name="name">Name of the entity to find</param>
+        /// <returns>Found entity</returns>
+        IDefinition Find(string name);
+
+        /// <summary>
         /// Rename a entity in the declarator
         /// </summary>
         /// <param name="lastName">Current declaration name of the entity</param>

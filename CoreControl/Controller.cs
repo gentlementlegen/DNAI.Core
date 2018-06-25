@@ -282,11 +282,11 @@ namespace CoreControl
         /// <param name="funcname">Name of the method to set as member</param>
         /// <param name="visibility">Visibility of the method to add</param>
         /// <returns>Identifier of the 'this' parameter added</returns>
-        public UInt32 SetClassFunctionAsMember(UInt32 classID, string funcname, EntityFactory.VISIBILITY visibility)
+        public UInt32 SetClassFunctionAsMember(UInt32 classID, string funcname)
         {
             CorePackage.Entity.Type.ObjectType objtype = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID);
 
-            entity_factory.AddEntity(objtype.SetFunctionAsMember(funcname, (CorePackage.Global.AccessMode)visibility));
+            entity_factory.AddEntity(objtype.SetFunctionAsMember(funcname));
 
             return entity_factory.LastID;
         }

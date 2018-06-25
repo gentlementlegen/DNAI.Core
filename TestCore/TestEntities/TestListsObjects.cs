@@ -90,7 +90,7 @@ namespace CoreTest.TestEntities
             
             CorePackage.Entity.Function getAttrSum = new CorePackage.Entity.Function();
             type.Declare(getAttrSum, "getAttrSum", CorePackage.Global.AccessMode.EXTERNAL);
-            type.SetFunctionAsMember("getAttrSum", CorePackage.Global.AccessMode.EXTERNAL);
+            type.SetFunctionAsMember("getAttrSum");
 
             CorePackage.Entity.Variable res = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer);
             getAttrSum.Declare(res, "res", CorePackage.Global.AccessMode.EXTERNAL);
@@ -138,7 +138,7 @@ namespace CoreTest.TestEntities
             CorePackage.Entity.Function addOp = (CorePackage.Entity.Function)type.Declare(new CorePackage.Entity.Function(), "Add", CorePackage.Global.AccessMode.EXTERNAL);
 
             // Object Add(Object this, Objet RightOperand);
-            type.SetFunctionAsMember("Add", CorePackage.Global.AccessMode.EXTERNAL);
+            type.SetFunctionAsMember("Add");
             addOp.Declare(new CorePackage.Entity.Variable(type), CorePackage.Global.Operator.Right, CorePackage.Global.AccessMode.EXTERNAL);
             addOp.SetVariableAs(CorePackage.Global.Operator.Right, CorePackage.Entity.Function.VariableRole.PARAMETER);
             addOp.Declare(new CorePackage.Entity.Variable(type), CorePackage.Global.Operator.Result, CorePackage.Global.AccessMode.EXTERNAL);

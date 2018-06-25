@@ -110,12 +110,12 @@ namespace CorePackage.Entity.Type
             attributes.Rename(lastName, newName);
         }
 
-        public Variable SetFunctionAsMember(string name, Global.AccessMode visibility)
+        public Variable SetFunctionAsMember(string name)
         {
-            Function func = (Function)Find(name, visibility);
+            Function func = (Function)Find(name);
 
             if (func == null)
-                throw new NotFoundException("No such function named \"" + name + "\" with visibility " + visibility.ToString());
+                throw new NotFoundException("No such function named \"" + name + "\"");
             
             Variable toret = (Variable)func.Declare(new Variable(this), "this", AccessMode.EXTERNAL);
             func.SetVariableAs("this", Function.VariableRole.PARAMETER);
@@ -200,6 +200,12 @@ namespace CorePackage.Entity.Type
         public IDefinition Find(string name, AccessMode visibility)
         {
             return context.Find(name, visibility);
+        }
+
+        /// <see cref="IDeclarator.Find(string)"/>
+        public IDefinition Find(string name)
+        {
+            return context.Find(name);
         }
 
         ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>

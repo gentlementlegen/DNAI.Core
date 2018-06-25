@@ -27,11 +27,13 @@ namespace CorePackage.Execution
         /// <summary>
         /// The Add node has two inputs : the collection and the element to add.
         /// </summary>
-        public Append() : base()
+        public Append(DataType type = null) : base()
         {
             AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)));
             AddInput("element", new Variable(Entity.Type.Scalar.Integer));
             AddOutput("count", new Variable(Entity.Type.Scalar.Integer));
+            if (type != null)
+                ContainerType = type;
         }
 
         /// <summary>

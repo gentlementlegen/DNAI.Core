@@ -10,7 +10,7 @@ namespace CorePackage.Execution
         /// <summary>
         /// Default constructor which will add an integer 'index' input
         /// </summary>
-        public Insert()
+        public Insert(DataType type = null) : base(type)
         {
             AddInput("index", new Variable(Entity.Type.Scalar.Integer));
         }

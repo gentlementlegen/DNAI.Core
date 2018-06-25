@@ -54,7 +54,12 @@ namespace CoreControl
             SIZE,
             FOREACH,
             GET_ATTRIBUTES,
-            SET_ATTRIBUTES
+            SET_ATTRIBUTES,
+            BREAK,
+            CONTINUE,
+            CLEAR,
+            FILL,
+            SET_VALUE_AT
         };
 
         /// <summary>
@@ -90,14 +95,19 @@ namespace CoreControl
             { INSTRUCTION_ID.FUNCTION_CALL, 1 },
             { INSTRUCTION_ID.IF, 0 },
             { INSTRUCTION_ID.WHILE, 0 },
-            { INSTRUCTION_ID.APPEND, 0 },
-            { INSTRUCTION_ID.INSERT, 0 },
-            { INSTRUCTION_ID.REMOVE, 0 },
-            { INSTRUCTION_ID.REMOVE_INDEX, 0 },
-            { INSTRUCTION_ID.SIZE, 0 },
+            { INSTRUCTION_ID.APPEND, 1 },
+            { INSTRUCTION_ID.INSERT, 1 },
+            { INSTRUCTION_ID.REMOVE, 1 },
+            { INSTRUCTION_ID.REMOVE_INDEX, 1 },
+            { INSTRUCTION_ID.SIZE, 1 },
             { INSTRUCTION_ID.FOREACH, 1 },
             { INSTRUCTION_ID.GET_ATTRIBUTES, 1 },
-            { INSTRUCTION_ID.SET_ATTRIBUTES, 1 }
+            { INSTRUCTION_ID.SET_ATTRIBUTES, 1 },
+            { INSTRUCTION_ID.BREAK, 0 },
+            { INSTRUCTION_ID.CONTINUE, 0 },
+            { INSTRUCTION_ID.CLEAR, 1 },
+            { INSTRUCTION_ID.FILL, 1 },
+            { INSTRUCTION_ID.SET_VALUE_AT, 1 }
         };
 
         /// <summary>
@@ -298,31 +308,31 @@ namespace CoreControl
             {
                 INSTRUCTION_ID.APPEND, (List<IDefinition> args) =>
                 {
-                    return new Append();
+                    return new Append((DataType)args[0]);
                 }
             },
             {
                 INSTRUCTION_ID.INSERT, (List<IDefinition> args) =>
                 {
-                    return new Insert();
+                    return new Insert((DataType)args[0]);
                 }
             },
             {
                 INSTRUCTION_ID.REMOVE, (List<IDefinition> args) =>
                 {
-                    return new Remove();
+                    return new Remove((DataType)args[0]);
                 }
             },
             {
                 INSTRUCTION_ID.REMOVE_INDEX, (List<IDefinition> args) =>
                 {
-                    return new RemoveIndex();
+                    return new RemoveIndex((DataType)args[0]);
                 }
             },
             {
                 INSTRUCTION_ID.SIZE, (List<IDefinition> args) =>
                 {
-                    return new Size();
+                    return new Size((DataType)args[0]);
                 }
             },
             {
@@ -341,6 +351,36 @@ namespace CoreControl
                 INSTRUCTION_ID.SET_ATTRIBUTES, (List<IDefinition> args) =>
                 {
                     return new SetAttribute((ObjectType)args[0]);
+                }
+            },
+            {
+                INSTRUCTION_ID.BREAK, (List<IDefinition> args) =>
+                {
+                    return new Break();
+                }
+            },
+            {
+                INSTRUCTION_ID.CONTINUE, (List<IDefinition> args) =>
+                {
+                    return new Continue();
+                }
+            },
+            {
+                INSTRUCTION_ID.CLEAR, (List<IDefinition> args) =>
+                {
+                    return new Clear((DataType)args[0]);
+                }
+            },
+            {
+                INSTRUCTION_ID.FILL, (List<IDefinition> args) =>
+                {
+                    return new Fill((DataType)args[0]);
+                }
+            },
+            {
+                INSTRUCTION_ID.SET_VALUE_AT, (List<IDefinition> args) =>
+                {
+                    return new SetValueAt((DataType)args[0]);
                 }
             }
         };

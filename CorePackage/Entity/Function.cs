@@ -218,6 +218,16 @@ namespace CorePackage.Entity
 
                 Execution.ExecutionRefreshInstruction[] nexts = toexecute.GetNextInstructions();
 
+                if (nexts.Count() == 0 && toexecute.GetType() == typeof(Execution.Break))
+                {
+                    Execution.ExecutionRefreshInstruction nxt = instructions.Peek();
+
+                    if (typeof(Execution.Loop).IsAssignableFrom(nxt.GetType())) //check if the next instruction is a loop instruction
+                    {
+                        instructions.Pop();
+                        instructions.Push(((Execution.Loop)nxt).GetDoneInstruction());
+                    }
+                }
                 foreach (Execution.ExecutionRefreshInstruction curr in nexts)
                 {
                     if (curr != null)
@@ -387,6 +397,12 @@ namespace CorePackage.Entity
         public IDefinition Find(string name, AccessMode visibility)
         {
             return scope.Find(name, visibility);
+        }
+
+        /// <see cref="IDeclarator.Find(string)"/>
+        public IDefinition Find(string name)
+        {
+            return scope.Find(name);
         }
 
         ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>

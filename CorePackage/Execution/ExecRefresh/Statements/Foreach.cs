@@ -4,22 +4,8 @@ using System.Collections.Generic;
 
 namespace CorePackage.Execution
 {
-    public class Foreach : Statement
+    public class Foreach : Loop
     {
-        /// <summary>
-        /// Represents the array of instructions to execute
-        /// </summary>
-        private readonly ExecutionRefreshInstruction[] nextToExecute = new ExecutionRefreshInstruction[2];
-
-        /// <summary>
-        /// Represents the outPoints indexes of the instruction
-        /// </summary>
-        private enum ForeachIndexes
-        {
-            OUTLOOP = 0,
-            INLOOP = 1,
-        }
-        
         private int _index;
         /// <summary>
         /// Current index in the collection.
@@ -71,7 +57,7 @@ namespace CorePackage.Execution
         /// <summary>
         /// Default constructor that initialises input "array" as array and set 2 outpoints capacity
         /// </summary>
-        public Foreach(DataType stored = null) : base(2)
+        public Foreach(DataType stored = null) : base()
         {
             AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)));
             AddOutput("index", new Variable(Entity.Type.Scalar.Integer));
@@ -93,36 +79,18 @@ namespace CorePackage.Execution
             {
                 _shouldReset = false;
                 nextToExecute[0] = this;
-                nextToExecute[1] = ExecutionPins[(int)ForeachIndexes.INLOOP];
+                nextToExecute[1] = GetDoInstruction();
                 Element = currList[Index];
                 Index++;
             }
             else //if foreach condition is false
             {
                 //you only have to execute the code "out loop"
-                nextToExecute[0] = ExecutionPins[(int)ForeachIndexes.OUTLOOP];
+                nextToExecute[0] = GetDoneInstruction();
                 nextToExecute[1] = null;
                 _shouldReset = true;
             }
             return this.nextToExecute;
-        }
-
-        /// <summary>
-        /// Link the instruction to the "IN LOOP" index
-        /// </summary>
-        /// <param name="next">Instruction to execute if while condition is true</param>
-        public void Do(ExecutionRefreshInstruction next)
-        {
-            this.LinkTo((int)ForeachIndexes.INLOOP, next);
-        }
-
-        /// <summary>
-        /// Link the instruction to the "OUT LOOP" index
-        /// </summary>
-        /// <param name="next">Instruction to execute if while condition is false</param>
-        public void Done(ExecutionRefreshInstruction next)
-        {
-            this.LinkTo((int)ForeachIndexes.OUTLOOP, next);
         }
     }
 }

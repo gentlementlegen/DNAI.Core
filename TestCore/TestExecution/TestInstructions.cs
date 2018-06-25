@@ -433,12 +433,14 @@ namespace CoreTest
             CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
 
             CorePackage.Execution.Size size = new CorePackage.Execution.Size();
+            CorePackage.Execution.Setter setIdx = new CorePackage.Execution.Setter(idx);
 
             size.ContainerType = CorePackage.Entity.Type.Scalar.Floating;
-
-            size.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
             
-            whileTester.setEntryPoint(whileTester.addInstruction(size));
+            size.GetInput("array").LinkTo(new CorePackage.Execution.Getter(l), "reference");
+            setIdx.GetInput("value").LinkTo(size, "count");
+            
+            whileTester.setEntryPoint(whileTester.addInstruction(setIdx));
             whileTester.Call();
             Assert.IsTrue(size.GetOutputValue("count") == 3);
         }

@@ -29,10 +29,12 @@ namespace CorePackage.Execution
         /// <summary>
         /// Default constructor which will add a list 'array' input and a boolean 'removed' output
         /// </summary>
-        protected ARemove() : base()
+        protected ARemove(DataType type = null) : base()
         {
             AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)));
             AddOutput("removed", new Variable(Entity.Type.Scalar.Boolean));
+            if (type != null)
+                ContainerType = type;
         }
 
         /// <summary>
