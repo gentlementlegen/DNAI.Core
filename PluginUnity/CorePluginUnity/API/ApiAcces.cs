@@ -18,7 +18,7 @@ namespace Core.Plugin.Unity.API
         public Token Token { get; private set; }
 
         // http://163.5.84.173/
-        private const string ApiAddress = "https://api.preprod.dnai.io/";
+        private const string ApiAddress = "https://api.dnai.io/";
 
         private const string FilePath = "users/";
         private const string SolutionPath = "download/";

@@ -37,6 +37,24 @@ namespace Core.Plugin.Unity.Drawing
                 drawHeaderCallback = DrawHeaderCallback,
                 drawElementCallback = DrawElementCallback
             };
+            FetchFiles();
+        }
+
+        private void FetchFiles()
+        {
+            _fileList.Clear();
+            UnityTask.Run(async () =>
+            {
+                try
+                {
+                    foreach (var file in await CloudFileWatcher.Access.GetFiles(SettingsDrawer.UserID))
+                        _fileList.Add(file);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError(ex.Message);
+                }
+            });
         }
 
         private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
@@ -73,18 +91,7 @@ namespace Core.Plugin.Unity.Drawing
             EditorGUI.LabelField(rect, "Online AIs");
             if (GUI.Button(new Rect(rect.xMax - 20, rect.y, 15, 15), "Refresh"))
             {
-                UnityTask.Run(async () =>
-                {
-                    try
-                    {
-                        foreach (var file in await CloudFileWatcher.Access.GetFiles(SettingsDrawer.UserID))
-                            _fileList.Add(file);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError(ex.Message);
-                    }
-                });
+                FetchFiles();
             }
         }
 
