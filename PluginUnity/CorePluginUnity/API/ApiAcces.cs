@@ -21,7 +21,7 @@ namespace Core.Plugin.Unity.API
         private const string ApiAddress = "https://api.preprod.dnai.io/";
 
         private const string FilePath = "users/";
-        private const string SolutionPath = "solution/";
+        private const string SolutionPath = "download/";
         private const string UserPath = "users/";
         private const string AuthenticationPath = "signin/";
 
@@ -87,11 +87,12 @@ namespace Core.Plugin.Unity.API
         /// </summary>
         internal void DownloadSolution()
         {
-            var url = ApiAddress;
-            url += SolutionPath;
-            url += UnityEngine.Application.platform == UnityEngine.RuntimePlatform.WindowsEditor ? "software-windows/" : "software-mac/";
+            var url = "https://dnai.io/download/";
+            //var url = ApiAddress;
+            //url += SolutionPath;
+            //url += UnityEngine.Application.platform == UnityEngine.RuntimePlatform.WindowsEditor ? "software-windows/" : "software-mac/";
             UnityEngine.Debug.Log("opening url => " + url);
-            UnityEngine.Application.OpenURL(SolutionPath + url);
+            UnityEngine.Application.OpenURL(url);
         }
 
         /// <summary>

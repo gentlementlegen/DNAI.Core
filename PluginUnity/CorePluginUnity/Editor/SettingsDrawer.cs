@@ -31,8 +31,44 @@ namespace Core.Plugin.Unity.Editor
             hideFlags = HideFlags.HideAndDontSave;
             LoadSettings();
             if (_settings.AutoLogin)
-                CloudFileWatcher.Access.SetAuthorization(_settings.Token);
-            _connectionStatus = !CloudFileWatcher.Access.Token.IsEmpty() ? "Connected." : "Disconnected.";
+            {
+                _connectionStatus = "";
+                UnityTask.Run(() => TryLogin());
+                //CloudFileWatcher.Access.SetAuthorization(_settings.Token);
+            }
+            //_connectionStatus = !CloudFileWatcher.Access.Token.IsEmpty() ? "Connected." : "Disconnected.";
+        }
+
+        /// <summary>
+        /// Tests a connexion to the server with the previous used token.
+        /// Since it's a not permanent connexion, we just try accessing files.
+        /// </summary>
+        private async void TryLogin()
+        {
+            //_connectionStatus = "";
+            //Token token = null;
+            System.Collections.Generic.List<API.File> list = null;
+            try
+            {
+                //token = await CloudFileWatcher.Access.GetToken(_settings.Username, _password);
+                list = await CloudFileWatcher.Access.GetFiles(SettingsDrawer.UserID);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex.InnerException.Message);
+            }
+            if (list != null)
+            {
+                //CloudFileWatcher.Access.SetAuthorization(_settings.Token);
+                //_connectionStatus = "Connected.";
+                SetConnected(_settings.Token);
+            }
+            else
+            {
+                //_connectionStatus = "Disconnected.";
+                SetDisconnected();
+            }
+            Repaint();
         }
 
         /// <summary>
@@ -92,11 +128,12 @@ namespace Core.Plugin.Unity.Editor
                     }
                     if (token.token != null)
                     {
-                        SetToken(token);
+                        SetConnected(token);
                     }
                     else
                     {
-                        _connectionStatus = "Wrong user/password.";
+                        //_connectionStatus = "Wrong user/password.";
+                        SetDisconnected("Wrong user/password.");
                     }
                     Repaint();
                 });
@@ -113,12 +150,20 @@ namespace Core.Plugin.Unity.Editor
         /// Sets a token for the current session.
         /// </summary>
         /// <param name="token"></param>
-        private void SetToken(Token token)
+        private void SetConnected(Token token)
         {
             _connectionStatus = "Connected.";
             CloudFileWatcher.Access.SetAuthorization(token);
             UserID = token.user_id;
             _settings.Token = token;
+        }
+
+        private void SetDisconnected(string message = "Disconnected.")
+        {
+            _connectionStatus = message;
+            CloudFileWatcher.Access.SetAuthorization(null);
+            UserID = "";
+            _settings.Token = null;
         }
     }
 
