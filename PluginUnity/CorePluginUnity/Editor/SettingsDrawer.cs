@@ -7,6 +7,11 @@ using UnityEngine;
 
 namespace Core.Plugin.Unity.Editor
 {
+    public class OnConnectionEvent : EventArgs
+    {
+        public bool IsSuccess;
+    }
+
     /// <summary>
     /// Handles the drawing of the settings widow for the DNAI editor.
     /// </summary>
@@ -15,6 +20,8 @@ namespace Core.Plugin.Unity.Editor
         public const string FileName = "DNAIEditorSettings.asset";
 
         public static string UserID { get; private set; }
+
+        public event EventHandler<OnConnectionEvent> OnConnection;
 
         private Settings _settings;
 
@@ -51,12 +58,13 @@ namespace Core.Plugin.Unity.Editor
             try
             {
                 //token = await CloudFileWatcher.Access.GetToken(_settings.Username, _password);
-                list = await CloudFileWatcher.Access.GetFiles(SettingsDrawer.UserID);
+                list = await CloudFileWatcher.Access.GetFiles(_settings.Token.user_id);
             }
             catch (Exception ex)
             {
                 Debug.LogError(ex.InnerException.Message);
             }
+            Debug.Log("Tried to login with id => " + _settings.Username + " token " + _settings.Token.user_id + " list is " + list);
             if (list != null)
             {
                 //CloudFileWatcher.Access.SetAuthorization(_settings.Token);
@@ -81,6 +89,7 @@ namespace Core.Plugin.Unity.Editor
                 _settings.Username = "";
                 _settings.Token = null;
             }
+            OnConnection = null;
         }
 
         /// <summary>
@@ -156,6 +165,7 @@ namespace Core.Plugin.Unity.Editor
             CloudFileWatcher.Access.SetAuthorization(token);
             UserID = token.user_id;
             _settings.Token = token;
+            OnConnection?.Invoke(this, new OnConnectionEvent { IsSuccess = true });
         }
 
         private void SetDisconnected(string message = "Disconnected.")
@@ -164,6 +174,7 @@ namespace Core.Plugin.Unity.Editor
             CloudFileWatcher.Access.SetAuthorization(null);
             UserID = "";
             _settings.Token = null;
+            OnConnection?.Invoke(this, new OnConnectionEvent { IsSuccess = false });
         }
     }
 

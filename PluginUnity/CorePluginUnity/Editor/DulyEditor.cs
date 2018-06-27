@@ -99,10 +99,13 @@ namespace Core.Plugin.Unity.Editor
 
             GUILayout.BeginHorizontal();
             DrawWindowTitle();
+
+            if (_settingsDrawer == null)
+                _settingsDrawer = CreateInstance<SettingsDrawer>();
             if (GUILayout.Button(_settingsContent))
             {
-                if (_settingsDrawer == null)
-                    _settingsDrawer = CreateInstance<SettingsDrawer>();
+                //if (_settingsDrawer == null)
+                    //_settingsDrawer = CreateInstance<SettingsDrawer>();
                 _settingsDrawer?.ShowAuxWindow();
             }
             GUILayout.EndHorizontal();
@@ -133,11 +136,16 @@ namespace Core.Plugin.Unity.Editor
             }
             if (_settingsDrawer == null)
             {
-                //_settingsDrawer = CreateInstance<SettingsDrawer>();
+                _settingsDrawer = CreateInstance<SettingsDrawer>();
             }
             if (_onlineScriptDrawer == null)
             {
                 _onlineScriptDrawer = new OnlineScriptDrawer();
+                _settingsDrawer.OnConnection += (t, e) =>
+                {
+                    if (e.IsSuccess)
+                        _onlineScriptDrawer.FetchFiles();
+                };
             }
         }
 

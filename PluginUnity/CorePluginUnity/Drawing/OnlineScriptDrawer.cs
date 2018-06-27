@@ -37,10 +37,13 @@ namespace Core.Plugin.Unity.Drawing
                 drawHeaderCallback = DrawHeaderCallback,
                 drawElementCallback = DrawElementCallback
             };
-            FetchFiles();
+            //FetchFiles();
         }
 
-        private void FetchFiles()
+        /// <summary>
+        /// Retrieves the files from the server.
+        /// </summary>
+        public void FetchFiles()
         {
             _fileList.Clear();
             UnityTask.Run(async () =>
@@ -50,9 +53,14 @@ namespace Core.Plugin.Unity.Drawing
                     foreach (var file in await CloudFileWatcher.Access.GetFiles(SettingsDrawer.UserID))
                         _fileList.Add(file);
                 }
+                catch (NullReferenceException)
+                {
+                    // Happens when the user is not connected
+                    Debug.LogWarning("Cannot fetch files: the DNAI user is not connected.");
+                }
                 catch (Exception ex)
                 {
-                    Debug.LogError(ex.Message);
+                    Debug.LogError("Error while fetching files: " + ex.Message);
                 }
             });
         }
