@@ -19,6 +19,8 @@ namespace Core.Plugin.Unity.Drawing
         private GUIContent iconToolbarPlus;
         private readonly List<API.File> _fileList = new List<API.File>();
 
+        private static Texture _refreshTexture;
+
         /// <summary>
         /// Gets the current size of the script list in pixels.
         /// </summary>
@@ -97,7 +99,11 @@ namespace Core.Plugin.Unity.Drawing
         private void DrawHeaderCallback(Rect rect)
         {
             EditorGUI.LabelField(rect, "Online AIs");
-            if (GUI.Button(new Rect(rect.xMax - 20, rect.y, 15, 15), "Refresh"))
+            if (_refreshTexture == null)
+                _refreshTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "refresh.png");
+            GUIContent gc = new GUIContent(_refreshTexture, "Refresh");
+            GUIStyle skin = new GUIStyle();
+            if (GUI.Button(new Rect(rect.xMax - 15, rect.y + 1, 14, 14), gc, skin))
             {
                 FetchFiles();
             }

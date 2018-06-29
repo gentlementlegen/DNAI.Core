@@ -141,7 +141,6 @@ namespace Core.Plugin.Unity.Drawing
             private void DrawHeaderInternal(Rect rect)
             {
                 Rect refreshRect = new Rect(rect.x + rect.xMax - 25f, rect.y, 15f, 15f);
-
                 EditorGUI.LabelField(rect, "IA List");
 
                 //subScriptList.list = scriptManager.iaList;

@@ -40,6 +40,7 @@ namespace Core.Plugin.Unity.Editor
         private SettingsDrawer _settingsDrawer;
         private static DulyEditor _window;
         private static Texture _texture;
+        private static Texture _buildTexture;
         private static GUIContent _settingsContent;
 
         private Vector2 scrollPos;
@@ -102,12 +103,12 @@ namespace Core.Plugin.Unity.Editor
 
             if (_settingsDrawer == null)
                 _settingsDrawer = CreateInstance<SettingsDrawer>();
-            if (GUILayout.Button(_settingsContent))
-            {
-                //if (_settingsDrawer == null)
-                    //_settingsDrawer = CreateInstance<SettingsDrawer>();
-                _settingsDrawer?.ShowAuxWindow();
-            }
+            //if (GUILayout.Button(_settingsContent))
+            //{
+            //    //if (_settingsDrawer == null)
+            //        //_settingsDrawer = CreateInstance<SettingsDrawer>();
+            //    _settingsDrawer?.ShowAuxWindow();
+            //}
             GUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
@@ -179,7 +180,14 @@ namespace Core.Plugin.Unity.Editor
         /// </summary>
         private void DrawBuildButton()
         {
-            if (GUILayout.Button("Build"))
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (_buildTexture == null)
+                _buildTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "build.png");
+            GUIContent ct = new GUIContent(_buildTexture, "Build scripts");
+
+            // Build scripts button
+            if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)))
             {
                 Context.UnityTask.Run(async () =>
                 {
@@ -223,6 +231,17 @@ namespace Core.Plugin.Unity.Editor
                     _isCompiling = false;
                 });
             }
+
+            // Settings button
+            if (GUILayout.Button(_settingsContent, GUILayout.Width(50), GUILayout.Height(50)))
+            {
+                //if (_settingsDrawer == null)
+                //_settingsDrawer = CreateInstance<SettingsDrawer>();
+                _settingsDrawer?.ShowAuxWindow();
+            }
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
 
             //if (_isCompiling)
             //{
