@@ -264,7 +264,7 @@ namespace Core.Plugin.Unity.Drawing
         }
 
         /// <summary>
-        /// Retrieves the saved setting of the wokspace.
+        /// Retrieves the saved setting of the workspace.
         /// </summary>
         private void LoadSettings()
         {
@@ -291,7 +291,15 @@ namespace Core.Plugin.Unity.Drawing
         {
             if (ShouldDraw)
             {
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+
+                GUILayout.BeginVertical(GUILayout.MaxWidth(Screen.width - 10));
                 rList.DoLayoutList();
+                GUILayout.EndVertical();
+
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
             }
         }
 

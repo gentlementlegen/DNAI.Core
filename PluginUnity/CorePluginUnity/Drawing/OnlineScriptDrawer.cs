@@ -118,7 +118,16 @@ namespace Core.Plugin.Unity.Drawing
                 iconToolbarPlus = EditorGUIUtility.IconContent("Toolbar Plus", "|Download script");
             if (preButton == null)
                 preButton = "RL FooterButton";
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            GUILayout.BeginVertical(GUILayout.MaxWidth(Screen.width - 10));
             _list.DoLayoutList();
+            GUILayout.EndVertical();
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
         }
     }
 }

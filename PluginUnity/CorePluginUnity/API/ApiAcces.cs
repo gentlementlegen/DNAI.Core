@@ -91,7 +91,7 @@ namespace Core.Plugin.Unity.API
             //var url = ApiAddress;
             //url += SolutionPath;
             //url += UnityEngine.Application.platform == UnityEngine.RuntimePlatform.WindowsEditor ? "software-windows/" : "software-mac/";
-            UnityEngine.Debug.Log("opening url => " + url);
+            //UnityEngine.Debug.Log("opening url => " + url);
             UnityEngine.Application.OpenURL(url);
         }
 
