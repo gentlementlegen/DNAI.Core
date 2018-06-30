@@ -1,10 +1,252 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.Events;
 
-namespace Core.Plugin.Unity.Editor.Conditions
+namespace Assets.Scripts.Test
 {
+    public class EventOutputChange : EventArgs
+    {
+        public object Value;
+        public Type ValueType;
+    }
+
+    public class DrawEvent : MonoBehaviour
+    {
+        //[HideInInspector]
+        //public string toto;
+
+        //[HideInInspector]
+        //public UnityEventOutputChange Output;
+
+        public List<ConditionItem> _cdtList = new List<ConditionItem>();// { new ConditionItem() { cdt = new IntCondition() } };
+    }
+
+    [CustomEditor(typeof(DrawEvent), true)]
+    public class DrawInEditor : Editor
+    {
+        private ReorderableList reorderableList;
+        private int _selectedIndex;
+
+        private DrawEvent listExample
+        {
+            get
+            {
+                return target as DrawEvent;
+            }
+        }
+
+        private void OnEnable()
+        {
+            reorderableList = new ReorderableList(listExample._cdtList, typeof(ConditionItem), true, true, true, true);
+
+            reorderableList.drawHeaderCallback += DrawHeader;
+            reorderableList.drawElementCallback += DrawElement;
+
+            reorderableList.onAddCallback += AddItem;
+            reorderableList.onRemoveCallback += RemoveItem;
+
+            reorderableList.elementHeightCallback += ElementHeightCallback;
+        }
+
+        private void OnDisable()
+        {
+            reorderableList.drawHeaderCallback -= DrawHeader;
+            reorderableList.drawElementCallback -= DrawElement;
+
+            reorderableList.onAddCallback -= AddItem;
+            reorderableList.onRemoveCallback -= RemoveItem;
+
+            reorderableList.elementHeightCallback -= ElementHeightCallback;
+        }
+
+        private void DrawHeader(Rect rect)
+        {
+            GUI.Label(rect, "Callbacks invoked when output changes");
+        }
+
+        private void DrawElement(Rect rect, int index, bool active, bool focused)
+        {
+            ConditionItem item = listExample._cdtList[index];
+            Rect newRect = rect;
+
+            //var s = serializedObject;
+            //s.Update();
+
+            EditorGUI.BeginChangeCheck();
+            newRect.y += 20;
+            newRect.x += 18;
+            //item.Test = EditorGUI.TextField(new Rect(rect.x + 18, rect.y, rect.width - 18, rect.height), ConditionItem.Outputs[0].Item1);
+
+            // Draws the condition item selector
+            item.SelectedIndex = EditorGUI.Popup(new Rect(rect.x + 18, rect.y + 2, rect.width - 18, 20), item.SelectedIndex, ConditionItem.Outputs);
+
+            newRect.y += item.Draw(newRect);
+
+            // Draws the callback zone to assign it
+            //SerializedObject s = new SerializedObject(listExample);
+            //var p = s.FindProperty("_cdtList").GetArrayElementAtIndex(index);
+            //EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p.FindPropertyRelative("OnOutputChanged"));
+            var p = serializedObject.FindProperty("_cdtList").GetArrayElementAtIndex(index);
+            var it = p.serializedObject.GetIterator();
+            p.Next(true);
+            p.Next(false);
+            p.Next(false);
+            //it.Next(true);
+            //it.Next(true);
+            //it.Next(true);
+            Debug.Log("p serialized => " + (p.GetEndProperty()));
+            //it.Next(true);
+            //it.Next(true);
+            Debug.Log("it name => " + it.propertyPath);
+            //CreateCachedEditor(p.objectReferenceValue, null, ref _editor);
+            //_editor.OnInspectorGUI();
+            //foreach (var toto in it)
+            //{
+            //    Debug.Log("item name => " + (toto as SerializedProperty).name);
+            //}
+            //EditorGUIUtility.LookLikeControls();
+            EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p);
+
+            //foreach (var x in p)
+            //{
+            //    break;
+            //    var u = x as SerializedProperty;
+            //    if (u.name == "size")
+            //    {
+            //        Debug.Log("found size " + u.intValue);
+            //        item.CallbackCount = u.intValue;
+            //    }
+            //}
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                //Debug.Log("end change check true");
+                EditorUtility.SetDirty(target);
+                Debug.Log("End change check lol");
+            }
+            //s.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private Editor _editor;
+
+        private void AddItem(ReorderableList list)
+        {
+            var item = new ConditionItem();
+            item.Initialize();
+            listExample._cdtList.Add(item);
+
+            EditorUtility.SetDirty(target);
+        }
+
+        private void RemoveItem(ReorderableList list)
+        {
+            listExample._cdtList.RemoveAt(list.index);
+
+            EditorUtility.SetDirty(target);
+        }
+
+        private float ElementHeightCallback(int idx)
+        {
+            return listExample._cdtList[idx].ItemSize;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            base.OnInspectorGUI();
+            reorderableList.DoLayoutList();
+            serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+    }
+
+    [Serializable]
+    public class UnityEventOutputChange : UnityEvent<EventOutputChange>
+    {
+    }
+
+    [CustomPropertyDrawer(typeof(ConditionItem))]
+    public class ConditionItemDraw : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            EditorGUI.LabelField(new Rect(0, 0, 10, 3), "toto !");
+        }
+    }
+
+    [System.Serializable]
+    public class ConditionItem
+    {
+        [SerializeField]
+        public ACondition cdt;
+
+        public string Test;
+
+        public static readonly string[] Outputs = new string[]
+        {
+            "No Output Selected",
+        };
+
+        public UnityEventOutputChange OnOutputChanged;
+        public int CallbackCount = 0;
+
+        private float drawSize = 0;
+
+        public float ItemSize
+        {
+            get { return 110f + ((CallbackCount > 1) ? (CallbackCount - 1) * 45f : 0f) + drawSize; }
+        }
+
+        [SerializeField]
+        private int _selectedIndex;
+
+        public int SelectedIndex
+        {
+            get { return _selectedIndex; }
+            set
+            {
+                if (value != _selectedIndex)
+                {
+                    _selectedIndex = value;
+                    cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
+                    //cdt.SetRefOutput(SelectedOutput[value]);
+                }
+            }
+        }
+
+        public string SelectedOutput { get { return Outputs[SelectedIndex]; } }
+
+        public void Initialize()
+        {
+            cdt = new ACondition();
+            cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
+        }
+
+        public float Draw(Rect rect)
+        {
+            //if (cdt != null)
+            //if (cdt.CurrentType == null)
+            //cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
+            if (_selectedIndex > 0)
+                drawSize = cdt.Draw(rect);
+            return drawSize;
+        }
+
+        public bool Evaluate<T>(T value)
+        {
+            //if (cdt != null)
+            if (_selectedIndex > 0)
+                return cdt.Evaluate(value);
+            return true;
+        }
+    }
+
+
+
+
     public delegate void CallbackFunc();
 
     /// <summary>
@@ -23,16 +265,6 @@ namespace Core.Plugin.Unity.Editor.Conditions
     [Serializable]
     public partial class ACondition : ISerializationCallbackReceiver
     {
-        private static readonly Dictionary<Type, Type> _matchingTypes = new Dictionary<Type, Type>
-        {
-            { typeof(int), typeof(ConditionEvaluator) },
-        };
-
-        [SerializeField]
-        private List<ConditionEvaluator> _matchingInstanceTypes = new List<ConditionEvaluator>
-        {
-            { new ConditionEvaluator() },
-        };
 
         [SerializeField]
         private int _selectedIdx;
@@ -45,15 +277,12 @@ namespace Core.Plugin.Unity.Editor.Conditions
         public enum CONDITION_NUMBER { NO_CONDITION, MORE, LESS, EQUAL, DIFFERENT }
         private string[] optionsNumber = new string[] { "No condition", "More than", "Less than", "Equal to", "Different than" };
         [SerializeField]
-        private ConditionInput<int> refOutputInt;
         #endregion
 
         #region String Options
-        [SerializeField]
         public enum CONDITION_STRING { NO_CONDITION, EQUAL, DIFFERENT }
         private string[] optionsString = new string[] { "No condition", "Equal to", "Different than" };
-        [SerializeField]
-        private ConditionInput<string> refOutputString;
+
         #endregion
 
         #region Input Serialized Values
@@ -76,8 +305,6 @@ namespace Core.Plugin.Unity.Editor.Conditions
         [SerializeField]
         private string _currentTypeStr;// = "System.Int64";
         //private Type _currentType;// = typeof(int);
-
-        private ConditionEvaluator _currentEvaluator;
 
         public ACondition()
         {
@@ -144,7 +371,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
                 }
                 return false;
             }));
-            _evaluateActions.Add(typeof(int).ToString(), new Func<object, bool> ((obj) => _evaluateActions[typeof(Int64).ToString()].Invoke(obj)));
+            _evaluateActions.Add(typeof(int).ToString(), new Func<object, bool>((obj) => _evaluateActions[typeof(Int64).ToString()].Invoke(obj)));
             _evaluateActions.Add(typeof(string).ToString(), new Func<object, bool>((obj) =>
             {
                 var ConditionString = (CONDITION_STRING)_selectedIdx;
@@ -204,51 +431,43 @@ namespace Core.Plugin.Unity.Editor.Conditions
         public void RegisterEnum(string enumType)
         {
             var enumName = enumType.Split(',')[0];
-            //Debug.Log("Registering enumeration type =======> " + enumType + " enum name => " + enumName);
+            Debug.Log("Registering enumeration type =======> " + enumType + " enum name => " + enumName);
             if (!_registeredTypes.Contains(enumType))
             {
                 _registeredTypes.Add(enumType);
             }
-
-            if (!_drawingActions.ContainsKey(enumName))
+            _drawingActions.Add(enumName, new DrawingAction((Rect rect, out int selectedIndex) =>
             {
-                _drawingActions.Add(enumName, new DrawingAction((Rect rect, out int selectedIndex) =>
-                {
-                    var t = Type.GetType(enumType);
-                    var mid = rect.width / 2f;
+                var t = Type.GetType(enumType);
+                var mid = rect.width / 2f;
                 //Debug.Log("enum");
                 selectedIndex = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsString);
-                    if (string.IsNullOrEmpty(InputEnum))
-                    {
-                        Debug.Log("Activator is receiving type " + t.ToString());
-                        InputEnum = Activator.CreateInstance(t).ToString();
-                    }
-                    if (_selectedIdx != 0)
-                        InputEnum = EditorGUI.EnumPopup(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), (Enum)Enum.Parse(t, InputEnum)).ToString();
-                    return 15;
-                }));
-            }
-
-            if (!_evaluateActions.ContainsKey(enumName))
-            {
-                _evaluateActions.Add(enumName, new Func<object, bool>((obj) =>
+                if (string.IsNullOrEmpty(InputEnum))
                 {
-                    var ConditionEnum = (CONDITION_STRING)_selectedIdx;
-                    Debug.Log("Evaluate enum : " + ConditionEnum + " Input=" + InputEnum + " Value=" + obj);
-                    switch (ConditionEnum)
-                    {
-                        case CONDITION_STRING.NO_CONDITION:
-                            return true;
+                    Debug.Log("Activator is receiving type " + t.ToString());
+                    InputEnum = Activator.CreateInstance(t).ToString();
+                }
+                if (_selectedIdx != 0)
+                    InputEnum = EditorGUI.EnumPopup(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), (Enum)Enum.Parse(t, InputEnum)).ToString();
+                return 15;
+            }));
+            _evaluateActions.Add(enumName, new Func<object, bool>((obj) =>
+            {
+                var ConditionEnum = (CONDITION_STRING)_selectedIdx;
+                Debug.Log("Evaluate enum : " + ConditionEnum + " Input=" + InputEnum + " Value=" + obj);
+                switch (ConditionEnum)
+                {
+                    case CONDITION_STRING.NO_CONDITION:
+                        return true;
 
-                        case CONDITION_STRING.EQUAL:
-                            return (string)obj == InputEnum;
+                    case CONDITION_STRING.EQUAL:
+                        return (string)obj == InputEnum;
 
-                        case CONDITION_STRING.DIFFERENT:
-                            return (string)obj != InputEnum;
-                    }
-                    return false;
-                }));
-            }
+                    case CONDITION_STRING.DIFFERENT:
+                        return (string)obj != InputEnum;
+                }
+                return false;
+            }));
         }
 
         private T ConvertVariableType<T>(object input)
@@ -268,17 +487,6 @@ namespace Core.Plugin.Unity.Editor.Conditions
             _selectedIdx = 0;
         }
 
-        public void SetRefOutput(ConditionInput<int> output)
-        {
-            Debug.Log("Setting ref output : " + output);
-            refOutputInt = output;
-        }
-
-        public void SetRefOutput(ConditionInput<string> output)
-        {
-            refOutputString = output;
-        }
-
         /// <summary>
         /// Evaluates if the condition is satisfied.
         /// </summary>
@@ -290,32 +498,6 @@ namespace Core.Plugin.Unity.Editor.Conditions
             //Debug.Log("1. Evaluate with type => " + _currentType);
             Debug.Log("2. Evaluate with type => " + _evaluateActions[_currentTypeStr]);
             return _evaluateActions[_currentTypeStr].Invoke(val);
-        }
-
-        /// <summary>
-        /// Retrives a class instance corresponding to the input type given.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static ACondition GetConditionFromType(Type type)
-        {
-            return Activator.CreateInstance(_matchingTypes[type]) as ACondition;
-        }
-
-        /// <summary>
-        /// Evaluates a set of conditions, returning true if all of them are satisfied.
-        /// </summary>
-        /// <param name="cdts"></param>
-        /// <returns></returns>
-        public static bool EvaluateSet(IEnumerable<ACondition> cdts)
-        {
-            throw new NotImplementedException("Evaluate set is not supported.");
-            //foreach(var cdt in cdts)
-            //{
-            //    if (!cdt.Evaluate())
-            //        return false;
-            //}
-            //return true;
         }
 
         /// <summary>
@@ -334,22 +516,12 @@ namespace Core.Plugin.Unity.Editor.Conditions
             return 0;
         }
 
-        public void SetRefOutput<T>(ConditionInput<T> cdt)
-        {
-            _currentEvaluator.SetRefOutput(cdt);
-        }
-
         public void OnBeforeSerialize()
         {
         }
 
         public void OnAfterDeserialize()
         {
-            //Debug.Log("On after desserialize !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + _registeredTypes.Count);
-            foreach (var item in _registeredTypes)
-            {
-                RegisterEnum(item);
-            }
         }
     }
 }

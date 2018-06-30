@@ -23,7 +23,7 @@ namespace DNAI.<#=Namespace#>
 	}
 
 	[System.Serializable]
-    public class ConditionItem : ScriptableObject
+    public class ConditionItem /*: ScriptableObject*/
     {
 		[SerializeField]
         public ACondition cdt;
@@ -146,8 +146,8 @@ namespace DNAI.<#=Namespace#>
             ConditionItem item = listExample._cdtList[index];
 			Rect newRect = rect;
 
-			var s = new SerializedObject(item);
-			s.Update();
+			//var s = serializedObject;
+			//s.Update();
 
             EditorGUI.BeginChangeCheck();
 			newRect.y += 20;
@@ -161,11 +161,16 @@ namespace DNAI.<#=Namespace#>
 
 			// Draws the callback zone to assign it
 			//SerializedObject s = new SerializedObject(listExample);
-            //var p = s.FindProperty("_cdtList").GetArrayElementAtIndex(index);
+            var p = serializedObject.FindProperty("_cdtList").GetArrayElementAtIndex(index);
             //EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p.FindPropertyRelative("OnOutputChanged"));
-            var p = s.FindProperty("OnOutputChanged");
-			EditorGUIUtility.LookLikeControls();
+            //var p = serializedObject.FindProperty("OnOutputChanged");
+			//EditorGUIUtility.LookLikeControls();
 
+			Debug.Log("p is => " + p);
+            var it = p.serializedObject.GetIterator();
+            p.Next(true);
+            p.Next(false);
+            p.Next(false);
             EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p);
 
 			foreach (var x in p)
@@ -182,14 +187,15 @@ namespace DNAI.<#=Namespace#>
             {
 				//Debug.Log("end change check true");
                 EditorUtility.SetDirty(target);
-				Debug.Log("End change check");
+				Debug.Log("End change check !");
             }
-			s.ApplyModifiedPropertiesWithoutUndo();
+			//s.ApplyModifiedPropertiesWithoutUndo();
         }
 
         private void AddItem(ReorderableList list)
         {
-			var item = ScriptableObject.CreateInstance<ConditionItem>();
+			//var item = ScriptableObject.CreateInstance<ConditionItem>();
+			var item = new ConditionItem();
 			item.Initialize();
             listExample._cdtList.Add(item);
 
@@ -210,8 +216,10 @@ namespace DNAI.<#=Namespace#>
 
         public override void OnInspectorGUI()
         {
+			serializedObject.Update();
             base.OnInspectorGUI();
             reorderableList.DoLayoutList();
+			serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
     }
 
@@ -232,6 +240,7 @@ namespace DNAI.<#=Namespace#>
 	///</summary>
 	public class <#=ClassName#> : MonoBehaviour
 	{
+		[HideInInspector]
 	    public List<ConditionItem> _cdtList = new List<ConditionItem>();// { new ConditionItem() { cdt = new IntCondition() } };
 
 		//[Serializable]
