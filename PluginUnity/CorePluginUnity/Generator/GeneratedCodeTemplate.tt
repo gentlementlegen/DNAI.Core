@@ -180,6 +180,8 @@ namespace DNAI.<#=Namespace#>
 				{
 					Debug.Log("found size " + u.intValue);
 					item.CallbackCount = u.intValue;
+					Repaint();
+					break;
 				}
 			}
 
@@ -240,7 +242,7 @@ namespace DNAI.<#=Namespace#>
 	///</summary>
 	public class <#=ClassName#> : MonoBehaviour
 	{
-		[HideInInspector]
+		//[HideInInspector]
 	    public List<ConditionItem> _cdtList = new List<ConditionItem>();// { new ConditionItem() { cdt = new IntCondition() } };
 
 		//[Serializable]

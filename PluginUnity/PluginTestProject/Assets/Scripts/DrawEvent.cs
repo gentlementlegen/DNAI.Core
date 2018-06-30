@@ -20,7 +20,7 @@ namespace Assets.Scripts.Test
 
         //[HideInInspector]
         //public UnityEventOutputChange Output;
-
+        //[HideInInspector]
         public List<ConditionItem> _cdtList = new List<ConditionItem>();// { new ConditionItem() { cdt = new IntCondition() } };
     }
 
@@ -110,16 +110,31 @@ namespace Assets.Scripts.Test
             //EditorGUIUtility.LookLikeControls();
             EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p);
 
-            //foreach (var x in p)
-            //{
-            //    break;
-            //    var u = x as SerializedProperty;
-            //    if (u.name == "size")
-            //    {
-            //        Debug.Log("found size " + u.intValue);
-            //        item.CallbackCount = u.intValue;
-            //    }
-            //}
+            Debug.Log("p property >>>>>> " + p.GetEnumerator());
+            foreach (var field in p.GetType().GetFields(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance))
+            {
+                Debug.Log("Private fields => " + field.GetValue(p));
+                if (field.GetValue(p) is SerializedObject)
+                {
+                    var so = field.GetValue(p) as SerializedObject;
+                    foreach (var f in so.GetType().GetFields(System.Reflection.BindingFlags.NonPublic))
+                    {
+                        Debug.Log("Private fields => " + f.Name);
+                    }
+                }
+            }
+            foreach (var x in p)
+            {
+                var u = x as SerializedProperty;
+                Debug.Log("x ===== " + u.propertyPath);
+                if (u.name == "size")
+                {
+                    Debug.Log("found size " + u.intValue);
+                    item.CallbackCount = u.intValue;
+                    Repaint();
+                    break;
+                }
+            }
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -156,7 +171,7 @@ namespace Assets.Scripts.Test
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            base.OnInspectorGUI();
+            //base.OnInspectorGUI();
             reorderableList.DoLayoutList();
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
