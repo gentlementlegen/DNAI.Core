@@ -7,6 +7,11 @@ using UnityEngine;
 
 namespace Core.Plugin.Unity.Editor
 {
+    public class OnConnectionEvent : EventArgs
+    {
+        public bool IsSuccess;
+    }
+
     /// <summary>
     /// Handles the drawing of the settings widow for the DNAI editor.
     /// </summary>
@@ -15,6 +20,8 @@ namespace Core.Plugin.Unity.Editor
         public const string FileName = "DNAIEditorSettings.asset";
 
         public static string UserID { get; private set; }
+
+        public event EventHandler<OnConnectionEvent> OnConnection;
 
         private Settings _settings;
 
@@ -31,8 +38,45 @@ namespace Core.Plugin.Unity.Editor
             hideFlags = HideFlags.HideAndDontSave;
             LoadSettings();
             if (_settings.AutoLogin)
-                CloudFileWatcher.Access.SetAuthorization(_settings.Token);
-            _connectionStatus = !CloudFileWatcher.Access.Token.IsEmpty() ? "Connected." : "Disconnected.";
+            {
+                _connectionStatus = "";
+                UnityTask.Run(() => TryLogin());
+                //CloudFileWatcher.Access.SetAuthorization(_settings.Token);
+            }
+            //_connectionStatus = !CloudFileWatcher.Access.Token.IsEmpty() ? "Connected." : "Disconnected.";
+        }
+
+        /// <summary>
+        /// Tests a connexion to the server with the previous used token.
+        /// Since it's a not permanent connexion, we just try accessing files.
+        /// </summary>
+        private async void TryLogin()
+        {
+            //_connectionStatus = "";
+            //Token token = null;
+            System.Collections.Generic.List<API.File> list = null;
+            try
+            {
+                //token = await CloudFileWatcher.Access.GetToken(_settings.Username, _password);
+                list = await CloudFileWatcher.Access.GetFiles(_settings.Token.user_id);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex.InnerException.Message);
+            }
+            //Debug.Log("Tried to login with id => " + _settings.Username + " token " + _settings.Token.user_id + " list is " + list);
+            if (list != null)
+            {
+                //CloudFileWatcher.Access.SetAuthorization(_settings.Token);
+                //_connectionStatus = "Connected.";
+                SetConnected(_settings.Token);
+            }
+            else
+            {
+                //_connectionStatus = "Disconnected.";
+                SetDisconnected();
+            }
+            Repaint();
         }
 
         /// <summary>
@@ -45,6 +89,7 @@ namespace Core.Plugin.Unity.Editor
                 _settings.Username = "";
                 _settings.Token = null;
             }
+            OnConnection = null;
         }
 
         /// <summary>
@@ -92,11 +137,12 @@ namespace Core.Plugin.Unity.Editor
                     }
                     if (token.token != null)
                     {
-                        SetToken(token);
+                        SetConnected(token);
                     }
                     else
                     {
-                        _connectionStatus = "Wrong user/password.";
+                        //_connectionStatus = "Wrong user/password.";
+                        SetDisconnected("Wrong user/password.");
                     }
                     Repaint();
                 });
@@ -113,12 +159,22 @@ namespace Core.Plugin.Unity.Editor
         /// Sets a token for the current session.
         /// </summary>
         /// <param name="token"></param>
-        private void SetToken(Token token)
+        private void SetConnected(Token token)
         {
             _connectionStatus = "Connected.";
             CloudFileWatcher.Access.SetAuthorization(token);
             UserID = token.user_id;
             _settings.Token = token;
+            OnConnection?.Invoke(this, new OnConnectionEvent { IsSuccess = true });
+        }
+
+        private void SetDisconnected(string message = "Disconnected.")
+        {
+            _connectionStatus = message;
+            CloudFileWatcher.Access.SetAuthorization(null);
+            UserID = "";
+            _settings.Token = null;
+            OnConnection?.Invoke(this, new OnConnectionEvent { IsSuccess = false });
         }
     }
 

@@ -205,7 +205,7 @@ namespace Core.Plugin.Unity.API
         /// <param name="token"></param>
         internal void SetAuthorizationOAuth(Token token)
         {
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.token);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token?.token);
         }
 
         /// <summary>
