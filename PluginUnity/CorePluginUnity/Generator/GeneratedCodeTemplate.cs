@@ -77,7 +77,7 @@ namespace DNAI.");
             
             #line default
             #line hidden
-            this.Write("\",\r\n\t\t\t\t\"DNAI.MoreOrLess.COMPARISON enum\",\r\n\t\t\t");
+            this.Write("\",\r\n\t\t\t\t/*\"DNAI.MoreOrLess.COMPARISON enum\",*/\r\n\t\t\t");
             
             #line 39 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
@@ -214,29 +214,29 @@ namespace DNAI.");
                     "      //EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width " +
                     "- 18, 20), p.FindPropertyRelative(\"OnOutputChanged\"));\r\n            //var p = se" +
                     "rializedObject.FindProperty(\"OnOutputChanged\");\r\n\t\t\t//EditorGUIUtility.LookLikeC" +
-                    "ontrols();\r\n\r\n\t\t\tDebug.Log(\"p is => \" + p);\r\n            var it = p.serializedOb" +
-                    "ject.GetIterator();\r\n            p.Next(true);\r\n            p.Next(false);\r\n    " +
-                    "        p.Next(false);\r\n            EditorGUI.PropertyField(new Rect(rect.x + 18" +
-                    ", newRect.y + 5, rect.width - 18, 20), p);\r\n\r\n\t\t\titem.CallbackCount = item.OnOut" +
-                    "putChanged.GetPersistentEventCount();\r\n\t\t\t//foreach (var x in p)\r\n\t\t\t//{\r\n\t\t\t//\t" +
-                    "var u = x as SerializedProperty;\r\n\t\t\t//\tif (u.name == \"size\")\r\n\t\t\t//\t{\r\n\t\t\t//\t\tD" +
-                    "ebug.Log(\"found size \" + u.intValue);\r\n\t\t\t//\t\titem.CallbackCount = u.intValue;\r\n" +
-                    "\t\t\t//\t\tRepaint();\r\n\t\t\t//\t\tbreak;\r\n\t\t\t//\t}\r\n\t\t\t//}\r\n\r\n            if (EditorGUI.E" +
-                    "ndChangeCheck())\r\n            {\r\n\t\t\t\t//Debug.Log(\"end change check true\");\r\n    " +
-                    "            EditorUtility.SetDirty(target);\r\n\t\t\t\tDebug.Log(\"End change check !\")" +
-                    ";\r\n\t\t\t\tRepaint();\r\n            }\r\n\t\t\t//s.ApplyModifiedPropertiesWithoutUndo();\r\n" +
-                    "        }\r\n\r\n        private void AddItem(ReorderableList list)\r\n        {\r\n\t\t\t/" +
-                    "/var item = ScriptableObject.CreateInstance<ConditionItem>();\r\n\t\t\tvar item = new" +
-                    " ConditionItem();\r\n\t\t\titem.Initialize();\r\n            listExample._cdtList.Add(i" +
-                    "tem);\r\n\r\n            EditorUtility.SetDirty(target);\r\n        }\r\n\r\n        priva" +
-                    "te void RemoveItem(ReorderableList list)\r\n        {\r\n            listExample._cd" +
-                    "tList.RemoveAt(list.index);\r\n\r\n            EditorUtility.SetDirty(target);\r\n    " +
-                    "    }\r\n\t\t\r\n        private float ElementHeightCallback(int idx)\r\n        {\r\n    " +
-                    "        return listExample._cdtList[idx].ItemSize;\r\n        }\r\n\r\n        public " +
-                    "override void OnInspectorGUI()\r\n        {\r\n\t\t\tserializedObject.Update();\r\n      " +
-                    "      base.OnInspectorGUI();\r\n            reorderableList.DoLayoutList();\r\n\t\t\tse" +
-                    "rializedObject.ApplyModifiedPropertiesWithoutUndo();\r\n        }\r\n    }\r\n\r\n\tpubli" +
-                    "c class EventOutputChange : EventArgs\r\n\t{\r\n\t\tpublic ");
+                    "ontrols();\r\n\r\n\t\t\t//Debug.Log(\"p is => \" + p);\r\n            var it = p.serialized" +
+                    "Object.GetIterator();\r\n            p.Next(true);\r\n            p.Next(false);\r\n  " +
+                    "          p.Next(false);\r\n            EditorGUI.PropertyField(new Rect(rect.x + " +
+                    "18, newRect.y + 5, rect.width - 18, 20), p);\r\n\r\n\t\t\titem.CallbackCount = item.OnO" +
+                    "utputChanged.GetPersistentEventCount();\r\n\t\t\t//foreach (var x in p)\r\n\t\t\t//{\r\n\t\t\t/" +
+                    "/\tvar u = x as SerializedProperty;\r\n\t\t\t//\tif (u.name == \"size\")\r\n\t\t\t//\t{\r\n\t\t\t//\t" +
+                    "\tDebug.Log(\"found size \" + u.intValue);\r\n\t\t\t//\t\titem.CallbackCount = u.intValue;" +
+                    "\r\n\t\t\t//\t\tRepaint();\r\n\t\t\t//\t\tbreak;\r\n\t\t\t//\t}\r\n\t\t\t//}\r\n\r\n            if (EditorGUI" +
+                    ".EndChangeCheck())\r\n            {\r\n\t\t\t\t//Debug.Log(\"end change check true\");\r\n  " +
+                    "              EditorUtility.SetDirty(target);\r\n\t\t\t\t//Debug.Log(\"End change check" +
+                    " !\");\r\n\t\t\t\tRepaint();\r\n            }\r\n\t\t\t//s.ApplyModifiedPropertiesWithoutUndo(" +
+                    ");\r\n        }\r\n\r\n        private void AddItem(ReorderableList list)\r\n        {\r\n" +
+                    "\t\t\t//var item = ScriptableObject.CreateInstance<ConditionItem>();\r\n\t\t\tvar item =" +
+                    " new ConditionItem();\r\n\t\t\titem.Initialize();\r\n            listExample._cdtList.A" +
+                    "dd(item);\r\n\r\n            EditorUtility.SetDirty(target);\r\n        }\r\n\r\n        p" +
+                    "rivate void RemoveItem(ReorderableList list)\r\n        {\r\n            listExample" +
+                    "._cdtList.RemoveAt(list.index);\r\n\r\n            EditorUtility.SetDirty(target);\r\n" +
+                    "        }\r\n\t\t\r\n        private float ElementHeightCallback(int idx)\r\n        {\r\n" +
+                    "            return listExample._cdtList[idx].ItemSize;\r\n        }\r\n\r\n        pub" +
+                    "lic override void OnInspectorGUI()\r\n        {\r\n\t\t\tserializedObject.Update();\r\n  " +
+                    "          base.OnInspectorGUI();\r\n            reorderableList.DoLayoutList();\r\n\t" +
+                    "\t\tserializedObject.ApplyModifiedPropertiesWithoutUndo();\r\n        }\r\n    }\r\n\r\n\tp" +
+                    "ublic class EventOutputChange : EventArgs\r\n\t{\r\n\t\tpublic ");
             
             #line 232 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));

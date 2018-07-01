@@ -35,7 +35,7 @@ namespace DNAI.<#=Namespace#>
 			<# foreach (var item in Outputs)
 			{ #>
 				"<#=item#>",
-				"DNAI.MoreOrLess.COMPARISON enum",
+				/*"DNAI.MoreOrLess.COMPARISON enum",*/
 			<# } #>
         };
 
@@ -166,7 +166,7 @@ namespace DNAI.<#=Namespace#>
             //var p = serializedObject.FindProperty("OnOutputChanged");
 			//EditorGUIUtility.LookLikeControls();
 
-			Debug.Log("p is => " + p);
+			//Debug.Log("p is => " + p);
             var it = p.serializedObject.GetIterator();
             p.Next(true);
             p.Next(false);
@@ -190,7 +190,7 @@ namespace DNAI.<#=Namespace#>
             {
 				//Debug.Log("end change check true");
                 EditorUtility.SetDirty(target);
-				Debug.Log("End change check !");
+				//Debug.Log("End change check !");
 				Repaint();
             }
 			//s.ApplyModifiedPropertiesWithoutUndo();

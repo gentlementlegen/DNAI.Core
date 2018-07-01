@@ -153,9 +153,10 @@ namespace Core.Plugin.Unity.Editor
         /// <returns></returns>
         public Task CompileAsync()
         {
-            // This case happens when Unity ddeserializes the object.
+            // This case happens when Unity deserializes the object.
             // Since we don't want to slow down the ctor too much, it's better
             // to check it on Compile call
+            // TODO : Add interface for deserialization instead ? 
             if (_manager.FilePath == null && _filePath != null)
                 _manager.LoadCommandsFrom(_filePath);
             return Task.Run(() => _codeConverter.ConvertCode());

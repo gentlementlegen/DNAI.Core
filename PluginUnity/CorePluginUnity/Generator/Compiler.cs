@@ -1,4 +1,4 @@
-﻿//#define UNITY_ENGINE
+﻿#define UNITY_ENGINE
 
 using Core.Plugin.Unity.Editor;
 using Core.Plugin.Unity.Extensions;
