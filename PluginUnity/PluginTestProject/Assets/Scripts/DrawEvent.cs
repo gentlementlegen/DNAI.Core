@@ -123,18 +123,19 @@ namespace Assets.Scripts.Test
                     }
                 }
             }
-            foreach (var x in p)
-            {
-                var u = x as SerializedProperty;
-                Debug.Log("x ===== " + u.propertyPath);
-                if (u.name == "size")
-                {
-                    Debug.Log("found size " + u.intValue);
-                    item.CallbackCount = u.intValue;
-                    Repaint();
-                    break;
-                }
-            }
+            item.CallbackCount = item.OnOutputChanged.GetPersistentEventCount();
+            //foreach (var x in p)
+            //{
+            //    var u = x as SerializedProperty;
+            //    Debug.Log("x ===== " + u.propertyPath);
+            //    if (u.name == "size")
+            //    {
+            //        Debug.Log("found size " + u.intValue);
+            //        item.CallbackCount = u.intValue;
+            //        Repaint();
+            //        break;
+            //    }
+            //}
 
             if (EditorGUI.EndChangeCheck())
             {

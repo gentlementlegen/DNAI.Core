@@ -173,23 +173,25 @@ namespace DNAI.<#=Namespace#>
             p.Next(false);
             EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p);
 
-			foreach (var x in p)
-			{
-				var u = x as SerializedProperty;
-				if (u.name == "size")
-				{
-					Debug.Log("found size " + u.intValue);
-					item.CallbackCount = u.intValue;
-					Repaint();
-					break;
-				}
-			}
+			item.CallbackCount = item.OnOutputChanged.GetPersistentEventCount();
+			//foreach (var x in p)
+			//{
+			//	var u = x as SerializedProperty;
+			//	if (u.name == "size")
+			//	{
+			//		Debug.Log("found size " + u.intValue);
+			//		item.CallbackCount = u.intValue;
+			//		Repaint();
+			//		break;
+			//	}
+			//}
 
             if (EditorGUI.EndChangeCheck())
             {
 				//Debug.Log("end change check true");
                 EditorUtility.SetDirty(target);
 				Debug.Log("End change check !");
+				Repaint();
             }
 			//s.ApplyModifiedPropertiesWithoutUndo();
         }
@@ -242,7 +244,7 @@ namespace DNAI.<#=Namespace#>
 	///</summary>
 	public class <#=ClassName#> : MonoBehaviour
 	{
-		//[HideInInspector]
+		[HideInInspector]
 	    public List<ConditionItem> _cdtList = new List<ConditionItem>();// { new ConditionItem() { cdt = new IntCondition() } };
 
 		//[Serializable]

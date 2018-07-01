@@ -43,6 +43,7 @@ namespace Core.Plugin.Unity.Editor
         private static Texture _texture;
         private static Texture _buildTexture;
         private static Texture _settingsTexture;
+        private static Texture _logoTexture;
         private static GUIContent _settingsContent;
 
         private Vector2 scrollPos;
@@ -171,7 +172,10 @@ namespace Core.Plugin.Unity.Editor
         {
             GUILayout.FlexibleSpace();
             //GUILayout.Label("DNAI Editor", EditorStyles.largeLabel);
-            GUILayout.Label(_texture);
+            if (_logoTexture == null)
+                _logoTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "logo_color.png");
+
+            GUILayout.Label(_logoTexture);
             GUILayout.FlexibleSpace();
         }
 
