@@ -20,7 +20,7 @@ namespace CorePackage.Entity
         /// Represents a variable value
         /// </summary>
         private dynamic value = null;
-
+        
         /// <summary>
         /// Basic default construction which is needed by factory
         /// </summary>
@@ -37,8 +37,7 @@ namespace CorePackage.Entity
         public Variable(DataType type, dynamic value = null)
         {
             Type = type;
-            if (value != null)
-                Value = value;
+            if (value != null) Value = value;
         }
 
         /// <summary>
@@ -49,8 +48,7 @@ namespace CorePackage.Entity
             get { return type; }
             set {
                 type = value;
-                if (Type != null && Value == null)
-                    Value = type.Instantiate();
+                if (Type != null) Value = Type.Instantiate();
             }
         }
 
@@ -60,9 +58,19 @@ namespace CorePackage.Entity
         /// </summary>
         public dynamic Value
         {
-            get { return value; }
+            get
+            {
+                if (Type == null)
+                    throw new InvalidOperationException("Cannot get the value of a variable without a type");
+                return value;
+            }
             set
             {
+                if (type == null)
+                {
+                    throw new InvalidOperationException("Type haven't been set to variable yet");
+                }
+
                 if (type.IsValueOfType(value))
                 {
                     this.value = value;
@@ -74,8 +82,8 @@ namespace CorePackage.Entity
             }
         }
 
-        /// <see cref="Global.Definition.IsValid"/>
-        public bool IsValid()
+        /// <see cref="Global.IDefinition.IsValid"/>
+        public override bool IsValid()
         {
             return this.value != null && this.type != null && this.type.IsValueOfType(this.value);
         }

@@ -15,10 +15,9 @@ namespace CorePackage.Execution
         /// Constructor that asks for an enum to split
         /// </summary>
         /// <param name="to_split">Enum to split</param>
-        public EnumSplitter(Entity.Type.EnumType to_split) :
-            base(new Dictionary<string, Entity.Variable>(), to_split.Values)
+        public EnumSplitter(Entity.Type.EnumType to_split) : base()
         {
-
+            AddOutputs(to_split.Values);
         }
 
         /// <summary>

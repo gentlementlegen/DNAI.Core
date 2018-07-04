@@ -16,8 +16,7 @@ namespace CorePackage.Execution.Operators
         /// </summary>
         /// <param name="opType">Operand type</param>
         /// <param name="resType">Returned value type</param>
-        public Inverse(Entity.DataType opType, Entity.DataType resType) :
-            base(opType, delegate(Entity.Variable op) { return -(op.Value); }, resType)
+        public Inverse(Entity.DataType opType, Entity.DataType resType) : base(opType, (dynamic op) => -op, resType)
         {
 
         }

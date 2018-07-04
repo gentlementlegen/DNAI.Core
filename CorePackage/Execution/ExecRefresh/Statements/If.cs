@@ -28,17 +28,9 @@ namespace CorePackage.Execution
         /// <summary>
         /// Default constructor
         /// </summary>
-        public If():
-            base(
-                new Dictionary<string, Entity.Variable>
-                {
-                    { "condition", new Entity.Variable(Entity.Type.Scalar.Boolean, false) }
-                },
-                null,
-                2
-            )
+        public If(): base(2)
         {
-
+            AddInput("condition", new Entity.Variable(Entity.Type.Scalar.Boolean, false));
         }
 
         /// <summary>
@@ -47,7 +39,7 @@ namespace CorePackage.Execution
         /// <returns>The array nextInstructions with the first index set with the instruction to execute</returns>
         public override ExecutionRefreshInstruction[] GetNextInstructions()
         {
-            nextinstrution[0] = this.OutPoints[this.GetInput("condition").Value.definition.Value == true ? (int)ConditionIndexes.OnTrue : (int)ConditionIndexes.OnFalse];
+            nextinstrution[0] = this.ExecutionPins[GetInputValue("condition") ? (int)ConditionIndexes.OnTrue : (int)ConditionIndexes.OnFalse];
             return nextinstrution;
         }
 

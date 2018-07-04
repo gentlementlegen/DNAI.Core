@@ -26,26 +26,26 @@ namespace CoreTest.TestEntities
                 {
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", true);
-                        i.SetInputValue("RightOperand", true);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, true);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, true);
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", true);
-                        i.SetInputValue("RightOperand", false);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, true);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, false);
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", false);
-                        i.SetInputValue("RightOperand", true);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, false);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, true);
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", false);
-                        i.SetInputValue("RightOperand", false);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, false);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, false);
                         return true;
                     }
                 },
@@ -134,22 +134,22 @@ namespace CoreTest.TestEntities
                     //greater
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", 42);
-                        i.SetInputValue("RightOperand", -42);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, 42);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, -42);
                         return true;
                     },
                     //equal
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", 42);
-                        i.SetInputValue("RightOperand", 42);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, 42);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, 42);
                         return true;
                     },
                     //less
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", -42);
-                        i.SetInputValue("RightOperand", 42);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, -42);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, 42);
                         return true;
                     }
                 },
@@ -204,26 +204,26 @@ namespace CoreTest.TestEntities
                 {
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", 42);
-                        i.SetInputValue("RightOperand", -42);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, 42);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, -42);
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", 0);
-                        i.SetInputValue("RightOperand", 42);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, 0);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, 42);
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", 42);
-                        i.SetInputValue("RightOperand", 42);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, 42);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, 42);
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", -42);
-                        i.SetInputValue("RightOperand", -42);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, -42);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, -42);
                         return true;
                     }
                 },
@@ -345,20 +345,20 @@ namespace CoreTest.TestEntities
             {
                 (CorePackage.Execution.Instruction i) =>
                 {
-                    i.SetInputValue("LeftOperand", 3.14);
-                    i.SetInputValue("RightOperand", 4.2);
+                    i.SetInputValue(CorePackage.Global.Operator.Left, 3.14);
+                    i.SetInputValue(CorePackage.Global.Operator.Right, 4.2);
                     return true;
                 },
                 (CorePackage.Execution.Instruction i) =>
                 {
-                    i.SetInputValue("LeftOperand", 4.2);
-                    i.SetInputValue("RightOperand", 4.2);
+                    i.SetInputValue(CorePackage.Global.Operator.Left, 4.2);
+                    i.SetInputValue(CorePackage.Global.Operator.Right, 4.2);
                     return true;
                 },
                 (CorePackage.Execution.Instruction i) =>
                 {
-                    i.SetInputValue("LeftOperand", 4.2);
-                    i.SetInputValue("RightOperand", 3.14);
+                    i.SetInputValue(CorePackage.Global.Operator.Left, 4.2);
+                    i.SetInputValue(CorePackage.Global.Operator.Right, 3.14);
                     return true;
                 }
             },
@@ -407,26 +407,26 @@ namespace CoreTest.TestEntities
                 {
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", 3.14);
-                        i.SetInputValue("RightOperand", 4.2);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, 3.14);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, 4.2);
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", 0.0);
-                        i.SetInputValue("RightOperand", 4.2);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, 0.0);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, 4.2);
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", 3.14);
-                        i.SetInputValue("RightOperand", -4.2);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, 3.14);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, -4.2);
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", -3.14);
-                        i.SetInputValue("RightOperand", -4.2);
+                        i.SetInputValue(CorePackage.Global.Operator.Left, -3.14);
+                        i.SetInputValue(CorePackage.Global.Operator.Right, -4.2);
                         return true;
                     }
                 },
@@ -524,20 +524,20 @@ namespace CoreTest.TestEntities
                 {
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", 'A');
-                        i.SetInputValue("RightOperand", 'R');
+                        i.SetInputValue(CorePackage.Global.Operator.Left, 'A');
+                        i.SetInputValue(CorePackage.Global.Operator.Right, 'R');
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", 'A');
-                        i.SetInputValue("RightOperand", 'A');
+                        i.SetInputValue(CorePackage.Global.Operator.Left, 'A');
+                        i.SetInputValue(CorePackage.Global.Operator.Right, 'A');
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", 'R');
-                        i.SetInputValue("RightOperand", 'A');
+                        i.SetInputValue(CorePackage.Global.Operator.Left, 'R');
+                        i.SetInputValue(CorePackage.Global.Operator.Right, 'A');
                         return true;
                     }
                 },
@@ -589,20 +589,20 @@ namespace CoreTest.TestEntities
                 {
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", "duly");
-                        i.SetInputValue("RightOperand", "apero");
+                        i.SetInputValue(CorePackage.Global.Operator.Left, "duly");
+                        i.SetInputValue(CorePackage.Global.Operator.Right, "apero");
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", "duly");
-                        i.SetInputValue("RightOperand", "duly");
+                        i.SetInputValue(CorePackage.Global.Operator.Left, "duly");
+                        i.SetInputValue(CorePackage.Global.Operator.Right, "duly");
                         return true;
                     },
                     (CorePackage.Execution.Instruction i) =>
                     {
-                        i.SetInputValue("LeftOperand", "apero");
-                        i.SetInputValue("RightOperand", "duly");
+                        i.SetInputValue(CorePackage.Global.Operator.Left, "apero");
+                        i.SetInputValue(CorePackage.Global.Operator.Right, "duly");
                         return true;
                     }
                 },

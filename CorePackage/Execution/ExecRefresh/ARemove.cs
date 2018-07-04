@@ -21,7 +21,7 @@ namespace CorePackage.Execution
             get { return _containerType; }
             set
             {
-                GetInput("array").Value.definition.Type = new Entity.Type.ListType(value);
+                GetInput("array").Definition.Type = new Entity.Type.ListType(value);
                 _containerType = value;
             }
         }
@@ -29,23 +29,12 @@ namespace CorePackage.Execution
         /// <summary>
         /// Default constructor which will add a list 'array' input and a boolean 'removed' output
         /// </summary>
-        protected ARemove() : base(
-            new Dictionary<string, Variable>
-            {
-                {
-                    "array",
-                    new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer))
-                }
-            },
-            new Dictionary<string, Variable>
-            {
-                {
-                    "removed",
-                    new Variable(Entity.Type.Scalar.Boolean)
-                }
-            })
+        protected ARemove(DataType type = null) : base()
         {
-
+            AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)));
+            AddOutput("removed", new Variable(Entity.Type.Scalar.Boolean));
+            if (type != null)
+                ContainerType = type;
         }
 
         /// <summary>
@@ -53,7 +42,7 @@ namespace CorePackage.Execution
         /// </summary>
         public override void Execute()
         {
-            outputs["removed"].Value.definition.Value = RemoveElement();
+            SetOutputValue("removed", RemoveElement());
         }
 
         /// <summary>

@@ -5,35 +5,14 @@ namespace CorePackage.Execution
     /// <summary>
     /// While loop statement. Executes instruction until condition is completed.
     /// </summary>
-    public class While : Statement
-    {
-        /// <summary>
-        /// Represents the array of instructions to execute
-        /// </summary>
-        private ExecutionRefreshInstruction[] nextToExecute = new ExecutionRefreshInstruction[2];
-
-        /// <summary>
-        /// Enumeration that tells which index for which system
-        /// </summary>
-        private enum WhileIndexes
-        {
-            OUTLOOP = 0,
-            INLOOP = 1
-        }
-
+    public class While : Loop
+    {        
         /// <summary>
         /// Default constructor that initialises input "condition" as boolean and set 2 outpoints capacity
         /// </summary>
-        public While() :
-            base(
-                new Dictionary<string, Entity.Variable>
-                {
-                    { "condition", new Entity.Variable(Entity.Type.Scalar.Boolean) }
-                },
-                null,
-                2
-            )
+        public While() : base()
         {
+            AddInput("condition", new Entity.Variable(Entity.Type.Scalar.Boolean));
         }
 
         /// <see cref="ExecutionRefreshInstruction.GetNextInstructions"/>
@@ -46,33 +25,15 @@ namespace CorePackage.Execution
                 //
                 //order is reverse here because execution is performed with a stack
                 nextToExecute[0] = this;
-                nextToExecute[1] = this.OutPoints[(int)WhileIndexes.INLOOP];
+                nextToExecute[1] = GetDoInstruction();
             }
             else //if while condition is false
             {
                 //you only have to execute the code "out loop"
-                nextToExecute[0] = this.OutPoints[(int)WhileIndexes.OUTLOOP];
+                nextToExecute[0] = GetDoneInstruction();
                 nextToExecute[1] = null;
             }
             return this.nextToExecute;
-        }
-
-        /// <summary>
-        /// Link the instruction to the "IN LOOP" index
-        /// </summary>
-        /// <param name="next">Instruction to execute if while condition is true</param>
-        public void Do(ExecutionRefreshInstruction next)
-        {
-            this.LinkTo((int)WhileIndexes.INLOOP, next);
-        }
-
-        /// <summary>
-        /// Link the instruction to the "OUT LOOP" index
-        /// </summary>
-        /// <param name="next">Instruction to execute if while condition is false</param>
-        public void Done(ExecutionRefreshInstruction next)
-        {
-            this.LinkTo((int)WhileIndexes.OUTLOOP, next);
         }
     }
 }

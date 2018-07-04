@@ -42,7 +42,7 @@ namespace CorePackage.Entity.Type
             return Activator.CreateInstance(handledTypes.First());
         }
 
-        /// <see cref="Global.Definition.IsValid"/>
+        /// <see cref="Global.IDefinition.IsValid"/>
         public override bool IsValid()
         {
             return handledTypes.Count > 0;

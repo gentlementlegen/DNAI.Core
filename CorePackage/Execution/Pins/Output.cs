@@ -14,25 +14,37 @@ namespace CorePackage.Execution
         /// <summary>
         /// Reference a variable declaration as value
         /// </summary>
-        private Global.Declaration<Entity.Variable> value;
+        private Entity.Variable definition;
 
         /// <summary>
         /// Constructor that need the declaration to bind
         /// </summary>
         /// <param name="value">Variable declaration to bind</param>
-        public Output(Global.Declaration<Entity.Variable> value)
+        public Output(Entity.Variable definition)
         {
-            this.value = value;
+            this.definition = definition;
+        }
+
+        public Entity.Variable Definition
+        {
+            get
+            {
+                return definition;
+            }
         }
 
         /// <summary>
         /// Getter for the declaration
         /// </summary>
-        public Global.Declaration<Entity.Variable> Value
+        public dynamic Value
         {
             get
             {
-                return this.value;
+                return definition.Value;
+            }
+            set
+            {
+                definition.Value = value;
             }
         }
     }

@@ -17,6 +17,7 @@ using UnityEngine;
 // Unity Decompiled : https://github.com/MattRix/UnityDecompiled/blob/master/UnityEditor/UnityEditorInternal/ReorderableList.cs
 // Saving window state : https://answers.unity.com/questions/119978/how-do-i-have-an-editorwindow-save-its-data-inbetw.html
 // Serialization rules in Unity : https://blogs.unity3d.com/2012/10/25/unity-serialization/
+// Good doc on reorderable lists : http://va.lent.in/unity-make-your-lists-functional-with-reorderablelist/
 
 // TODO : L'idée ce serait de faire un système comme les unity events, ou on chargerait un script,
 // qui une fois chargé (avec des threads) afficherait les behaviours dispos
@@ -40,6 +41,9 @@ namespace Core.Plugin.Unity.Editor
         private SettingsDrawer _settingsDrawer;
         private static DulyEditor _window;
         private static Texture _texture;
+        private static Texture _buildTexture;
+        private static Texture _settingsTexture;
+        private static Texture _logoTexture;
         private static GUIContent _settingsContent;
 
         private Vector2 scrollPos;
@@ -99,12 +103,15 @@ namespace Core.Plugin.Unity.Editor
 
             GUILayout.BeginHorizontal();
             DrawWindowTitle();
-            if (GUILayout.Button(_settingsContent))
-            {
-                if (_settingsDrawer == null)
-                    _settingsDrawer = CreateInstance<SettingsDrawer>();
-                _settingsDrawer?.ShowAuxWindow();
-            }
+
+            if (_settingsDrawer == null)
+                _settingsDrawer = CreateInstance<SettingsDrawer>();
+            //if (GUILayout.Button(_settingsContent))
+            //{
+            //    //if (_settingsDrawer == null)
+            //        //_settingsDrawer = CreateInstance<SettingsDrawer>();
+            //    _settingsDrawer?.ShowAuxWindow();
+            //}
             GUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
@@ -133,11 +140,16 @@ namespace Core.Plugin.Unity.Editor
             }
             if (_settingsDrawer == null)
             {
-                //_settingsDrawer = CreateInstance<SettingsDrawer>();
+                _settingsDrawer = CreateInstance<SettingsDrawer>();
             }
             if (_onlineScriptDrawer == null)
             {
                 _onlineScriptDrawer = new OnlineScriptDrawer();
+                _settingsDrawer.OnConnection += (t, e) =>
+                {
+                    if (e.IsSuccess)
+                        _onlineScriptDrawer.FetchFiles();
+                };
             }
         }
 
@@ -159,7 +171,11 @@ namespace Core.Plugin.Unity.Editor
         private void DrawWindowTitle()
         {
             GUILayout.FlexibleSpace();
-            GUILayout.Label("DNAI Editor", EditorStyles.largeLabel);
+            //GUILayout.Label("DNAI Editor", EditorStyles.largeLabel);
+            if (_logoTexture == null)
+                _logoTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "logo_color.png");
+
+            GUILayout.Label(_logoTexture);
             GUILayout.FlexibleSpace();
         }
 
@@ -171,7 +187,14 @@ namespace Core.Plugin.Unity.Editor
         /// </summary>
         private void DrawBuildButton()
         {
-            if (GUILayout.Button("Build"))
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (_buildTexture == null)
+                _buildTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "build.png");
+            GUIContent ct = new GUIContent(_buildTexture, "Build");
+
+            // Build scripts button
+            if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)))
             {
                 Context.UnityTask.Run(async () =>
                 {
@@ -202,6 +225,10 @@ namespace Core.Plugin.Unity.Editor
                     {
                         Debug.LogError($"Could not find the DNAI file {ex.FileName}. Make sure it exists in the Scripts folder.");
                     }
+                    finally
+                    {
+                        EditorUtility.ClearProgressBar();
+                    }
                 }).ContinueWith((e) =>
                 {
                     if (e.IsFaulted)
@@ -211,6 +238,20 @@ namespace Core.Plugin.Unity.Editor
                     _isCompiling = false;
                 });
             }
+
+            // Settings button
+            if (_settingsTexture == null)
+                _settingsTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "settings.png");
+            ct = new GUIContent(_settingsTexture, "Settings");
+            if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)))
+            {
+                //if (_settingsDrawer == null)
+                //_settingsDrawer = CreateInstance<SettingsDrawer>();
+                _settingsDrawer?.ShowAuxWindow();
+            }
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
 
             //if (_isCompiling)
             //{

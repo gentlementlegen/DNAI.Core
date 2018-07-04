@@ -15,15 +15,9 @@ namespace CorePackage.Execution
         /// Constructor that asks for the variable definition to get
         /// </summary>
         /// <param name="toget">Variable definition to get as output</param>
-        public Getter(Entity.Variable toget):
-            base(
-                null,
-                new Dictionary<string, Entity.Variable>
-                {
-                    { "reference", toget }
-                })
+        public Getter(Entity.Variable toget): base()
         {
-
+            AddOutput("reference", toget);
         }
 
         /// <summary>

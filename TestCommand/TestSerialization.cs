@@ -1,4 +1,4 @@
-﻿using CoreCommand.Command;
+﻿using CoreCommand;
 using CoreControl;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -17,7 +17,7 @@ namespace TestCommand
         [TestMethod]
         public void SerializeParameters()
         {
-            //Console.Write(ProtoBuf.Serializer.GetProto<CoreCommand.ProtoData>(ProtoBuf.Meta.ProtoSyntax.Proto3));
+            //Console.Write(ProtoBuf.Serializer.GetProto<CoreCoreCommand.Command.ProtoData>(ProtoBuf.Meta.ProtoSyntax.Proto3));
 
             //Controller controller = new Controller();
 
@@ -25,22 +25,22 @@ namespace TestCommand
 
             watcher.AddCommand(() =>
             {
-                return new Declare { ContainerID = 0, EntityType = EntityFactory.ENTITY.CONTEXT, Name = "ctx", Visibility = EntityFactory.VISIBILITY.PUBLIC };
+                return new CoreCommand.Command.Declarator.Declare { ContainerID = 0, EntityType = EntityFactory.ENTITY.CONTEXT, Name = "ctx", Visibility = EntityFactory.VISIBILITY.PUBLIC };
             });
 
             watcher.AddCommand(() =>
             {
-                return new Declare { ContainerID = 0, EntityType = EntityFactory.ENTITY.ENUM_TYPE, Name = "myEnum", Visibility = EntityFactory.VISIBILITY.PRIVATE };
+                return new CoreCommand.Command.Declarator.Declare { ContainerID = 0, EntityType = EntityFactory.ENTITY.ENUM_TYPE, Name = "myEnum", Visibility = EntityFactory.VISIBILITY.PRIVATE };
             });
 
             watcher.AddCommand(() =>
             {
-                return new Declare { ContainerID = 0, EntityType = EntityFactory.ENTITY.FUNCTION, Name = "myFx", Visibility = EntityFactory.VISIBILITY.PUBLIC };
+                return new CoreCommand.Command.Declarator.Declare { ContainerID = 0, EntityType = EntityFactory.ENTITY.FUNCTION, Name = "myFx", Visibility = EntityFactory.VISIBILITY.PUBLIC };
             });
 
             watcher.AddCommand(() =>
             {
-                return new AddInstruction { Name = "And", InstructionId = InstructionFactory.INSTRUCTION_ID.AND, Id = 8 };
+                return new CoreCommand.Command.Function.AddInstruction { Name = "And", InstructionId = InstructionFactory.INSTRUCTION_ID.AND, Id = 8 };
             });
 
             watcher.SerializeCommandsToFile();
@@ -48,18 +48,18 @@ namespace TestCommand
 
             foreach (var a in actions)
             {
-                if (a is Declare d)
+                if (a is CoreCommand.Command.Declarator.Declare d)
                 {
-                    controller.Declare(d.EntityType, d.ContainerID, d.Name, d.Visibility);
+                    controller.CoreCommand.Command.Declarator.Declare(d.EntityType, d.ContainerID, d.Name, d.Visibility);
                 }
-                else if (a is AddInstruction e)
+                else if (a is CoreCommand.Command.Function.AddInstruction e)
                 {
-                    controller.AddInstruction(e.Id, e.InstructionId, e.Arguments);
+                    controller.CoreCommand.Command.Function.AddInstruction(e.Id, e.InstructionId, e.Arguments);
                 }
             }*/
 
-            /*SetVariableValue test = new SetVariableValue { VariableID = 42, Value = "toto" };
-            //Declare test = new Declare { ContainerID = 42, EntityType = ENTITY.CONTEXT, Name = "toto", Visibility = VISIBILITY.PRIVATE };
+            /*CoreCommand.Command.Variable.SetValue test = new CoreCommand.Command.Variable.SetValue { VariableID = 42, Value = "toto" };
+            //CoreCommand.Command.Declarator.Declare test = new CoreCommand.Command.Declarator.Declare { ContainerID = 42, EntityType = ENTITY.CONTEXT, Name = "toto", Visibility = VISIBILITY.PRIVATE };
 
             System.IO.MemoryStream to_wr = new System.IO.MemoryStream();
 
@@ -67,7 +67,7 @@ namespace TestCommand
 
             to_wr.Position = 0;
 
-            SetVariableValue deser = ProtoBuf.Serializer.DeserializeWithLengthPrefix<SetVariableValue>(to_wr, ProtoBuf.PrefixStyle.Base128);
+            CoreCommand.Command.Variable.SetValue deser = ProtoBuf.Serializer.DeserializeWithLengthPrefix<CoreCommand.Command.Variable.SetValue>(to_wr, ProtoBuf.PrefixStyle.Base128);
 
             Assert.IsFalse(deser == null);*/
 
@@ -84,9 +84,10 @@ namespace TestCommand
             if (!manager.CallCommand(manager.GetCommandName(typeof(Command)), inp, oup))
             {
                 oup.Position = 0;
-                throw new Exception(BinarySerializer.Serializer.Deserialize<String>(oup));
+                throw new Exception("Failed to call command: \"" + BinarySerializer.Serializer.Deserialize<String>(oup) + "\"");
             }
             oup.Position = 0;
+            BinarySerializer.Serializer.Deserialize<Command>(oup);
             return BinarySerializer.Serializer.Deserialize<Reply>(oup);
         }
 
@@ -96,7 +97,7 @@ namespace TestCommand
 
             int i = 0;
 
-            CallFunction command = new CallFunction
+            CoreCommand.Command.Function.Call command = new CoreCommand.Command.Function.Call
             {
                 FuncId = funcID,
                 Parameters = new Dictionary<string, string>
@@ -104,12 +105,12 @@ namespace TestCommand
                     { "lastResult", "2" }
                 }
             };
-            CallFunction.Reply reply;
+            CoreCommand.Command.Function.Call.Reply reply;
             int given;
 
             do
             {
-                reply = HandleCommand<CallFunction.Reply, CallFunction>(command, manager);
+                reply = HandleCommand<CoreCommand.Command.Function.Call.Reply, CoreCommand.Command.Function.Call>(command, manager);
 
                 given = Int32.Parse(reply.Returns["result"]);
 
@@ -141,8 +142,8 @@ namespace TestCommand
             MemoryStream output = new MemoryStream();
             uint integer = (uint)EntityFactory.BASE_ID.INTEGER_TYPE;
 
-            Declare.Reply moreOrLessContext = HandleCommand<Declare.Reply, Declare>(
-                new Declare
+            CoreCommand.Command.Declarator.Declare.Reply moreOrLessContext = HandleCommand<CoreCommand.Command.Declarator.Declare.Reply, CoreCommand.Command.Declarator.Declare>(
+                new CoreCommand.Command.Declarator.Declare
                 {
                     EntityType = EntityFactory.ENTITY.CONTEXT,
                     ContainerID = 0,
@@ -151,66 +152,66 @@ namespace TestCommand
                 }, manager);
 
             //int min = 0;
-            Declare.Reply minVariable = HandleCommand<Declare.Reply, Declare>(
-                new Declare
+            CoreCommand.Command.Declarator.Declare.Reply minVariable = HandleCommand<CoreCommand.Command.Declarator.Declare.Reply, CoreCommand.Command.Declarator.Declare>(
+                new CoreCommand.Command.Declarator.Declare
                 {
                     EntityType = EntityFactory.ENTITY.VARIABLE,
                     ContainerID = moreOrLessContext.EntityID,
                     Name = "min",
                     Visibility = EntityFactory.VISIBILITY.PRIVATE
                 }, manager);
-            HandleCommand<SetVariableType.Reply, SetVariableType>(
-                new SetVariableType
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetType>(
+                new CoreCommand.Command.Variable.SetType
                 {
                     VariableID = minVariable.EntityID,
                     TypeID = integer
                 }, manager);
-            HandleCommand<SetVariableValue.Reply, SetVariableValue>(
-                new SetVariableValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetValue>(
+                new CoreCommand.Command.Variable.SetValue
                 {
                     VariableID = minVariable.EntityID,
                     Value = "0"
                 }, manager);
 
             //int max = 100;
-            Declare.Reply maxVariable = HandleCommand<Declare.Reply, Declare>(
-                new Declare
+            CoreCommand.Command.Declarator.Declare.Reply maxVariable = HandleCommand<CoreCommand.Command.Declarator.Declare.Reply, CoreCommand.Command.Declarator.Declare>(
+                new CoreCommand.Command.Declarator.Declare
                 {
                     EntityType = EntityFactory.ENTITY.VARIABLE,
                     ContainerID = moreOrLessContext.EntityID,
                     Name = "max",
                     Visibility = EntityFactory.VISIBILITY.PRIVATE
                 }, manager);
-            HandleCommand<SetVariableType.Reply, SetVariableType>(
-                new SetVariableType
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetType>(
+                new CoreCommand.Command.Variable.SetType
                 {
                     VariableID = maxVariable.EntityID,
                     TypeID = integer
                 }, manager);
-            HandleCommand<SetVariableValue.Reply, SetVariableValue>(
-                new SetVariableValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetValue>(
+                new CoreCommand.Command.Variable.SetValue
                 {
                     VariableID = maxVariable.EntityID,
                     Value = "100"
                 }, manager);
 
             //int lastGiven = -1;
-            Declare.Reply lastGivenVariable = HandleCommand<Declare.Reply, Declare>(
-                new Declare
+            CoreCommand.Command.Declarator.Declare.Reply lastGivenVariable = HandleCommand<CoreCommand.Command.Declarator.Declare.Reply, CoreCommand.Command.Declarator.Declare>(
+                new CoreCommand.Command.Declarator.Declare
                 {
                     EntityType = EntityFactory.ENTITY.VARIABLE,
                     ContainerID = moreOrLessContext.EntityID,
                     Name = "lastGiven",
                     Visibility = EntityFactory.VISIBILITY.PRIVATE
                 }, manager);
-            HandleCommand<SetVariableType.Reply, SetVariableType>(
-                new SetVariableType
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetType>(
+                new CoreCommand.Command.Variable.SetType
                 {
                     VariableID = lastGivenVariable.EntityID,
                     TypeID = integer
                 }, manager);
-            HandleCommand<SetVariableValue.Reply, SetVariableValue>(
-                new SetVariableValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetValue>(
+                new CoreCommand.Command.Variable.SetValue
                 {
                     VariableID = lastGivenVariable.EntityID,
                     Value = "-1"
@@ -224,30 +225,30 @@ namespace TestCommand
              *      NONE = 2
              * }
              */
-            Declare.Reply COMPARISONenum = HandleCommand<Declare.Reply, Declare>(
-                new Declare
+            CoreCommand.Command.Declarator.Declare.Reply COMPARISONenum = HandleCommand<CoreCommand.Command.Declarator.Declare.Reply, CoreCommand.Command.Declarator.Declare>(
+                new CoreCommand.Command.Declarator.Declare
                 {
                     EntityType = EntityFactory.ENTITY.ENUM_TYPE,
                     ContainerID = moreOrLessContext.EntityID,
                     Name = "COMPARISON",
                     Visibility = EntityFactory.VISIBILITY.PUBLIC
                 }, manager);
-            HandleCommand<SetEnumerationValue.Reply, SetEnumerationValue>(
-                new SetEnumerationValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Enum.SetValue>(
+                new CoreCommand.Command.Enum.SetValue
                 {
                     EnumId = COMPARISONenum.EntityID,
                     Name = "MORE",
                     Value = "0"
                 }, manager);
-            HandleCommand<SetEnumerationValue.Reply, SetEnumerationValue>(
-                new SetEnumerationValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Enum.SetValue>(
+                new CoreCommand.Command.Enum.SetValue
                 {
                     EnumId = COMPARISONenum.EntityID,
                     Name = "LESS",
                     Value = "1"
                 }, manager);
-            HandleCommand<SetEnumerationValue.Reply, SetEnumerationValue>(
-                new SetEnumerationValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Enum.SetValue>(
+                new CoreCommand.Command.Enum.SetValue
                 {
                     EnumId = COMPARISONenum.EntityID,
                     Name = "NONE",
@@ -257,70 +258,70 @@ namespace TestCommand
             /*
              * COMPARISON Play(COMPARISON lastResult = NONE);
              */
-            Declare.Reply playFunction = HandleCommand<Declare.Reply, Declare>(
-                new Declare
+            CoreCommand.Command.Declarator.Declare.Reply playFunction = HandleCommand<CoreCommand.Command.Declarator.Declare.Reply, CoreCommand.Command.Declarator.Declare>(
+                new CoreCommand.Command.Declarator.Declare
                 {
                     EntityType = EntityFactory.ENTITY.FUNCTION,
                     ContainerID = moreOrLessContext.EntityID,
                     Name = "Play",
                     Visibility = EntityFactory.VISIBILITY.PUBLIC
                 }, manager);
-            Declare.Reply play_lastResultVariable = HandleCommand<Declare.Reply, Declare>(
-                new Declare
+            CoreCommand.Command.Declarator.Declare.Reply play_lastResultVariable = HandleCommand<CoreCommand.Command.Declarator.Declare.Reply, CoreCommand.Command.Declarator.Declare>(
+                new CoreCommand.Command.Declarator.Declare
                 {
                     EntityType = EntityFactory.ENTITY.VARIABLE,
                     ContainerID = playFunction.EntityID,
                     Name = "lastResult",
                     Visibility = EntityFactory.VISIBILITY.PUBLIC
                 }, manager);
-            HandleCommand<SetFunctionParameter.Reply, SetFunctionParameter>(
-                new SetFunctionParameter
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.SetParameter>(
+                new CoreCommand.Command.Function.SetParameter
                 {
                     FuncId = playFunction.EntityID,
                     ExternalVarName = "lastResult"
                 }, manager);
-            HandleCommand<SetVariableType.Reply, SetVariableType>(
-                new SetVariableType
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetType>(
+                new CoreCommand.Command.Variable.SetType
                 {
                     VariableID = play_lastResultVariable.EntityID,
                     TypeID = COMPARISONenum.EntityID
                 }, manager);
-            HandleCommand<SetVariableValue.Reply, SetVariableValue>(
-                new SetVariableValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetValue>(
+                new CoreCommand.Command.Variable.SetValue
                 {
                     VariableID = play_lastResultVariable.EntityID,
                     Value = "2"
                 }, manager);
-            Declare.Reply play_resultVariable = HandleCommand<Declare.Reply, Declare>(
-                new Declare
+            CoreCommand.Command.Declarator.Declare.Reply play_resultVariable = HandleCommand<CoreCommand.Command.Declarator.Declare.Reply, CoreCommand.Command.Declarator.Declare>(
+                new CoreCommand.Command.Declarator.Declare
                 {
                     EntityType = EntityFactory.ENTITY.VARIABLE,
                     ContainerID = playFunction.EntityID,
                     Name = "result",
                     Visibility = EntityFactory.VISIBILITY.PUBLIC
                 }, manager);
-            HandleCommand<SetFunctionReturn.Reply, SetFunctionReturn>(
-                new SetFunctionReturn
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.SetReturn>(
+                new CoreCommand.Command.Function.SetReturn
                 {
                     FuncId = playFunction.EntityID,
                     ExternalVarName = "result"
                 }, manager);
-            HandleCommand<SetVariableType.Reply, SetVariableType>(
-                new SetVariableType
+            HandleCommand<EmptyReply, CoreCommand.Command.Variable.SetType>(
+                new CoreCommand.Command.Variable.SetType
                 {
                     VariableID = play_resultVariable.EntityID,
                     TypeID = integer
                 }, manager);
 
-            AddInstruction.Reply splitCOMPARISON = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply splitCOMPARISON = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.ENUM_SPLITTER,
                     Arguments = new List<uint> { COMPARISONenum.EntityID }
                 }, manager);
-            AddInstruction.Reply getLastResult = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply getLastResult = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.GETTER,
@@ -328,15 +329,15 @@ namespace TestCommand
                 }, manager);
 
             //if (lastResult == COMPARISON::MORE)
-            AddInstruction.Reply lr_eq_more = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply lr_eq_more = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.EQUAL,
                     Arguments = new List<uint> { COMPARISONenum.EntityID, COMPARISONenum.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = splitCOMPARISON.InstructionID,
@@ -344,8 +345,8 @@ namespace TestCommand
                     ToId = lr_eq_more.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastResult.InstructionID,
@@ -353,15 +354,15 @@ namespace TestCommand
                     ToId = lr_eq_more.InstructionID,
                     InputName = "RightOperand"
                 }, manager);
-            AddInstruction.Reply if_lr_eq_more = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply if_lr_eq_more = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.IF,
                     Arguments = new List<uint> { }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = lr_eq_more.InstructionID,
@@ -371,22 +372,22 @@ namespace TestCommand
                 }, manager);
 
             //min = lastGiven
-            AddInstruction.Reply getLastGiven = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply getLastGiven = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.GETTER,
                     Arguments = new List<uint> { lastGivenVariable.EntityID }
                 }, manager);
-            AddInstruction.Reply setMin = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply setMin = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { minVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastGiven.InstructionID,
@@ -396,15 +397,15 @@ namespace TestCommand
                 }, manager);
 
             //if (lastResult == COMPARISON::LESS)
-            AddInstruction.Reply lr_eq_less = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply lr_eq_less = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.EQUAL,
                     Arguments = new List<uint> { COMPARISONenum.EntityID, COMPARISONenum.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastResult.InstructionID,
@@ -412,8 +413,8 @@ namespace TestCommand
                     ToId = lr_eq_less.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = splitCOMPARISON.InstructionID,
@@ -421,15 +422,15 @@ namespace TestCommand
                     ToId = lr_eq_less.InstructionID,
                     InputName = "RightOperand"
                 }, manager);
-            AddInstruction.Reply if_lr_eq_less = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply if_lr_eq_less = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.IF,
                     Arguments = new List<uint> { }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = lr_eq_less.InstructionID,
@@ -439,15 +440,15 @@ namespace TestCommand
                 }, manager);
 
             //max = lastGiven
-            AddInstruction.Reply set_max = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply set_max = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { maxVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastGiven.InstructionID,
@@ -457,22 +458,22 @@ namespace TestCommand
                 }, manager);
 
             //min / 2
-            AddInstruction.Reply getMin = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply getMin = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.GETTER,
                     Arguments = new List<uint> { minVariable.EntityID }
                 }, manager);
-            AddInstruction.Reply minHalf = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply minHalf = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.DIV,
                     Arguments = new List<uint> { integer, integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getMin.InstructionID,
@@ -480,8 +481,8 @@ namespace TestCommand
                     ToId = minHalf.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<SetInstructionInputValue.Reply, SetInstructionInputValue>(
-                new SetInstructionInputValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.SetInputValue>(
+                new CoreCommand.Command.Function.Instruction.SetInputValue
                 {
                     FunctionID = playFunction.EntityID,
                     Instruction = minHalf.InstructionID,
@@ -490,22 +491,22 @@ namespace TestCommand
                 }, manager);
 
             //max / 2
-            AddInstruction.Reply getMax = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply getMax = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.GETTER,
                     Arguments = new List<uint> { maxVariable.EntityID }
                 }, manager);
-            AddInstruction.Reply maxHalf = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply maxHalf = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.DIV,
                     Arguments = new List<uint> { integer, integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getMax.InstructionID,
@@ -513,8 +514,8 @@ namespace TestCommand
                     ToId = maxHalf.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<SetInstructionInputValue.Reply, SetInstructionInputValue>(
-                new SetInstructionInputValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.SetInputValue>(
+                new CoreCommand.Command.Function.Instruction.SetInputValue
                 {
                     FunctionID = playFunction.EntityID,
                     Instruction = maxHalf.InstructionID,
@@ -523,15 +524,15 @@ namespace TestCommand
                 }, manager);
 
             //min / 2 + max / 2
-            AddInstruction.Reply minHalfPlusMaxHalf = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply minHalfPlusMaxHalf = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.ADD,
                     Arguments = new List<uint> { integer, integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = minHalf.InstructionID,
@@ -539,8 +540,8 @@ namespace TestCommand
                     ToId = minHalfPlusMaxHalf.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = maxHalf.InstructionID,
@@ -550,15 +551,15 @@ namespace TestCommand
                 }, manager);
 
             //result = min / 2 + max / 2
-            AddInstruction.Reply setResult = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply setResult = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { play_resultVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = minHalfPlusMaxHalf.InstructionID,
@@ -568,22 +569,22 @@ namespace TestCommand
                 }, manager);
 
             //result == lastGiven
-            AddInstruction.Reply getResult = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply getResult = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.GETTER,
                     Arguments = new List<uint> { play_resultVariable.EntityID }
                 }, manager);
-            AddInstruction.Reply resEqLastGiven = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply resEqLastGiven = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.EQUAL,
                     Arguments = new List<uint> { integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastGiven.InstructionID,
@@ -591,8 +592,8 @@ namespace TestCommand
                     ToId = resEqLastGiven.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getResult.InstructionID,
@@ -602,15 +603,15 @@ namespace TestCommand
                 }, manager);
 
             //if (result == lastGiven)
-            AddInstruction.Reply ifResEqLastGiven = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply ifResEqLastGiven = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.IF,
                     Arguments = new List<uint> { }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = resEqLastGiven.InstructionID,
@@ -620,15 +621,15 @@ namespace TestCommand
                 }, manager);
 
             //lastResult == MORE
-            AddInstruction.Reply lastResultEqMore = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply lastResultEqMore = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.EQUAL,
                     Arguments = new List<uint> { COMPARISONenum.EntityID, COMPARISONenum.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getLastResult.InstructionID,
@@ -636,8 +637,8 @@ namespace TestCommand
                     ToId = lastResultEqMore.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = splitCOMPARISON.InstructionID,
@@ -647,15 +648,15 @@ namespace TestCommand
                 }, manager);
 
             //if (lastResult == MORE)
-            AddInstruction.Reply ifLastResultEqMore = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply ifLastResultEqMore = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.IF,
                     Arguments = new List<uint> { }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = lastResultEqMore.InstructionID,
@@ -665,15 +666,15 @@ namespace TestCommand
                 }, manager);
 
             //result + 1
-            AddInstruction.Reply resultPP = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply resultPP = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.ADD,
                     Arguments = new List<uint> { integer, integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getResult.InstructionID,
@@ -681,8 +682,8 @@ namespace TestCommand
                     ToId = resultPP.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<SetInstructionInputValue.Reply, SetInstructionInputValue>(
-                new SetInstructionInputValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.SetInputValue>(
+                new CoreCommand.Command.Function.Instruction.SetInputValue
                 {
                     FunctionID = playFunction.EntityID,
                     Instruction = resultPP.InstructionID,
@@ -691,15 +692,15 @@ namespace TestCommand
                 }, manager);
 
             //result = result + 1
-            AddInstruction.Reply setResultPP = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply setResultPP = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { play_resultVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = resultPP.InstructionID,
@@ -709,15 +710,15 @@ namespace TestCommand
                 }, manager);
 
             //result - 1
-            AddInstruction.Reply resultMM = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply resultMM = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SUB,
                     Arguments = new List<uint> { integer, integer, integer }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getResult.InstructionID,
@@ -725,8 +726,8 @@ namespace TestCommand
                     ToId = resultMM.InstructionID,
                     InputName = "LeftOperand"
                 }, manager);
-            HandleCommand<SetInstructionInputValue.Reply, SetInstructionInputValue>(
-                new SetInstructionInputValue
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.SetInputValue>(
+                new CoreCommand.Command.Function.Instruction.SetInputValue
                 {
                     FunctionID = playFunction.EntityID,
                     Instruction = resultMM.InstructionID,
@@ -735,15 +736,15 @@ namespace TestCommand
                 }, manager);
 
             //result = result - 1
-            AddInstruction.Reply setResultMM = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply setResultMM = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { play_resultVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = resultMM.InstructionID,
@@ -753,15 +754,15 @@ namespace TestCommand
                 }, manager);
 
             //lastGiven = result
-            AddInstruction.Reply setLastGiven = HandleCommand<AddInstruction.Reply, AddInstruction>(
-                new AddInstruction
+            CoreCommand.Command.Function.AddInstruction.Reply setLastGiven = HandleCommand<CoreCommand.Command.Function.AddInstruction.Reply, CoreCommand.Command.Function.AddInstruction>(
+                new CoreCommand.Command.Function.AddInstruction
                 {
                     FunctionID = playFunction.EntityID,
                     ToCreate = InstructionFactory.INSTRUCTION_ID.SETTER,
                     Arguments = new List<uint> { lastGivenVariable.EntityID }
                 }, manager);
-            HandleCommand<LinkInstructionData.Reply, LinkInstructionData>(
-                new LinkInstructionData
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkData>(
+                new CoreCommand.Command.Function.Instruction.LinkData
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = getResult.InstructionID,
@@ -800,16 +801,16 @@ namespace TestCommand
              * lastGiven = number
              */
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = if_lr_eq_more.InstructionID,
                     OutIndex = 0, //on true
                     ToId = setMin.InstructionID
                 }, manager);
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = if_lr_eq_more.InstructionID,
@@ -817,8 +818,8 @@ namespace TestCommand
                     ToId = if_lr_eq_less.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = setMin.InstructionID,
@@ -826,16 +827,16 @@ namespace TestCommand
                     ToId = setResult.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = if_lr_eq_less.InstructionID,
                     OutIndex = 0, //on true
                     ToId = set_max.InstructionID
                 }, manager);
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = if_lr_eq_less.InstructionID,
@@ -843,8 +844,8 @@ namespace TestCommand
                     ToId = setResult.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = set_max.InstructionID,
@@ -852,8 +853,8 @@ namespace TestCommand
                     ToId = setResult.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = setResult.InstructionID,
@@ -861,16 +862,16 @@ namespace TestCommand
                     ToId = ifResEqLastGiven.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = ifResEqLastGiven.InstructionID,
                     OutIndex = 0, //on true
                     ToId = ifLastResultEqMore.InstructionID
                 }, manager);
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = ifResEqLastGiven.InstructionID,
@@ -878,16 +879,16 @@ namespace TestCommand
                     ToId = setLastGiven.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = ifLastResultEqMore.InstructionID,
                     OutIndex = 0, //on true
                     ToId = setResultPP.InstructionID
                 }, manager);
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = ifLastResultEqMore.InstructionID,
@@ -895,16 +896,16 @@ namespace TestCommand
                     ToId = setResultMM.InstructionID
                 }, manager);
 
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = setResultPP.InstructionID,
                     OutIndex = 0,
                     ToId = setLastGiven.InstructionID
                 }, manager);
-            HandleCommand<LinkInstructionExecution.Reply, LinkInstructionExecution>(
-                new LinkInstructionExecution
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.Instruction.LinkExecution>(
+                new CoreCommand.Command.Function.Instruction.LinkExecution
                 {
                     FunctionID = playFunction.EntityID,
                     FromId = setResultMM.InstructionID,
@@ -912,8 +913,8 @@ namespace TestCommand
                     ToId = setLastGiven.InstructionID
                 }, manager);
 
-            HandleCommand<SetFunctionEntryPoint.Reply, SetFunctionEntryPoint>(
-                new SetFunctionEntryPoint
+            HandleCommand<EmptyReply, CoreCommand.Command.Function.SetEntryPoint>(
+                new CoreCommand.Command.Function.SetEntryPoint
                 {
                     FunctionId = playFunction.EntityID,
                     Instruction = if_lr_eq_more.InstructionID
@@ -921,14 +922,14 @@ namespace TestCommand
 
             MoreOrLessExecuter(manager, playFunction.EntityID);
 
-            HandleCommand<SerializeTo.Reply, SerializeTo>(new SerializeTo
+            HandleCommand<EmptyReply, CoreCommand.Command.Global.Save>(new CoreCommand.Command.Global.Save
             {
                 Filename = "moreOrLess.duly"
             }, manager);
 
-            CoreCommand.IManager witness = new CoreCommand.BinaryManager();
+            IManager witness = new BinaryManager();
 
-            HandleCommand<LoadFrom.Reply, LoadFrom>(new LoadFrom
+            HandleCommand<EmptyReply, CoreCommand.Command.Global.Load>(new CoreCommand.Command.Global.Load
             {
                 Filename = "moreOrLess.duly"
             }, witness);

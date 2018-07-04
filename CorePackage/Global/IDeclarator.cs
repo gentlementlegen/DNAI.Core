@@ -19,7 +19,7 @@ namespace CorePackage.Global
     /// Interface that defines actions linked to declarator behaviour
     /// </summary>
     /// <typeparam name="definitionType">Type of the definition the declarator is in charge of</typeparam>
-    public interface IDeclarator<definitionType>
+    public interface IDeclarator
     {
         /// <summary>
         /// Will set a declaration of the given entity through the given name inside the declarator
@@ -28,14 +28,14 @@ namespace CorePackage.Global
         /// <param name="name">Declaration name</param>
         /// <param name="visibility">Declaration visibility</param>
         /// <returns>Given entity (usefull if you inherit many times of this interface)</returns>
-        definitionType Declare(definitionType entity, string name, AccessMode visibility);
+        IDefinition Declare(IDefinition entity, string name, AccessMode visibility);
 
         /// <summary>
         /// Will remove and return the entity of the given name
         /// </summary>
         /// <param name="name">Declaration name</param>
         /// <returns>Poped entity</returns>
-        definitionType Pop(string name);
+        IDefinition Pop(string name);
 
         /// <summary>
         /// Allow to find an entity from it's name and visibility
@@ -43,7 +43,14 @@ namespace CorePackage.Global
         /// <param name="name">Name of the entity to find</param>
         /// <param name="visibility">Visbility of the entity to find</param>
         /// <returns>Found entity</returns>
-        definitionType Find(string name, AccessMode visibility);
+        IDefinition Find(string name, AccessMode visibility);
+
+        /// <summary>
+        /// Allow to find an entity from it's name
+        /// </summary>
+        /// <param name="name">Name of the entity to find</param>
+        /// <returns>Found entity</returns>
+        IDefinition Find(string name);
 
         /// <summary>
         /// Rename a entity in the declarator
@@ -51,7 +58,7 @@ namespace CorePackage.Global
         /// <param name="lastName">Current declaration name of the entity</param>
         /// <param name="newName">New name for the entity</param>
         /// <returns>Entity renamed</returns>
-        definitionType Rename(string lastName, string newName);
+        void Rename(string lastName, string newName);
 
         /// <summary>
         /// Allow to get the visibility of a declaration
@@ -59,7 +66,7 @@ namespace CorePackage.Global
         /// <param name="name">Name of the declaration to get</param>
         /// <param name="visibility">Visibility in which it will be stored</param>
         /// <returns>Entity</returns>
-        definitionType GetVisibilityOf(string name, ref AccessMode visibility);
+        AccessMode GetVisibilityOf(string name);
 
         /// <summary>
         /// Allow to change a declaration visibility into its contrary
@@ -67,18 +74,25 @@ namespace CorePackage.Global
         /// <param name="name">Name of the declaration</param>
         /// <param name="newVisibility">New visibility of the declaration</param>
         /// <returns>Entity changed</returns>
-        definitionType ChangeVisibility(string name, AccessMode newVisibility);
+        void ChangeVisibility(string name, AccessMode newVisibility);
 
         /// <summary>
         /// Remove all declared entities
         /// </summary>
         /// <returns>A list of removed entities</returns>
-        List<definitionType> Clear();
+        List<IDefinition> Clear();
 
         /// <summary>
         /// Allow to expose entities with a specific visibility
         /// </summary>
         /// <returns>List of entities with the given visibility</returns>
-        Dictionary<string, definitionType> GetEntities(AccessMode visibility);
+        Dictionary<string, IDefinition> GetEntities(AccessMode visibility);
+
+        /// <summary>
+        /// Checks if an entity is in the declarator
+        /// </summary>
+        /// <param name="name">Name of the entity to check existence</param>
+        /// <returns>True if entity exists</returns>
+        bool Contains(string name);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CorePackage.Entity.Type;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,12 +15,7 @@ namespace CorePackage.Execution.Operators
         /// <summary>
         /// Constructor that doesn't need anything cause inputs and ouputs are boolean
         /// </summary>
-        public Or() :
-            base(Entity.Type.Scalar.Boolean, Entity.Type.Scalar.Boolean,
-                delegate(Entity.Variable left, Entity.Variable right)
-                {
-                    return left.Value || right.Value; //logical or is not overloadable
-                })
+        public Or() : base(Scalar.Boolean, Scalar.Boolean, (dynamic left, dynamic right) => (left || right))
         {
 
         }

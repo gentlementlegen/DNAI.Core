@@ -54,7 +54,12 @@ namespace CoreControl
             SIZE,
             FOREACH,
             GET_ATTRIBUTES,
-            SET_ATTRIBUTES
+            SET_ATTRIBUTES,
+            BREAK,
+            CONTINUE,
+            CLEAR,
+            FILL,
+            SET_VALUE_AT
         };
 
         /// <summary>
@@ -90,74 +95,79 @@ namespace CoreControl
             { INSTRUCTION_ID.FUNCTION_CALL, 1 },
             { INSTRUCTION_ID.IF, 0 },
             { INSTRUCTION_ID.WHILE, 0 },
-            { INSTRUCTION_ID.APPEND, 0 },
-            { INSTRUCTION_ID.INSERT, 0 },
-            { INSTRUCTION_ID.REMOVE, 0 },
-            { INSTRUCTION_ID.REMOVE_INDEX, 0 },
-            { INSTRUCTION_ID.SIZE, 0 },
+            { INSTRUCTION_ID.APPEND, 1 },
+            { INSTRUCTION_ID.INSERT, 1 },
+            { INSTRUCTION_ID.REMOVE, 1 },
+            { INSTRUCTION_ID.REMOVE_INDEX, 1 },
+            { INSTRUCTION_ID.SIZE, 1 },
             { INSTRUCTION_ID.FOREACH, 1 },
             { INSTRUCTION_ID.GET_ATTRIBUTES, 1 },
-            { INSTRUCTION_ID.SET_ATTRIBUTES, 1 }
+            { INSTRUCTION_ID.SET_ATTRIBUTES, 1 },
+            { INSTRUCTION_ID.BREAK, 0 },
+            { INSTRUCTION_ID.CONTINUE, 0 },
+            { INSTRUCTION_ID.CLEAR, 1 },
+            { INSTRUCTION_ID.FILL, 1 },
+            { INSTRUCTION_ID.SET_VALUE_AT, 1 }
         };
 
         /// <summary>
         /// Dictionary that associates an instruction to its creator delegate
         /// </summary>
-        private static readonly Dictionary<INSTRUCTION_ID, Func<List<Definition>, Instruction>> creators = new Dictionary<INSTRUCTION_ID, Func<List<CorePackage.Global.Definition>, CorePackage.Execution.Instruction>>
+        private static readonly Dictionary<INSTRUCTION_ID, Func<List<IDefinition>, Instruction>> creators = new Dictionary<INSTRUCTION_ID, Func<List<CorePackage.Global.IDefinition>, CorePackage.Execution.Instruction>>
         {
             {
-                INSTRUCTION_ID.AND, (List<Definition> arguments) =>
+                INSTRUCTION_ID.AND, (List<IDefinition> arguments) =>
                 {
                     return new And();
                 }
             },
-            { INSTRUCTION_ID.OR, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.OR, (List<IDefinition> arguments) =>
                 {
                     return new Or();
                 }
             },
-            { INSTRUCTION_ID.DIFFERENT, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.DIFFERENT, (List<IDefinition> arguments) =>
                 {
                     return new Different(
                         (DataType)arguments.ElementAt(0),
                         (DataType)arguments.ElementAt(1));
                 }
             },
-            { INSTRUCTION_ID.EQUAL, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.EQUAL, (List<IDefinition> arguments) =>
                 {
                     return new Equal(
                         (DataType)arguments.ElementAt(0),
                         (DataType)arguments.ElementAt(1));
                 }
             },
-            { INSTRUCTION_ID.GREATER, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.GREATER, (List<IDefinition> arguments) =>
                 {
                     return new Greater(
                         (DataType)arguments.ElementAt(0),
                         (DataType)arguments.ElementAt(1));
                 }
             },
-            { INSTRUCTION_ID.GREATER_EQUAL, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.GREATER_EQUAL, (List<IDefinition> arguments) =>
                 {
                     return new GreaterEqual(
                         (DataType)arguments.ElementAt(0),
                         (DataType)arguments.ElementAt(1));
                 }
             },
-            { INSTRUCTION_ID.LOWER, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.LOWER, (List<IDefinition> arguments) =>
                 {
                     return new Less(
                         (DataType)arguments.ElementAt(0),
                         (DataType)arguments.ElementAt(1));
                 }
             },
-            { INSTRUCTION_ID.LOWER_EQUAL, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.LOWER_EQUAL, (List<IDefinition> arguments) =>
                 {
                     return new LessEqual(
                         (DataType)arguments.ElementAt(0),
                         (DataType)arguments.ElementAt(1));
                 } },
-            { INSTRUCTION_ID.ACCESS, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.ACCESS, (List<IDefinition> arguments) =>
                 {
                     return new Access(
                         (DataType)arguments.ElementAt(0),
@@ -165,7 +175,7 @@ namespace CoreControl
                         (DataType)arguments.ElementAt(2));
                 }
             },
-            { INSTRUCTION_ID.BINARY_AND, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.BINARY_AND, (List<IDefinition> arguments) =>
                 {
                     return new BinaryAnd(
                         (DataType)arguments.ElementAt(0),
@@ -173,7 +183,7 @@ namespace CoreControl
                         (DataType)arguments.ElementAt(2));
                 }
             },
-            { INSTRUCTION_ID.BINARY_OR, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.BINARY_OR, (List<IDefinition> arguments) =>
                 {
                     return new BinaryOr(
                         (DataType)arguments.ElementAt(0),
@@ -181,7 +191,7 @@ namespace CoreControl
                         (DataType)arguments.ElementAt(2));
                 }
             },
-            { INSTRUCTION_ID.XOR, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.XOR, (List<IDefinition> arguments) =>
                 {
                     return new Xor(
                         (DataType)arguments.ElementAt(0),
@@ -189,7 +199,7 @@ namespace CoreControl
                         (DataType)arguments.ElementAt(2));
                 }
             },
-            { INSTRUCTION_ID.ADD, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.ADD, (List<IDefinition> arguments) =>
                 {
                     return new Add(
                         (DataType)arguments.ElementAt(0),
@@ -197,7 +207,7 @@ namespace CoreControl
                         (DataType)arguments.ElementAt(2));
                 }
             },
-            { INSTRUCTION_ID.SUB, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.SUB, (List<IDefinition> arguments) =>
                 {
                     return new Substract(
                         (DataType)arguments.ElementAt(0),
@@ -205,7 +215,7 @@ namespace CoreControl
                         (DataType)arguments.ElementAt(2));
                 }
             },
-            { INSTRUCTION_ID.DIV, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.DIV, (List<IDefinition> arguments) =>
                 {
                     return new Divide(
                         (DataType)arguments.ElementAt(0),
@@ -213,7 +223,7 @@ namespace CoreControl
                         (DataType)arguments.ElementAt(2));
                 }
             },
-            { INSTRUCTION_ID.MUL, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.MUL, (List<IDefinition> arguments) =>
                 {
                     return new Multiplicate(
                         (DataType)arguments.ElementAt(0),
@@ -221,7 +231,7 @@ namespace CoreControl
                         (DataType)arguments.ElementAt(2));
                 }
             },
-            { INSTRUCTION_ID.MOD, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.MOD, (List<IDefinition> arguments) =>
                 {
                     return new Modulo(
                         (DataType)arguments.ElementAt(0),
@@ -229,7 +239,7 @@ namespace CoreControl
                         (DataType)arguments.ElementAt(2));
                 }
             },
-            { INSTRUCTION_ID.LEFT_SHIFT, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.LEFT_SHIFT, (List<IDefinition> arguments) =>
                 {
                     return new LeftShift(
                         (DataType)arguments.ElementAt(0),
@@ -237,7 +247,7 @@ namespace CoreControl
                         (DataType)arguments.ElementAt(2));
                 }
             },
-            { INSTRUCTION_ID.RIGHT_SHIFT, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.RIGHT_SHIFT, (List<IDefinition> arguments) =>
                 {
                     return new RightShift(
                         (DataType)arguments.ElementAt(0),
@@ -245,102 +255,132 @@ namespace CoreControl
                         (DataType)arguments.ElementAt(2));
                 }
             },
-            { INSTRUCTION_ID.BINARY_NOT, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.BINARY_NOT, (List<IDefinition> arguments) =>
                 {
                     return new BinaryNot(
                         (DataType)arguments.ElementAt(0),
                         (DataType)arguments.ElementAt(1));
                 }
             },
-            { INSTRUCTION_ID.NOT, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.NOT, (List<IDefinition> arguments) =>
                 {
                     return new Not((DataType)arguments.ElementAt(0));
                 }
             },
-            { INSTRUCTION_ID.INVERSE, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.INVERSE, (List<IDefinition> arguments) =>
                 {
                     return new Inverse(
                         (DataType)arguments.ElementAt(0),
                         (DataType)arguments.ElementAt(1));
                 }
             },
-            { INSTRUCTION_ID.ENUM_SPLITTER, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.ENUM_SPLITTER, (List<IDefinition> arguments) =>
                 {
                     return new EnumSplitter((EnumType)arguments.ElementAt(0));
                 }
             },
-            { INSTRUCTION_ID.GETTER, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.GETTER, (List<IDefinition> arguments) =>
                 {
                     return new Getter((Variable)arguments.ElementAt(0));
                 }
             },
-            { INSTRUCTION_ID.SETTER, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.SETTER, (List<IDefinition> arguments) =>
                 {
                     return new Setter((Variable)arguments.ElementAt(0));
                 }
             },
-            { INSTRUCTION_ID.FUNCTION_CALL, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.FUNCTION_CALL, (List<IDefinition> arguments) =>
                 {
                     return new FunctionCall((Function)arguments.ElementAt(0));
                 }
             },
-            { INSTRUCTION_ID.IF, (List<Definition> arguments) =>
+            { INSTRUCTION_ID.IF, (List<IDefinition> arguments) =>
                 {
                     return new If();
                 }
             },
             {
-                INSTRUCTION_ID.WHILE, (List<Definition> arguments) =>
+                INSTRUCTION_ID.WHILE, (List<IDefinition> arguments) =>
                 {
                     return new While();
                 }
             },
             {
-                INSTRUCTION_ID.APPEND, (List<Definition> args) =>
+                INSTRUCTION_ID.APPEND, (List<IDefinition> args) =>
                 {
-                    return new Append();
+                    return new Append((DataType)args[0]);
                 }
             },
             {
-                INSTRUCTION_ID.INSERT, (List<Definition> args) =>
+                INSTRUCTION_ID.INSERT, (List<IDefinition> args) =>
                 {
-                    return new Insert();
+                    return new Insert((DataType)args[0]);
                 }
             },
             {
-                INSTRUCTION_ID.REMOVE, (List<Definition> args) =>
+                INSTRUCTION_ID.REMOVE, (List<IDefinition> args) =>
                 {
-                    return new Remove();
+                    return new Remove((DataType)args[0]);
                 }
             },
             {
-                INSTRUCTION_ID.REMOVE_INDEX, (List<Definition> args) =>
+                INSTRUCTION_ID.REMOVE_INDEX, (List<IDefinition> args) =>
                 {
-                    return new RemoveIndex();
+                    return new RemoveIndex((DataType)args[0]);
                 }
             },
             {
-                INSTRUCTION_ID.SIZE, (List<Definition> args) =>
+                INSTRUCTION_ID.SIZE, (List<IDefinition> args) =>
                 {
-                    return new Size();
+                    return new Size((DataType)args[0]);
                 }
             },
             {
-                INSTRUCTION_ID.FOREACH, (List<Definition> args) =>
+                INSTRUCTION_ID.FOREACH, (List<IDefinition> args) =>
                 {
                     return new Foreach((DataType)args[0]);
                 }
             },
             {
-                INSTRUCTION_ID.GET_ATTRIBUTES, (List<Definition> args) =>
+                INSTRUCTION_ID.GET_ATTRIBUTES, (List<IDefinition> args) =>
                 {
                     return new GetAttributes((ObjectType)(args[0]));
                 }
             },
             {
-                INSTRUCTION_ID.SET_ATTRIBUTES, (List<Definition> args) =>
+                INSTRUCTION_ID.SET_ATTRIBUTES, (List<IDefinition> args) =>
                 {
-                    return new SetAttribute((Variable)args[0]);
+                    return new SetAttribute((ObjectType)args[0]);
+                }
+            },
+            {
+                INSTRUCTION_ID.BREAK, (List<IDefinition> args) =>
+                {
+                    return new Break();
+                }
+            },
+            {
+                INSTRUCTION_ID.CONTINUE, (List<IDefinition> args) =>
+                {
+                    return new Continue();
+                }
+            },
+            {
+                INSTRUCTION_ID.CLEAR, (List<IDefinition> args) =>
+                {
+                    return new Clear((DataType)args[0]);
+                }
+            },
+            {
+                INSTRUCTION_ID.FILL, (List<IDefinition> args) =>
+                {
+                    return new Fill((DataType)args[0]);
+                }
+            },
+            {
+                INSTRUCTION_ID.SET_VALUE_AT, (List<IDefinition> args) =>
+                {
+                    return new SetValueAt((DataType)args[0]);
                 }
             }
         };
@@ -351,7 +391,7 @@ namespace CoreControl
         /// <param name="to_create">Type of the instruction to create</param>
         /// <param name="arguments">List of arguments to pass to the instruction at construction</param>
         /// <returns>An instruction of type represented by the give id</returns>
-        public static Instruction CreateInstruction(INSTRUCTION_ID to_create, List<Definition> arguments)
+        public static Instruction CreateInstruction(INSTRUCTION_ID to_create, List<IDefinition> arguments)
         {
             if (!number_of_arguments.ContainsKey(to_create) || !creators.ContainsKey(to_create))
                 throw new KeyNotFoundException("Given instruction isn't referenced in factory");

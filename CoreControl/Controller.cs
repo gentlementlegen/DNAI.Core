@@ -42,9 +42,9 @@ namespace CoreControl
         /// <param name="containerID">Identifier of the container in which entity is declared</param>
         /// <param name="name">Name of the entity to remove in the container</param>
         /// <returns>List of all removed entities' id</returns>
-        public List<UInt32> Remove(EntityFactory.ENTITY entity_type, UInt32 containerID, string name)
+        public List<UInt32> Remove(UInt32 containerID, string name)
         {
-            return entity_factory.Remove(entity_type, containerID, name);
+            return entity_factory.Remove(containerID, name);
         }
 
         /// <summary>
@@ -54,9 +54,9 @@ namespace CoreControl
         /// <param name="containerID">Identifier of the container in which entity is declared</param>
         /// <param name="lastName">Current name of the entity</param>
         /// <param name="newName">New name to set</param>
-        public void Rename(EntityFactory.ENTITY entity_type, UInt32 containerID, string lastName, string newName)
+        public void Rename(UInt32 containerID, string lastName, string newName)
         {
-            entity_factory.Rename(entity_type, containerID, lastName, newName);
+            entity_factory.Rename(containerID, lastName, newName);
         }
 
         /// <summary>
@@ -66,9 +66,9 @@ namespace CoreControl
         /// <param name="fromID">Identifier of the entity declared in the container</param>
         /// <param name="toID">Identifier of the declarator in which move the entity</param>
         /// <param name="name">Name of the entity to move</param>
-        public void Move(EntityFactory.ENTITY entity_type, UInt32 fromID, UInt32 toID, string name)
+        public void Move(UInt32 fromID, UInt32 toID, string name)
         {
-            entity_factory.Move(entity_type, fromID, toID, name);
+            entity_factory.Move(fromID, toID, name);
         }
 
         /// <summary>
@@ -78,9 +78,9 @@ namespace CoreControl
         /// <param name="containerID">Identifier of the container in which entity is declared</param>
         /// <param name="name">Name of the declared entity in the container</param>
         /// <param name="newVisi">New visibility of the declared entity</param>
-        public void ChangeVisibility(EntityFactory.ENTITY entity_type, UInt32 containerID, string name, EntityFactory.VISIBILITY newVisi)
+        public void ChangeVisibility(UInt32 containerID, string name, EntityFactory.VISIBILITY newVisi)
         {
-            entity_factory.ChangeVisibility(entity_type, containerID, name, newVisi);
+            entity_factory.ChangeVisibility(containerID, name, newVisi);
         }
 
         /// <summary>
@@ -100,13 +100,15 @@ namespace CoreControl
                 return EntityFactory.ENTITY.LIST_TYPE;
             else if (entity.GetType() == typeof(CorePackage.Entity.DataType))
                 return EntityFactory.ENTITY.DATA_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ScalarType))
+                return EntityFactory.ENTITY.DATA_TYPE;
             else if (entity.GetType() == typeof(CorePackage.Entity.Function))
                 return EntityFactory.ENTITY.FUNCTION;
             else if (entity.GetType() == typeof(CorePackage.Entity.Variable))
                 return EntityFactory.ENTITY.VARIABLE;
             else if (entity.GetType() == typeof(CorePackage.Entity.Context))
                 return EntityFactory.ENTITY.CONTEXT;
-            throw new InvalidOperationException("Controller.GetEntityType : Given entity as no declared type");
+            throw new InvalidOperationException("Controller.GetEntityType : Entity " + entity.FullName + " as invalid entity type " + entity.GetType().ToString());
         }
 
         /// <summary>
@@ -167,7 +169,7 @@ namespace CoreControl
         /// <param name="parentID">Identifier of the parent context to set</param>
         public void SetContextParent(UInt32 contextID, UInt32 parentID)
         {
-            entity_factory.FindDefinitionOfType<CorePackage.Global.IContext>(contextID).SetParent(entity_factory.FindDefinitionOfType<CorePackage.Global.IContext>(parentID));
+            //entity_factory.FindDefinitionOfType<CorePackage.Entity.Context>(contextID).SetParent(entity_factory.FindDefinitionOfType<CorePackage.Entity.Context>(parentID));
         }
 
         public dynamic InstantiateType(UInt32 dataTypeID)
@@ -280,11 +282,11 @@ namespace CoreControl
         /// <param name="funcname">Name of the method to set as member</param>
         /// <param name="visibility">Visibility of the method to add</param>
         /// <returns>Identifier of the 'this' parameter added</returns>
-        public UInt32 SetClassFunctionAsMember(UInt32 classID, string funcname, EntityFactory.VISIBILITY visibility)
+        public UInt32 SetClassFunctionAsMember(UInt32 classID, string funcname)
         {
             CorePackage.Entity.Type.ObjectType objtype = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID);
 
-            entity_factory.AddEntity(objtype.SetFunctionAsMember(funcname, (CorePackage.Global.AccessMode)visibility));
+            entity_factory.AddEntity(objtype.SetFunctionAsMember(funcname));
 
             return entity_factory.LastID;
         }
@@ -400,7 +402,7 @@ namespace CoreControl
         public UInt32 AddInstruction(UInt32 functionID, InstructionFactory.INSTRUCTION_ID to_create, List<UInt32> crea_args)
         {
             CorePackage.Entity.Function func = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID);
-            List<CorePackage.Global.Definition> crea_definitions = new List<CorePackage.Global.Definition>();
+            List<CorePackage.Global.IDefinition> crea_definitions = new List<CorePackage.Global.IDefinition>();
 
             foreach (UInt32 definitionID in crea_args)
             {
@@ -486,6 +488,11 @@ namespace CoreControl
         public List<uint> GetIds(EntityFactory.EntityType flags = EntityFactory.EntityType.ALL)
         {
             return entity_factory.GetIds(flags);
+        }
+
+        public void merge(Controller controller)
+        {
+            entity_factory.merge(controller.entity_factory);
         }
     }
 }

@@ -9,7 +9,7 @@
              Base behaviour for DNAI IA.
             </summary>
             </member>
-        <member name="F:DNAI.MoreOrLess.Play.OnOutputChanged">
+        <member name="F:DNAI.MoreOrLess.Play.lastResult">
             <summary>
              Called when output values of the DNAI script change.
             </summary>

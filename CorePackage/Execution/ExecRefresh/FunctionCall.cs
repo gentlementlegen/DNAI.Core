@@ -22,22 +22,11 @@ namespace CorePackage.Execution
         /// Constructor that asks for the function to call
         /// </summary>
         /// <param name="tocall">Function to call when instruction is executed</param>
-        public FunctionCall(Entity.Function tocall) :
-            base(
-                null,
-                null
-            )
+        public FunctionCall(Entity.Function tocall) : base()
         {
-            foreach (KeyValuePair<string, Entity.Variable> curr in tocall.Parameters)
-            {
-                AddInput(curr.Key, curr.Value);
-            }
-
-            foreach (KeyValuePair<string, Entity.Variable> curr in tocall.Returns)
-            {
-                AddOutput(curr.Key, curr.Value);
-            }
-
+            AddInputs(tocall.Parameters);
+            AddOutputs(tocall.Returns);
+            
             this.tocall = tocall;
         }
 
@@ -46,6 +35,10 @@ namespace CorePackage.Execution
         /// </summary>
         public override void Execute()
         {
+            foreach (KeyValuePair<string, Input> input in Inputs)
+            {
+                GetInputValue(input.Key); //this will refresh the values of inputs
+            }
             tocall.Call();
         }
     }

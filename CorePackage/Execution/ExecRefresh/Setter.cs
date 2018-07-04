@@ -15,19 +15,10 @@ namespace CorePackage.Execution
         /// Constructor that need the definition of the variable to set
         /// </summary>
         /// <param name="toset">Definition of the variable to set</param>
-        public Setter(Entity.Variable toset):
-            base(
-                new Dictionary<string, Entity.Variable>
-                {
-                    { "value", new Entity.Variable(toset.Type) }
-                },
-                new Dictionary<string, Entity.Variable>
-                {
-                    { "reference", toset }
-                }
-            )
+        public Setter(Entity.Variable toset): base()
         {
-            
+            AddInput("value", new Entity.Variable(toset.Type)); //creates a copy of the variable in input
+            AddOutput("reference", toset); //set the variable to set in output
         }
 
         /// <summary>
@@ -35,7 +26,7 @@ namespace CorePackage.Execution
         /// </summary>
         public override void Execute()
         {
-            this.outputs["reference"].Value.definition.Value = this.inputs["value"].Value.definition.Value;
+            SetOutputValue("reference", GetInputValue("value"));
         }
     }
 }

@@ -81,7 +81,7 @@ namespace CoreTest.TestEntities
         [TestMethod]
         public void TestObjectActions()
         {
-            CorePackage.Entity.Type.ObjectType type = new CorePackage.Entity.Type.ObjectType(null);
+            CorePackage.Entity.Type.ObjectType type = new CorePackage.Entity.Type.ObjectType();
             CorePackage.Entity.DataType integer = CorePackage.Entity.Type.Scalar.Integer;
 
             type.AddAttribute("x", integer, CorePackage.Global.AccessMode.EXTERNAL);
@@ -89,8 +89,8 @@ namespace CoreTest.TestEntities
             type.AddAttribute("z", integer, CorePackage.Global.AccessMode.EXTERNAL);
             
             CorePackage.Entity.Function getAttrSum = new CorePackage.Entity.Function();
-            ((CorePackage.Global.IDeclarator<CorePackage.Entity.Function>)type).Declare(getAttrSum, "getAttrSum", CorePackage.Global.AccessMode.EXTERNAL);
-            type.SetFunctionAsMember("getAttrSum", CorePackage.Global.AccessMode.EXTERNAL);
+            type.Declare(getAttrSum, "getAttrSum", CorePackage.Global.AccessMode.EXTERNAL);
+            type.SetFunctionAsMember("getAttrSum");
 
             CorePackage.Entity.Variable res = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer);
             getAttrSum.Declare(res, "res", CorePackage.Global.AccessMode.EXTERNAL);
@@ -135,10 +135,10 @@ namespace CoreTest.TestEntities
             Console.WriteLine(getAttrSum.GetReturnValue("res"));
             Assert.IsTrue(getAttrSum.GetReturnValue("res") == 16);
 
-            CorePackage.Entity.Function addOp = ((CorePackage.Global.IDeclarator<CorePackage.Entity.Function>)type).Declare(new CorePackage.Entity.Function(), "Add", CorePackage.Global.AccessMode.EXTERNAL);
+            CorePackage.Entity.Function addOp = (CorePackage.Entity.Function)type.Declare(new CorePackage.Entity.Function(), "Add", CorePackage.Global.AccessMode.EXTERNAL);
 
             // Object Add(Object this, Objet RightOperand);
-            type.SetFunctionAsMember("Add", CorePackage.Global.AccessMode.EXTERNAL);
+            type.SetFunctionAsMember("Add");
             addOp.Declare(new CorePackage.Entity.Variable(type), CorePackage.Global.Operator.Right, CorePackage.Global.AccessMode.EXTERNAL);
             addOp.SetVariableAs(CorePackage.Global.Operator.Right, CorePackage.Entity.Function.VariableRole.PARAMETER);
             addOp.Declare(new CorePackage.Entity.Variable(type), CorePackage.Global.Operator.Result, CorePackage.Global.AccessMode.EXTERNAL);
@@ -181,7 +181,8 @@ namespace CoreTest.TestEntities
             uint splitRes = addOp.addInstruction(new CorePackage.Execution.GetAttributes(type));
             addOp.LinkInstructionData(getRes, "reference", splitRes, "this");
 
-            uint setResult = addOp.addInstruction(new CorePackage.Execution.SetAttribute(addOp.GetReturn(CorePackage.Global.Operator.Result)));
+            uint setResult = addOp.addInstruction(new CorePackage.Execution.SetAttribute(type));
+            addOp.LinkInstructionData(getRes, "reference", setResult, "this");
             addOp.LinkInstructionData(addX, CorePackage.Global.Operator.Result, setResult, "x");
             addOp.LinkInstructionData(addY, CorePackage.Global.Operator.Result, setResult, "y");
             addOp.LinkInstructionData(addZ, CorePackage.Global.Operator.Result, setResult, "z");

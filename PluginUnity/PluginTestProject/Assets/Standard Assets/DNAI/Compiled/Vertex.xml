@@ -9,7 +9,7 @@
              Base behaviour for DNAI IA.
             </summary>
             </member>
-        <member name="F:DNAI.Vertex.DNAIBehaviour.OnOutputChanged">
+        <member name="T:DNAI.Vertex.DNAIBehaviour.Vector3Df">
             <summary>
              Called when output values of the DNAI script change.
             </summary>

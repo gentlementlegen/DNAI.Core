@@ -8,33 +8,27 @@ namespace CorePackage.Execution
 {
     public class SetAttribute : ExecutionRefreshInstruction
     {
-        Entity.Variable toset;
-        Dictionary<string, Entity.DataType> attributes;
+        List<String> attributes = new List<String>();
 
-        public SetAttribute(Entity.Variable obj) :
-            base(new Dictionary<string, Entity.Variable> { },
-                new Dictionary<string, Entity.Variable> { })
+        public SetAttribute(Entity.Type.ObjectType type) : base()
         {
-            toset = obj;
-            Entity.Type.ObjectType type = obj.Type as Entity.Type.ObjectType;
-
-            if (type == null)
-                throw new InvalidOperationException("Given variable have to be of object type");
-
-            attributes = type.GetAttributes();
-
-            foreach (KeyValuePair<string, Entity.DataType> curr in attributes)
+            AddInput("this", new Entity.Variable(type), true);
+            foreach (KeyValuePair<string, Global.IDefinition> curr in type.GetAttributes())
             {
-                AddInput(curr.Key, new Entity.Variable(curr.Value));
+                Entity.Variable definition = new Entity.Variable((Entity.DataType)curr.Value);
+                AddInput(curr.Key, definition); //each time the node is executed, input are refreshed
+                AddOutput(curr.Key, definition); //if the definition of output is the same as the input they will be refreshed too
+                attributes.Add(curr.Key);
             }
         }
 
         public override void Execute()
         {
-            foreach (KeyValuePair<string, Entity.DataType> curr in attributes)
+            Entity.Variable objReference = GetInput("this").Definition;
+
+            foreach (String curr in attributes)
             {
-                toset.Value[curr.Key] = GetInputValue(curr.Key);
-                //outputs[curr.Key].Value.definition.Value = GetInputValue(curr.Key);
+                objReference.Value[curr] = GetInputValue(curr);
             }
         }
     }

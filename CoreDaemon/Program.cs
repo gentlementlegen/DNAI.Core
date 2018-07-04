@@ -14,7 +14,7 @@ namespace CoreDaemon
             CoreNetwork.ClientManager client = new CoreNetwork.ClientManager(new CoreCommand.BinaryManager());
 
             //client.Connect("10.248.84.63", 7777);
-            int port = 7777;
+            int port = 55241;
             Console.WriteLine(args.Count());
             if (args.Count() == 2 && args[0] == "-p") {
                 port = Int32.Parse(args[1]);
@@ -24,8 +24,10 @@ namespace CoreDaemon
 
             if (!client.isConnected())
                 throw new Exception("Unable to connect");
-
+            
             client.RegisterEvents();
+            
+            Console.WriteLine("Daemon running");
 
             while (client.isConnected())
             {
