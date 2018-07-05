@@ -56,15 +56,17 @@ namespace Core.Plugin.Unity.Generator
             AssemblyName = Path.GetFileNameWithoutExtension(_manager.FilePath).RemoveIllegalCharacters();
 
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
+            //UnityEngine.Debug.Log("compiling scripts length => " + ids.Count);
 
             foreach (var id in ids)
             {
                 dataTypes.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.DATA_TYPE, id));
                 variables.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, id));
                 functions.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
+                //UnityEngine.Debug.Log("for id " + id + " found functions " + functions.Count);
             }
-
             var code = _template.GenerateTemplateContent(_manager, variables, functions, dataTypes);
+            //UnityEngine.Debug.Log(code);
             _compiler.Compile(code, AssemblyName);
         }
 
