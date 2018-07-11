@@ -332,7 +332,11 @@ namespace CoreControl
         /// <param name="newName">Name to set to the entity</param>
         public void Rename(UInt32 containerID, string lastName, string newName)
         {
-            GetDeclaratorOf(containerID).Rename(lastName, newName);
+            CorePackage.Global.IDeclarator decl = GetDeclaratorOf(containerID);
+            CorePackage.Global.IDefinition def = decl.Find(lastName);
+
+            decl.Rename(lastName, newName);
+            def.Name = newName; //rename here because declarator do not edit Definition name
         }
 
         /// <summary>

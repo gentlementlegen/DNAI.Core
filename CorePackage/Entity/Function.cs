@@ -33,12 +33,12 @@ namespace CorePackage.Entity
         /// <summary>
         /// Contains function parameters which references variables declared in "scope" attribute
         /// </summary>
-        private Dictionary<string, Variable> parameters = new Dictionary<string, Variable>();
+        private HashSet<Variable> parameters = new HashSet<Variable>();
 
         /// <summary>
         /// Contains function returns which references variables declared in "scope" attribute
         /// </summary>
-        private Dictionary<string, Variable> returns = new Dictionary<string, Variable>();
+        private HashSet<Variable> returns = new HashSet<Variable>();
 
         /// <summary>
         /// Contained instructions to process
@@ -67,9 +67,9 @@ namespace CorePackage.Entity
             Variable real = (Variable)scope.Find(name, AccessMode.EXTERNAL);
             
             if (role == VariableRole.PARAMETER)
-                this.parameters[name] = real;
+                this.parameters.Add(real);
             else if (role == VariableRole.RETURN)
-                this.returns[name] = real;
+                this.returns.Add(real);
             return real;
         }
 
@@ -78,7 +78,7 @@ namespace CorePackage.Entity
         /// </summary>
         public Dictionary<string, Variable> Parameters
         {
-            get { return this.parameters; }
+            get { return this.parameters.ToDictionary((Variable var) => var.Name); }
         }
 
         /// <summary>
@@ -99,9 +99,11 @@ namespace CorePackage.Entity
         /// <returns>Variable definition that corresponds to the parameter</returns>
         public Variable GetParameter(string name)
         {
-            if (!this.parameters.ContainsKey(name))
+            Variable param = (Variable)scope.Find(name);
+
+            if (!this.parameters.Contains(param))
                 throw new Error.NotFoundException("Function: No such parameter named \"" + name + "\"");
-            return this.parameters[name];
+            return param;
         }
 
         /// <summary>
@@ -109,7 +111,7 @@ namespace CorePackage.Entity
         /// </summary>
         public Dictionary<string, Variable> Returns
         {
-            get { return this.returns; }
+            get { return this.returns.ToDictionary((Variable var) => var.Name); }
         }
 
         /// <summary>
@@ -120,9 +122,11 @@ namespace CorePackage.Entity
         /// <returns>Value to find or null</returns>
         public Variable GetReturn(string name)
         {
-            if (!this.returns.ContainsKey(name))
+            Variable ret = (Variable)scope.Find(name);
+
+            if (!this.returns.Contains(ret))
                 throw new Error.NotFoundException("Function: No such return named \"" + name + "\"");
-            return this.returns[name];
+            return ret;
         }
 
         /// <summary>
@@ -386,10 +390,12 @@ namespace CorePackage.Entity
         ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
         public IDefinition Pop(string name)
         {
-            if (parameters.ContainsKey(name))
-                parameters.Remove(name);
-            else if (returns.ContainsKey(name))
-                returns.Remove(name);
+            Variable topop = (Variable)scope.Find(name);
+
+            if (parameters.Contains(topop))
+                parameters.Remove(topop);
+            else if (returns.Contains(topop))
+                returns.Remove(topop);
             return scope.Pop(name);
         }
 

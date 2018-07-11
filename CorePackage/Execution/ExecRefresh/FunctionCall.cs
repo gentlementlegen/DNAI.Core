@@ -27,6 +27,11 @@ namespace CorePackage.Execution
             AddInputs(tocall.Parameters);
             AddOutputs(tocall.Returns);
             
+            foreach (KeyValuePair<string, Input> curr in Inputs)
+            {
+                Console.WriteLine(curr.Key + ": " + curr.Value.Definition.Type.GetType().ToString());
+            }
+
             this.tocall = tocall;
         }
 
