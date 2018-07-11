@@ -16,6 +16,7 @@ namespace Core.Plugin.Unity.Generator
         public List<string> Inputs = new List<string>();
         public List<string> Outputs = new List<string>();
         public List<string> DataTypes = new List<string>();
+        public List<string> EnumNames = new List<string>();
         public string FilePath = "";
         public uint FunctionId;
         public string FunctionArguments = "";
@@ -111,6 +112,7 @@ namespace Core.Plugin.Unity.Generator
                         ret += "}";
                         template.DataTypes.Add(ret);
                         enumNames.Add(item.Id, item.Name);
+                        template.EnumNames.Add(item.Name);
                     }
                     else if (type == CoreControl.EntityFactory.ENTITY.OBJECT_TYPE)
                     {

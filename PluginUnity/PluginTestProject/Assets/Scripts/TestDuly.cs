@@ -32,11 +32,11 @@ public class TestDuly
 #if COMPILE
     private IEnumerator PlayRoutine()
     {
-        lastResult = COMPARISON.NONE;
+        lastResult = (long)COMPARISON.NONE;
         for (int i = Tries; i > 0 && result != MysteryNumber; i--)
         {
             Execute();
-            lastResult = result < MysteryNumber ? COMPARISON.MORE : COMPARISON.LESS;
+            lastResult = (long) (result < MysteryNumber ? COMPARISON.MORE : COMPARISON.LESS);
             Debug.Log($"Result = {result}; MysteryNumber = {MysteryNumber}; lastResult = {lastResult}");
             TextNumber.text = result.ToString();
             yield return new WaitForSeconds(0.5f);

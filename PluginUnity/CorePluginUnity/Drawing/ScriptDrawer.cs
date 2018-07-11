@@ -141,7 +141,6 @@ namespace Core.Plugin.Unity.Drawing
             private void DrawHeaderInternal(Rect rect)
             {
                 Rect refreshRect = new Rect(rect.x + rect.xMax - 25f, rect.y, 15f, 15f);
-
                 EditorGUI.LabelField(rect, "IA List");
 
                 //subScriptList.list = scriptManager.iaList;
@@ -265,7 +264,7 @@ namespace Core.Plugin.Unity.Drawing
         }
 
         /// <summary>
-        /// Retrieves the saved setting of the wokspace.
+        /// Retrieves the saved setting of the workspace.
         /// </summary>
         private void LoadSettings()
         {
@@ -292,7 +291,15 @@ namespace Core.Plugin.Unity.Drawing
         {
             if (ShouldDraw)
             {
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+
+                GUILayout.BeginVertical(GUILayout.MaxWidth(Screen.width - 10));
                 rList.DoLayoutList();
+                GUILayout.EndVertical();
+
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
             }
         }
 
