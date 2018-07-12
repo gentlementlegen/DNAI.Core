@@ -207,7 +207,7 @@ namespace Core.Plugin.Unity.Drawing
         /// </summary>
         public ScriptDrawer()
         {
-            CloudFileWatcher.FileCreated += OnFileCreated;
+            //CloudFileWatcher.FileCreated += OnFileCreated;
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace Core.Plugin.Unity.Drawing
             var newElem = new ListAIHandler();
             newElem.OnEnable();
             newElem.scriptManager.FilePath = e.FullPath;
-            newElem.scriptManager.LoadScript();
+            newElem.scriptManager.LoadScript(e.FullPath);
             listIA.Add(newElem);
         }
 
@@ -355,8 +355,8 @@ namespace Core.Plugin.Unity.Drawing
                 var newPath = EditorUtility.OpenFilePanel("Select a script to load", "Documents", Constants.iaFileExtension);
                 if (!string.IsNullOrEmpty(newPath))
                 {
-                    listIA[index].scriptManager.FilePath = newPath;
-                    listIA[index].scriptManager.LoadScript();
+                    //listIA[index].scriptManager.FilePath = newPath;
+                    listIA[index].scriptManager.FilePath = listIA[index].scriptManager.LoadScript(newPath);
                     AssetDatabase.Refresh();
                     _editorWindow.Focus();
                 }

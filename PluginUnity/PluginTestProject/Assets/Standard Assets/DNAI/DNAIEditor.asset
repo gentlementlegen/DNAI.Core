@@ -14,6 +14,7 @@ MonoBehaviour:
   listIA:
   - scriptManager:
       _fileName: 
-      _filePath: C:/Users/ferna/Desktop/MoreOrLess.dnai
+      _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
+        Assets\DNAI\Editor\..\Scripts
     _scriptList:
     - Play
