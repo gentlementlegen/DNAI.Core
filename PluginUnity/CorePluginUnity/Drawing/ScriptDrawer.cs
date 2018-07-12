@@ -349,6 +349,7 @@ namespace Core.Plugin.Unity.Drawing
             //Debug.Log("[DEBUG] 1. ");
 
             //			if (GUI.Button (dropdownRect, "Browse", miniButton))
+            // Button for loading a script from the disk
             if (GUI.Button(dropdownRect, dotButton))
             {
                 var newPath = EditorUtility.OpenFilePanel("Select a script to load", "Documents", Constants.iaFileExtension);

@@ -97,6 +97,7 @@ namespace Core.Plugin.Unity.Editor
 
             Task.Run(() =>
             {
+                _manager.Reset();
                 _manager.LoadCommandsFrom(FilePath);
                 //var codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
                 //codeConverter.ConvertCode();
