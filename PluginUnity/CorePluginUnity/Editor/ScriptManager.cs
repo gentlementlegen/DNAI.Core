@@ -90,12 +90,18 @@ namespace Core.Plugin.Unity.Editor
             try
             {
                 // TODO : maybe check if the file is already there and ask for overwrite
+                CloudFileWatcher.Watch(false);
                 Directory.CreateDirectory(fileCopyPath);
                 File.Copy(path, fileFullPath, true);
+                CloudFileWatcher.Watch(true);
             }
             catch (IOException e)
             {
                 UnityEngine.Debug.LogWarning($"Error copying file at location [{path}]: {e.Message}");
+            }
+            finally
+            {
+                CloudFileWatcher.Watch(true);
             }
 
             Task.Run(() =>

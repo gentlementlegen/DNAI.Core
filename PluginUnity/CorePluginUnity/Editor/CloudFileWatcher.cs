@@ -32,9 +32,9 @@ namespace Core.Plugin.Unity.Editor
             _fileWatcher.Path = (Constants.ScriptPath);
             _fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
             _fileWatcher.Filter = "*." + Constants.iaFileExtension;
-            _fileWatcher.Created += OnFileCreated;
-            _fileWatcher.Changed += OnFileChanged;
-            _fileWatcher.Deleted += OnFileDeleted;
+            //_fileWatcher.Created += OnFileCreated;
+            //_fileWatcher.Changed += OnFileChanged;
+            //_fileWatcher.Deleted += OnFileDeleted;
             _fileWatcher.EnableRaisingEvents = true;
             //StartWatcher();
         }

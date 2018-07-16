@@ -200,7 +200,7 @@ namespace Core.Plugin.Unity.Generator
         private string GetUnityLibraryPath()
         {
 #if UNITY_ENGINE
-            UnityEngine.Debug.Log("Install path => " + UnityEditor.EditorApplication.applicationContentsPath);
+            //UnityEngine.Debug.Log("Install path => " + UnityEditor.EditorApplication.applicationContentsPath);
             return UnityEditor.EditorApplication.applicationContentsPath;
 #else
             var path = "";
