@@ -207,7 +207,7 @@ namespace Core.Plugin.Unity.Drawing
         /// </summary>
         public ScriptDrawer()
         {
-            //CloudFileWatcher.FileCreated += OnFileCreated;
+            CloudFileWatcher.FileCreated += OnFileCreated;
         }
 
         /// <summary>
