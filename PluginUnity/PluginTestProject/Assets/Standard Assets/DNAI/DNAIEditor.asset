@@ -14,14 +14,8 @@ MonoBehaviour:
   listIA:
   - scriptManager:
       _fileName: 
-<<<<<<< HEAD
       _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
-        Assets\DNAI\Editor\..\Scripts
-    _scriptList:
-    - Play
-=======
-      _filePath: C:/Users/ferna/Downloads/MoreOrLess.dnai
+        Assets\DNAI\Editor\..\Scripts\MoreOrLess.dnai
     _scriptList:
     - Play
     - Reset
->>>>>>> unity_plugin_file_loader
