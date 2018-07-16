@@ -490,6 +490,23 @@ namespace CoreControl
             return entity_factory.GetIds(flags);
         }
 
+        /// <summary>
+        /// Get an entity from its id
+        /// </summary>
+        /// <param name="id">Id of the entity</param>
+        /// <returns>The entity corresponding to the id</returns>
+        public EntityFactory.Entity GetEntity(UInt32 id)
+        {
+            CorePackage.Global.IDefinition def = entity_factory.Find(id);
+
+            return new EntityFactory.Entity
+            {
+                Id = id,
+                Name = def.Name,
+                Type = GetEntityType(id)
+            };
+        }
+
         public void merge(Controller controller)
         {
             entity_factory.merge(controller.entity_factory);
