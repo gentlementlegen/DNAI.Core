@@ -99,6 +99,10 @@ namespace Core.Plugin.Unity.Editor
             {
                 UnityEngine.Debug.LogWarning($"Error copying file at location [{path}]: {e.Message}");
             }
+            finally
+            {
+                CloudFileWatcher.Watch(true);
+            }
 
             Task.Run(() =>
             {
