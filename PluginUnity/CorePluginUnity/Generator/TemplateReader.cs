@@ -18,10 +18,18 @@ namespace Core.Plugin.Unity.Generator
         public List<string> DataTypes = new List<string>();
         public List<string> EnumNames = new List<string>();
         public string FilePath = "";
-        public uint FunctionId;
-        public string FunctionArguments = "";
+        //public uint FunctionId;
+        //public string FunctionArguments = "";
         public string Namespace = "Behaviour";
         public string ClassName = "DNAIBehaviour";
+        public List<Function> Functions = new List<Function>();
+    }
+
+    public class Function
+    {
+        public string Name = "";
+        public uint FunctionId;
+        public string FunctionArguments = "";
     }
 
     /// <summary>
@@ -95,8 +103,9 @@ namespace Core.Plugin.Unity.Generator
                 template.Namespace = Path.GetFileNameWithoutExtension(template.FilePath).RemoveIllegalCharacters();
             }
 
-            if (functions?.Count > 0)
-                template.ClassName = functions[0].Name;
+            //if (functions?.Count > 0)
+            //    template.ClassName = functions[0].Name;
+            template.ClassName = template.Namespace;
 
             if (dataTypes != null)
             {
@@ -134,9 +143,15 @@ namespace Core.Plugin.Unity.Generator
             if (functions?.Count > 0)
             {
                 template.Outputs.Clear();
-                template.FunctionId = functions[0].Id;
+                //template.FunctionId = functions[0].Id;
                 foreach (var item in functions)
                 {
+                    var func = new Function();
+                    func.Name = item.Name;
+                    func.FunctionId = item.Id;
+
+                    template.Functions.Add(func);
+
                     //template.FunctionId = item.Id;
                     var pars = manager.Controller.GetFunctionParameters(item.Id);
 
@@ -157,7 +172,7 @@ namespace Core.Plugin.Unity.Generator
                     }
 
                     for (int i = 0; i < pars.Count; i++)
-                        template.FunctionArguments += $"{{\"{pars[i].Name}\", ({manager.Controller.GetVariableValue(pars[i].Id).GetType().ToString()}) {pars[i].Name}}},";
+                        func.FunctionArguments += $"{{\"{pars[i].Name}\", ({manager.Controller.GetVariableValue(pars[i].Id).GetType().ToString()}) {pars[i].Name}}},";
                     foreach (var ret in manager.Controller.GetFunctionReturns(item.Id))
                         template.Outputs.Add(ret.ToSerialString(manager.Controller));
                 }
