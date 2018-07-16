@@ -14,12 +14,14 @@ MonoBehaviour:
   listIA:
   - scriptManager:
       _fileName: 
-      _filePath: D:/Folders/VisualStudio/Duly/PluginUnity/PluginTestProject/Assets/Standard
-        Assets/DNAI/Scripts/More Or Less.dnai
+<<<<<<< HEAD
+      _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
+        Assets\DNAI\Editor\..\Scripts
     _scriptList:
     - Play
-  - scriptManager:
-      _fileName: 
-      _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
-        Assets\DNAI\Scripts\MoreOrLess.dnai
-    _scriptList: []
+=======
+      _filePath: C:/Users/ferna/Downloads/MoreOrLess.dnai
+    _scriptList:
+    - Play
+    - Reset
+>>>>>>> unity_plugin_file_loader
