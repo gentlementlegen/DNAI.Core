@@ -85,12 +85,13 @@ namespace Core.Plugin.Unity.Editor
             //t.Start ();
             UnityEngine.Debug.Log("file path => " + path);
             var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "Scripts");
+            var fileFullPath = Path.Combine(fileCopyPath, Path.GetFileName(path));
 
             try
             {
                 // TODO : maybe check if the file is already there and ask for overwrite
                 Directory.CreateDirectory(fileCopyPath);
-                File.Copy(path, Path.Combine(fileCopyPath, Path.GetFileName(path)), true);
+                File.Copy(path, fileFullPath, true);
             }
             catch (IOException e)
             {
@@ -104,7 +105,7 @@ namespace Core.Plugin.Unity.Editor
                 //var codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
                 //codeConverter.ConvertCode();
             }).ContinueWith((param) => OnScriptLoaded(param.Status.ToString()));
-            return fileCopyPath;
+            return fileFullPath;
         }
 
         /// <summary>
