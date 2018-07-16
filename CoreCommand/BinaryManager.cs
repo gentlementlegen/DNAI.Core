@@ -204,6 +204,8 @@ namespace CoreCommand
 
                 if (outStream != null)
                     BinarySerializer.Serializer.Serialize(error.Message, outStream);
+                if (save)
+                    _commands.RemoveAt(_commands.Count - 1);
                 return false;
             }
         }

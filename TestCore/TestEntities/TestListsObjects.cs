@@ -93,6 +93,7 @@ namespace CoreTest.TestEntities
             type.SetFunctionAsMember("getAttrSum");
 
             CorePackage.Entity.Variable res = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer);
+            res.Name = "res";
             getAttrSum.Declare(res, "res", CorePackage.Global.AccessMode.EXTERNAL);
             getAttrSum.SetVariableAs("res", CorePackage.Entity.Function.VariableRole.RETURN);
 
@@ -139,9 +140,16 @@ namespace CoreTest.TestEntities
 
             // Object Add(Object this, Objet RightOperand);
             type.SetFunctionAsMember("Add");
-            addOp.Declare(new CorePackage.Entity.Variable(type), CorePackage.Global.Operator.Right, CorePackage.Global.AccessMode.EXTERNAL);
+            CorePackage.Entity.Variable rgt = new CorePackage.Entity.Variable(type);
+            rgt.Name = CorePackage.Global.Operator.Right;
+
+            addOp.Declare(rgt, CorePackage.Global.Operator.Right, CorePackage.Global.AccessMode.EXTERNAL);
             addOp.SetVariableAs(CorePackage.Global.Operator.Right, CorePackage.Entity.Function.VariableRole.PARAMETER);
-            addOp.Declare(new CorePackage.Entity.Variable(type), CorePackage.Global.Operator.Result, CorePackage.Global.AccessMode.EXTERNAL);
+
+            CorePackage.Entity.Variable rs = new CorePackage.Entity.Variable(type);
+            rs.Name = CorePackage.Global.Operator.Result;
+
+            addOp.Declare(rs, CorePackage.Global.Operator.Result, CorePackage.Global.AccessMode.EXTERNAL);
             addOp.SetVariableAs(CorePackage.Global.Operator.Result, CorePackage.Entity.Function.VariableRole.RETURN);
 
             type.OverloadOperator(CorePackage.Global.Operator.Name.ADD, "Add");
