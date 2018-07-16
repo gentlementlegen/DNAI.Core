@@ -217,6 +217,8 @@ namespace Core.Plugin.Unity.Generator
         /// <returns></returns>
         private string CreateObject(CustomObject obj)
         {
+            return obj.GetGeneratedClass();
+            throw new NotImplementedException("In development");
             var ret = "class " + obj.ObjectName + "{";
 
             foreach (var attrib in obj.Fields)

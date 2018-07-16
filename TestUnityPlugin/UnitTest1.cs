@@ -199,6 +199,33 @@ namespace TestUnityPlugin
             //Assert.IsNotNull(func, "func is null");
         }
 
+        [TestMethod]
+        public void TestAstar()
+        {
+            var compiler = new Compiler();
+            var template = new TemplateReader();
+            var _manager = new BinaryManager();
+            var variables = new List<Entity>();
+            var functions = new List<Entity>();
+            var dataTypes = new List<Entity>();
+
+            _manager.LoadCommandsFrom("AStarFix.dnai");
+            var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
+            foreach (var id in ids)
+            {
+                dataTypes.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.DATA_TYPE, id));
+                variables.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, id));
+                functions.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
+            }
+            //variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[1]);
+            //functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[1]);
+            //GenerateMoreOrLess(_manager, out List<Entity> variables, out List<Entity> functions);
+
+            string code = template.GenerateTemplateContent(_manager, variables, functions, dataTypes);
+            var res = compiler.Compile(code);
+            res = compiler.Compile(code);
+        }
+
         private Reply HandleCommand<Reply, Command>(Command tohandle, CoreCommand.IManager manager)
         {
             MemoryStream inp = new MemoryStream();

@@ -17,12 +17,6 @@ using Core.Plugin.Unity.Editor.Conditions;
 
 namespace DNAI.<#=Namespace#>
 {
-	<# foreach (var item in DataTypes)
-	{#>
-		public <#=item#>
-	<# } #>
-
-
 	//namespace <#=ClassName#>
 	//{
 		[Serializable]
@@ -250,6 +244,11 @@ namespace DNAI.<#=Namespace#>
 			[HideInInspector]
 			public List<ConditionItem> _cdtList = new List<ConditionItem>();// { new ConditionItem() { cdt = new IntCondition() } };
 
+			<# foreach (var item in DataTypes)
+			{#>
+				<#=item#>
+			<# } #>
+
 			//[Serializable]
 			//public class UnityEventOutputChange : UnityEvent<EventOutputChange>
 			//{
@@ -286,11 +285,11 @@ namespace DNAI.<#=Namespace#>
 				}
 			<# } #>
 
-			private BinaryManager _manager;
+			private static readonly BinaryManager _manager = new BinaryManager();
 
 			public <#=ClassName#>()
 			{
-				_manager = new BinaryManager();
+				//_manager = new BinaryManager();
 				_manager.LoadCommandsFrom(@"Assets/Standard Assets/DNAI/Scripts/" + "<#=FilePath#>");
 			}
 

@@ -92,6 +92,11 @@
     <Compile Include="Generator\Compiler.cs" />
     <Compile Include="Generator\CustomObject.cs" />
     <Compile Include="Generator\FunctionGenerator.cs" />
+    <Compile Include="Generator\GeneratedClassTemplate.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneratedClassTemplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Generator\GeneratedCodeTemplate.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -132,6 +137,10 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Generator\GeneratedClassTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>GeneratedClassTemplate.cs</LastGenOutput>
+    </Content>
     <Content Include="Generator\GeneratedCodeTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>GeneratedCodeTemplate.cs</LastGenOutput>

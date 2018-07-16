@@ -32,7 +32,7 @@ public class TestDuly
 #if COMPILE
     private IEnumerator PlayRoutine()
     {
-        //ExecuteReset();
+        ExecuteReset();
         lastResult = (long)COMPARISON.NONE;
         for (int i = Tries; i > 0 && result != MysteryNumber; i--)
         {
