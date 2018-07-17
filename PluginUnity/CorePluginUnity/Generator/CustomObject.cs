@@ -2,6 +2,7 @@
 using CoreControl;
 using System;
 using System.Collections.Generic;
+using static Core.Plugin.Unity.Generator.GeneratedClassTemplate;
 using static CoreControl.EntityFactory;
 
 namespace Core.Plugin.Unity.Generator
@@ -84,7 +85,8 @@ namespace Core.Plugin.Unity.Generator
             //template.Outputs.Clear();
             foreach (var item in methods)
             {
-                var func = new Function
+                // method is for DNAI call
+                var method = new Method
                 {
                     Name = item.Name,
                     FunctionId = item.Id
@@ -115,13 +117,22 @@ namespace Core.Plugin.Unity.Generator
                 //}
 
                 for (int i = 0; i < pars.Count; i++)
+                {
+                    var fType = GetFieldType(controller.GetVariableType(pars[i].Id));
                     //func.FunctionArguments += $"{{\"{pars[i].Name}\", ({controller.GetVariableValue(pars[i].Id).GetType().ToString()}) {pars[i].Name}}},";
-                    func.FunctionArguments += $"{{\"{pars[i].Name}\", ({controller.GetEntity(controller.GetVariableType(pars[i].Id)).Name}) {pars[i].Name}}},";
+                    //method.InvokeArguments += $"{{\"{pars[i].Name}\", ({controller.GetEntity(controller.GetVariableType(pars[i].Id)).Name}) @{pars[i].Name}}},";
+                    method.InvokeArguments += $"{{\"{pars[i].Name}\", ({fType}) @{pars[i].Name}}},";
+                    //method.Arguments += controller.GetEntity(controller.GetVariableType(pars[i].Id)).Name + " @" + pars[i].Name + (i + 1 >= pars.Count ? "" : ",");
+                    method.Arguments += fType + " @" + pars[i].Name + (i + 1 >= pars.Count ? "" : ",");
+                }
                 foreach (var ret in controller.GetFunctionReturns(item.Id))
                 {
-                    var vvv = ret.ToSerialString(controller);
+                    var r = controller.GetEntity(controller.GetVariableType(ret.Id)).Name;
+                    var fType = GetFieldType(controller.GetVariableType(ret.Id));
+                    method.Return = fType;
                     //template.Outputs.Add(ret.ToSerialString(controller));
                 }
+                _template.Methods.Add(method);
             }
         }
 

@@ -24,8 +24,3 @@ MonoBehaviour:
       _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
         Assets\DNAI\Scripts\AStarFix.dnai
     _scriptList: []
-  - scriptManager:
-      _fileName: 
-      _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
-        Assets\DNAI\Editor\..\Scripts\vertex.dnai
-    _scriptList: []

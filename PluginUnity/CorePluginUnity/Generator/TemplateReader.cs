@@ -114,7 +114,7 @@ namespace Core.Plugin.Unity.Generator
                     var type = manager.Controller.GetEntityType(item.Id);
                     if (type == CoreControl.EntityFactory.ENTITY.ENUM_TYPE)
                     {
-                        var ret = "";
+                        var ret = "public ";
                         ret += $"enum {item.Name} {{";
                         foreach (var v in manager.Controller.GetEnumerationValues(item.Id))
                             ret += $"{v} = {manager.Controller.GetEnumerationValue(item.Id, v)},";
@@ -218,14 +218,13 @@ namespace Core.Plugin.Unity.Generator
         private string CreateObject(CustomObject obj)
         {
             return obj.GetGeneratedClass();
-            throw new NotImplementedException("In development");
-            var ret = "class " + obj.ObjectName + "{";
+            //var ret = "class " + obj.ObjectName + "{";
 
-            foreach (var attrib in obj.Fields)
-            {
-                ret += "public " + obj.GetFieldType(attrib.Value) + " " + attrib.Key + ";";
-            }
-            return ret + "}";
+            //foreach (var attrib in obj.Fields)
+            //{
+            //    ret += "public " + obj.GetFieldType(attrib.Value) + " " + attrib.Key + ";";
+            //}
+            //return ret + "}";
         }
 
         /// <summary>

@@ -34,7 +34,7 @@ namespace Assets.Scripts.Pacman
     {
         public Dummy()
         {
-            _manager = null;
+            //_manager = null;
         }
     }
 }
