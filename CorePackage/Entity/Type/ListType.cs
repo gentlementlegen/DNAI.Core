@@ -72,7 +72,26 @@ namespace CorePackage.Entity.Type
         /// </summary>
         public override bool IsValueOfType(dynamic value)
         {
-            return _listType == value.GetType();
+            //If the value is enumerable
+            if (!typeof(System.Collections.IEnumerable).IsAssignableFrom(value.GetType()))
+                return false;
+
+            //If its empty, its ok
+            if (value.Count == 0)
+                return true;
+
+            //Else check the first value
+            dynamic fval = value[0];
+
+            try
+            {
+                //If its scalar, get the real value
+                if ((stored as ScalarType) != null)
+                    fval = fval.Value;
+            } catch (Exception) { }
+
+            //and finaly check that is of stored type
+            return  stored.IsValueOfType(fval);
         }
 
         public override dynamic OperatorAdd(dynamic lOp, dynamic rOp)

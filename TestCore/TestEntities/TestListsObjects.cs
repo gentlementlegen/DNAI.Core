@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace CoreTest.TestEntities
 {
@@ -212,6 +213,53 @@ namespace CoreTest.TestEntities
             Assert.IsTrue(addition["x"] == 15);
             Assert.IsTrue(addition["y"] == 62);
             Assert.IsTrue(addition["z"] == -71);
+        }
+        
+        public class Pos
+        {
+            public class ZType
+            {
+                public double toto;
+            }
+
+            public double X;
+            public List<double> Y;
+            public ZType Z;
+        }
+
+        [TestMethod]
+        public void TestObjectValues()
+        {
+            CorePackage.Entity.Type.ObjectType obj = new CorePackage.Entity.Type.ObjectType();
+            CorePackage.Entity.Type.ObjectType ztype = new CorePackage.Entity.Type.ObjectType();
+
+            ztype.AddAttribute("toto", CorePackage.Entity.Type.Scalar.Floating, CorePackage.Global.AccessMode.EXTERNAL);
+
+            obj.AddAttribute("X", CorePackage.Entity.Type.Scalar.Floating, CorePackage.Global.AccessMode.EXTERNAL);
+            obj.AddAttribute("Y", new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), CorePackage.Global.AccessMode.EXTERNAL);
+            obj.AddAttribute("Z", ztype, CorePackage.Global.AccessMode.EXTERNAL);
+
+            Dictionary<string, dynamic> dicValue = new Dictionary<string, dynamic>
+            {
+                { "X", 3.14 },
+                { "Y", new List<double> { 4.12 } },
+                { "Z", new Dictionary<string, dynamic> { { "toto", -3093.334 } } }
+            };
+            object jsonValue = JsonConvert.DeserializeObject(@"{
+                ""X"": 3.14,
+                ""Y"": [4.12],
+                ""Z"": { ""toto"": -3093.334 }
+            }");
+            Pos realValue = new Pos
+            {
+                X = 3.14,
+                Y = new List<double> { 4.12 },
+                Z = new Pos.ZType { toto = -3093.334 }
+            };
+
+            Assert.IsTrue(obj.IsValueOfType(dicValue));
+            Assert.IsTrue(obj.IsValueOfType(jsonValue));
+            Assert.IsTrue(obj.IsValueOfType(realValue));
         }
     }
 }
