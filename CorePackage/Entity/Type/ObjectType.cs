@@ -122,6 +122,56 @@ namespace CorePackage.Entity.Type
             func.SetVariableAs("this", Function.VariableRole.PARAMETER);
             return toret;
         }
+
+        public dynamic GetAttributeValue(dynamic obj, string attribute)
+        {
+            if (!typeof(System.Collections.IEnumerable).IsAssignableFrom(obj.GetType()))
+            {
+                foreach (FieldInfo valAttr in obj.GetType().GetFields())
+                {
+                    if (valAttr.Name == attribute)
+                    {
+                        return valAttr.GetValue(obj);
+                    }
+                }
+                throw new NotFoundException("No such attribute " + attribute + " in object " + Name);
+            }
+            else
+            {
+                if (!obj.ContainsKey(attribute))
+                    throw new NotFoundException("No such attribute " + attribute + " in object " + Name);
+                return obj[attribute];
+            }
+        }
+
+        public void SetAttributeValue(dynamic obj, string attribute, dynamic value)
+        {
+            bool found = false;
+
+            if (typeof(System.Collections.IEnumerable).IsAssignableFrom(obj.GetType()))
+            {
+                if (obj.ContainsKey(attribute))
+                {
+                    obj[attribute] = value;
+                    found = true;
+                }
+            }
+            else
+            {
+                foreach (FieldInfo valAttr in obj.GetType().GetFields())
+                {
+                    if (valAttr.Name == attribute)
+                    {
+                        valAttr.SetValue(obj, value);
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!found)
+                throw new NotFoundException("No such attribute " + attribute + " in object " + Name);
+        }
         
         /// <see cref="DataType.Instantiate"/>
         public override dynamic Instantiate()

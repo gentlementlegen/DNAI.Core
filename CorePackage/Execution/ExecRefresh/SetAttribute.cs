@@ -9,9 +9,11 @@ namespace CorePackage.Execution
     public class SetAttribute : ExecutionRefreshInstruction
     {
         List<String> attributes = new List<String>();
+        Entity.Type.ObjectType stored;
 
         public SetAttribute(Entity.Type.ObjectType type) : base()
         {
+            stored = type;
             AddInput("this", new Entity.Variable(type), true);
             foreach (KeyValuePair<string, Global.IDefinition> curr in type.GetAttributes())
             {
@@ -28,7 +30,7 @@ namespace CorePackage.Execution
 
             foreach (String curr in attributes)
             {
-                objReference.Value[curr] = GetInputValue(curr);
+                stored.SetAttributeValue(objReference.Value, curr, GetInputValue(curr));
             }
         }
     }
