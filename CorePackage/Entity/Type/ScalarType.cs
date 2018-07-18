@@ -175,12 +175,12 @@ namespace CorePackage.Entity.Type
         /// <summary>
         /// Represents an integer type
         /// </summary>
-        public static readonly ScalarType Integer = new ScalarType(typeof(long), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(ulong));
+        public static readonly ScalarType Integer = new ScalarType(typeof(int), typeof(long), typeof(short), typeof(ushort), typeof(uint), typeof(ulong));
 
         /// <summary>
         /// Represents a floating type
         /// </summary>
-        public static readonly ScalarType Floating = new ScalarType(typeof(double), typeof(float));
+        public static readonly ScalarType Floating = new ScalarType(typeof(float), typeof(double));
 
         /// <summary>
         /// Represents a character type

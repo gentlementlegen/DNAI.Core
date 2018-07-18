@@ -61,8 +61,8 @@ namespace CoreTest.TestEntities
 
             var item = type.OperatorAccess(operatorTest, 1);
 
-            Assert.IsTrue(type.OperatorEqual(union, new List<long> { 0, 0, 42, 50 }));
-            Assert.IsTrue(type.OperatorEqual(sub, new List<long> { 50 }));
+            Assert.IsTrue(type.OperatorEqual(union, new List<int> { 0, 0, 42, 50 }));
+            Assert.IsTrue(type.OperatorEqual(sub, new List<int> { 50 }));
             Assert.IsTrue(item == 50);
 
             //remove
@@ -77,6 +77,24 @@ namespace CoreTest.TestEntities
             //  outputs:
             //      - size
             Debug.WriteLine($"Size = {t.Count}");
+        }
+
+        [TestMethod]
+        public void TestNestedList()
+        {
+            CorePackage.Entity.Type.ListType intlist = new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Integer);
+            CorePackage.Entity.Type.ListType intlistlist = new CorePackage.Entity.Type.ListType(intlist);
+            CorePackage.Execution.Append instruction = new CorePackage.Execution.Append(intlist);
+            List<List<int>> val = new List<List<int>>();
+
+            instruction.SetInputValue("array", val);
+
+            Assert.IsTrue(instruction.GetInputValue("array").Count == 0);
+            Assert.IsTrue(instruction.GetInputValue("element").Count == 0);
+
+            instruction.Execute();
+
+            Assert.IsTrue(val.Count == 1);
         }
 
         [TestMethod]

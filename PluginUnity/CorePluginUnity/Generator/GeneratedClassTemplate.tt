@@ -16,7 +16,7 @@ public class <#=ClassName#>
 		public <#=method.Return#> <#=method.Name#>(<#=method.Arguments#>)
 		{
 			<# if (method.Return != "void") { #>
-				return 
+				return (<#=method.Return#>)
 			<# } #>
 			_manager.Controller.CallFunction(<#=method.FunctionId#>, new Dictionary<string, dynamic>{ <#=method.InvokeArguments#> })
 			<# if (method.Return != "void") { #>
