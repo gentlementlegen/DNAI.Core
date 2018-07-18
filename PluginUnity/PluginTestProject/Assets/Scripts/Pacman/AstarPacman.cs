@@ -1,4 +1,5 @@
 ﻿using DNAI.AStarFix;
+using static DNAI.AStarFix.AStarFix;
 
 namespace Assets.Scripts.Pacman
 {

@@ -15,7 +15,13 @@ public class <#=ClassName#>
 	{ #>
 		public <#=method.Return#> <#=method.Name#>(<#=method.Arguments#>)
 		{
-			return _manager.Controller.CallFunction(<#=method.FunctionId#>, new Dictionary<string, dynamic>{ <#=method.InvokeArguments#> });
+			<# if (method.Return != "void") { #>
+				return 
+			<# } #>
+			_manager.Controller.CallFunction(<#=method.FunctionId#>, new Dictionary<string, dynamic>{ <#=method.InvokeArguments#> })
+			<# if (method.Return != "void") { #>
+				["<#=method.InvokeReturn#>"]
+			<#}#>;
 		}
 	<# } #>
 }

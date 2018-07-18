@@ -93,23 +93,58 @@ namespace Core.Plugin.Unity.Generator
             
             #line default
             #line hidden
-            this.Write(")\r\n\t\t{\r\n\t\t\treturn _manager.Controller.CallFunction(");
+            this.Write(")\r\n\t\t{\r\n\t\t\t");
             
             #line 18 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedClassTemplate.tt"
+ if (method.Return != "void") { 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\treturn \r\n\t\t\t");
+            
+            #line 20 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedClassTemplate.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t_manager.Controller.CallFunction(");
+            
+            #line 21 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedClassTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.FunctionId));
             
             #line default
             #line hidden
             this.Write(", new Dictionary<string, dynamic>{ ");
             
-            #line 18 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedClassTemplate.tt"
+            #line 21 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedClassTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.InvokeArguments));
             
             #line default
             #line hidden
-            this.Write(" });\r\n\t\t}\r\n\t");
+            this.Write(" })\r\n\t\t\t");
             
-            #line 20 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedClassTemplate.tt"
+            #line 22 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedClassTemplate.tt"
+ if (method.Return != "void") { 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\t\t[\"");
+            
+            #line 23 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedClassTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(method.InvokeReturn));
+            
+            #line default
+            #line hidden
+            this.Write("\"]\r\n\t\t\t");
+            
+            #line 24 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedClassTemplate.tt"
+}
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n\t\t}\r\n\t");
+            
+            #line 26 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedClassTemplate.tt"
  } 
             
             #line default

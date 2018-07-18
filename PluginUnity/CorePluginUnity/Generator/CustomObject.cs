@@ -125,11 +125,14 @@ namespace Core.Plugin.Unity.Generator
                     //method.Arguments += controller.GetEntity(controller.GetVariableType(pars[i].Id)).Name + " @" + pars[i].Name + (i + 1 >= pars.Count ? "" : ",");
                     method.Arguments += fType + " @" + pars[i].Name + (i + 1 >= pars.Count ? "" : ",");
                 }
+
+                // TODO : handle tuple return
                 foreach (var ret in controller.GetFunctionReturns(item.Id))
                 {
                     var r = controller.GetEntity(controller.GetVariableType(ret.Id)).Name;
                     var fType = GetFieldType(controller.GetVariableType(ret.Id));
                     method.Return = fType;
+                    method.InvokeReturn = ret.Name;
                     //template.Outputs.Add(ret.ToSerialString(controller));
                 }
                 _template.Methods.Add(method);
@@ -209,6 +212,7 @@ namespace Core.Plugin.Unity.Generator
         public class Method
         {
             public string Return = "void";
+            public string InvokeReturn = "result";
             public string Name = "GeneratedMethod";
             public string Arguments = "";
             public string InvokeArguments = "";
