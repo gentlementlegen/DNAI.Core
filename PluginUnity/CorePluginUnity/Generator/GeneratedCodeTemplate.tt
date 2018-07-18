@@ -287,7 +287,7 @@ namespace DNAI.<#=Namespace#>
 
 			private static readonly BinaryManager _manager = new BinaryManager();
 
-			public <#=ClassName#>()
+			static <#=ClassName#>()
 			{
 				//_manager = new BinaryManager();
 				_manager.LoadCommandsFrom(@"Assets/Standard Assets/DNAI/Scripts/" + "<#=FilePath#>");

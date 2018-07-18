@@ -1,41 +1,62 @@
-﻿using DNAI.AStarFix;
-using static DNAI.AStarFix.AStarFix;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using static DNAI.AstarMabit.AstarMabit;
 
 namespace Assets.Scripts.Pacman
 {
-    public class Manager { }
-
-    public class AstarPacman : AStarFix
+    public class AstarPacman : MonoBehaviour
     {
-        private static Manager _manager;
+        private readonly PosGraph _graph = new PosGraph();
+        private Dictionary<int, int> _idx = new Dictionary<int, int>();
+        private readonly List<int> _tList = new List<int>();
 
-        public int param1;
-        public int param2;
-
-        public int Output { get; }
-
-        public class Position { float x; float y; float z; }
-
-        public class PositionGraph
+        private void Start()
         {
-            public Position getNode(int idx, PositionGraph t)
+            for (int y = 0; y < TerrainManager.Terrain.Length; y++)
             {
-                _manager = null;
-                return null;
+                for (int x = 0; x < TerrainManager.Terrain[y].Length; x++)
+                {
+                    char pos = TerrainManager.Terrain[y][x];
+                    if (pos == '.' || pos == 'O' || pos == ' ' || pos == 'T')
+                    {
+                        var posNode = new Position()
+                        {
+                            X = x,
+                            Y = y,
+                            Z = 0
+                        };
+                        var i = _graph.appendNode(posNode, _graph);
+                        _idx.Add(y * TerrainManager.Terrain[y].Length + x, i);
+                        if (pos == 'T')
+                            _tList.Add(i);
+                        // top
+                        if (pos != 'T' && TerrainManager.Terrain[y - 1][x] != 'X')
+                            _graph.linkNodes(i, _idx[(y - 1) * TerrainManager.Terrain[y].Length + x], true, _graph);
+                        // left
+                        if (pos != 'T' && TerrainManager.Terrain[y][x - 1] != 'X')
+                            _graph.linkNodes(i, _idx[y * TerrainManager.Terrain[y].Length + x - 1], true, _graph);
+                    }
+                }
+            }
+            _graph.linkNodes(_tList[0], _tList[1], true, _graph);
+            var l = (List<List<int>>)_graph.links;
+            var n = (List<Position>)_graph.nodes;
+
+            for (int i = 0; i < l.Count; i++)
+            {
+                List<int> link = l[i];
+                foreach (var li in link)
+                {
+                    Debug.Log("[Idx => " + i + " li => " + li + "]");
+                }
+                Debug.Log("\n");
             }
 
-            public void appendNode()
+            for (int i = 0; i < n.Count; i++)
             {
-
+                Position node = n[i];
+                Debug.Log("[idx => " + i + " node => " + node.Display() + "]");
             }
-        }
-    }
-
-    public class Dummy : Position
-    {
-        public Dummy()
-        {
-            //_manager = null;
         }
     }
 }
