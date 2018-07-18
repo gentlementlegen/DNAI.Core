@@ -5,12 +5,15 @@ using static DNAI.AstarMabit.AstarMabit;
 
 public class AstarTest : MonoBehaviour
 {
-    private readonly PosGraph _graph = new PosGraph();
+	private readonly PosGraph _graph = new PosGraph();
     private Dictionary<int, int> _idx = new Dictionary<int, int>();
     private readonly List<int> _tList = new List<int>();
 
     private void Start()
     {
+	  	_graph.links = new List<List<int>> ();
+		_graph.nodes = new List<Position> ();
+
         for (int y = 0; y < TerrainManager.Terrain.Length; y++)
         {
             for (int x = 0; x < TerrainManager.Terrain[y].Length; x++)
@@ -29,11 +32,15 @@ public class AstarTest : MonoBehaviour
                     if (pos == 'T')
                         _tList.Add(i);
                     // top
-                    if (pos != 'T' && TerrainManager.Terrain[y - 1][x] != 'X')
-                        _graph.linkNodes(i, _idx[(y - 1) * TerrainManager.Terrain[y].Length + x], true, _graph);
+					if (pos != 'T' && TerrainManager.Terrain [y - 1] [x] != 'X') {
+						Debug.Log ("Link (" + x.ToString() + ", " + y.ToString() + ") to (" + x.ToString() + ", " + (y - 1).ToString() + ")");
+						_graph.linkNodes (i, _idx [(y - 1) * TerrainManager.Terrain [y].Length + x], true, _graph);
+					}
                     // left
-                    if (pos != 'T' && TerrainManager.Terrain[y][x - 1] != 'X')
-                        _graph.linkNodes(i, _idx[y * TerrainManager.Terrain[y].Length + x - 1], true, _graph);
+					if (pos != 'T' && TerrainManager.Terrain [y] [x - 1] != 'X') {
+						Debug.Log ("Link (" + x.ToString() + ", " + y.ToString() + ") to ( " + (x - 1).ToString() + ", " + y.ToString() + ")");
+						_graph.linkNodes (i, _idx [y * TerrainManager.Terrain [y].Length + x - 1], true, _graph);
+					}
                 }
             }
         }

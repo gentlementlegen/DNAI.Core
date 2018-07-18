@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static DNAI.AstarMabit.AstarMabit;
+//using static DNAI.AstarMabit.AstarMabit;
 
 namespace Assets.Scripts.Pacman
 {
     public class AstarPacman : MonoBehaviour
     {
-        private readonly PosGraph _graph = new PosGraph();
+  //      private readonly PosGraph _graph = new PosGraph();
         private Dictionary<int, int> _idx = new Dictionary<int, int>();
         private readonly List<int> _tList = new List<int>();
 
         private void Start()
         {
-            for (int y = 0; y < TerrainManager.Terrain.Length; y++)
+            /*for (int y = 0; y < TerrainManager.Terrain.Length; y++)
             {
                 for (int x = 0; x < TerrainManager.Terrain[y].Length; x++)
                 {
@@ -56,7 +56,7 @@ namespace Assets.Scripts.Pacman
             {
                 Position node = n[i];
                 Debug.Log("[idx => " + i + " node => " + node.Display() + "]");
-            }
+            }*/
         }
     }
 }
