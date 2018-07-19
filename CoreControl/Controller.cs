@@ -507,6 +507,23 @@ namespace CoreControl
             };
         }
 
+        /// <summary>
+        /// Get a list of entities corresponding to the given ids.
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public List<EntityFactory.Entity> GetEntities(List<UInt32> ids)
+        {
+            var ret = new List<EntityFactory.Entity>();
+
+            foreach (var id in ids)
+            {
+                CorePackage.Global.IDefinition def = entity_factory.Find(id);
+                ret.Add(new EntityFactory.Entity { Id = id, Name = def.Name, Type = GetEntityType(id) });
+            }
+            return ret;
+        }
+
         public void merge(Controller controller)
         {
             entity_factory.merge(controller.entity_factory);
