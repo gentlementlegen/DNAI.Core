@@ -1,4 +1,4 @@
-﻿using static DNAI.AStar.AStar;
+﻿using static DNAI.Astar2.Astar2;
 
 namespace Assets.Scripts.Pacman
 {

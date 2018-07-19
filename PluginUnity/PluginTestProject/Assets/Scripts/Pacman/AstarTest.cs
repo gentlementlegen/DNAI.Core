@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Pacman;
 using System.Collections.Generic;
 using UnityEngine;
-using static DNAI.AStar.AStar;
+using static DNAI.Astar2.Astar2;
 
 public class AstarTest : MonoBehaviour
 {
