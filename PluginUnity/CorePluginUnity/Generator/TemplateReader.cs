@@ -101,8 +101,7 @@ namespace Core.Plugin.Unity.Generator
                 //Regex rgx = new Regex("[^a-zA-Z0-9 -]");
                 //template.Namespace = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rgx.Replace(Path.GetFileNameWithoutExtension(template.FilePath), ""));
                 //template.Namespace = Path.GetFileNameWithoutExtension(template.FilePath).RemoveIllegalCharacters();
-                template.Namespace = manager.Controller.GetEntities(manager.Controller.GetIds(EntityFactory.EntityType.CONTEXT | EntityFactory.EntityType.PUBLIC))
-                    .Find((w) => !string.IsNullOrEmpty(w.Name)).Name;
+                template.Namespace = manager.Controller.GetMainContextName();
             }
 
             //if (functions?.Count > 0)

@@ -1,6 +1,7 @@
 ﻿using Core.Plugin.Unity.Context;
 using Core.Plugin.Unity.Editor;
 using Core.Plugin.Unity.Extensions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,6 +56,9 @@ namespace Core.Plugin.Unity.Drawing
         {
             [SerializeField]
             public ScriptManager scriptManager;
+
+            [SerializeField]
+            public string AIName;
 
             /// <summary>
             /// Backup of the <see cref="SubScriptList"/> list that cannot be serialized by Unity.
@@ -208,6 +212,34 @@ namespace Core.Plugin.Unity.Drawing
         public ScriptDrawer()
         {
             CloudFileWatcher.FileCreated += OnFileCreated;
+            CloudFileWatcher.FileChanged += OnFileChanged;
+        }
+
+        /// <summary>
+        /// Triggered when file changed. If the file is not in the file list, adds it.
+        /// If it is already there, reloads the script.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            var manager = new CoreCommand.BinaryManager();
+            manager.LoadCommandsFrom(e.FullPath);
+            var elem = listIA.Find(x => x.scriptManager.FilePath == e.FullPath);
+            Debug.Log("On File changed. Elem = " + elem + " elem script name = " + e.FullPath + " registered path " + elem?.scriptManager.FilePath);
+
+            if (elem != null)
+            {
+                elem.scriptManager.ReloadScript();
+            }
+            else
+            {
+                var newElem = new ListAIHandler();
+                newElem.OnEnable();
+                newElem.scriptManager.FilePath = e.FullPath;
+                newElem.scriptManager.LoadScript(e.FullPath);
+                listIA.Add(newElem);
+            }
         }
 
         /// <summary>
@@ -217,6 +249,8 @@ namespace Core.Plugin.Unity.Drawing
         /// <param name="e"></param>
         private void OnFileCreated(object sender, FileSystemEventArgs e)
         {
+            if (listIA.Any(x => x.scriptManager.FilePath == e.FullPath))
+                return;
             var newElem = new ListAIHandler();
             newElem.OnEnable();
             newElem.scriptManager.FilePath = e.FullPath;
@@ -261,6 +295,7 @@ namespace Core.Plugin.Unity.Drawing
             //Debug.Log("+++++++ ON DESTROY List count => " + _editorSettings.listIA.Count);
             listIA.ForEach(x => x.OnDisable());
             CloudFileWatcher.FileCreated -= OnFileCreated;
+            CloudFileWatcher.FileChanged -= OnFileChanged;
         }
 
         /// <summary>
@@ -357,6 +392,7 @@ namespace Core.Plugin.Unity.Drawing
                 {
                     //listIA[index].scriptManager.FilePath = newPath;
                     listIA[index].scriptManager.FilePath = listIA[index].scriptManager.LoadScript(newPath);
+                    ListAI[index].AIName = ListAI[index].scriptManager.GetLoadedScriptName();
                     AssetDatabase.Refresh();
                     _editorWindow.Focus();
                 }

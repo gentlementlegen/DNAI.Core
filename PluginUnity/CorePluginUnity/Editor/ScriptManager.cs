@@ -85,7 +85,7 @@ namespace Core.Plugin.Unity.Editor
             //t.Start ();
             UnityEngine.Debug.Log("file path => " + path);
             var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "Scripts");
-            var fileFullPath = Path.Combine(fileCopyPath, Path.GetFileName(path));
+            var fileFullPath = Path.GetFullPath(Path.Combine(fileCopyPath, Path.GetFileName(path)));
 
             try
             {
@@ -112,6 +112,16 @@ namespace Core.Plugin.Unity.Editor
                 //codeConverter.ConvertCode();
             }).ContinueWith((param) => OnScriptLoaded(param.Status.ToString()));
             return fileFullPath;
+        }
+
+        public void ReloadScript()
+        {
+            _manager.LoadCommandsFrom(FilePath);
+        }
+
+        public string GetLoadedScriptName()
+        {
+            return _manager.Controller.GetMainContextName();
         }
 
         /// <summary>

@@ -188,6 +188,15 @@ namespace CoreControl
         }
 
         /// <summary>
+        /// Returns the highest context name.
+        /// </summary>
+        /// <returns></returns>
+        public string GetMainContextName()
+        {
+            return GetEntities(GetIds(EntityFactory.EntityType.CONTEXT | EntityFactory.EntityType.PUBLIC)).Find(x => !string.IsNullOrEmpty(x.Name)).Name;
+        }
+
+        /// <summary>
         /// Set an enumeration value
         /// </summary>
         /// <param name="enumID">Identifier of specific enumeration</param>
