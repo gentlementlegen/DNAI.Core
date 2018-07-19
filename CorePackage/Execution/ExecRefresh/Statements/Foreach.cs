@@ -61,7 +61,7 @@ namespace CorePackage.Execution
         {
             AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)));
             AddOutput("index", new Variable(Entity.Type.Scalar.Integer));
-            AddOutput("element", new Variable());
+            AddOutput("element", new Variable(), true);
             if (stored != null)
                 ContainerType = stored;
         }

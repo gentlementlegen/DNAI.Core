@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace CoreControl
 {
@@ -81,6 +82,26 @@ namespace CoreControl
         public void ChangeVisibility(UInt32 containerID, string name, EntityFactory.VISIBILITY newVisi)
         {
             entity_factory.ChangeVisibility(containerID, name, newVisi);
+        }
+
+        public List<EntityFactory.Entity> GetEntities(UInt32 containerID)
+        {
+            List<EntityFactory.Entity> toret = new List<EntityFactory.Entity>();
+
+            CorePackage.Global.IDeclarator decl = entity_factory.GetDeclaratorOf(containerID);
+
+            foreach (KeyValuePair<string, CorePackage.Global.IDefinition> curr in decl.GetEntities(CorePackage.Global.AccessMode.EXTERNAL))
+            {
+                UInt32 id = entity_factory.GetEntityID(curr.Value);
+
+                toret.Add(new EntityFactory.Entity
+                {
+                    Id = id,
+                    Name = curr.Value.Name,
+                    Type = GetEntityType(id)
+                });
+            }
+            return toret;
         }
 
         /// <summary>
@@ -273,7 +294,7 @@ namespace CoreControl
         {
             return entity_factory.GetEntityID(entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID).GetAttribute(name));
         }
-
+        
         /// <summary>
         /// Add a member function to a class
         /// </summary>
@@ -300,7 +321,7 @@ namespace CoreControl
         {
             entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ListType>(listID).Stored = entity_factory.FindDefinitionOfType<CorePackage.Entity.DataType>(typeID);
         }
-
+        
         /// <summary>
         /// Call a specific function with specific parameters
         /// </summary>
@@ -309,7 +330,26 @@ namespace CoreControl
         /// <returns>Dictionary that contains function returns' value</returns>
         public Dictionary<string, dynamic> CallFunction(UInt32 funcID, Dictionary<string, dynamic> parameters)
         {
+            DumpFunctionInto(funcID, "C:/Users/GasparQ/Desktop");
             return entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(funcID).Call(parameters);
+        }
+        
+        public void DumpFunctionInto(UInt32 funcId, string directory)
+        {
+            CorePackage.Entity.Function func = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(funcId);
+            System.IO.FileStream file = new System.IO.FileStream(directory + "/" + func.Name + ".dot", System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write);
+
+            if (file.CanWrite)
+            {
+                string dat = func.ToDotFile();
+
+                file.Write(Encoding.ASCII.GetBytes(dat), 0, dat.Length);
+                file.Close();
+            }
+            else
+            {
+                throw new InvalidOperationException("Couldn't write data in file");
+            }
         }
 
         /// <summary>

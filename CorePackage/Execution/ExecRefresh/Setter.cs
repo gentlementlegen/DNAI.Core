@@ -18,7 +18,7 @@ namespace CorePackage.Execution
         public Setter(Entity.Variable toset): base()
         {
             AddInput("value", new Entity.Variable(toset.Type)); //creates a copy of the variable in input
-            AddOutput("reference", toset); //set the variable to set in output
+            AddOutput("reference", toset, true); //set the variable to set in output
         }
 
         /// <summary>

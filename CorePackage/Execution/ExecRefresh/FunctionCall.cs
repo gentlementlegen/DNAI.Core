@@ -24,8 +24,8 @@ namespace CorePackage.Execution
         /// <param name="tocall">Function to call when instruction is executed</param>
         public FunctionCall(Entity.Function tocall) : base()
         {
-            AddInputs(tocall.Parameters);
-            AddOutputs(tocall.Returns);
+            AddInputs(tocall.Parameters, true);
+            AddOutputs(tocall.Returns, true);
             
             foreach (KeyValuePair<string, Input> curr in Inputs)
             {

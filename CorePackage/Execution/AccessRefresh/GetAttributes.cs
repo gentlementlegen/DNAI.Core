@@ -19,7 +19,7 @@ namespace CorePackage.Execution
             attrs = _stored.GetAttributes().Keys.ToList();
             foreach (KeyValuePair<string, IDefinition> attr in typetosplit.GetAttributes())
             {
-                AddOutput(attr.Key, new Entity.Variable((Entity.DataType)attr.Value));
+                AddOutput(attr.Key, new Entity.Variable((Entity.DataType)attr.Value), true);
             }
         }
 

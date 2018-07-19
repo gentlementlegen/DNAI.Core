@@ -306,7 +306,7 @@ namespace CorePackage.Entity
                     //concatenate label to inputs for splitted box effect
                     inputs += label + (inputId < node.Inputs.Count ? "|" : "");
 
-                    if (curr.Value.IsLinked)
+                    if (!curr.Value.IsLinked)
                         continue;
 
                     //in case there is a linked node to the input, declare it

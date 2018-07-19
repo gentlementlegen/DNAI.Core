@@ -442,5 +442,17 @@ namespace CorePackage.Entity.Type
         {
             return context.Contains(name);
         }
+
+        /// <see cref="DataType.GetDeepCopyOf(dynamic)"/>
+        public override dynamic GetDeepCopyOf(dynamic value)
+        {
+            dynamic val = Activator.CreateInstance(value.GetType());
+
+            foreach (KeyValuePair<string, IDefinition> attr in attributes.GetEntities())
+            {
+                SetAttributeValue(val, attr.Key, ((DataType)attr.Value).GetDeepCopyOf(GetAttributeValue(value, attr.Key)));
+            }
+            return val;
+        }
     }
 }

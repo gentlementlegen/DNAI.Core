@@ -18,10 +18,10 @@ namespace CorePackage.Execution
         /// <param name="rOpType">Type of the right operand</param>
         /// <param name="operation">Operation to execute</param>
         /// <param name="resultType">Type of the returned value</param>
-        public BinaryOperator(Entity.DataType lOpType, Entity.DataType rOpType, Func<dynamic, dynamic, dynamic> operation, Entity.DataType resultType) : base(resultType, operation)
+        public BinaryOperator(Entity.DataType lOpType, Entity.DataType rOpType, Func<dynamic, dynamic, dynamic> operation, Entity.DataType resultType, bool outreference = false) : base(resultType, operation, outreference)
         {
-            AddInput(Global.Operator.Left, new Entity.Variable(lOpType));
-            AddInput(Global.Operator.Right, new Entity.Variable(rOpType));
+            AddInput(Global.Operator.Left, new Entity.Variable(lOpType), true);
+            AddInput(Global.Operator.Right, new Entity.Variable(rOpType), true);
         }
 
         /// <summary>

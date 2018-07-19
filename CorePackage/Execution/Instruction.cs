@@ -50,11 +50,11 @@ namespace CorePackage.Execution
         /// Allow to add inputs to the instruction
         /// </summary>
         /// <param name="inputs">Dictionnary of inputs</param>
-        public void AddInputs(Dictionary<string, Entity.Variable> inputs)
+        public void AddInputs(Dictionary<string, Entity.Variable> inputs, bool reference = false)
         {
             foreach (KeyValuePair<string, Entity.Variable> input in inputs)
             {
-                AddInput(input.Key, input.Value);
+                AddInput(input.Key, input.Value, reference);
             }
         }
 
@@ -63,20 +63,20 @@ namespace CorePackage.Execution
         /// </summary>
         /// <param name="name">Name of the output</param>
         /// <param name="definition">Variable definition of the output</param>
-        public void AddOutput(string name, Entity.Variable definition)
+        public void AddOutput(string name, Entity.Variable definition, bool reference = false)
         {
-            this.outputs[name] = new Output(definition);
+            this.outputs[name] = new Output(definition, reference);
         }
 
         /// <summary>
         /// Allow to add outputs to the instruction
         /// </summary>
         /// <param name="outputs">Dictionnary of outputs to set</param>
-        public void AddOutputs(Dictionary<string, Entity.Variable> outputs)
+        public void AddOutputs(Dictionary<string, Entity.Variable> outputs, bool reference = false)
         {
             foreach (KeyValuePair<string, Entity.Variable> output in outputs)
             {
-                AddOutput(output.Key, output.Value);
+                AddOutput(output.Key, output.Value, reference);
             }
         }
 

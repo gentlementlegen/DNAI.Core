@@ -65,7 +65,11 @@ namespace CorePackage.Execution
                 {
                     Definition.Value = link.Value;
                 }
-                return Definition.Value;
+
+                if (reference)
+                    return Definition.Value;
+
+                return Definition.Type.GetDeepCopyOf(Definition.Value);
             }
             set
             {

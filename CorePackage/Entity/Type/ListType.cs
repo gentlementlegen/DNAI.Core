@@ -25,7 +25,8 @@ namespace CorePackage.Entity.Type
             {
                 if (value != null)
                 {
-                    _listType = typeof(List<>).MakeGenericType(value.Instantiate().GetType());
+                    _listGenericType = value.Instantiate().GetType();
+                    _listType = typeof(List<>).MakeGenericType(_listGenericType);
                     stored = value;
                 }
             }
@@ -35,6 +36,7 @@ namespace CorePackage.Entity.Type
         /// Represents the real type of the list
         /// </summary>
         private System.Type _listType;
+        private System.Type _listGenericType;
 
         /// <summary>
         /// Basic default constructor which is necessary for factory
@@ -192,6 +194,18 @@ namespace CorePackage.Entity.Type
         public override dynamic OperatorAccess(dynamic lOp, dynamic rOp)
         {
             return lOp[rOp];
+        }
+
+        /// <see cref="DataType.GetDeepCopyOf(dynamic)"/>
+        public override dynamic GetDeepCopyOf(dynamic value)
+        {
+            dynamic toret = Instantiate();
+
+            foreach (var curr in value)
+            {
+                toret.Add(Convert.ChangeType(stored.GetDeepCopyOf(curr), _listGenericType));
+            }
+            return toret;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.Pacman;
 using System.Collections.Generic;
 using UnityEngine;
-using static DNAI.AstarMabit.AstarMabit;
+using static DNAI.AStar.AStar;
 
 public class AstarTest : MonoBehaviour
 {
@@ -28,19 +28,28 @@ public class AstarTest : MonoBehaviour
                         Z = 0
                     };
                     var i = _graph.appendNode(posNode, _graph);
+
+                    Debug.Log("Adding node (" + x.ToString() + ", " + y.ToString() + "): index(" + i.ToString() + ") => LinksLength: " + ((List<List<int>>)_graph.links).Count);
+
                     _idx.Add(y * TerrainManager.Terrain[y].Length + x, i);
+
                     if (pos == 'T')
                         _tList.Add(i);
+                    
                     // top
-					if (pos != 'T' && TerrainManager.Terrain [y - 1] [x] != 'X') {
-						Debug.Log ("Link (" + x.ToString() + ", " + y.ToString() + ") to (" + x.ToString() + ", " + (y - 1).ToString() + ")");
-						_graph.linkNodes (i, _idx [(y - 1) * TerrainManager.Terrain [y].Length + x], true, _graph);
-					}
+                    if (pos != 'T' && TerrainManager.Terrain [y - 1] [x] != 'X') {
+
+                        var j = _idx[(y - 1) * TerrainManager.Terrain[y].Length + x];
+                                                
+						_graph.linkNodes (i, j, true, _graph);
+                    }
                     // left
 					if (pos != 'T' && TerrainManager.Terrain [y] [x - 1] != 'X') {
-						Debug.Log ("Link (" + x.ToString() + ", " + y.ToString() + ") to ( " + (x - 1).ToString() + ", " + y.ToString() + ")");
-						_graph.linkNodes (i, _idx [y * TerrainManager.Terrain [y].Length + x - 1], true, _graph);
-					}
+
+                        var j = _idx[y * TerrainManager.Terrain[y].Length + x - 1];
+
+                        _graph.linkNodes (i, j, true, _graph);
+                    }
                 }
             }
         }
@@ -55,7 +64,6 @@ public class AstarTest : MonoBehaviour
             {
                 Debug.Log("[Idx => " + i + " li => " + li + "]");
             }
-            Debug.Log("\n");
         }
 
         for (int i = 0; i < n.Count; i++)

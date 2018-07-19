@@ -29,7 +29,7 @@ namespace CorePackage.Execution
         /// </summary>
         public Append(DataType type = null) : base()
         {
-            AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)));
+            AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)), true);
             AddInput("element", new Variable(Entity.Type.Scalar.Integer));
             AddOutput("count", new Variable(Entity.Type.Scalar.Integer));
             if (type != null)

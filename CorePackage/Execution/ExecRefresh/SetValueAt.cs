@@ -14,7 +14,7 @@ namespace CorePackage.Execution
             AddInput("array", new Entity.Variable(new Entity.Type.ListType(stored)), true);
             AddInput("value", val);
             AddInput("index", new Entity.Variable(Entity.Type.Scalar.Integer));
-            AddOutput("value", val);
+            AddOutput("value", val, true);
         }
 
         public override void Execute()

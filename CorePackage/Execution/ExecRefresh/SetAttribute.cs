@@ -19,7 +19,7 @@ namespace CorePackage.Execution
             {
                 Entity.Variable definition = new Entity.Variable((Entity.DataType)curr.Value);
                 AddInput(curr.Key, definition); //each time the node is executed, input are refreshed
-                AddOutput(curr.Key, definition); //if the definition of output is the same as the input they will be refreshed too
+                AddOutput(curr.Key, definition, true); //if the definition of output is the same as the input they will be refreshed too
                 attributes.Add(curr.Key);
             }
         }

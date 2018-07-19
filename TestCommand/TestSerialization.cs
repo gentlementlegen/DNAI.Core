@@ -936,5 +936,69 @@ namespace TestCommand
 
             MoreOrLessExecuter(witness, playFunction.EntityID);
         }
+
+        public class Pos
+        {
+            public float X, Y, Z;
+        }
+
+        public class PosGraph
+        {
+            public List<List<int>> links = new List<List<int>>();
+            public List<Pos> nodes = new List<Pos>();
+        }
+
+        [TestMethod]
+        public void TestAstar()
+        {
+            CoreCommand.BinaryManager manager = new CoreCommand.BinaryManager();
+
+            manager.LoadCommandsFrom("astar.dnai");
+
+            EntityFactory.Entity astarProject = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.CONTEXT, 0)[0];
+            EntityFactory.Entity posGraphClass = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.OBJECT_TYPE, astarProject.Id)[1];
+            List<EntityFactory.Entity> funcs = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.FUNCTION, posGraphClass.Id);
+
+            EntityFactory.Entity appendNode = null, linkNodes = null;
+
+            foreach (EntityFactory.Entity curr in funcs)
+            {
+                if (curr.Name == "appendNode")
+                    appendNode = curr;
+                else if (curr.Name == "linkNodes")
+                    linkNodes = curr;
+            }
+
+            Assert.IsFalse(appendNode == null);
+            Assert.IsFalse(linkNodes == null);
+
+            PosGraph graph = new PosGraph();
+
+            manager.Controller.CallFunction(appendNode.Id, new Dictionary<string, dynamic> { { "node", new Pos { X = 0f, Y = 0f, Z = 0f } }, { "this", graph } });
+            manager.Controller.CallFunction(appendNode.Id, new Dictionary<string, dynamic> { { "node", new Pos { X = 1f, Y = 1f, Z = 0f } }, { "this", graph }  });
+
+            Assert.IsTrue(graph.nodes.Count == 2);
+            Assert.IsTrue(graph.links.Count == 2);
+
+            manager.Controller.CallFunction(linkNodes.Id, new Dictionary<string, dynamic> { { "from", 1 }, { "to", 0 }, { "this", graph }, { "bidirectionnal", false } });
+
+            Assert.IsTrue(graph.links[1].Count == 1);
+            Assert.IsTrue(graph.links[1][0] == 0);
+
+            Assert.IsTrue(graph.links[0].Count == 0);
+
+            manager.Controller.CallFunction(appendNode.Id, new Dictionary<string, dynamic> { { "node", new Pos { X = 2f, Y = 2f, Z = 0f } }, { "this", graph }  });
+
+            Assert.IsTrue(graph.nodes.Count == 3);
+            Assert.IsTrue(graph.links.Count == 3);
+
+            manager.Controller.CallFunction(linkNodes.Id, new Dictionary<string, dynamic> { { "from", 2 }, { "to", 0 }, { "this", graph }, { "bidirectionnal", true } });
+
+            Assert.IsTrue(graph.links[0].Count == 1);
+            Assert.IsTrue(graph.links[0][0] == 2);
+
+            Assert.IsTrue(graph.links[2].Count == 1);
+            Assert.IsTrue(graph.links[2][0] == 0);
+        }
     }
 }

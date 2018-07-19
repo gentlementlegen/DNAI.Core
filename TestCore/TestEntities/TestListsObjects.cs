@@ -86,7 +86,7 @@ namespace CoreTest.TestEntities
             CorePackage.Entity.Type.ListType intlistlist = new CorePackage.Entity.Type.ListType(intlist);
             CorePackage.Execution.Append instruction = new CorePackage.Execution.Append(intlist);
             List<List<int>> val = new List<List<int>>();
-
+            
             instruction.SetInputValue("array", val);
 
             Assert.IsTrue(instruction.GetInputValue("array").Count == 0);
@@ -95,6 +95,27 @@ namespace CoreTest.TestEntities
             instruction.Execute();
 
             Assert.IsTrue(val.Count == 1);
+
+            CorePackage.Execution.Append intlistappend = new CorePackage.Execution.Append(CorePackage.Entity.Type.Scalar.Integer);
+            CorePackage.Execution.Operators.Access access = new CorePackage.Execution.Operators.Access(intlistlist, CorePackage.Entity.Type.Scalar.Integer, intlist);
+            CorePackage.Execution.Getter getfrom = new CorePackage.Execution.Getter(new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 0));
+
+            access.SetInputValue("LeftOperand", val);
+            access.SetInputValue("RightOperand", 0);
+
+            intlistappend.GetInput("array").LinkTo(access, "result");
+            intlistappend.GetInput("element").LinkTo(getfrom, "reference");
+            //intlistappend.SetInputValue("array", val[0]);
+
+            Assert.IsTrue(intlistappend.GetInputValue("array").Count == 0);
+            Assert.IsTrue(val[0].Count == 0);
+            Assert.IsTrue(val[0] == intlistappend.GetInputValue("array"));
+
+            intlistappend.Execute();
+
+            Assert.IsTrue(intlistappend.GetInputValue("array").Count == 1);
+            Assert.IsTrue(val[0].Count == 1);
+            Assert.IsTrue(val[0] == intlistappend.GetInputValue("array"));
         }
 
         [TestMethod]

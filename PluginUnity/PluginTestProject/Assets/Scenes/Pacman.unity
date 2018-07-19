@@ -437,7 +437,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000030517578, y: -0.000015258789}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &664244749
@@ -981,6 +981,7 @@ GameObject:
   - component: {fileID: 1459632667}
   - component: {fileID: 1459632666}
   - component: {fileID: 1459632668}
+  - component: {fileID: 1459632669}
   m_Layer: 0
   m_Name: PacmanTerrain
   m_TagString: Untagged
@@ -1060,6 +1061,17 @@ MonoBehaviour:
     type: 2}
   _prefabPowerUp: {fileID: 1020226476805252, guid: a186c0c46e7aa3f4e8bf877bb521868b,
     type: 2}
+--- !u!114 &1459632669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1459632665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a9c6dc830c0b3743bc44ae1a7ae403f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1464255557
 GameObject:
   m_ObjectHideFlags: 0

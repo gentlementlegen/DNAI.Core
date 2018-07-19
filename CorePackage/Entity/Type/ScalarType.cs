@@ -34,6 +34,14 @@ namespace CorePackage.Entity.Type
             }
         }
 
+        /// <see cref="DataType.GetDeepCopyOf(dynamic)"/>
+        public override dynamic GetDeepCopyOf(dynamic value)
+        {
+            if (handledTypes.First() == typeof(string))
+                return String.Copy(value); //need to copy for string
+            return value; //scalars are automatically passed by copy
+        }
+
         /// <see cref="DataType.Instantiate"/>
         public override dynamic Instantiate()
         {

@@ -450,8 +450,8 @@ namespace CoreTest
         {
             CorePackage.Entity.Function whileTester = new CorePackage.Entity.Function();
 
-            CorePackage.Entity.Variable idx = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Floating, 42.0);
-            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<double> { 1.0, 2.0, 42.0 });
+            CorePackage.Entity.Variable idx = new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Floating, 42.0f);
+            CorePackage.Entity.Variable l = new CorePackage.Entity.Variable(new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), new List<float> { 1.0f, 2.0f, 42.0f });
 
             CorePackage.Execution.Remove remove = new CorePackage.Execution.Remove
             {
