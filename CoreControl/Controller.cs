@@ -209,6 +209,15 @@ namespace CoreControl
         }
 
         /// <summary>
+        /// Returns the highest context name.
+        /// </summary>
+        /// <returns></returns>
+        public string GetMainContextName()
+        {
+            return GetEntities(GetIds(EntityFactory.EntityType.CONTEXT | EntityFactory.EntityType.PUBLIC)).Find(x => !string.IsNullOrEmpty(x.Name)).Name;
+        }
+
+        /// <summary>
         /// Set an enumeration value
         /// </summary>
         /// <param name="enumID">Identifier of specific enumeration</param>
@@ -545,6 +554,23 @@ namespace CoreControl
                 Name = def.Name,
                 Type = GetEntityType(id)
             };
+        }
+
+        /// <summary>
+        /// Get a list of entities corresponding to the given ids.
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public List<EntityFactory.Entity> GetEntities(List<UInt32> ids)
+        {
+            var ret = new List<EntityFactory.Entity>();
+
+            foreach (var id in ids)
+            {
+                CorePackage.Global.IDefinition def = entity_factory.Find(id);
+                ret.Add(new EntityFactory.Entity { Id = id, Name = def.Name, Type = GetEntityType(id) });
+            }
+            return ret;
         }
 
         public void merge(Controller controller)
