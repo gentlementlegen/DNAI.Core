@@ -41,9 +41,32 @@ namespace CorePackage.Execution
         /// </summary>
         public override void Execute()
         {
-            var val = GetInputValue("array");
+            dynamic val = GetInputValue("array");
+            dynamic item = GetInputValue("element");
 
-            val?.Add(GetInputValue("element"));
+            if (val == null)
+            {
+                System.Diagnostics.Debug.WriteLine("List: null");
+            }
+            else
+            {
+                string typename = val.GetType().ToString();
+                string valname = val.ToString();
+                System.Diagnostics.Debug.WriteLine("List: " + typename + ": " + valname);
+            }
+
+            if (item == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Item: null");
+            }
+            else
+            {
+                string typename = item.GetType().ToString();
+                string itemname = item.ToString();
+                System.Diagnostics.Debug.WriteLine("Item: " + typename + ": " + itemname);
+            }
+
+            val?.Add(item);
             SetOutputValue("count", val?.Count);
         }
     }

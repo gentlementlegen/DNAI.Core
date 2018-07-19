@@ -50,7 +50,8 @@ namespace Core.Plugin.Unity.Generator
             ObjectName = entity.Name;
             _template.ClassName = ObjectName;
             ObjectId = entity.Id;
-            _registeredClasses.Add(ObjectId, ObjectName);
+            if (!_registeredClasses.ContainsKey(ObjectId))
+                _registeredClasses.Add(ObjectId, ObjectName);
             Entity = entity;
             ObjectType = entity.Name;
             var fields = new Dictionary<string, uint>();
