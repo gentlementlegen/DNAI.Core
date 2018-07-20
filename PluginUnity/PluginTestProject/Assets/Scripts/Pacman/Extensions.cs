@@ -8,5 +8,15 @@ namespace Assets.Scripts.Pacman
         {
             return p.X + " " + p.Y + " " + p.Z;
         }
+
+        public static Position toPosition(this UnityEngine.Vector3 p)
+        {
+            return new Position
+            {
+                X = p.x,
+                Y = p.y,
+                Z = p.z
+            };
+        }
     }
 }

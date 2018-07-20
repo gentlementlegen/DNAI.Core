@@ -106,7 +106,7 @@ namespace CorePackage.Entity.Type
         /// <see cref="DataType.OperatorEqual(dynamic, dynamic)"/>
         public override bool OperatorEqual(dynamic lOp, dynamic rOp)
         {
-            return lOp.Equals(rOp);
+            return lOp.Equals(Convert.ChangeType(rOp, lOp.GetType()));
         }
 
         /// <see cref="DataType.OperatorGt(dynamic, dynamic)"/>

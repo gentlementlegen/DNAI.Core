@@ -59,7 +59,8 @@ namespace CoreControl
             CONTINUE,
             CLEAR,
             FILL,
-            SET_VALUE_AT
+            SET_VALUE_AT,
+            RETURN
         };
 
         /// <summary>
@@ -107,7 +108,8 @@ namespace CoreControl
             { INSTRUCTION_ID.CONTINUE, 0 },
             { INSTRUCTION_ID.CLEAR, 1 },
             { INSTRUCTION_ID.FILL, 1 },
-            { INSTRUCTION_ID.SET_VALUE_AT, 1 }
+            { INSTRUCTION_ID.SET_VALUE_AT, 1 },
+            { INSTRUCTION_ID.RETURN, 0 }
         };
 
         /// <summary>
@@ -155,7 +157,8 @@ namespace CoreControl
             { INSTRUCTION_ID.CONTINUE,          (List<IDefinition> args) => new Continue() },
             { INSTRUCTION_ID.CLEAR,             (List<IDefinition> args) => new Clear((DataType)args[0]) },
             { INSTRUCTION_ID.FILL,              (List<IDefinition> args) => new Fill((DataType)args[0]) },
-            { INSTRUCTION_ID.SET_VALUE_AT,      (List<IDefinition> args) => new SetValueAt((DataType)args[0]) }
+            { INSTRUCTION_ID.SET_VALUE_AT,      (List<IDefinition> args) => new SetValueAt((DataType)args[0]) },
+            { INSTRUCTION_ID.RETURN,            (List<IDefinition> args) => new Return() }
         };
 
         /// <summary>

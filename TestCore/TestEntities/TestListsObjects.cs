@@ -119,6 +119,21 @@ namespace CoreTest.TestEntities
         }
 
         [TestMethod]
+        public void TestListRemove()
+        {
+            CorePackage.Entity.Type.ListType intlist = new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Integer);
+            CorePackage.Execution.RemoveIndex ins = new CorePackage.Execution.RemoveIndex(CorePackage.Entity.Type.Scalar.Integer);
+            List<int> data = new List<int> { 2, 0, 1 };
+
+            ins.SetInputValue("array", data);
+            ins.SetInputValue("index", 0);
+
+            ins.Execute();
+
+            Assert.IsTrue(data.Count == 2);
+        }
+
+        [TestMethod]
         public void TestObjectActions()
         {
             CorePackage.Entity.Type.ObjectType type = new CorePackage.Entity.Type.ObjectType();

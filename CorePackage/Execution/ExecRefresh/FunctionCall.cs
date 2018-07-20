@@ -24,7 +24,7 @@ namespace CorePackage.Execution
         /// <param name="tocall">Function to call when instruction is executed</param>
         public FunctionCall(Entity.Function tocall) : base()
         {
-            AddInputs(tocall.Parameters, true);
+            AddInputs(tocall.Parameters);
             AddOutputs(tocall.Returns, true);
             
             foreach (KeyValuePair<string, Input> curr in Inputs)
@@ -42,7 +42,7 @@ namespace CorePackage.Execution
         {
             foreach (KeyValuePair<string, Input> input in Inputs)
             {
-                GetInputValue(input.Key); //this will refresh the values of inputs
+                tocall.SetParameterValue(input.Key, GetInputValue(input.Key)); //this will refresh the values of inputs
             }
             tocall.Call();
         }

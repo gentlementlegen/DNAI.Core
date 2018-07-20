@@ -19,6 +19,7 @@ namespace CorePackage.Execution
         public override void Execute()
         {
             List<dynamic> value = new List<dynamic>();
+            Entity.Variable array = GetInput("array").Definition;
             dynamic element = GetInputValue("element");
             dynamic count = GetInputValue("count");
 
@@ -26,7 +27,7 @@ namespace CorePackage.Execution
             {
                 value.Add(element);
             }
-            SetInputValue("array", value);
+            array.Value = value;
         }
     }
 }

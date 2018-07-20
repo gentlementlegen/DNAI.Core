@@ -959,7 +959,7 @@ namespace TestCommand
             EntityFactory.Entity posGraphClass = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.OBJECT_TYPE, astarProject.Id)[1];
             List<EntityFactory.Entity> funcs = manager.Controller.GetEntitiesOfType(EntityFactory.ENTITY.FUNCTION, posGraphClass.Id);
 
-            EntityFactory.Entity appendNode = null, linkNodes = null;
+            EntityFactory.Entity appendNode = null, linkNodes = null, pathfindAstar = null;
 
             foreach (EntityFactory.Entity curr in funcs)
             {
@@ -967,15 +967,18 @@ namespace TestCommand
                     appendNode = curr;
                 else if (curr.Name == "linkNodes")
                     linkNodes = curr;
+                else if (curr.Name == "pathFindAStar")
+                    pathfindAstar = curr;
             }
 
             Assert.IsFalse(appendNode == null);
             Assert.IsFalse(linkNodes == null);
+            Assert.IsFalse(pathfindAstar == null);
 
             PosGraph graph = new PosGraph();
 
             manager.Controller.CallFunction(appendNode.Id, new Dictionary<string, dynamic> { { "node", new Pos { X = 0f, Y = 0f, Z = 0f } }, { "this", graph } });
-            manager.Controller.CallFunction(appendNode.Id, new Dictionary<string, dynamic> { { "node", new Pos { X = 1f, Y = 1f, Z = 0f } }, { "this", graph }  });
+            manager.Controller.CallFunction(appendNode.Id, new Dictionary<string, dynamic> { { "node", new Pos { X = 1f, Y = 1f, Z = 0f } }, { "this", graph } });
 
             Assert.IsTrue(graph.nodes.Count == 2);
             Assert.IsTrue(graph.links.Count == 2);
@@ -987,18 +990,33 @@ namespace TestCommand
 
             Assert.IsTrue(graph.links[0].Count == 0);
 
-            manager.Controller.CallFunction(appendNode.Id, new Dictionary<string, dynamic> { { "node", new Pos { X = 2f, Y = 2f, Z = 0f } }, { "this", graph }  });
+            manager.Controller.CallFunction(appendNode.Id, new Dictionary<string, dynamic> { { "node", new Pos { X = 2f, Y = 2f, Z = 0f } }, { "this", graph } });
 
             Assert.IsTrue(graph.nodes.Count == 3);
             Assert.IsTrue(graph.links.Count == 3);
 
-            manager.Controller.CallFunction(linkNodes.Id, new Dictionary<string, dynamic> { { "from", 2 }, { "to", 0 }, { "this", graph }, { "bidirectionnal", true } });
+            manager.Controller.CallFunction(linkNodes.Id, new Dictionary<string, dynamic> { { "from", 2 }, { "to", 0 }, { "this", graph }, { "bidirectionnal", false } });
 
-            Assert.IsTrue(graph.links[0].Count == 1);
-            Assert.IsTrue(graph.links[0][0] == 2);
+            Assert.IsTrue(graph.links[0].Count == 0);
 
             Assert.IsTrue(graph.links[2].Count == 1);
             Assert.IsTrue(graph.links[2][0] == 0);
+
+            List<int> path = manager.Controller.CallFunction(pathfindAstar.Id, new Dictionary<string, dynamic> { { "from", 2 }, { "to", 1 }, { "this", graph } })["path"];
+
+            Assert.IsTrue(path.Count == 0); //the pathfind fails because the link 0 -> 1 doesn't exists (only 1 -> 0)
+
+            manager.Controller.CallFunction(linkNodes.Id, new Dictionary<string, dynamic> { { "from", 0 }, { "to", 1 }, { "this", graph }, { "bidirectionnal", false } });
+
+            Assert.IsTrue(graph.links[0].Count == 1);
+            Assert.IsTrue(graph.links[0][0] == 1);
+
+            Assert.IsTrue(graph.links[1].Count == 1);
+
+            path = (List<int>)manager.Controller.CallFunction(pathfindAstar.Id, new Dictionary<string, dynamic> { { "from", 2 }, { "to", 1 }, { "this", graph } })["path"];
+
+            Assert.IsTrue(path.Count == 3);
+            Assert.IsTrue(!path.Except(new List<int> { 2, 0, 1 }).Any());
         }
     }
 }

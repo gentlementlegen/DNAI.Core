@@ -59,7 +59,7 @@ namespace CorePackage.Execution
         /// </summary>
         public Foreach(DataType stored = null) : base()
         {
-            AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)));
+            AddInput("array", new Variable(new Entity.Type.ListType(Entity.Type.Scalar.Integer)), true);
             AddOutput("index", new Variable(Entity.Type.Scalar.Integer));
             AddOutput("element", new Variable(), true);
             if (stored != null)

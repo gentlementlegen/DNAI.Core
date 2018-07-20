@@ -18,14 +18,7 @@ namespace CorePackage.Execution
         ///<see cref="ARemove.RemoveElement"/>
         protected override bool RemoveElement()
         {
-            try
-            {
-                GetInputValue("array").RemoveAt(GetInputValue("index"));
-            }
-            catch
-            {
-                return false;
-            }
+            GetInputValue("array").RemoveAt((int)GetInputValue("index"));
             return true;
         }
     }

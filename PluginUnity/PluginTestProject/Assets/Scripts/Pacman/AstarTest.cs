@@ -7,7 +7,23 @@ public class AstarTest : MonoBehaviour
 {
 	private readonly PosGraph _graph = new PosGraph();
     private Dictionary<int, int> _idx = new Dictionary<int, int>();
+    private List<Position> _nodes = new List<Position>();
     private readonly List<int> _tList = new List<int>();
+
+    /*[SerializeField]
+    private PacmanController pacman;
+
+    [SerializeField]
+    private Transform target;*/
+
+    private List<int> path;
+
+    private Position currPosition = null;
+
+    private int GetNodeIndex(Position node)
+    {
+        return _idx[(int)node.Y * TerrainManager.Terrain[(int)node.Y].Length + (int)node.X];
+    }
 
     private void Start()
     {
@@ -29,9 +45,10 @@ public class AstarTest : MonoBehaviour
                     };
                     var i = _graph.appendNode(posNode, _graph);
 
-                    Debug.Log("Adding node (" + x.ToString() + ", " + y.ToString() + "): index(" + i.ToString() + ") => LinksLength: " + ((List<List<int>>)_graph.links).Count);
+                    //Debug.Log("Adding node (" + x.ToString() + ", " + y.ToString() + "): index(" + i.ToString() + ") => LinksLength: " + ((List<List<int>>)_graph.links).Count);
 
                     _idx.Add(y * TerrainManager.Terrain[y].Length + x, i);
+                    _nodes.Add(posNode);
 
                     if (pos == 'T')
                         _tList.Add(i);
@@ -43,6 +60,7 @@ public class AstarTest : MonoBehaviour
                                                 
 						_graph.linkNodes (i, j, true, _graph);
                     }
+
                     // left
 					if (pos != 'T' && TerrainManager.Terrain [y] [x - 1] != 'X') {
 
@@ -54,7 +72,17 @@ public class AstarTest : MonoBehaviour
             }
         }
         _graph.linkNodes(_tList[0], _tList[1], true, _graph);
-        var l = (List<List<int>>)_graph.links;
+        
+        path = (List<int>)_graph.pathFindAStar(0, 256, _graph);
+
+        currPosition = _nodes[path[0]];
+
+        foreach (int curr in path)
+        {
+            Debug.Log("=> " + _nodes[curr].Display());
+        }
+
+        /*var l = (List<List<int>>)_graph.links;
         var n = (List<Position>)_graph.nodes;
 
         for (int i = 0; i < l.Count; i++)
@@ -70,6 +98,19 @@ public class AstarTest : MonoBehaviour
         {
             Position node = n[i];
             Debug.Log("[idx => " + i + " node => " + node.Display() + "]");
+        }*/
+    }
+
+    /*public void Update()
+    {
+        if (curr)
+    }*/
+
+    private IEnumerable<Position> GetNextPosition()
+    {
+        foreach (int currPos in path)
+        {
+            yield return _nodes[currPos];
         }
     }
 }

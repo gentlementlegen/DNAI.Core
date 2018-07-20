@@ -22,7 +22,7 @@ namespace CorePackage.Execution
         {
             var val = GetInputValue("array");
 
-            val?.Insert(GetInputValue("index"), GetInputValue("element"));
+            val?.Insert((int)GetInputValue("index"), System.Convert.ChangeType(GetInputValue("element"), val?.GetType().GetGenericArguments()[0]));
             SetOutputValue("count", val?.Count);
         }
     }

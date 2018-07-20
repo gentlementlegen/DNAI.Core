@@ -63,7 +63,7 @@ namespace Assets.Scripts.Pacman
             GameManager.Instance.KillPlayer();
         }
 
-        private void AddDirection(TerrainManager.Direction direction)
+        public void AddDirection(TerrainManager.Direction direction)
         {
             if (_dir.Count > 0)
                 _dir.Dequeue();

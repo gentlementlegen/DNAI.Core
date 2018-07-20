@@ -222,20 +222,34 @@ namespace CorePackage.Entity
 
                 Execution.ExecutionRefreshInstruction[] nexts = toexecute.GetNextInstructions();
 
-                if (nexts.Count() == 0 && toexecute.GetType() == typeof(Execution.Break))
+                if (nexts.Count() == 0)
                 {
-                    Execution.ExecutionRefreshInstruction nxt = instructions.Peek();
-
-                    if (typeof(Execution.Loop).IsAssignableFrom(nxt.GetType())) //check if the next instruction is a loop instruction
+                    if (toexecute.GetType() == typeof(Execution.Break))
                     {
-                        instructions.Pop();
-                        instructions.Push(((Execution.Loop)nxt).GetDoneInstruction());
+                        Execution.ExecutionRefreshInstruction nxt = instructions.Peek();
+
+                        if (typeof(Execution.Loop).IsAssignableFrom(nxt.GetType())) //check if the next instruction is a loop instruction
+                        {
+                            instructions.Pop();
+
+                            Execution.ExecutionRefreshInstruction done = ((Execution.Loop)nxt).GetDoneInstruction();
+
+                            if (done != null)
+                                instructions.Push(done);
+                        }
+                    }
+                    else if (toexecute.GetType() == typeof(Execution.Return))
+                    {
+                        return;
                     }
                 }
-                foreach (Execution.ExecutionRefreshInstruction curr in nexts)
+                else
                 {
-                    if (curr != null)
-                        instructions.Push(curr);
+                    foreach (Execution.ExecutionRefreshInstruction curr in nexts)
+                    {
+                        if (curr != null)
+                            instructions.Push(curr);
+                    }
                 }
             }
         }

@@ -32,6 +32,11 @@ namespace CorePackage.Entity.Type
             }
         }
 
+        public System.Type RealStoredType
+        {
+            get { return _listGenericType; }
+        }
+
         /// <summary>
         /// Represents the real type of the list
         /// </summary>
@@ -193,17 +198,17 @@ namespace CorePackage.Entity.Type
 
         public override dynamic OperatorAccess(dynamic lOp, dynamic rOp)
         {
-            return lOp[rOp];
+            return lOp[(int)rOp];
         }
 
         /// <see cref="DataType.GetDeepCopyOf(dynamic)"/>
         public override dynamic GetDeepCopyOf(dynamic value)
         {
-            dynamic toret = Instantiate();
+            dynamic toret = Activator.CreateInstance(value.GetType());
 
             foreach (var curr in value)
             {
-                toret.Add(Convert.ChangeType(stored.GetDeepCopyOf(curr), _listGenericType));
+                toret.Add(Convert.ChangeType(stored.GetDeepCopyOf(curr), curr.GetType()));
             }
             return toret;
         }
