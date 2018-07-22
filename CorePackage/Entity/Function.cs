@@ -213,6 +213,7 @@ namespace CorePackage.Entity
 
             Stack<Execution.ExecutionRefreshInstruction> instructions = new Stack<Execution.ExecutionRefreshInstruction>();
 
+            ResetReturnsValue();
             instructions.Push(entrypoint);
             while (instructions.Count > 0)
             {
@@ -263,7 +264,7 @@ namespace CorePackage.Entity
             {
                 SetParameterValue(curr.Key, curr.Value);
             }
-
+            
             Dictionary<string, dynamic> returns = new Dictionary<string, dynamic>();
             
             Call();
@@ -273,6 +274,14 @@ namespace CorePackage.Entity
                 returns[curr.Key] = curr.Value.Value;
             }
             return returns;
+        }
+
+        public void ResetReturnsValue()
+        {
+            foreach (Variable curr in returns)
+            {
+                curr.Value = curr.Type.Instantiate();
+            }
         }
 
         /// <see cref="Global.IDefinition.IsValid"/>

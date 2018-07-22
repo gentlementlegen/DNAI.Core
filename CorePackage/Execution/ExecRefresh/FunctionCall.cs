@@ -24,12 +24,14 @@ namespace CorePackage.Execution
         /// <param name="tocall">Function to call when instruction is executed</param>
         public FunctionCall(Entity.Function tocall) : base()
         {
-            AddInputs(tocall.Parameters);
-            AddOutputs(tocall.Returns, true);
-            
-            foreach (KeyValuePair<string, Input> curr in Inputs)
+            foreach (KeyValuePair<string, Entity.Variable> input in tocall.Parameters)
             {
-                Console.WriteLine(curr.Key + ": " + curr.Value.Definition.Type.GetType().ToString());
+                AddInput(input.Key, new Entity.Variable(input.Value.Type));
+            }
+
+            foreach (KeyValuePair<string, Entity.Variable> output in tocall.Returns)
+            {
+                AddOutput(output.Key, new Entity.Variable(output.Value.Type));
             }
 
             this.tocall = tocall;
@@ -45,6 +47,10 @@ namespace CorePackage.Execution
                 tocall.SetParameterValue(input.Key, GetInputValue(input.Key)); //this will refresh the values of inputs
             }
             tocall.Call();
+            foreach (string output in Outputs.Keys)
+            {
+                SetOutputValue(output, tocall.GetReturnValue(output));
+            }
         }
     }
 }

@@ -1013,6 +1013,15 @@ namespace TestCommand
 
             Assert.IsTrue(graph.links[1].Count == 1);
 
+            manager.Controller.CallFunction(appendNode.Id, new Dictionary<string, dynamic> { { "node", new Pos { X = 3f, Y = 3f, Z = 0f } }, { "this", graph } });
+            manager.Controller.CallFunction(appendNode.Id, new Dictionary<string, dynamic> { { "node", new Pos { X = 4f, Y = 4f, Z = 0f } }, { "this", graph } });
+            manager.Controller.CallFunction(appendNode.Id, new Dictionary<string, dynamic> { { "node", new Pos { X = 5f, Y = 5f, Z = 0f } }, { "this", graph } });
+
+            path = (List<int>)manager.Controller.CallFunction(pathfindAstar.Id, new Dictionary<string, dynamic> { { "from", 2 }, { "to", 1 }, { "this", graph } })["path"];
+
+            Assert.IsTrue(path.Count == 3);
+            Assert.IsTrue(!path.Except(new List<int> { 2, 0, 1 }).Any());
+
             path = (List<int>)manager.Controller.CallFunction(pathfindAstar.Id, new Dictionary<string, dynamic> { { "from", 2 }, { "to", 1 }, { "this", graph } })["path"];
 
             Assert.IsTrue(path.Count == 3);
