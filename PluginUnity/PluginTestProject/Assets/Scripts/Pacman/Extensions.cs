@@ -28,5 +28,10 @@ namespace Assets.Scripts.Pacman
         {
             return new Position { X = v.x, Y = v.y, Z = 0 };
         }
+
+        public static Position AsPosition(this UnityEngine.Vector3 v)
+        {
+            return new Position { X = v.x, Y = v.y, Z = v.z };
+        }
     }
 }
