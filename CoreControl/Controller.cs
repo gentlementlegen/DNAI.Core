@@ -339,7 +339,6 @@ namespace CoreControl
         /// <returns>Dictionary that contains function returns' value</returns>
         public Dictionary<string, dynamic> CallFunction(UInt32 funcID, Dictionary<string, dynamic> parameters)
         {
-            DumpFunctionInto(funcID, "C:/Users/GasparQ/Desktop");
             return entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(funcID).Call(parameters);
         }
         

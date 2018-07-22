@@ -18,5 +18,15 @@ namespace Assets.Scripts.Pacman
                 Z = p.z
             };
         }
+
+        public static UnityEngine.Vector3 ToVector3(this Position p)
+        {
+            return new UnityEngine.Vector3(p.X, p.Y, p.Z);
+        }
+
+        public static Position AsPosition(this UnityEngine.Vector2Int v)
+        {
+            return new Position { X = v.x, Y = v.y, Z = 0 };
+        }
     }
 }

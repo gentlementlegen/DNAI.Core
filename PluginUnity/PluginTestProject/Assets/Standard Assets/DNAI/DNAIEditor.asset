@@ -15,14 +15,14 @@ MonoBehaviour:
   - scriptManager:
       _fileName: 
       _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
-        Assets\DNAI\Scripts\AstarMabit.dnai
-    AIName: 
-    _scriptList: []
-  - scriptManager:
-      _fileName: 
-      _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
-        Assets\DNAI\Editor\..\Scripts\MoreOrLess.dnai
+        Assets\DNAI\Scripts\MoreOrLess.dnai
     AIName: 
     _scriptList:
     - Play
     - Reset
+  - scriptManager:
+      _fileName: 
+      _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
+        Assets\DNAI\Scripts\AStar.dnai
+    AIName: 
+    _scriptList: []
