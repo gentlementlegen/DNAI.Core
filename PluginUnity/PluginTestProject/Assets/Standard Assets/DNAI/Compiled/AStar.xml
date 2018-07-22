@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AStar</name>
+    </assembly>
+    <members>
+        <member name="T:DNAI.Astar2.Astar2">
+            <summary>
+             Base behaviour for DNAI IA.
+            </summary>
+            </member>
+        <member name="F:DNAI.Astar2.Astar2._manager">
+            <summary>
+             Called when output values of the DNAI script change.
+            </summary>
+            </member>
+    </members>
+</doc>

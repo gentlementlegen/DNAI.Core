@@ -77,10 +77,10 @@ public class AstarTest : MonoBehaviour
 
         currPosition = _nodes[path[0]];
 
-        foreach (int curr in path)
-        {
-            Debug.Log("=> " + _nodes[curr].Display());
-        }
+        //foreach (int curr in path)
+        //{
+        //    Debug.Log("=> " + _nodes[curr].Display());
+        //}
 
         /*var l = (List<List<int>>)_graph.links;
         var n = (List<Position>)_graph.nodes;
@@ -99,6 +99,21 @@ public class AstarTest : MonoBehaviour
             Position node = n[i];
             Debug.Log("[idx => " + i + " node => " + node.Display() + "]");
         }*/
+    }
+
+    public List<int> GetDestinationPath(Position from, Position to)
+    {
+        return GetDestination(GetNodeIndex(from), GetNodeIndex(to));
+    }
+
+    public List<int> GetDestination(int from, int to)
+    {
+        return _graph.pathFindAStar(from, to, _graph) as List<int>;
+    }
+
+    public Position GetNode(int idx)
+    {
+        return _graph.getNode(idx, _graph);
     }
 
     /*public void Update()
