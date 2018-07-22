@@ -73,9 +73,9 @@ public class AstarTest : MonoBehaviour
         }
         _graph.linkNodes(_tList[0], _tList[1], true, _graph);
         
-        path = (List<int>)_graph.pathFindAStar(0, 256, _graph);
+        //path = (List<int>)_graph.pathFindAStar(0, 256, _graph);
 
-        currPosition = _nodes[path[0]];
+        //currPosition = _nodes[path[0]];
 
         //foreach (int curr in path)
         //{
@@ -103,10 +103,10 @@ public class AstarTest : MonoBehaviour
 
     public List<int> GetDestinationPath(Position from, Position to)
     {
-        return GetDestination(GetNodeIndex(from), GetNodeIndex(to));
+        return GetDestinationPath(GetNodeIndex(from), GetNodeIndex(to));
     }
 
-    public List<int> GetDestination(int from, int to)
+    public List<int> GetDestinationPath(int from, int to)
     {
         return _graph.pathFindAStar(from, to, _graph) as List<int>;
     }

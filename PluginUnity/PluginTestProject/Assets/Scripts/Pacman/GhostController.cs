@@ -2,6 +2,9 @@
 
 namespace Assets.Scripts.Pacman
 {
+    /// <summary>
+    /// Controller for the Pacman Ghosts.
+    /// </summary>
     public class GhostController : MonoBehaviour
     {
         [SerializeField]
@@ -18,7 +21,7 @@ namespace Assets.Scripts.Pacman
         {
             _currPos.X = 1;
             _currPos.Y = 1;
-            _targetPos.X = 4;
+            _targetPos.X = 1;
             _targetPos.Y = 1;
         }
 
@@ -36,10 +39,10 @@ namespace Assets.Scripts.Pacman
                 for (int i = 0; i < nodes.Count; i++)
                 {
                     int node = nodes[i];
-                    Debug.Log("Node["+i+"]"+_astar.GetNode(node).Display());
+                    Debug.Log("Node["+i+"]"+_astar.GetNode(node).Display() + " corresponding idx:" + nodes[i]);
                 }
 
-                _targetPos = _astar.GetNode(nodes[1]);
+                _targetPos = _astar.GetNode(nodes[0]);
                 Debug.LogError("Targetpos=" + _targetPos.Display());
             }
             transform.position = Vector3.MoveTowards(transform.position,
