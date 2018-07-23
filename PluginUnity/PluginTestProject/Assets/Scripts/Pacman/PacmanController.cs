@@ -4,8 +4,12 @@ using UnityEngine;
 
 namespace Assets.Scripts.Pacman
 {
+    public delegate void OnPositionChanged(object sender, Vector2Int position);
+
     public class PacmanController : MonoBehaviour
     {
+        public event OnPositionChanged PositionChanged;
+
         [SerializeField]
         private float _distanceDelta = 0.1f;
 
@@ -77,6 +81,7 @@ namespace Assets.Scripts.Pacman
             if (_dir.Count <= 0)
             {
                 _target = TerrainManager.Instance.GetNextAvailableNode(x, y, _currentDir, out x, out y, out isJump);
+                PositionChanged?.Invoke(this, new Vector2Int(x, y));
             }
             else
             {
@@ -86,6 +91,7 @@ namespace Assets.Scripts.Pacman
                 if (currX == x && currY == y)
                 {
                     newTarget = TerrainManager.Instance.GetNextAvailableNode(x, y, _currentDir, out x, out y, out isJump);
+                    PositionChanged?.Invoke(this, new Vector2Int(currX, currY));
                 }
                 else
                 {
