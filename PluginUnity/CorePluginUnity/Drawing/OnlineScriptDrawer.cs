@@ -19,6 +19,8 @@ namespace Core.Plugin.Unity.Drawing
         private GUIContent iconToolbarPlus;
         private readonly List<API.File> _fileList = new List<API.File>();
 
+        private static Texture _refreshTexture;
+
         /// <summary>
         /// Gets the current size of the script list in pixels.
         /// </summary>
@@ -37,6 +39,32 @@ namespace Core.Plugin.Unity.Drawing
                 drawHeaderCallback = DrawHeaderCallback,
                 drawElementCallback = DrawElementCallback
             };
+            //FetchFiles();
+        }
+
+        /// <summary>
+        /// Retrieves the files from the server.
+        /// </summary>
+        public void FetchFiles()
+        {
+            _fileList.Clear();
+            UnityTask.Run(async () =>
+            {
+                try
+                {
+                    foreach (var file in await CloudFileWatcher.Access.GetFiles(SettingsDrawer.UserID))
+                        _fileList.Add(file);
+                }
+                catch (NullReferenceException)
+                {
+                    // Happens when the user is not connected
+                    Debug.LogWarning("Cannot fetch files: the DNAI user is not connected.");
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError("Error while fetching files: " + ex.Message);
+                }
+            });
         }
 
         private void DrawElementCallback(Rect rect, int index, bool isActive, bool isFocused)
@@ -71,20 +99,13 @@ namespace Core.Plugin.Unity.Drawing
         private void DrawHeaderCallback(Rect rect)
         {
             EditorGUI.LabelField(rect, "Online AIs");
-            if (GUI.Button(new Rect(rect.xMax - 20, rect.y, 15, 15), "Refresh"))
+            if (_refreshTexture == null)
+                _refreshTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "refresh.png");
+            GUIContent gc = new GUIContent(_refreshTexture, "Refresh");
+            GUIStyle skin = new GUIStyle();
+            if (GUI.Button(new Rect(rect.xMax - 15, rect.y + 1, 14, 14), gc, skin))
             {
-                UnityTask.Run(async () =>
-                {
-                    try
-                    {
-                        foreach (var file in await CloudFileWatcher.Access.GetFiles(SettingsDrawer.UserID))
-                            _fileList.Add(file);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.LogError(ex.Message);
-                    }
-                });
+                FetchFiles();
             }
         }
 
@@ -97,7 +118,16 @@ namespace Core.Plugin.Unity.Drawing
                 iconToolbarPlus = EditorGUIUtility.IconContent("Toolbar Plus", "|Download script");
             if (preButton == null)
                 preButton = "RL FooterButton";
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            GUILayout.BeginVertical(GUILayout.MaxWidth(Screen.width - 10));
             _list.DoLayoutList();
+            GUILayout.EndVertical();
+
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
         }
     }
 }

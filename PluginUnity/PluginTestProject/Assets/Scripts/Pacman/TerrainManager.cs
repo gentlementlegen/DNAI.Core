@@ -18,15 +18,15 @@ namespace Assets.Scripts.Pacman
             "X.XXXX.XX.XXXXXXXX.XX.XXXX.X",
             "X......XX....XX....XX......X",
             "XXXXXX.XXXXX XX XXXXX.XXXXXX",
-            "     X.XXXXX XX XXXXX.X     ",
-            "     X.XX          XX.X     ",
-            "     X.XX XXXXXXXX XX.X     ",
-            "XXXXXX.XX X      X XX.XXXXXX",
-            "T     .   X      X   .     T",
-            "XXXXXX.XX X      X XX.XXXXXX",
-            "     X.XX XXXXXXXX XX.X     ",
-            "     X.XX          XX.X     ",
-            "     X.XX XXXXXXXX XX.X     ",
+            "-----X.XXXXX XX XXXXX.X-----",
+            "-----X.XX          XX.X-----",
+            "-----X.XX XXXXXXXX XX.X-----",
+            "XXXXXX.XX X------X XX.XXXXXX",
+            "T     .   X------X   .     T",
+            "XXXXXX.XX X------X XX.XXXXXX",
+            "-----X.XX XXXXXXXX XX.X-----",
+            "-----X.XX          XX.X-----",
+            "-----X.XX XXXXXXXX XX.X-----",
             "XXXXXX.XX XXXXXXXX XX.XXXXXX",
             "X............XX............X",
             "X.XXXX.XXXXX.XX.XXXXX.XXXX.X",
@@ -146,7 +146,7 @@ namespace Assets.Scripts.Pacman
 
         public Vector2Int GetGridPosition(float x, float y)
         {
-            return new Vector2Int((int)(x / _scaleFactor.x), (int)(y / _scaleFactor.y));
+            return new Vector2Int(Mathf.RoundToInt(x / _scaleFactor.x), Mathf.RoundToInt(-y / _scaleFactor.y));
         }
 
         public Vector3 GetWorldPosition(int x, int y)

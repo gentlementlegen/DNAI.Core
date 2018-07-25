@@ -64,43 +64,64 @@ namespace Core.Plugin.Unity.Editor
         /// Loads the script at a certain location.
         /// </summary>
         /// <param name="filePath">File path.</param>
-        public void LoadScript(string filePath)
-        {
-            FilePath = filePath;
-            LoadScript();
-        }
+        //public void LoadScript(string filePath)
+        //{
+        //    FilePath = filePath;
+        //    LoadScript();
+        //}
 
         /// <summary>
         /// Loads the script using <paramref name="FilePath"/> path.
         /// </summary>
-        public void LoadScript()
+        public string LoadScript(string path)
         {
-            if (FilePath?.Length == 0)
+            if (path?.Length == 0)
             {
                 ProcessingStatus = "No file selected.";
-                return;
+                return "";
             }
             ProcessingStatus = "Reading file...";
             //Thread t = new Thread (() => fileLoader.LoadFile(FilePath));
             //t.Start ();
+            UnityEngine.Debug.Log("file path => " + path);
             var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "Scripts");
-            Directory.CreateDirectory(fileCopyPath);
+            var fileFullPath = Path.GetFullPath(Path.Combine(fileCopyPath, Path.GetFileName(path)));
 
             try
             {
-                File.Copy(FilePath, Path.Combine(fileCopyPath, Path.GetFileName(FilePath)), true);
+                // TODO : maybe check if the file is already there and ask for overwrite
+                CloudFileWatcher.Watch(false);
+                Directory.CreateDirectory(fileCopyPath);
+                File.Copy(path, fileFullPath, true);
+                CloudFileWatcher.Watch(true);
             }
             catch (IOException e)
             {
-                UnityEngine.Debug.LogWarning($"Error copying file at location [{FilePath}]: {e.Message}");
+                UnityEngine.Debug.LogWarning($"Error copying file at location [{path}]: {e.Message}");
+            }
+            finally
+            {
+                CloudFileWatcher.Watch(true);
             }
 
             Task.Run(() =>
             {
-                _manager.LoadCommandsFrom(FilePath);
+                _manager.Reset();
+                _manager.LoadCommandsFrom(path);
                 //var codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
                 //codeConverter.ConvertCode();
             }).ContinueWith((param) => OnScriptLoaded(param.Status.ToString()));
+            return fileFullPath;
+        }
+
+        public void ReloadScript()
+        {
+            _manager.LoadCommandsFrom(FilePath);
+        }
+
+        public string GetLoadedScriptName()
+        {
+            return _manager.Controller.GetMainContextName();
         }
 
         /// <summary>
@@ -153,9 +174,10 @@ namespace Core.Plugin.Unity.Editor
         /// <returns></returns>
         public Task CompileAsync()
         {
-            // This case happens when Unity ddeserializes the object.
+            // This case happens when Unity deserializes the object.
             // Since we don't want to slow down the ctor too much, it's better
             // to check it on Compile call
+            // TODO : Add interface for deserialization instead ? 
             if (_manager.FilePath == null && _filePath != null)
                 _manager.LoadCommandsFrom(_filePath);
             return Task.Run(() => _codeConverter.ConvertCode());

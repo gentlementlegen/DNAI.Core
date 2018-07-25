@@ -10,7 +10,7 @@ namespace CorePackage.Execution
         /// <summary>
         /// Default constructor which will add an integer 'index' input
         /// </summary>
-        public Insert()
+        public Insert(DataType type = null) : base(type)
         {
             AddInput("index", new Variable(Entity.Type.Scalar.Integer));
         }
@@ -22,7 +22,7 @@ namespace CorePackage.Execution
         {
             var val = GetInputValue("array");
 
-            val?.Insert(GetInputValue("index"), GetInputValue("element"));
+            val?.Insert((int)GetInputValue("index"), System.Convert.ChangeType(GetInputValue("element"), val?.GetType().GetGenericArguments()[0]));
             SetOutputValue("count", val?.Count);
         }
     }

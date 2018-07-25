@@ -11,7 +11,7 @@ using static DNAI.Vertex.DNAIBehaviour;
 
 public class TestDuly
 #if COMPILE
-    : Play
+    : MoreOrLess
 #endif
 {
     public Text TextNumber;
@@ -32,11 +32,12 @@ public class TestDuly
 #if COMPILE
     private IEnumerator PlayRoutine()
     {
-        lastResult = COMPARISON.NONE;
+        ExecuteReset();
+        lastResult = (int)COMPARISON.NONE;
         for (int i = Tries; i > 0 && result != MysteryNumber; i--)
         {
-            Execute();
-            lastResult = result < MysteryNumber ? COMPARISON.MORE : COMPARISON.LESS;
+            ExecutePlay();
+            lastResult = (int) (result < MysteryNumber ? COMPARISON.MORE : COMPARISON.LESS);
             Debug.Log($"Result = {result}; MysteryNumber = {MysteryNumber}; lastResult = {lastResult}");
             TextNumber.text = result.ToString();
             yield return new WaitForSeconds(0.5f);
@@ -51,8 +52,10 @@ public class TestDuly
         MysteryNumber = Convert.ToInt32(nbr);
     }
 
+#if COMPILE
     public void OutputChanged(EventOutputChange e)
     {
         Debug.Log("Output changed callback ! ==> " + e.Value + " (" + e.ValueType + ")");
     }
+#endif
 }

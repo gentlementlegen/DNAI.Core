@@ -14,12 +14,15 @@ MonoBehaviour:
   listIA:
   - scriptManager:
       _fileName: 
-      _filePath: D:/Folders/VisualStudio/Duly/PluginUnity/PluginTestProject/Assets/Standard
-        Assets/DNAI/Scripts/More Or Less.dnai
+      _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
+        Assets\DNAI\Scripts\MoreOrLess.dnai
+    AIName: 
     _scriptList:
     - Play
+    - Reset
   - scriptManager:
       _fileName: 
-      _filePath: D:/Folders/VisualStudio/Duly/PluginUnity/PluginTestProject/Assets/Standard
-        Assets/DNAI/Scripts/vertex.dnai
+      _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
+        Assets\DNAI\Scripts\AStar.dnai
+    AIName: 
     _scriptList: []

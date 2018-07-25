@@ -87,7 +87,9 @@
     <Compile Include="Execution\AccessRefresh\Operators\Unary\Not.cs" />
     <Compile Include="Execution\ExecRefresh\Append.cs" />
     <Compile Include="Execution\ExecRefresh\ARemove.cs" />
+    <Compile Include="Execution\ExecRefresh\Clear.cs" />
     <Compile Include="Execution\ExecRefresh\Debug.cs" />
+    <Compile Include="Execution\ExecRefresh\Fill.cs" />
     <Compile Include="Execution\ExecRefresh\Formula.cs" />
     <Compile Include="Execution\ExecRefresh\FunctionCall.cs" />
     <Compile Include="Execution\ExecRefresh\Insert.cs" />
@@ -95,10 +97,15 @@
     <Compile Include="Execution\ExecRefresh\RemoveIndex.cs" />
     <Compile Include="Execution\ExecRefresh\SetAttribute.cs" />
     <Compile Include="Execution\ExecRefresh\Setter.cs" />
-    <Compile Include="Execution\ExecRefresh\Size.cs" />
+    <Compile Include="Execution\AccessRefresh\Size.cs" />
+    <Compile Include="Execution\ExecRefresh\SetValueAt.cs" />
     <Compile Include="Execution\ExecRefresh\Statement.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\Break.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\Continue.cs" />
     <Compile Include="Execution\ExecRefresh\Statements\If.cs" />
     <Compile Include="Execution\ExecRefresh\Statements\Foreach.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\Loop.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\Return.cs" />
     <Compile Include="Execution\ExecRefresh\Statements\While.cs" />
     <Compile Include="Execution\ExecutionRefreshInstruction.cs" />
     <Compile Include="Execution\Instruction.cs" />
@@ -111,9 +118,6 @@
     <Compile Include="Global\IDeclarator.cs" />
     <Compile Include="Global\IOperable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

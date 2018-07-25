@@ -204,6 +204,11 @@ namespace CoreCommand
 
                 if (outStream != null)
                     BinarySerializer.Serializer.Serialize(error.Message, outStream);
+                if (save)
+                {
+                    Console.Error.WriteLine("Removing command from file");
+                    _commands.RemoveAt(_commands.Count - 1);
+                }
                 return false;
             }
         }

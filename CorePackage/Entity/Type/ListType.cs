@@ -25,16 +25,23 @@ namespace CorePackage.Entity.Type
             {
                 if (value != null)
                 {
-                    _listType = typeof(List<>).MakeGenericType(value.Instantiate().GetType());
+                    _listGenericType = value.Instantiate().GetType();
+                    _listType = typeof(List<>).MakeGenericType(_listGenericType);
                     stored = value;
                 }
             }
+        }
+
+        public System.Type RealStoredType
+        {
+            get { return _listGenericType; }
         }
 
         /// <summary>
         /// Represents the real type of the list
         /// </summary>
         private System.Type _listType;
+        private System.Type _listGenericType;
 
         /// <summary>
         /// Basic default constructor which is necessary for factory
@@ -72,7 +79,26 @@ namespace CorePackage.Entity.Type
         /// </summary>
         public override bool IsValueOfType(dynamic value)
         {
-            return _listType == value.GetType();
+            //If the value is enumerable
+            if (!typeof(System.Collections.IEnumerable).IsAssignableFrom(value.GetType()))
+                return false;
+
+            //If its empty, its ok
+            if (value.Count == 0)
+                return true;
+
+            //Else check the first value
+            dynamic fval = value[0];
+
+            try
+            {
+                //If its scalar, get the real value
+                if ((stored as ScalarType) != null)
+                    fval = fval.Value;
+            } catch (Exception) { }
+
+            //and finaly check that is of stored type
+            return  stored.IsValueOfType(fval);
         }
 
         public override dynamic OperatorAdd(dynamic lOp, dynamic rOp)
@@ -172,7 +198,19 @@ namespace CorePackage.Entity.Type
 
         public override dynamic OperatorAccess(dynamic lOp, dynamic rOp)
         {
-            return lOp[rOp];
+            return lOp[(int)rOp];
+        }
+
+        /// <see cref="DataType.GetDeepCopyOf(dynamic)"/>
+        public override dynamic GetDeepCopyOf(dynamic value)
+        {
+            dynamic toret = Activator.CreateInstance(value.GetType());
+
+            foreach (var curr in value)
+            {
+                toret.Add(Convert.ChangeType(stored.GetDeepCopyOf(curr), curr.GetType()));
+            }
+            return toret;
         }
     }
 }

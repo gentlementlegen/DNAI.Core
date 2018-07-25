@@ -16,15 +16,12 @@ namespace CoreCommand.Command.Class
 
         [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
-
-        [BinarySerializer.BinaryFormat]
-        public EntityFactory.VISIBILITY Visibility { get; set; }
-
+        
         public Reply Resolve(Controller controller)
         {
             return new Reply
             {
-                ThisParamID = controller.SetClassFunctionAsMember(ClassId, Name, Visibility)
+                ThisParamID = controller.SetClassFunctionAsMember(ClassId, Name)
             };
         }
     }

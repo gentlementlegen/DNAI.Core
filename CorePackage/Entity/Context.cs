@@ -51,6 +51,12 @@ namespace CorePackage.Entity
             return scope.Find(name, visibility);
         }
 
+        /// <see cref="IDeclarator.Find(string)"/>
+        public IDefinition Find(string name)
+        {
+            return scope.Find(name);
+        }
+
         ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
         public IDefinition Pop(string name)
         {

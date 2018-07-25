@@ -26,7 +26,7 @@ namespace CorePackage.Execution
         /// <param name="toprint">Variable to watch</param>
         public Debug(Entity.Variable toprint) : base()
         {
-            AddInput("to_print", toprint);
+            AddInput("to_print", toprint, true);
         }
 
         /// <summary>

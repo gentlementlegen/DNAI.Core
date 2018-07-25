@@ -17,9 +17,9 @@ namespace CorePackage.Execution
         /// <param name="opType">Type of the operand</param>
         /// <param name="operation">Operation to execute</param>
         /// <param name="resultType">Type of the returned value</param>
-        public UnaryOperator(Entity.DataType opType, Func<dynamic, dynamic> operation, Entity.DataType resultType): base(resultType, operation)
+        public UnaryOperator(Entity.DataType opType, Func<dynamic, dynamic> operation, Entity.DataType resultType, bool outreference = false): base(resultType, operation, outreference)
         {
-            AddInput("Operand", new Entity.Variable(opType));
+            AddInput("Operand", new Entity.Variable(opType), true);
         }
 
         /// <summary>

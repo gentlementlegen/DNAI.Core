@@ -1,4 +1,4 @@
-﻿//#define UNITY_ENGINE
+﻿#define UNITY_ENGINE
 
 using Core.Plugin.Unity.Editor;
 using Core.Plugin.Unity.Extensions;
@@ -56,15 +56,17 @@ namespace Core.Plugin.Unity.Generator
             AssemblyName = Path.GetFileNameWithoutExtension(_manager.FilePath).RemoveIllegalCharacters();
 
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
+            //UnityEngine.Debug.Log("compiling scripts length => " + ids.Count);
 
             foreach (var id in ids)
             {
                 dataTypes.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.DATA_TYPE, id));
                 variables.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, id));
                 functions.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
+                //UnityEngine.Debug.Log("for id " + id + " found functions " + functions.Count);
             }
-
             var code = _template.GenerateTemplateContent(_manager, variables, functions, dataTypes);
+            UnityEngine.Debug.Log(code);
             _compiler.Compile(code, AssemblyName);
         }
 
@@ -167,7 +169,14 @@ namespace Core.Plugin.Unity.Generator
                 _parameters.ReferencedAssemblies.Add("/Library/Frameworks/Mono.framework/Versions/5.4.0/lib/mono/4.6.1-api/System.Core.dll");
                 _parameters.ReferencedAssemblies.Add("/Library/Frameworks/Mono.framework/Versions/5.4.0/lib/mono/4.6.1-api/Microsoft.CSharp.dll");
             } else if (OperatingSystem.IsWindows()) {
+#if UNITY_ENGINE
+                _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Managed\UnityEngine.dll");
+                _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Managed\UnityEditor.dll");
+                _parameters.ReferencedAssemblies.Add(assemblyPath + "../Editor/CorePluginUnity.dll");
+#else
                 _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEngine.dll");
+                _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEditor.dll");
+#endif
 
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
@@ -189,6 +198,10 @@ namespace Core.Plugin.Unity.Generator
 
         private string GetUnityLibraryPath()
         {
+#if UNITY_ENGINE
+            //UnityEngine.Debug.Log("Install path => " + UnityEditor.EditorApplication.applicationContentsPath);
+            return UnityEditor.EditorApplication.applicationContentsPath;
+#else
             var path = "";
 
             if (OperatingSystem.IsWindows())
@@ -212,6 +225,7 @@ namespace Core.Plugin.Unity.Generator
             }
 
             return path;
+#endif
         }
 
         /// <summary>

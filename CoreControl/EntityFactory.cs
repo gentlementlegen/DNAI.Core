@@ -55,7 +55,7 @@ namespace CoreControl
             FUNCTION = 8
         }
 
-        public struct Entity
+        public class Entity
         {
             public EntityFactory.ENTITY Type { get; set; }
 
@@ -332,7 +332,11 @@ namespace CoreControl
         /// <param name="newName">Name to set to the entity</param>
         public void Rename(UInt32 containerID, string lastName, string newName)
         {
-            GetDeclaratorOf(containerID).Rename(lastName, newName);
+            CorePackage.Global.IDeclarator decl = GetDeclaratorOf(containerID);
+            CorePackage.Global.IDefinition def = decl.Find(lastName);
+
+            decl.Rename(lastName, newName);
+            def.Name = newName; //rename here because declarator do not edit Definition name
         }
 
         /// <summary>
@@ -451,7 +455,10 @@ namespace CoreControl
             { ENTITY.CONTEXT, typeof(CorePackage.Entity.Context) },
             { ENTITY.DATA_TYPE, typeof(CorePackage.Entity.DataType) },
             { ENTITY.FUNCTION, typeof(CorePackage.Entity.Function) },
-            { ENTITY.VARIABLE, typeof(CorePackage.Entity.Variable) }
+            { ENTITY.VARIABLE, typeof(CorePackage.Entity.Variable) },
+            { ENTITY.OBJECT_TYPE, typeof(CorePackage.Entity.Type.ObjectType) },
+            { ENTITY.ENUM_TYPE, typeof(CorePackage.Entity.Type.EnumType) },
+            { ENTITY.LIST_TYPE, typeof(CorePackage.Entity.Type.ListType) }
         };
 
         /// <summary>

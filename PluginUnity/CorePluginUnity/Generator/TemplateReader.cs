@@ -16,11 +16,20 @@ namespace Core.Plugin.Unity.Generator
         public List<string> Inputs = new List<string>();
         public List<string> Outputs = new List<string>();
         public List<string> DataTypes = new List<string>();
+        public List<string> EnumNames = new List<string>();
         public string FilePath = "";
-        public uint FunctionId;
-        public string FunctionArguments = "";
+        //public uint FunctionId;
+        //public string FunctionArguments = "";
         public string Namespace = "Behaviour";
         public string ClassName = "DNAIBehaviour";
+        public List<Function> Functions = new List<Function>();
+    }
+
+    public class Function
+    {
+        public string Name = "";
+        public uint FunctionId;
+        public string FunctionArguments = "";
     }
 
     /// <summary>
@@ -91,11 +100,13 @@ namespace Core.Plugin.Unity.Generator
                 template.FilePath = Path.GetFileName(manager.FilePath);
                 //Regex rgx = new Regex("[^a-zA-Z0-9 -]");
                 //template.Namespace = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(rgx.Replace(Path.GetFileNameWithoutExtension(template.FilePath), ""));
-                template.Namespace = Path.GetFileNameWithoutExtension(template.FilePath).RemoveIllegalCharacters();
+                //template.Namespace = Path.GetFileNameWithoutExtension(template.FilePath).RemoveIllegalCharacters();
+                template.Namespace = manager.Controller.GetMainContextName();
             }
 
-            if (functions?.Count > 0)
-                template.ClassName = functions[0].Name;
+            //if (functions?.Count > 0)
+            //    template.ClassName = functions[0].Name;
+            template.ClassName = template.Namespace;
 
             if (dataTypes != null)
             {
@@ -104,13 +115,14 @@ namespace Core.Plugin.Unity.Generator
                     var type = manager.Controller.GetEntityType(item.Id);
                     if (type == CoreControl.EntityFactory.ENTITY.ENUM_TYPE)
                     {
-                        var ret = "";
+                        var ret = "public ";
                         ret += $"enum {item.Name} {{";
                         foreach (var v in manager.Controller.GetEnumerationValues(item.Id))
                             ret += $"{v} = {manager.Controller.GetEnumerationValue(item.Id, v)},";
                         ret += "}";
                         template.DataTypes.Add(ret);
                         enumNames.Add(item.Id, item.Name);
+                        template.EnumNames.Add(item.Name);
                     }
                     else if (type == CoreControl.EntityFactory.ENTITY.OBJECT_TYPE)
                     {
@@ -132,9 +144,15 @@ namespace Core.Plugin.Unity.Generator
             if (functions?.Count > 0)
             {
                 template.Outputs.Clear();
-                template.FunctionId = functions[0].Id;
+                //template.FunctionId = functions[0].Id;
                 foreach (var item in functions)
                 {
+                    var func = new Function();
+                    func.Name = item.Name;
+                    func.FunctionId = item.Id;
+
+                    template.Functions.Add(func);
+
                     //template.FunctionId = item.Id;
                     var pars = manager.Controller.GetFunctionParameters(item.Id);
 
@@ -155,7 +173,7 @@ namespace Core.Plugin.Unity.Generator
                     }
 
                     for (int i = 0; i < pars.Count; i++)
-                        template.FunctionArguments += $"{{\"{pars[i].Name}\", ({manager.Controller.GetVariableValue(pars[i].Id).GetType().ToString()}) {pars[i].Name}}},";
+                        func.FunctionArguments += $"{{\"{pars[i].Name}\", ({manager.Controller.GetVariableValue(pars[i].Id).GetType().ToString()}) {pars[i].Name}}},";
                     foreach (var ret in manager.Controller.GetFunctionReturns(item.Id))
                         template.Outputs.Add(ret.ToSerialString(manager.Controller));
                 }
@@ -200,13 +218,14 @@ namespace Core.Plugin.Unity.Generator
         /// <returns></returns>
         private string CreateObject(CustomObject obj)
         {
-            var ret = "class " + obj.ObjectName + "{";
+            return obj.GetGeneratedClass();
+            //var ret = "class " + obj.ObjectName + "{";
 
-            foreach (var attrib in obj.Fields)
-            {
-                ret += "public " + obj.GetFieldType(attrib.Value) + " " + attrib.Key + ";";
-            }
-            return ret + "}";
+            //foreach (var attrib in obj.Fields)
+            //{
+            //    ret += "public " + obj.GetFieldType(attrib.Value) + " " + attrib.Key + ";";
+            //}
+            //return ret + "}";
         }
 
         /// <summary>
