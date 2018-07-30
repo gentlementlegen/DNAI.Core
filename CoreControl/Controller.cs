@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace CoreControl
 {
@@ -81,6 +82,26 @@ namespace CoreControl
         public void ChangeVisibility(UInt32 containerID, string name, EntityFactory.VISIBILITY newVisi)
         {
             entity_factory.ChangeVisibility(containerID, name, newVisi);
+        }
+
+        public List<EntityFactory.Entity> GetEntities(UInt32 containerID)
+        {
+            List<EntityFactory.Entity> toret = new List<EntityFactory.Entity>();
+
+            CorePackage.Global.IDeclarator decl = entity_factory.GetDeclaratorOf(containerID);
+
+            foreach (KeyValuePair<string, CorePackage.Global.IDefinition> curr in decl.GetEntities(CorePackage.Global.AccessMode.EXTERNAL))
+            {
+                UInt32 id = entity_factory.GetEntityID(curr.Value);
+
+                toret.Add(new EntityFactory.Entity
+                {
+                    Id = id,
+                    Name = curr.Value.Name,
+                    Type = GetEntityType(id)
+                });
+            }
+            return toret;
         }
 
         /// <summary>
@@ -188,6 +209,15 @@ namespace CoreControl
         }
 
         /// <summary>
+        /// Returns the highest context name.
+        /// </summary>
+        /// <returns></returns>
+        public string GetMainContextName()
+        {
+            return GetEntities(GetIds(EntityFactory.EntityType.CONTEXT | EntityFactory.EntityType.PUBLIC)).Find(x => !string.IsNullOrEmpty(x.Name)).Name;
+        }
+
+        /// <summary>
         /// Set an enumeration value
         /// </summary>
         /// <param name="enumID">Identifier of specific enumeration</param>
@@ -273,7 +303,7 @@ namespace CoreControl
         {
             return entity_factory.GetEntityID(entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID).GetAttribute(name));
         }
-
+        
         /// <summary>
         /// Add a member function to a class
         /// </summary>
@@ -282,11 +312,11 @@ namespace CoreControl
         /// <param name="funcname">Name of the method to set as member</param>
         /// <param name="visibility">Visibility of the method to add</param>
         /// <returns>Identifier of the 'this' parameter added</returns>
-        public UInt32 SetClassFunctionAsMember(UInt32 classID, string funcname, EntityFactory.VISIBILITY visibility)
+        public UInt32 SetClassFunctionAsMember(UInt32 classID, string funcname)
         {
             CorePackage.Entity.Type.ObjectType objtype = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID);
 
-            entity_factory.AddEntity(objtype.SetFunctionAsMember(funcname, (CorePackage.Global.AccessMode)visibility));
+            entity_factory.AddEntity(objtype.SetFunctionAsMember(funcname));
 
             return entity_factory.LastID;
         }
@@ -300,7 +330,7 @@ namespace CoreControl
         {
             entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ListType>(listID).Stored = entity_factory.FindDefinitionOfType<CorePackage.Entity.DataType>(typeID);
         }
-
+        
         /// <summary>
         /// Call a specific function with specific parameters
         /// </summary>
@@ -310,6 +340,24 @@ namespace CoreControl
         public Dictionary<string, dynamic> CallFunction(UInt32 funcID, Dictionary<string, dynamic> parameters)
         {
             return entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(funcID).Call(parameters);
+        }
+        
+        public void DumpFunctionInto(UInt32 funcId, string directory)
+        {
+            CorePackage.Entity.Function func = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(funcId);
+            System.IO.FileStream file = new System.IO.FileStream(directory + "/" + func.Name + ".dot", System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Write);
+
+            if (file.CanWrite)
+            {
+                string dat = func.ToDotFile();
+
+                file.Write(Encoding.ASCII.GetBytes(dat), 0, dat.Length);
+                file.Close();
+            }
+            else
+            {
+                throw new InvalidOperationException("Couldn't write data in file");
+            }
         }
 
         /// <summary>
@@ -488,6 +536,40 @@ namespace CoreControl
         public List<uint> GetIds(EntityFactory.EntityType flags = EntityFactory.EntityType.ALL)
         {
             return entity_factory.GetIds(flags);
+        }
+
+        /// <summary>
+        /// Get an entity from its id
+        /// </summary>
+        /// <param name="id">Id of the entity</param>
+        /// <returns>The entity corresponding to the id</returns>
+        public EntityFactory.Entity GetEntity(UInt32 id)
+        {
+            CorePackage.Global.IDefinition def = entity_factory.Find(id);
+
+            return new EntityFactory.Entity
+            {
+                Id = id,
+                Name = def.Name,
+                Type = GetEntityType(id)
+            };
+        }
+
+        /// <summary>
+        /// Get a list of entities corresponding to the given ids.
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public List<EntityFactory.Entity> GetEntities(List<UInt32> ids)
+        {
+            var ret = new List<EntityFactory.Entity>();
+
+            foreach (var id in ids)
+            {
+                CorePackage.Global.IDefinition def = entity_factory.Find(id);
+                ret.Add(new EntityFactory.Entity { Id = id, Name = def.Name, Type = GetEntityType(id) });
+            }
+            return ret;
         }
 
         public void merge(Controller controller)

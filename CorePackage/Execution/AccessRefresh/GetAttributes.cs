@@ -9,25 +9,27 @@ namespace CorePackage.Execution
 {
     public class GetAttributes : AccessRefreshInstruction
     {
+        private List<String> attrs = new List<string>();
         private Entity.Type.ObjectType _stored;
 
         public GetAttributes(Entity.Type.ObjectType typetosplit) : base()
         {
             AddInput("this", new Entity.Variable(typetosplit), true);
             this._stored = typetosplit;
+            attrs = _stored.GetAttributes().Keys.ToList();
             foreach (KeyValuePair<string, IDefinition> attr in typetosplit.GetAttributes())
             {
-                AddOutput(attr.Key, new Entity.Variable((Entity.DataType)attr.Value));
+                AddOutput(attr.Key, new Entity.Variable((Entity.DataType)attr.Value), true);
             }
         }
 
         public override void Execute()
         {
-            Dictionary<string, dynamic> value = GetInputValue("this");
+            dynamic value = GetInputValue("this");
 
-            foreach (KeyValuePair<string, IDefinition> attr in _stored.GetAttributes())
+            foreach (string curr in attrs)
             {
-                SetOutputValue(attr.Key, value[attr.Key]);
+                SetOutputValue(curr, _stored.GetAttributeValue(value, curr));
             }
         }
     }

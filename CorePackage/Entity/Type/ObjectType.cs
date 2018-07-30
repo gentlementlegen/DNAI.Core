@@ -3,6 +3,7 @@ using CorePackage.Global;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -110,16 +111,66 @@ namespace CorePackage.Entity.Type
             attributes.Rename(lastName, newName);
         }
 
-        public Variable SetFunctionAsMember(string name, Global.AccessMode visibility)
+        public Variable SetFunctionAsMember(string name)
         {
-            Function func = (Function)Find(name, visibility);
+            Function func = (Function)Find(name);
 
             if (func == null)
-                throw new NotFoundException("No such function named \"" + name + "\" with visibility " + visibility.ToString());
+                throw new NotFoundException("No such function named \"" + name + "\"");
             
             Variable toret = (Variable)func.Declare(new Variable(this), "this", AccessMode.EXTERNAL);
             func.SetVariableAs("this", Function.VariableRole.PARAMETER);
             return toret;
+        }
+
+        public dynamic GetAttributeValue(dynamic obj, string attribute)
+        {
+            if (!typeof(System.Collections.IEnumerable).IsAssignableFrom(obj.GetType()))
+            {
+                foreach (FieldInfo valAttr in obj.GetType().GetFields())
+                {
+                    if (valAttr.Name == attribute)
+                    {
+                        return valAttr.GetValue(obj);
+                    }
+                }
+                throw new NotFoundException("No such attribute " + attribute + " in object " + Name);
+            }
+            else
+            {
+                if (!obj.ContainsKey(attribute))
+                    throw new NotFoundException("No such attribute " + attribute + " in object " + Name);
+                return obj[attribute];
+            }
+        }
+
+        public void SetAttributeValue(dynamic obj, string attribute, dynamic value)
+        {
+            bool found = false;
+
+            if (typeof(System.Collections.IEnumerable).IsAssignableFrom(obj.GetType()))
+            {
+                if (obj.ContainsKey(attribute))
+                {
+                    obj[attribute] = value;
+                    found = true;
+                }
+            }
+            else
+            {
+                foreach (FieldInfo valAttr in obj.GetType().GetFields())
+                {
+                    if (valAttr.Name == attribute)
+                    {
+                        valAttr.SetValue(obj, value);
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!found)
+                throw new NotFoundException("No such attribute " + attribute + " in object " + Name);
         }
         
         /// <see cref="DataType.Instantiate"/>
@@ -140,11 +191,17 @@ namespace CorePackage.Entity.Type
         /// <see cref="DataType.IsValueOfType(dynamic)"/>
         public override bool IsValueOfType(dynamic value)
         {
-            Console.Error.WriteLine("========");
-
-            foreach (KeyValuePair<string, dynamic> val in value)
+            if (!typeof(System.Collections.IEnumerable).IsAssignableFrom(value.GetType()))
             {
-                Console.Error.WriteLine(val.Key + ": " + val.Value.ToString());
+                System.Type valType = value.GetType();
+                FieldInfo[] valAttrs = valType.GetFields();
+                dynamic newValue = new Dictionary<string, dynamic>();
+
+                foreach (FieldInfo valAttr in valAttrs)
+                {
+                    newValue[valAttr.Name] = valAttr.GetValue(value);
+                }
+                value = newValue;
             }
 
             foreach (KeyValuePair<string, IDefinition> attr in attributes.GetEntities())
@@ -155,26 +212,20 @@ namespace CorePackage.Entity.Type
                     return false;
                 }
 
-                if (!((DataType)attr.Value).IsValueOfType(value[attr.Key]))
+                dynamic attrVal = value[attr.Key];
+
+                try
+                {
+                    if ((attr.Value as ScalarType) != null)
+                        attrVal = attrVal.Value;
+                } catch (Exception) { }
+
+                if (!((DataType)attr.Value).IsValueOfType(attrVal))
                 {
                     Console.Error.WriteLine("Value of the attribute " + attr.Key + " is of type " + value[attr.Key].GetType().ToString() + " instead of " + attr.Value.ToString());
                     return false;
                 }
             }
-
-            /*foreach (KeyValuePair<string, IDefinition> attrtype in attributes.GetEntities(AccessMode.EXTERNAL))
-            {
-                if (!value.ContainsKey(attrtype.Key)
-                    || !((DataType)attrtype.Value).IsValueOfType(value[attrtype.Key]))
-                    return false;
-            }
-            
-            foreach (KeyValuePair<string, IDefinition> attrtype in attributes.GetEntities(AccessMode.INTERNAL))
-            {
-                if (!value.ContainsKey(attrtype.Key)
-                    || !((DataType)attrtype.Value).IsValueOfType(value[attrtype.Key]))
-                    return false;
-            }*/
             return true;
         }
 
@@ -200,6 +251,12 @@ namespace CorePackage.Entity.Type
         public IDefinition Find(string name, AccessMode visibility)
         {
             return context.Find(name, visibility);
+        }
+
+        /// <see cref="IDeclarator.Find(string)"/>
+        public IDefinition Find(string name)
+        {
+            return context.Find(name);
         }
 
         ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>
@@ -264,13 +321,10 @@ namespace CorePackage.Entity.Type
 
             Operator.Type opType = Operator.GetTypeOf(toOverload);
 
-            if (opType == Operator.Type.UNARY
-                && overload.GetParameter("this").Type != this)
+            if (opType == Operator.Type.UNARY && overload.GetParameter("this").Type != this)
                 throw new InvalidOperatorSignature("Unary operator must have 1 parameter named`\"Operand\" of type " + this.ToString());
 
-            if (opType == Operator.Type.BINARY
-                && (overload.GetParameter("this").Type != this
-                    || overload.GetParameter(Operator.Right) == null))
+            if (opType == Operator.Type.BINARY && (overload.GetParameter("this").Type != this || overload.GetParameter(Operator.Right) == null))
                 throw new InvalidOperatorSignature("Binary operator must have 2 parameters named \"LeftOperand\" (of type " + this.ToString() + ") and \"RightOperand\"");
 
             if (overload.GetReturn(Operator.Result) == null)
@@ -387,6 +441,18 @@ namespace CorePackage.Entity.Type
         public bool Contains(string name)
         {
             return context.Contains(name);
+        }
+
+        /// <see cref="DataType.GetDeepCopyOf(dynamic)"/>
+        public override dynamic GetDeepCopyOf(dynamic value)
+        {
+            dynamic val = Activator.CreateInstance(value.GetType());
+
+            foreach (KeyValuePair<string, IDefinition> attr in attributes.GetEntities())
+            {
+                SetAttributeValue(val, attr.Key, ((DataType)attr.Value).GetDeepCopyOf(GetAttributeValue(value, attr.Key)));
+            }
+            return val;
         }
     }
 }

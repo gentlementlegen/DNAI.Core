@@ -24,6 +24,13 @@ namespace CorePackage.Entity
         /// <returns>True if value type match, false either</returns>
         public abstract bool IsValueOfType(dynamic value);
 
+        /// <summary>
+        /// Returns a deep copy of a given value
+        /// </summary>
+        /// <param name="value">The value to copy</param>
+        /// <returns>A new instance which is equal to the given one</returns>
+        public abstract dynamic GetDeepCopyOf(dynamic value);
+
         public abstract dynamic OperatorAdd(dynamic lOp, dynamic rOp);
 
         public abstract dynamic OperatorSub(dynamic lOp, dynamic rOp);

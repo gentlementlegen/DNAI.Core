@@ -24,7 +24,7 @@ namespace CorePackage.Execution
         /// <summary>
         /// Basic default constructor which will add an integer 'element' input
         /// </summary>
-        public Remove()
+        public Remove(DataType type = null) : base(type)
         {
             AddInput("element", new Entity.Variable(Entity.Type.Scalar.Integer));
         }

@@ -17,7 +17,7 @@ namespace CorePackage.Execution
         /// <param name="toget">Variable definition to get as output</param>
         public Getter(Entity.Variable toget): base()
         {
-            AddOutput("reference", toget);
+            AddOutput("reference", toget, true);
         }
 
         /// <summary>

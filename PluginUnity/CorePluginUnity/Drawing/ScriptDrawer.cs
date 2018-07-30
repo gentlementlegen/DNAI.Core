@@ -1,6 +1,7 @@
 ﻿using Core.Plugin.Unity.Context;
 using Core.Plugin.Unity.Editor;
 using Core.Plugin.Unity.Extensions;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,6 +56,9 @@ namespace Core.Plugin.Unity.Drawing
         {
             [SerializeField]
             public ScriptManager scriptManager;
+
+            [SerializeField]
+            public string AIName;
 
             /// <summary>
             /// Backup of the <see cref="SubScriptList"/> list that cannot be serialized by Unity.
@@ -141,7 +145,6 @@ namespace Core.Plugin.Unity.Drawing
             private void DrawHeaderInternal(Rect rect)
             {
                 Rect refreshRect = new Rect(rect.x + rect.xMax - 25f, rect.y, 15f, 15f);
-
                 EditorGUI.LabelField(rect, "IA List");
 
                 //subScriptList.list = scriptManager.iaList;
@@ -209,6 +212,34 @@ namespace Core.Plugin.Unity.Drawing
         public ScriptDrawer()
         {
             CloudFileWatcher.FileCreated += OnFileCreated;
+            CloudFileWatcher.FileChanged += OnFileChanged;
+        }
+
+        /// <summary>
+        /// Triggered when file changed. If the file is not in the file list, adds it.
+        /// If it is already there, reloads the script.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            var manager = new CoreCommand.BinaryManager();
+            manager.LoadCommandsFrom(e.FullPath);
+            var elem = listIA.Find(x => x.scriptManager.FilePath == e.FullPath);
+            //Debug.Log("On File changed. Elem = " + elem + " elem script name = " + e.FullPath + " registered path " + elem?.scriptManager.FilePath);
+
+            if (elem != null)
+            {
+                elem.scriptManager.ReloadScript();
+            }
+            else
+            {
+                var newElem = new ListAIHandler();
+                newElem.OnEnable();
+                newElem.scriptManager.FilePath = e.FullPath;
+                newElem.scriptManager.LoadScript(e.FullPath);
+                listIA.Add(newElem);
+            }
         }
 
         /// <summary>
@@ -218,10 +249,12 @@ namespace Core.Plugin.Unity.Drawing
         /// <param name="e"></param>
         private void OnFileCreated(object sender, FileSystemEventArgs e)
         {
+            if (listIA.Any(x => x.scriptManager.FilePath == e.FullPath))
+                return;
             var newElem = new ListAIHandler();
             newElem.OnEnable();
             newElem.scriptManager.FilePath = e.FullPath;
-            newElem.scriptManager.LoadScript();
+            newElem.scriptManager.LoadScript(e.FullPath);
             listIA.Add(newElem);
         }
 
@@ -262,10 +295,11 @@ namespace Core.Plugin.Unity.Drawing
             //Debug.Log("+++++++ ON DESTROY List count => " + _editorSettings.listIA.Count);
             listIA.ForEach(x => x.OnDisable());
             CloudFileWatcher.FileCreated -= OnFileCreated;
+            CloudFileWatcher.FileChanged -= OnFileChanged;
         }
 
         /// <summary>
-        /// Retrieves the saved setting of the wokspace.
+        /// Retrieves the saved setting of the workspace.
         /// </summary>
         private void LoadSettings()
         {
@@ -292,7 +326,15 @@ namespace Core.Plugin.Unity.Drawing
         {
             if (ShouldDraw)
             {
+                GUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+
+                GUILayout.BeginVertical(GUILayout.MaxWidth(Screen.width - 10));
                 rList.DoLayoutList();
+                GUILayout.EndVertical();
+
+                GUILayout.FlexibleSpace();
+                GUILayout.EndHorizontal();
             }
         }
 
@@ -342,13 +384,15 @@ namespace Core.Plugin.Unity.Drawing
             //Debug.Log("[DEBUG] 1. ");
 
             //			if (GUI.Button (dropdownRect, "Browse", miniButton))
+            // Button for loading a script from the disk
             if (GUI.Button(dropdownRect, dotButton))
             {
                 var newPath = EditorUtility.OpenFilePanel("Select a script to load", "Documents", Constants.iaFileExtension);
                 if (!string.IsNullOrEmpty(newPath))
                 {
-                    listIA[index].scriptManager.FilePath = newPath;
-                    listIA[index].scriptManager.LoadScript();
+                    //listIA[index].scriptManager.FilePath = newPath;
+                    listIA[index].scriptManager.FilePath = listIA[index].scriptManager.LoadScript(newPath);
+                    ListAI[index].AIName = ListAI[index].scriptManager.GetLoadedScriptName();
                     AssetDatabase.Refresh();
                     _editorWindow.Focus();
                 }

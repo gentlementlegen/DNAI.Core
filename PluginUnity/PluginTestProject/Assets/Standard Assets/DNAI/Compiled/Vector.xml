@@ -4,12 +4,17 @@
         <name>Vector</name>
     </assembly>
     <members>
-        <member name="T:Duly.Vector.DulyBehaviour">
+        <member name="T:DNAI.Vector.DNAIBehaviour">
             <summary>
-             Base behaviour for Duly IA.
+             Base behaviour for DNAI IA.
             </summary>
             </member>
-        <member name="M:Duly.Vector.DulyBehaviour.Execute">
+        <member name="F:DNAI.Vector.DNAIBehaviour._manager">
+            <summary>
+             Called when output values of the DNAI script change.
+            </summary>
+            </member>
+        <member name="M:DNAI.Vector.DNAIBehaviour.Execute">
             <summary>
              Executes the Duly Behaviour by calling the created function.
              Updates Outputs accordingly.

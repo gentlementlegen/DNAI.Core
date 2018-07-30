@@ -20,6 +20,11 @@ namespace Core.Plugin.Unity.Editor
         /// </summary>
         public static event FileSystemEventHandler FileCreated { add => _fileWatcher.Created += value; remove => _fileWatcher.Created -= value; }
 
+        /// <summary>
+        /// Called on file changed.
+        /// </summary>
+        public static event FileSystemEventHandler FileChanged { add => _fileWatcher.Changed += value; remove => _fileWatcher.Changed -= value; }
+
         private static readonly FileSystemWatcher _fileWatcher = new FileSystemWatcher();
 
         internal static readonly ApiAccess Access = new ApiAccess();
@@ -32,9 +37,9 @@ namespace Core.Plugin.Unity.Editor
             _fileWatcher.Path = (Constants.ScriptPath);
             _fileWatcher.NotifyFilter = NotifyFilters.LastWrite;
             _fileWatcher.Filter = "*." + Constants.iaFileExtension;
-            _fileWatcher.Created += OnFileCreated;
-            _fileWatcher.Changed += OnFileChanged;
-            _fileWatcher.Deleted += OnFileDeleted;
+            //_fileWatcher.Created += OnFileCreated;
+            //_fileWatcher.Changed += OnFileChanged;
+            //_fileWatcher.Deleted += OnFileDeleted;
             _fileWatcher.EnableRaisingEvents = true;
             //StartWatcher();
         }

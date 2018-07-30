@@ -250,5 +250,11 @@ namespace CorePackage.Entity.Type
         {
             throw new OperatorNotPermitted("This operator is not allowed on EnumType");
         }
+
+        /// <see cref="DataType.GetDeepCopyOf(dynamic)"/>
+        public override dynamic GetDeepCopyOf(dynamic value)
+        {
+            return stored.GetDeepCopyOf(value);
+        }
     }
 }

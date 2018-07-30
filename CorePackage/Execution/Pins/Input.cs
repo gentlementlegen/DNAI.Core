@@ -61,11 +61,16 @@ namespace CorePackage.Execution
         {
             get
             {
-                if (IsLinked && !reference)
+                if (IsLinked)
                 {
-                    Definition.Value = link.Value;
+                    if (reference)
+                        return link.Value;
+                    return Definition.Type.GetDeepCopyOf(link.Value);
                 }
-                return Definition.Value;
+
+                if (reference)
+                    return Definition.Value;
+                return Definition.Type.GetDeepCopyOf(Definition.Value);
             }
             set
             {

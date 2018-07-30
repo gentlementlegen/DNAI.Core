@@ -10,12 +10,12 @@ namespace CoreCommand.Command.Enum
             [BinarySerializer.BinaryFormat]
             public string Value { get; set; }
         }
+        
+        [BinarySerializer.BinaryFormat]
+        public uint EnumId { get; set; }
 
         [BinarySerializer.BinaryFormat]
         public string Name { get; set; }
-
-        [BinarySerializer.BinaryFormat]
-        public uint EnumId { get; set; }
 
         public Reply Resolve(Controller controller)
         {

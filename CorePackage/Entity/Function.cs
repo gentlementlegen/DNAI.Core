@@ -33,12 +33,12 @@ namespace CorePackage.Entity
         /// <summary>
         /// Contains function parameters which references variables declared in "scope" attribute
         /// </summary>
-        private Dictionary<string, Variable> parameters = new Dictionary<string, Variable>();
+        private HashSet<Variable> parameters = new HashSet<Variable>();
 
         /// <summary>
         /// Contains function returns which references variables declared in "scope" attribute
         /// </summary>
-        private Dictionary<string, Variable> returns = new Dictionary<string, Variable>();
+        private HashSet<Variable> returns = new HashSet<Variable>();
 
         /// <summary>
         /// Contained instructions to process
@@ -67,9 +67,9 @@ namespace CorePackage.Entity
             Variable real = (Variable)scope.Find(name, AccessMode.EXTERNAL);
             
             if (role == VariableRole.PARAMETER)
-                this.parameters[name] = real;
+                this.parameters.Add(real);
             else if (role == VariableRole.RETURN)
-                this.returns[name] = real;
+                this.returns.Add(real);
             return real;
         }
 
@@ -78,7 +78,7 @@ namespace CorePackage.Entity
         /// </summary>
         public Dictionary<string, Variable> Parameters
         {
-            get { return this.parameters; }
+            get { return this.parameters.ToDictionary((Variable var) => var.Name); }
         }
 
         /// <summary>
@@ -99,9 +99,11 @@ namespace CorePackage.Entity
         /// <returns>Variable definition that corresponds to the parameter</returns>
         public Variable GetParameter(string name)
         {
-            if (!this.parameters.ContainsKey(name))
+            Variable param = (Variable)scope.Find(name);
+
+            if (!this.parameters.Contains(param))
                 throw new Error.NotFoundException("Function: No such parameter named \"" + name + "\"");
-            return this.parameters[name];
+            return param;
         }
 
         /// <summary>
@@ -109,7 +111,7 @@ namespace CorePackage.Entity
         /// </summary>
         public Dictionary<string, Variable> Returns
         {
-            get { return this.returns; }
+            get { return this.returns.ToDictionary((Variable var) => var.Name); }
         }
 
         /// <summary>
@@ -120,9 +122,11 @@ namespace CorePackage.Entity
         /// <returns>Value to find or null</returns>
         public Variable GetReturn(string name)
         {
-            if (!this.returns.ContainsKey(name))
+            Variable ret = (Variable)scope.Find(name);
+
+            if (!this.returns.Contains(ret))
                 throw new Error.NotFoundException("Function: No such return named \"" + name + "\"");
-            return this.returns[name];
+            return ret;
         }
 
         /// <summary>
@@ -209,6 +213,7 @@ namespace CorePackage.Entity
 
             Stack<Execution.ExecutionRefreshInstruction> instructions = new Stack<Execution.ExecutionRefreshInstruction>();
 
+            ResetReturnsValue();
             instructions.Push(entrypoint);
             while (instructions.Count > 0)
             {
@@ -218,10 +223,34 @@ namespace CorePackage.Entity
 
                 Execution.ExecutionRefreshInstruction[] nexts = toexecute.GetNextInstructions();
 
-                foreach (Execution.ExecutionRefreshInstruction curr in nexts)
+                if (nexts.Count() == 0)
                 {
-                    if (curr != null)
-                        instructions.Push(curr);
+                    if (toexecute.GetType() == typeof(Execution.Break))
+                    {
+                        Execution.ExecutionRefreshInstruction nxt = instructions.Peek();
+
+                        if (typeof(Execution.Loop).IsAssignableFrom(nxt.GetType())) //check if the next instruction is a loop instruction
+                        {
+                            instructions.Pop();
+
+                            Execution.ExecutionRefreshInstruction done = ((Execution.Loop)nxt).GetDoneInstruction();
+
+                            if (done != null)
+                                instructions.Push(done);
+                        }
+                    }
+                    else if (toexecute.GetType() == typeof(Execution.Return))
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    foreach (Execution.ExecutionRefreshInstruction curr in nexts)
+                    {
+                        if (curr != null)
+                            instructions.Push(curr);
+                    }
                 }
             }
         }
@@ -235,7 +264,7 @@ namespace CorePackage.Entity
             {
                 SetParameterValue(curr.Key, curr.Value);
             }
-
+            
             Dictionary<string, dynamic> returns = new Dictionary<string, dynamic>();
             
             Call();
@@ -245,6 +274,14 @@ namespace CorePackage.Entity
                 returns[curr.Key] = curr.Value.Value;
             }
             return returns;
+        }
+
+        public void ResetReturnsValue()
+        {
+            foreach (Variable curr in returns)
+            {
+                curr.Value = curr.Type.Instantiate();
+            }
         }
 
         /// <see cref="Global.IDefinition.IsValid"/>
@@ -292,7 +329,7 @@ namespace CorePackage.Entity
                     //concatenate label to inputs for splitted box effect
                     inputs += label + (inputId < node.Inputs.Count ? "|" : "");
 
-                    if (curr.Value.IsLinked)
+                    if (!curr.Value.IsLinked)
                         continue;
 
                     //in case there is a linked node to the input, declare it
@@ -376,10 +413,12 @@ namespace CorePackage.Entity
         ///<see cref="IDeclarator{definitionType}.Pop(string)"/>
         public IDefinition Pop(string name)
         {
-            if (parameters.ContainsKey(name))
-                parameters.Remove(name);
-            else if (returns.ContainsKey(name))
-                returns.Remove(name);
+            Variable topop = (Variable)scope.Find(name);
+
+            if (parameters.Contains(topop))
+                parameters.Remove(topop);
+            else if (returns.Contains(topop))
+                returns.Remove(topop);
             return scope.Pop(name);
         }
 
@@ -387,6 +426,12 @@ namespace CorePackage.Entity
         public IDefinition Find(string name, AccessMode visibility)
         {
             return scope.Find(name, visibility);
+        }
+
+        /// <see cref="IDeclarator.Find(string)"/>
+        public IDefinition Find(string name)
+        {
+            return scope.Find(name);
         }
 
         ///<see cref="IDeclarator{definitionType}.Rename(string, string)"/>

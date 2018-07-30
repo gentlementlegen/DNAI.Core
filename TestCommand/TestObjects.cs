@@ -109,8 +109,7 @@ namespace TestCommand
             Assert.IsTrue(manager.CallCommand(new SetFunctionAsMember
             {
                 ClassId = objDeclared.EntityID,
-                Name = "Set",
-                Visibility = VISIBILITY.PUBLIC
+                Name = "Set"
             }, out thisParam));
             
             //Declare function parameter
