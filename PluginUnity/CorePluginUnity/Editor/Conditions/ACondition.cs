@@ -124,7 +124,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             _evaluateActions.Add(typeof(Int64).ToString(), new Func<object, bool>((obj) =>
             {
                 var ConditionNumber = (CONDITION_NUMBER)_selectedIdx;
-                Debug.Log("Evaluate int : " + ConditionNumber + " Input=" + InputInt + " Value=" + obj);
+                //Debug.Log("Evaluate int : " + ConditionNumber + " Input=" + InputInt + " Value=" + obj);
                 switch (ConditionNumber)
                 {
                     case CONDITION_NUMBER.NO_CONDITION:
@@ -148,7 +148,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             _evaluateActions.Add(typeof(string).ToString(), new Func<object, bool>((obj) =>
             {
                 var ConditionString = (CONDITION_STRING)_selectedIdx;
-                Debug.Log("Evaluate string : " + ConditionString + " Input=" + InputString + " Value=" + obj);
+                //Debug.Log("Evaluate string : " + ConditionString + " Input=" + InputString + " Value=" + obj);
                 switch (ConditionString)
                 {
                     case CONDITION_STRING.NO_CONDITION:
@@ -165,7 +165,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             _evaluateActions.Add(typeof(float).ToString(), new Func<object, bool>((obj) =>
             {
                 var ConditionNumber = (CONDITION_NUMBER)_selectedIdx;
-                Debug.Log("Evaluate float : " + ConditionNumber + " Input=" + InputFloat + " Value=" + obj);
+                //Debug.Log("Evaluate float : " + ConditionNumber + " Input=" + InputFloat + " Value=" + obj);
                 switch (ConditionNumber)
                 {
                     case CONDITION_NUMBER.NO_CONDITION:
@@ -220,7 +220,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
                 selectedIndex = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsString);
                     if (string.IsNullOrEmpty(InputEnum))
                     {
-                        Debug.Log("Activator is receiving type " + t.ToString());
+                        //Debug.Log("Activator is receiving type " + t.ToString());
                         InputEnum = Activator.CreateInstance(t).ToString();
                     }
                     if (_selectedIdx != 0)
@@ -234,7 +234,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
                 _evaluateActions.Add(enumName, new Func<object, bool>((obj) =>
                 {
                     var ConditionEnum = (CONDITION_STRING)_selectedIdx;
-                    Debug.Log("Evaluate enum : " + ConditionEnum + " Input=" + InputEnum + " Value=" + obj);
+                    //Debug.Log("Evaluate enum : " + ConditionEnum + " Input=" + InputEnum + " Value=" + obj);
                     switch (ConditionEnum)
                     {
                         case CONDITION_STRING.NO_CONDITION:
@@ -262,7 +262,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// <param name="type"></param>
         public void SetCurrentType(string type)
         {
-            Debug.Log("Set current type to => " + type);
+            //Debug.Log("Set current type to => " + type);
             _currentTypeStr = type;
             //_currentType = Type.GetType(_currentTypeStr);
             _selectedIdx = 0;
@@ -270,7 +270,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
 
         public void SetRefOutput(ConditionInput<int> output)
         {
-            Debug.Log("Setting ref output : " + output);
+            //Debug.Log("Setting ref output : " + output);
             refOutputInt = output;
         }
 
@@ -288,7 +288,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             //if (_currentType == null && !string.IsNullOrEmpty(_currentTypeStr))
             //    _currentType = Type.GetType(_currentTypeStr);
             //Debug.Log("1. Evaluate with type => " + _currentType);
-            Debug.Log("2. Evaluate with type => " + _evaluateActions[_currentTypeStr]);
+            //Debug.Log("2. Evaluate with type => " + _evaluateActions[_currentTypeStr]);
             return _evaluateActions[_currentTypeStr].Invoke(val);
         }
 
@@ -324,7 +324,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// <returns></returns>
         public virtual float Draw(UnityEngine.Rect rect)
         {
-            Debug.Log("1. Drawing => " + _currentTypeStr);
+            //Debug.Log("1. Drawing => " + _currentTypeStr);
             //if (_currentType == null && !string.IsNullOrEmpty(_currentTypeStr))
             //    _currentType = Type.GetType(_currentTypeStr);
             //Debug.Log("2. Drawing => " + Type.GetType(_currentTypeStr));

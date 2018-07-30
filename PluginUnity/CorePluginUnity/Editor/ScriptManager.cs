@@ -83,7 +83,7 @@ namespace Core.Plugin.Unity.Editor
             ProcessingStatus = "Reading file...";
             //Thread t = new Thread (() => fileLoader.LoadFile(FilePath));
             //t.Start ();
-            UnityEngine.Debug.Log("file path => " + path);
+            //UnityEngine.Debug.Log("file path => " + path);
             var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "Scripts");
             var fileFullPath = Path.GetFullPath(Path.Combine(fileCopyPath, Path.GetFileName(path)));
 
@@ -97,7 +97,7 @@ namespace Core.Plugin.Unity.Editor
             }
             catch (IOException e)
             {
-                UnityEngine.Debug.LogWarning($"Error copying file at location [{path}]: {e.Message}");
+                //UnityEngine.Debug.LogWarning($"Error copying file at location [{path}]: {e.Message}");
             }
             finally
             {

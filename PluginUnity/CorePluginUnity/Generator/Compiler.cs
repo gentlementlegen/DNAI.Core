@@ -66,7 +66,7 @@ namespace Core.Plugin.Unity.Generator
                 //UnityEngine.Debug.Log("for id " + id + " found functions " + functions.Count);
             }
             var code = _template.GenerateTemplateContent(_manager, variables, functions, dataTypes);
-            UnityEngine.Debug.Log(code);
+            //UnityEngine.Debug.Log(code);
             _compiler.Compile(code, AssemblyName);
         }
 
