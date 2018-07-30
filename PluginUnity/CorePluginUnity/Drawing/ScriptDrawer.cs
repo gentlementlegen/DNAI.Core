@@ -226,7 +226,7 @@ namespace Core.Plugin.Unity.Drawing
             var manager = new CoreCommand.BinaryManager();
             manager.LoadCommandsFrom(e.FullPath);
             var elem = listIA.Find(x => x.scriptManager.FilePath == e.FullPath);
-            Debug.Log("On File changed. Elem = " + elem + " elem script name = " + e.FullPath + " registered path " + elem?.scriptManager.FilePath);
+            //Debug.Log("On File changed. Elem = " + elem + " elem script name = " + e.FullPath + " registered path " + elem?.scriptManager.FilePath);
 
             if (elem != null)
             {
