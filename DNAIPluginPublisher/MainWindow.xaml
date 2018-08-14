@@ -1,0 +1,79 @@
+﻿<Window x:Class="DNAIPluginPublisher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.galasoft.ch/ignore"
+		xmlns:model="clr-namespace:DNAIPluginPublisher.Model"
+        mc:Ignorable="d ignore"
+        Height="300"
+        Width="500"
+        Title="DNAI Plugin Publisher"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+    
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+			<RowDefinition/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<TextBox Style="{StaticResource PlaceHolder}"
+				 Margin="10"
+				 Tag="Username"
+				 Grid.Row="0"/>
+
+		<PasswordBox
+				 x:Name="Pwd"
+				 Margin="10"
+				 Tag="Password"
+				 Grid.Row="1"/>
+
+		<Border Grid.Row="3"
+				BorderBrush="Gray"
+				BorderThickness="1"
+				Margin="10">
+			<ItemsControl ItemsSource="{Binding Source={x:Static model:Logger.Logs}}">
+				<ItemsControl.Template>
+					<ControlTemplate>
+						<ScrollViewer CanContentScroll="True">
+							<ItemsPresenter />
+						</ScrollViewer>
+					</ControlTemplate>
+				</ItemsControl.Template>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate DataType="LogItem">
+						<TextBlock Text="{Binding MessageFormatted}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</Border>
+
+		<StackPanel FlowDirection="RightToLeft"
+					Grid.Row="4"
+					Margin="0 0 10 10"
+					Orientation="Horizontal"
+					HorizontalAlignment="Right">
+			<Button Content="Send"
+					Command="{Binding SendCommand}"
+					Width="60"
+					Margin="0 0 5 0"
+					HorizontalAlignment="Right"/>
+			<Button Content="Cancel"
+					Width="60"
+					Margin="5 0 0 0"
+					HorizontalAlignment="Right"/>
+		</StackPanel>
+
+	</Grid>
+</Window>
