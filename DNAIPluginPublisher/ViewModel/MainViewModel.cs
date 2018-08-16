@@ -123,7 +123,7 @@ namespace DNAIPluginPublisher.ViewModel
                         Logger.Log("Starting...");
                         var packer = new Packer();
 
-                        packer.Pack(_provider.Items);
+                        packer.Pack(_provider.Items, Properties.Settings.Default.DirectoryPath, "DNAItest.unityPackage");
                     }, (e) => !string.IsNullOrEmpty(UserName)));
             }
         }
@@ -165,7 +165,7 @@ namespace DNAIPluginPublisher.ViewModel
                         };
                         var res = dialog.ShowDialog();
                         if (res == CommonFileDialogResult.Ok)
-                            Properties.Settings.Default.DirectoryPath = dialog.FileName;
+                            Properties.Settings.Default.DirectoryPath = dialog.FileName + "\\";
                     }));
             }
         }
