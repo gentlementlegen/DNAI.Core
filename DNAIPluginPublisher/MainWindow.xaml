@@ -23,8 +23,8 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition/>
-			<RowDefinition/>
+			<RowDefinition Height="0.7*"/>
+			<RowDefinition Height="0.3*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 

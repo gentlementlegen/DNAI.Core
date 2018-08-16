@@ -34,7 +34,13 @@ namespace DNAIPluginPublisher.Model
 
             startInfo.Arguments += " -projectPath=\"" + projectPath + "\"";
             startInfo.Arguments += " -exportPackage ";
-            startInfo.Arguments += GetSelectedItems(items);
+            var s = GetSelectedItems(items);
+            if (string.IsNullOrEmpty(s))
+            {
+                Logger.Log("No files selected, aborting.");
+                return;
+            }
+            startInfo.Arguments += s;
             startInfo.Arguments += " \"C:\\Users\\ferna\\Desktop\\PluginUploader\\" + packageName + "\"";
 
             process.StartInfo = startInfo;
@@ -46,7 +52,7 @@ namespace DNAIPluginPublisher.Model
             }
             else
             {
-                Logger.Log("Failed to create Unity Package.");
+                Logger.Log("Failed to create Unity Package." + process.StandardError.ReadToEnd() + process.StandardOutput.ReadToEnd());
             }
         }
 
@@ -59,6 +65,7 @@ namespace DNAIPluginPublisher.Model
                 {
                     if (item is DirectoryItem di)
                     {
+                        //ret += "\"" + MakeRelativePath(_projectPath, item.Path) + "\" ";
                         ret += GetSelectedItems(di.Items);
                     }
                     else
@@ -75,7 +82,7 @@ namespace DNAIPluginPublisher.Model
         {
             if (items.Count <= 0)
             {
-                Logger.Log("No file selected to be packed, cannot proceed.");
+                Logger.Log("The folder is empty, cannot proceed.");
                 return false;
             }
             if (!items.Any(x => x.Name == "Assets"))

@@ -2,26 +2,41 @@
 // https://www.codeproject.com/Articles/167873/A-WPF-File-ListView-and-ComboBox
 // https://stackoverflow.com/questions/15104986/how-to-list-files-in-directory-c-sharp-wpf
 // https://stackoverflow.com/questions/6415037/populate-treeview-from-list-of-file-paths-in-wpf
+using GalaSoft.MvvmLight;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System;
-using System.Windows.Media;
-using System.Windows.Interop;
-using System.Windows;
-using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace DNAIPluginPublisher.Model
 {
-    public class Item
+    public class Item : ObservableObject
     {
+        protected bool _isSelected;
+
         public string Name { get; set; }
         public string Path { get; set; }
-        public bool IsSelected { get; set; }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                Set(ref _isSelected, value);
+                if (Parent != null) Parent.IsSelected = value;
+            }
+        }
+
         public ImageSource Icon { get; set; }
+
+        public Item Parent { get; set; }
     }
 
     public class FileItem : Item
@@ -35,6 +50,24 @@ namespace DNAIPluginPublisher.Model
         public DirectoryItem()
         {
             Items = new List<Item>();
+        }
+
+        public new bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                Set(ref _isSelected, value);
+                if (Parent != null) Parent.IsSelected = value;
+
+                foreach (var item in Items)
+                {
+                    if (item is DirectoryItem d)
+                        d.IsSelected = value;
+                    else
+                        item.IsSelected = value;
+                }
+            }
         }
     }
 
@@ -53,7 +86,7 @@ namespace DNAIPluginPublisher.Model
             }
         }
 
-        private List<Item> GetItemsInternal(string path)
+        private List<Item> GetItemsInternal(string path, Item parent = null)
         {
             var items = new List<Item>();
 
@@ -66,8 +99,10 @@ namespace DNAIPluginPublisher.Model
                     Name = directory.Name,
                     Path = directory.FullName,
                     Icon = null,
-                    Items = GetItemsInternal(directory.FullName)
+                    Parent = parent
                 };
+
+                item.Items = GetItemsInternal(directory.FullName, item);
 
                 items.Add(item);
             }
@@ -77,7 +112,8 @@ namespace DNAIPluginPublisher.Model
                 var item = new FileItem
                 {
                     Name = file.Name,
-                    Path = file.FullName
+                    Path = file.FullName,
+                    Parent = parent
                 };
                 if (!GalaSoft.MvvmLight.ViewModelBase.IsInDesignModeStatic)
                     item.Icon = ToImageSource(Icon.ExtractAssociatedIcon(file.FullName));
@@ -90,7 +126,6 @@ namespace DNAIPluginPublisher.Model
 
         [DllImport("gdi32.dll", SetLastError = true)]
         private static extern bool DeleteObject(IntPtr hObject);
-
 
         private ImageSource ToImageSource(Icon icon)
         {
