@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -30,7 +31,7 @@ namespace DNAIPluginPublisher.Model
             set
             {
                 Set(ref _isSelected, value);
-                if (Parent != null) Parent.IsSelected = value;
+                if (Parent != null && value == true) Parent.IsSelected = value;
             }
         }
 
@@ -41,6 +42,16 @@ namespace DNAIPluginPublisher.Model
 
     public class FileItem : Item
     {
+        public new bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                Set(ref _isSelected, value);
+
+                if (Parent != null && value == true) Parent.IsSelected = value;
+            }
+        }
     }
 
     public class DirectoryItem : Item
@@ -58,7 +69,8 @@ namespace DNAIPluginPublisher.Model
             set
             {
                 Set(ref _isSelected, value);
-                if (Parent != null) Parent.IsSelected = value;
+
+                if (value == true && Parent != null) Parent.IsSelected = value;
 
                 foreach (var item in Items)
                 {
@@ -109,16 +121,19 @@ namespace DNAIPluginPublisher.Model
 
             foreach (var file in dirInfo.GetFiles())
             {
-                var item = new FileItem
+                if (file.Extension != ".meta")
                 {
-                    Name = file.Name,
-                    Path = file.FullName,
-                    Parent = parent
-                };
-                if (!GalaSoft.MvvmLight.ViewModelBase.IsInDesignModeStatic)
-                    item.Icon = ToImageSource(Icon.ExtractAssociatedIcon(file.FullName));
+                    var item = new FileItem
+                    {
+                        Name = file.Name,
+                        Path = file.FullName,
+                        Parent = parent
+                    };
+                    if (!GalaSoft.MvvmLight.ViewModelBase.IsInDesignModeStatic)
+                        item.Icon = ToImageSource(Icon.ExtractAssociatedIcon(file.FullName));
 
-                items.Add(item);
+                    items.Add(item);
+                }
             }
 
             return items;
