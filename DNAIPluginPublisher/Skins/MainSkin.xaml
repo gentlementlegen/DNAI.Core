@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:model="clr-namespace:DNAIPluginPublisher.Model">
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary>
 			<Style x:Key="PlaceHolder" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
@@ -33,6 +34,24 @@
 					</Setter.Value>
 				</Setter>
 			</Style>
+		</ResourceDictionary>
+		<ResourceDictionary>
+			<HierarchicalDataTemplate DataType="{x:Type model:DirectoryItem}"
+                                  ItemsSource="{Binding Items}">
+				<StackPanel Orientation="Horizontal">
+					<CheckBox Margin="4 0" VerticalAlignment="Center" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" />
+					<TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xED25;" VerticalAlignment="Center"/>
+					<TextBlock Text="{Binding Path=Name}" Margin="3 0" ToolTip="{Binding Path=Path}" VerticalAlignment="Center"/>
+				</StackPanel>
+			</HierarchicalDataTemplate>
+
+			<DataTemplate DataType="{x:Type model:FileItem}">
+				<StackPanel Orientation="Horizontal">
+					<CheckBox Margin="4 0" VerticalAlignment="Center" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}"/>
+					<Image Source="{Binding Path=Icon}" MaxWidth="25" MaxHeight="25" VerticalAlignment="Center"/>
+					<TextBlock Margin="3 0 3 0" Text="{Binding Path=Name}" ToolTip="{Binding Path=Path}" VerticalAlignment="Center"/>
+				</StackPanel>
+			</DataTemplate>
 		</ResourceDictionary>
 	</ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

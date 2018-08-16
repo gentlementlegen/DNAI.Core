@@ -6,8 +6,8 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
 		xmlns:model="clr-namespace:DNAIPluginPublisher.Model"
         mc:Ignorable="d ignore"
-        Height="300"
-        Width="500"
+        Height="400"
+        Width="600"
         Title="DNAI Plugin Publisher"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     
@@ -31,6 +31,7 @@
 		<TextBox Style="{StaticResource PlaceHolder}"
 				 Margin="10"
 				 Tag="Username"
+				 Text="{Binding UserName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				 Grid.Row="0"/>
 
 		<PasswordBox
@@ -38,6 +39,11 @@
 				 Margin="10"
 				 Tag="Password"
 				 Grid.Row="1"/>
+
+		<TreeView
+			Margin="10"
+			ItemsSource="{Binding Items}"
+			Grid.Row="2"/>
 
 		<Border Grid.Row="3"
 				BorderBrush="Gray"
@@ -59,21 +65,39 @@
 			</ItemsControl>
 		</Border>
 
-		<StackPanel FlowDirection="RightToLeft"
-					Grid.Row="4"
+		<Grid Grid.Row="4">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+
+			<StackPanel Orientation="Horizontal"
+						Margin="10 0 0 10"
+						Grid.Column="0">
+				<Button Content="Select project location"
+					Width="140"
+					Margin="0 0 0 0"
+					Command="{Binding PickFolderCommand}"/>
+			</StackPanel>
+			
+			<StackPanel FlowDirection="RightToLeft"
+					Grid.Column="1"
 					Margin="0 0 10 10"
 					Orientation="Horizontal"
 					HorizontalAlignment="Right">
-			<Button Content="Send"
+				<Button Content="Send"
 					Command="{Binding SendCommand}"
+					CommandParameter="{Binding ElementName=Pwd}"
 					Width="60"
 					Margin="0 0 5 0"
 					HorizontalAlignment="Right"/>
-			<Button Content="Cancel"
+				<Button Content="Cancel"
 					Width="60"
 					Margin="5 0 0 0"
+						Command="{Binding CancelCommand}"
 					HorizontalAlignment="Right"/>
-		</StackPanel>
+			</StackPanel>
+		</Grid>
 
 	</Grid>
 </Window>
