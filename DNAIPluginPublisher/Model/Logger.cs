@@ -5,6 +5,9 @@ using System.Windows.Data;
 
 namespace DNAIPluginPublisher.Model
 {
+    /// <summary>
+    /// The importance level of the log.
+    /// </summary>
     public enum LEVEL { Info, Warning, Error }
 
     /// <summary>
@@ -39,7 +42,7 @@ namespace DNAIPluginPublisher.Model
     public static class Logger
     {
         private static readonly ObservableCollection<LogItem> _logs = new ObservableCollection<LogItem>();
-        private static object _lock = new object();
+        private static readonly object _lock = new object();
 
         public static IReadOnlyList<LogItem> Logs => _logs;
 
