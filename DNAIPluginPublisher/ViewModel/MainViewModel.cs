@@ -122,8 +122,10 @@ namespace DNAIPluginPublisher.ViewModel
                     {
                         Logger.Log("Starting...");
                         var packer = new Packer();
+                        var sender = new Sender();
 
-                        packer.Pack(_provider.Items, Properties.Settings.Default.DirectoryPath, "DNAItest.unityPackage");
+                        //packer.Pack(_provider.Items, Properties.Settings.Default.DirectoryPath, "DNAItest.unityPackage");
+                        sender.Send("./", UserName, pbox.Password);
                     }, (e) => !string.IsNullOrEmpty(UserName)));
             }
         }
