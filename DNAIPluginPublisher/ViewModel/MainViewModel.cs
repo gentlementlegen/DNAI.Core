@@ -1,12 +1,15 @@
-﻿using GalaSoft.MvvmLight;
-using DNAIPluginPublisher.Model;
+﻿using DNAIPluginPublisher.Model;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using System.Collections.Generic;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using System.IO.Compression;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.IO.Compression;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace DNAIPluginPublisher.ViewModel
 {
@@ -21,31 +24,10 @@ namespace DNAIPluginPublisher.ViewModel
         private readonly IDataService _dataService;
 
         private ItemProvider _provider = new ItemProvider();
+        private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
+        private CancellationToken _cancelToken;
 
-        /// <summary>
-        /// The <see cref="WelcomeTitle" /> property's name.
-        /// </summary>
-        public const string WelcomeTitlePropertyName = "WelcomeTitle";
-
-        private string _welcomeTitle = string.Empty;
-
-        /// <summary>
-        /// Gets the WelcomeTitle property.
-        /// Changes to that property's value raise the PropertyChanged event. 
-        /// </summary>
-        public string WelcomeTitle
-        {
-            get
-            {
-                return _welcomeTitle;
-            }
-            set
-            {
-                Set(ref _welcomeTitle, value);
-            }
-        }
-
-        private ObservableCollection<Item> _items = new ObservableCollection<Item>();
+        private readonly ObservableCollection<Item> _items = new ObservableCollection<Item>();
 
         public IReadOnlyList<Item> Items
         {
@@ -69,11 +51,26 @@ namespace DNAIPluginPublisher.ViewModel
             }
         }
 
+        private string _version = "";
+
+        public string Version
+        {
+            get
+            {
+                return _version;
+            }
+            set
+            {
+                Set(ref _version, value);
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel(IDataService dataService)
         {
+            _cancelToken = _cancelTokenSource.Token;
             _dataService = dataService;
             _dataService.GetData(
                 (item, error) =>
@@ -83,8 +80,6 @@ namespace DNAIPluginPublisher.ViewModel
                         // Report error here
                         return;
                     }
-
-                    WelcomeTitle = item.Title;
                 });
             Properties.Settings.Default.PropertyChanged += Default_PropertyChanged;
             _provider.GetItems(Properties.Settings.Default.DirectoryPath);
@@ -125,17 +120,45 @@ namespace DNAIPluginPublisher.ViewModel
                         Logger.Log("Starting...");
                         var packer = new Packer();
                         var sender = new Sender();
-                        var path = Path.GetTempPath() + "DNAItest.unityPackage";
+                        var path = Path.GetTempPath() + "DNAI.unityPackage";
+                        var zipPath = Path.GetTempPath() + "DNAI.zip";
 
-                        packer.Pack(_provider.Items, Properties.Settings.Default.DirectoryPath, "DNAItest.unityPackage", Path.GetTempPath());
-                        sender.Send("C:\\Users\\ferna\\Desktop\\PluginUploader\\DNAI.zip", UserName, pbox.Password, () =>
+                        Task.Run(() =>
                         {
-                            using (ZipArchive zip = ZipFile.Open("C:\\Users\\ferna\\Desktop\\PluginUploader\\DNAI.zip", ZipArchiveMode.Update))
+                            if (!_cancelToken.IsCancellationRequested)
+                                packer.Pack(_provider.Items, Properties.Settings.Default.DirectoryPath, path);
+
+                            if (!_cancelToken.IsCancellationRequested)
                             {
-                                ZipArchiveEntry oldEntry = zip.GetEntry("DNAItest.unityPackage");
-                                if (oldEntry != null) oldEntry.Delete();
-                                zip.CreateEntryFromFile(path, "DNAItest.unityPackage");
+                                Logger.Log("Preparing to send package DNAI version " + Version);
+                                sender.Send(zipPath, UserName, pbox.Password, new Version(Version), () =>
+                                {
+                                    using (ZipArchive zip = ZipFile.Open(zipPath, ZipArchiveMode.Update))
+                                    {
+                                        ZipArchiveEntry oldEntry = zip.GetEntry("DNAI.unityPackage");
+                                        if (oldEntry != null) oldEntry.Delete();
+                                        zip.CreateEntryFromFile(path, "DNAI.unityPackage");
+                                    }
+                                });
                             }
+                        }, _cancelToken).ContinueWith((e) =>
+                        {
+                            if (e.IsCanceled)
+                                Logger.Log("Operation cancelled.");
+                            if (e.IsFaulted)
+                                Logger.Log("Operation could not be completed. Reason: " + e.Exception.Message);
+                            if (e.IsCompleted && !e.IsCanceled)
+                                Logger.Log("Operation completed.");
+
+                            _cancelTokenSource.Dispose();
+                            _cancelTokenSource = new CancellationTokenSource();
+                            _cancelToken = _cancelTokenSource.Token;
+
+                            try
+                            {
+                                packer.Dispose();
+                                File.Delete(zipPath);
+                            } catch { }
                         });
                     }, (e) => !string.IsNullOrEmpty(UserName)));
             }
@@ -155,6 +178,7 @@ namespace DNAIPluginPublisher.ViewModel
                     () =>
                     {
                         Logger.Log("Cancelling current task...");
+                        _cancelTokenSource.Cancel();
                     }));
             }
         }
