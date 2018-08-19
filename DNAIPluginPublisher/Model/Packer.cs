@@ -12,7 +12,7 @@ namespace DNAIPluginPublisher.Model
     {
         private string _projectPath = "";
 
-        public void Pack(IEnumerable<Item> items, string projectPath, string packageName)
+        public void Pack(IEnumerable<Item> items, string projectPath, string packageName, string packagePath)
         {
             if (!CheckUnityProjectValidity(items as ICollection<Item>))
                 return;
@@ -41,7 +41,7 @@ namespace DNAIPluginPublisher.Model
                 return;
             }
             startInfo.Arguments += s;
-            startInfo.Arguments += " \"C:\\Users\\ferna\\Desktop\\PluginUploader\\" + packageName + "\"";
+            startInfo.Arguments += " \"" + packagePath + "\\" + packageName + "\"";
 
             process.StartInfo = startInfo;
             process.Start();
