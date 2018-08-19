@@ -8,15 +8,17 @@ namespace DNAIPluginPublisher.Model
     /// <summary>
     /// Packs the file in a Unity Package file
     /// </summary>
-    public class Packer
+    public class Packer : IDisposable
     {
         private string _projectPath = "";
+        private string _packageName;
 
-        public void Pack(IEnumerable<Item> items, string projectPath, string packageName, string packagePath)
+        public void Pack(IEnumerable<Item> items, string projectPath, string packageName)
         {
             if (!CheckUnityProjectValidity(items as ICollection<Item>))
                 return;
             _projectPath = projectPath;
+            _packageName = packageName;
             Logger.Log("Packaging files. This operation might take a while.");
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo
@@ -41,7 +43,7 @@ namespace DNAIPluginPublisher.Model
                 return;
             }
             startInfo.Arguments += s;
-            startInfo.Arguments += " \"" + packagePath + "\\" + packageName + "\"";
+            startInfo.Arguments += " \"" + packageName + "\"";
 
             process.StartInfo = startInfo;
             process.Start();
@@ -118,6 +120,11 @@ namespace DNAIPluginPublisher.Model
         private string GetUnityPath()
         {
             return "\"D:\\Program Files (x86)\\Unity\\Editor\\Unity.exe\"";
+        }
+
+        public void Dispose()
+        {
+            File.Delete(_packageName);
         }
     }
 }

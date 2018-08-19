@@ -11,12 +11,12 @@ namespace DNAIPluginPublisher.Model
     {
         private const string SLUG = "installer";
 
-        public bool Send(string path, string login, string password)
+        public bool Send(string path, string login, string password, Version version)
         {
-            return Send(path, login, password, null);
+            return Send(path, login, password, version, null);
         }
 
-        public bool Send(string path, string login, string password, Action onBeforeSend)
+        public bool Send(string path, string login, string password, Version version, Action onBeforeSend)
         {
             IRestResponse response = ConnectToAPI(login, password);
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
@@ -28,7 +28,7 @@ namespace DNAIPluginPublisher.Model
 
             dynamic ds = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Content);
             string token = ds.token;
-            response = CreateEntryAPI(login, password, token, new Version("0.1.2.1"));
+            response = CreateEntryAPI(login, password, token, version);
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 Logger.Log("Failed to create entry in the API.");
@@ -36,7 +36,7 @@ namespace DNAIPluginPublisher.Model
             }
             Logger.Log("Successfully created entry in the DNAI API.");
 
-            response = PatchEntryAPI(login, password, token, new Version("0.1.2.1"));
+            response = PatchEntryAPI(login, password, token, version);
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 Logger.Log("Failed to patched entry in the API.");
@@ -45,7 +45,7 @@ namespace DNAIPluginPublisher.Model
             Logger.Log("Successfully patched entry in the DNAI API.");
 
             onBeforeSend?.Invoke();
-            response = UploadEntryAPI(login, password, token, new Version("0.1.2.1"), path);
+            response = UploadEntryAPI(login, password, token, version, path);
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 Logger.Log("Failed to upload entry in the API.");
