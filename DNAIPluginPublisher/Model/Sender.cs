@@ -27,7 +27,8 @@ namespace DNAIPluginPublisher.Model
             Logger.Log("Successfully logged to the DNAI API.");
 
             dynamic ds = Newtonsoft.Json.JsonConvert.DeserializeObject(response.Content);
-            response = CreateEntryAPI(login, password, ds.token, new Version("0.0.0.1"));
+            string token = ds.token;
+            response = CreateEntryAPI(login, password, token, new Version("0.1.2.1"));
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 Logger.Log("Failed to create entry in the API.");
@@ -35,7 +36,7 @@ namespace DNAIPluginPublisher.Model
             }
             Logger.Log("Successfully created entry in the DNAI API.");
 
-            response = PatchEntryAPI(login, password, ds.token, new Version("0.0.0.1"));
+            response = PatchEntryAPI(login, password, token, new Version("0.1.2.1"));
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 Logger.Log("Failed to patched entry in the API.");
@@ -43,7 +44,8 @@ namespace DNAIPluginPublisher.Model
             }
             Logger.Log("Successfully patched entry in the DNAI API.");
 
-            response = UploadEntryAPI(login, password, ds.token, new Version("0.0.0.1"), path);
+            onBeforeSend?.Invoke();
+            response = UploadEntryAPI(login, password, token, new Version("0.1.2.1"), path);
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
                 Logger.Log("Failed to upload entry in the API.");

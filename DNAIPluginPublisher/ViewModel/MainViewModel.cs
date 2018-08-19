@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Collections.Generic;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.IO.Compression;
+using System.IO;
 
 namespace DNAIPluginPublisher.ViewModel
 {
@@ -123,9 +125,18 @@ namespace DNAIPluginPublisher.ViewModel
                         Logger.Log("Starting...");
                         var packer = new Packer();
                         var sender = new Sender();
+                        var path = Path.GetTempPath() + "DNAItest.unityPackage";
 
-                        //packer.Pack(_provider.Items, Properties.Settings.Default.DirectoryPath, "DNAItest.unityPackage");
-                        sender.Send("./", UserName, pbox.Password);
+                        packer.Pack(_provider.Items, Properties.Settings.Default.DirectoryPath, "DNAItest.unityPackage", Path.GetTempPath());
+                        sender.Send("C:\\Users\\ferna\\Desktop\\PluginUploader\\DNAI.zip", UserName, pbox.Password, () =>
+                        {
+                            using (ZipArchive zip = ZipFile.Open("C:\\Users\\ferna\\Desktop\\PluginUploader\\DNAI.zip", ZipArchiveMode.Update))
+                            {
+                                ZipArchiveEntry oldEntry = zip.GetEntry("DNAItest.unityPackage");
+                                if (oldEntry != null) oldEntry.Delete();
+                                zip.CreateEntryFromFile(path, "DNAItest.unityPackage");
+                            }
+                        });
                     }, (e) => !string.IsNullOrEmpty(UserName)));
             }
         }
