@@ -28,6 +28,7 @@ namespace Core.Plugin.Unity.Runtime
         public List<ConditionItem> _cdtList = new List<ConditionItem>();
     }
 
+    [System.Serializable]
     public class ConditionItem /*: ScriptableObject*/
     {
         [SerializeField]
@@ -37,9 +38,9 @@ namespace Core.Plugin.Unity.Runtime
 
         public static readonly string[] Outputs = new string[]
         {
-                "No Output Selected"
+            "No Output Selected"
             // TODO register outputs
-			};
+		};
 
         public UnityEventOutputChange OnOutputChanged;
         public int CallbackCount = 0;
@@ -70,9 +71,10 @@ namespace Core.Plugin.Unity.Runtime
 
         public string SelectedOutput { get { return Outputs[SelectedIndex]; } }
 
-        public void Initialize()
+        public void Initialize(Type t)
         {
-            cdt = new AConditionRuntime();
+            //cdt = new AConditionRuntime();
+            cdt = Activator.CreateInstance(t) as AConditionRuntime;
             cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
 
             //            <# foreach (var item in EnumNames)
@@ -81,15 +83,14 @@ namespace Core.Plugin.Unity.Runtime
             //<# } #>
         }
 
-        public float Draw(Rect rect)
+        public virtual float Draw(Rect rect)
         {
             //if (cdt != null)
             //if (cdt.CurrentType == null)
             //cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
 
-            //if (_selectedIndex > 0)
-            //    drawSize = cdt.Draw(rect);
-            Debug.Log("Base draw size");
+            if (_selectedIndex > 0)
+                drawSize = (cdt as ICondition).Draw(rect);
             return drawSize;
         }
 

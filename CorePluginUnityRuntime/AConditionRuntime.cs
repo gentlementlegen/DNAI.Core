@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace Core.Plugin.Unity.Runtime
 {
+    public interface ICondition
+    {
+        float Draw(Rect r);
+        void RegisterEnum(string enumType);
+        bool Evaluate<T>(T val);
+    }
+
     public delegate void CallbackFunc();
 
     /// <summary>
@@ -12,7 +19,7 @@ namespace Core.Plugin.Unity.Runtime
     /// so this class handles every callbkack that can be used within the editor.
     /// </summary>
     [Serializable]
-    public partial class AConditionRuntime /*: ISerializationCallbackReceiver*/
+    public partial class AConditionRuntime : ICondition /*: ISerializationCallbackReceiver*/
     {
         [SerializeField]
         private int _selectedIdx;
@@ -129,7 +136,7 @@ namespace Core.Plugin.Unity.Runtime
         /// Registers an enum to the list of handled types.
         /// </summary>
         /// <param name="enumType"></param>
-        public void RegisterEnum(string enumType)
+        public virtual void RegisterEnum(string enumType)
         {
             var enumName = enumType.Split(',')[0];
             //Debug.Log("Registering enumeration type =======> " + enumType + " enum name => " + enumName);
@@ -169,7 +176,7 @@ namespace Core.Plugin.Unity.Runtime
         /// Sets the current type used, such as string, int...
         /// </summary>
         /// <param name="type"></param>
-        public void SetCurrentType(string type)
+        public virtual void SetCurrentType(string type)
         {
             //Debug.Log("Set current type to => " + type);
             _currentTypeStr = type;
@@ -204,6 +211,11 @@ namespace Core.Plugin.Unity.Runtime
             //        return false;
             //}
             //return true;
+        }
+
+        public virtual float Draw(Rect r)
+        {
+            return 0;
         }
 
         //public void OnBeforeSerialize()

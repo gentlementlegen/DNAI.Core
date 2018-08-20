@@ -25,7 +25,6 @@ namespace Core.Plugin.Unity.Drawing
    //     public static readonly string[] Outputs = new string[]
    //     {
    //             "No Output Selected"
-   //         // TODO register outputs
 			//};
 
    //     public UnityEventOutputChange OnOutputChanged;
@@ -91,7 +90,7 @@ namespace Core.Plugin.Unity.Drawing
     public class ListExampleInspector : UnityEditor.Editor
     {
         private ReorderableList reorderableList;
-        private int _selectedIndex;
+        //private int _selectedIndex;
 
         private DNAIScriptConditionRuntime listExample
         {
@@ -189,7 +188,8 @@ namespace Core.Plugin.Unity.Drawing
         {
             //var item = ScriptableObject.CreateInstance<ConditionItem>();
             var item = new Core.Plugin.Unity.Runtime.ConditionItem();
-            item.Initialize();
+            // TODO : generate the string list for outputs
+            item.Initialize(typeof(ACondition));
             listExample._cdtList.Add(item);
 
             EditorUtility.SetDirty(target);

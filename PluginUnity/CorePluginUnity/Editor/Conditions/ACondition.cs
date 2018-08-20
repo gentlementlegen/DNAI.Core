@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Plugin.Unity.Runtime;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
     /// so this class handles every time that can be used within the editor.
     /// </summary>
     [Serializable]
-    public partial class ACondition : ISerializationCallbackReceiver
+    public partial class ACondition : AConditionRuntime, ISerializationCallbackReceiver
     {
         private static readonly Dictionary<Type, Type> _matchingTypes = new Dictionary<Type, Type>
         {
@@ -41,26 +42,26 @@ namespace Core.Plugin.Unity.Editor.Conditions
         private List<string> _registeredTypes = new List<string>();
 
         #region Number Options
-        [SerializeField]
-        public enum CONDITION_NUMBER { NO_CONDITION, MORE, LESS, EQUAL, DIFFERENT }
+        //[SerializeField]
+        //public enum CONDITION_NUMBER { NO_CONDITION, MORE, LESS, EQUAL, DIFFERENT }
         private string[] optionsNumber = new string[] { "No condition", "More than", "Less than", "Equal to", "Different than" };
         [SerializeField]
         private ConditionInput<int> refOutputInt;
         #endregion
 
         #region String Options
-        [SerializeField]
-        public enum CONDITION_STRING { NO_CONDITION, EQUAL, DIFFERENT }
+        //[SerializeField]
+        //public enum CONDITION_STRING { NO_CONDITION, EQUAL, DIFFERENT }
         private string[] optionsString = new string[] { "No condition", "Equal to", "Different than" };
         [SerializeField]
         private ConditionInput<string> refOutputString;
         #endregion
 
         #region Input Serialized Values
-        public int InputInt;
-        public float InputFloat;
-        public string InputString;
-        public string InputEnum;
+        //public int InputInt;
+        //public float InputFloat;
+        //public string InputString;
+        //public string InputEnum;
         #endregion
 
         /// <summary>
@@ -69,7 +70,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         private readonly Dictionary<string, DrawingAction> _drawingActions = new Dictionary<string, DrawingAction>();
         private readonly Dictionary<string, Func<object, bool>> _evaluateActions = new Dictionary<string, Func<object, bool>>();
 
-        public CallbackFunc Callback;
+        //public CallbackFunc Callback;
 
         //public Type CurrentType => _currentType;
 
@@ -77,7 +78,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         private string _currentTypeStr;// = "System.Int64";
         //private Type _currentType;// = typeof(int);
 
-        private ConditionEvaluator _currentEvaluator;
+        //private ConditionEvaluator _currentEvaluator;
 
         public ACondition()
         {
@@ -201,7 +202,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// Registers an enum to the list of handled types.
         /// </summary>
         /// <param name="enumType"></param>
-        public void RegisterEnum(string enumType)
+        public override void RegisterEnum(string enumType)
         {
             var enumName = enumType.Split(',')[0];
             //Debug.Log("Registering enumeration type =======> " + enumType + " enum name => " + enumName);
@@ -260,7 +261,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// Sets the current type used, such as string, int...
         /// </summary>
         /// <param name="type"></param>
-        public void SetCurrentType(string type)
+        public override void SetCurrentType(string type)
         {
             //Debug.Log("Set current type to => " + type);
             _currentTypeStr = type;
@@ -283,7 +284,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// Evaluates if the condition is satisfied.
         /// </summary>
         /// <returns></returns>
-        public virtual bool Evaluate<T>(T val)
+        public override bool Evaluate<T>(T val)
         {
             //if (_currentType == null && !string.IsNullOrEmpty(_currentTypeStr))
             //    _currentType = Type.GetType(_currentTypeStr);
@@ -322,7 +323,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
         /// Draws the condition and return its size.
         /// </summary>
         /// <returns></returns>
-        public virtual float Draw(UnityEngine.Rect rect)
+        public override float Draw(UnityEngine.Rect rect)
         {
             //Debug.Log("1. Drawing => " + _currentTypeStr);
             //if (_currentType == null && !string.IsNullOrEmpty(_currentTypeStr))
@@ -336,7 +337,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
 
         public void SetRefOutput<T>(ConditionInput<T> cdt)
         {
-            _currentEvaluator.SetRefOutput(cdt);
+            //_currentEvaluator.SetRefOutput(cdt);
         }
 
         public void OnBeforeSerialize()
