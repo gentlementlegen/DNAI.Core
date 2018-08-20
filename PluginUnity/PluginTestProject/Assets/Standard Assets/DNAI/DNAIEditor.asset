@@ -23,6 +23,6 @@ MonoBehaviour:
   - scriptManager:
       _fileName: 
       _filePath: D:\Folders\VisualStudio\Duly\PluginUnity\PluginTestProject\Assets\Standard
-        Assets\DNAI\Scripts\AStar.dnai
+        Assets\DNAI\Scripts\Astar.dnai
     AIName: 
     _scriptList: []
