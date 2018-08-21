@@ -218,9 +218,9 @@ namespace DNAI.");
             
             #line default
             #line hidden
-            this.Write("\").ForEach((y) =>\r\n\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\tif (y.Evaluate(value))\r\n\t\t\t\t\t\t\t\ty.OnOutputChan" +
-                    "ged?.Invoke(new EventOutputChange { Value = value, ValueType = value.GetType(), " +
-                    "Invoker = this });\r\n\t\t\t\t\t\t});\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t");
+            this.Write("\").ForEach((y) =>\r\n\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\tif (y.Evaluate(value) && y.OnOutputChanged != " +
+                    "null)\r\n\t\t\t\t\t\t\t\ty.OnOutputChanged.Invoke(new EventOutputChange { Value = value, V" +
+                    "alueType = value.GetType(), Invoker = this });\r\n\t\t\t\t\t\t});\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t");
             
             #line 88 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 

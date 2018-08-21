@@ -43,6 +43,7 @@ namespace TestUnityPlugin
             var t = new TemplateReader();
 
             var content = t.GenerateTemplateContent();
+            Assert.IsNotNull(content);
         }
 
         [TestMethod]
@@ -56,7 +57,7 @@ namespace TestUnityPlugin
             string code = template.GenerateTemplateContent();
             var res = compiler.Compile(code);
 
-            var type = res.CompiledAssembly.GetType("DNAI.Behaviour.DNAIBehaviour");
+            var type = res.CompiledAssembly.GetType("DNAI.Behaviour.Behaviour");
             Assert.IsNotNull(type);
         }
 
@@ -84,7 +85,7 @@ namespace TestUnityPlugin
             var dataTypes = new List<Entity>();
             //GenerateDulyFile();
             GenerateMoreOrLess();
-            _manager.LoadCommandsFrom("moreOrLess.dnai");
+            _manager.LoadCommandsFrom("More Or Less.dnai");
             //GenerateMoreOrLess(_manager, out variables, out functions);
 
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
@@ -101,10 +102,9 @@ namespace TestUnityPlugin
             string code = template.GenerateTemplateContent(_manager, variables, functions, dataTypes);
             var res = compiler.Compile(code);
             res = compiler.Compile(code);
-
-            var type = res.CompiledAssembly.GetType("DNAI.MoreOrLess.Play");
+            var type = res.CompiledAssembly.GetType("DNAI.MoreOrLess.MoreOrLess");
             Assert.IsNotNull(type);
-            var func = type.GetMethod("Execute");
+            var func = type.GetMethod("ExecutePlay");
             Assert.IsNotNull(func);
         }
 
@@ -116,9 +116,9 @@ namespace TestUnityPlugin
             var codeConverter = new DulyCodeConverter(_manager);
 
             //GenerateDulyFile();
-            GenerateMoreOrLess();
+            //GenerateMoreOrLess();
             //_manager.LoadCommandsFrom("test.duly");
-            _manager.LoadCommandsFrom("moreOrLess.duly");
+            _manager.LoadCommandsFrom("moreOrLess.dnai");
 
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
             foreach (var id in ids)
@@ -136,7 +136,7 @@ namespace TestUnityPlugin
             var api = new ApiAccess();
 
             // Connection
-            var token = api.GetToken("toto", "tata").Result;
+            var token = api.GetToken("admin", "dnai").Result;
             api.SetAuthorization(token);
 
             // Get all files for a user
@@ -145,7 +145,7 @@ namespace TestUnityPlugin
             Assert.IsNotNull(files, "Files are null");
 
             // Get a specific file
-            Core.Plugin.Unity.API.File file = api.GetFile(token.user_id, files[0]._id).Result;
+            Core.Plugin.Unity.API.File file = api.GetFile(token.user_id, files[1]._id).Result;
             Assert.IsNotNull(file, "File was null");
 
             // Get content of the file
@@ -167,37 +167,37 @@ namespace TestUnityPlugin
             Assert.IsFalse(str.Contains(" "));
         }
 
-        [TestMethod]
-        public void TestVectorObject()
-        {
-            var compiler = new Compiler();
-            var template = new TemplateReader();
-            var _manager = new BinaryManager();
-            var variables = new List<Entity>();
-            var functions = new List<Entity>();
-            var dataTypes = new List<Entity>();
+        //[TestMethod]
+        //public void TestVectorObject()
+        //{
+        //    var compiler = new Compiler();
+        //    var template = new TemplateReader();
+        //    var _manager = new BinaryManager();
+        //    var variables = new List<Entity>();
+        //    var functions = new List<Entity>();
+        //    var dataTypes = new List<Entity>();
 
-            _manager.LoadCommandsFrom("vertex.dnai");
-            var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
-            foreach (var id in ids)
-            {
-                dataTypes.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.DATA_TYPE, id));
-                variables.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, id));
-                functions.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
-            }
-            //variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[1]);
-            //functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[1]);
-            //GenerateMoreOrLess(_manager, out List<Entity> variables, out List<Entity> functions);
+        //    _manager.LoadCommandsFrom("vertex.dnai");
+        //    var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
+        //    foreach (var id in ids)
+        //    {
+        //        dataTypes.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.DATA_TYPE, id));
+        //        variables.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, id));
+        //        functions.AddRange(_manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, id));
+        //    }
+        //    //variables = _manager.Controller.GetEntitiesOfType(ENTITY.VARIABLE, ids[1]);
+        //    //functions = _manager.Controller.GetEntitiesOfType(ENTITY.FUNCTION, ids[1]);
+        //    //GenerateMoreOrLess(_manager, out List<Entity> variables, out List<Entity> functions);
 
-            string code = template.GenerateTemplateContent(_manager, variables, functions, dataTypes);
-            var res = compiler.Compile(code);
-            res = compiler.Compile(code);
+        //    string code = template.GenerateTemplateContent(_manager, variables, functions, dataTypes);
+        //    var res = compiler.Compile(code);
+        //    res = compiler.Compile(code);
 
-            var type = res.CompiledAssembly.GetType("DNAI.Vertex.DNAIBehaviour");
-            Assert.IsNotNull(type, "Type not found");
-            //var func = type.GetMethod("Set");
-            //Assert.IsNotNull(func, "func is null");
-        }
+        //    var type = res.CompiledAssembly.GetType("DNAI.Vertex.DNAIBehaviour");
+        //    Assert.IsNotNull(type, "Type not found");
+        //    //var func = type.GetMethod("Set");
+        //    //Assert.IsNotNull(func, "func is null");
+        //}
 
         [TestMethod]
         public void TestAstar()

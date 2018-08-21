@@ -80,8 +80,8 @@ namespace DNAI.<#=Namespace#>
 						//OnOutputChanged.Invoke(new EventOutputChange { Value = value, ValueType = value.GetType(), Invoker = this });
 						_cdtList.FindAll((x) => x.SelectedOutput == "<#=item#>").ForEach((y) =>
 						{
-							if (y.Evaluate(value))
-								y.OnOutputChanged?.Invoke(new EventOutputChange { Value = value, ValueType = value.GetType(), Invoker = this });
+							if (y.Evaluate(value) && y.OnOutputChanged != null)
+								y.OnOutputChanged.Invoke(new EventOutputChange { Value = value, ValueType = value.GetType(), Invoker = this });
 						});
 					}
 				}

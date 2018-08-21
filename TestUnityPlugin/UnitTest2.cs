@@ -8,7 +8,7 @@ namespace TestUnityPlugin
     [TestClass]
     public class UnitTest2
     {
-        [TestMethod]
+        //[TestMethod]
         public void TestConditions()
         {
             List<ACondition> cdts = new List<ACondition>();
@@ -31,7 +31,7 @@ namespace TestUnityPlugin
             Assert.IsFalse(ACondition.EvaluateSet(cdts), "2 Conditions are not satisfied");
         }
 
-        [TestMethod]
+        //[TestMethod]
         public void TestConditionCallback()
         {
             List<ACondition> cdts = new List<ACondition>();
