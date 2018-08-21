@@ -41,6 +41,11 @@ namespace Core.Plugin.Unity.Runtime
             "No Output Selected"
 		};
 
+        public string[] OutputsQualified = new string[]
+        {
+            "void"
+        };
+
         public UnityEventOutputChange OnOutputChanged;
         public int CallbackCount = 0;
 
@@ -69,6 +74,7 @@ namespace Core.Plugin.Unity.Runtime
         }
 
         public string SelectedOutput { get { return Outputs[SelectedIndex]; } }
+        public string SelectedOutputQualified { get { return OutputsQualified[SelectedIndex]; } }
 
         public void Initialize(Type t)
         {
@@ -76,7 +82,7 @@ namespace Core.Plugin.Unity.Runtime
             cdt = Activator.CreateInstance(t) as AConditionRuntime;
             cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
 
-            //            <# foreach (var item in EnumNames)
+            //<# foreach (var item in EnumNames)
             //{#>
             //	cdt.RegisterEnum(typeof(<#=ClassName#>.<#=item#>).AssemblyQualifiedName);
             //<# } #>

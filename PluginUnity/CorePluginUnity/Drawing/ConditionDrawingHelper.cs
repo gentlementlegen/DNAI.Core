@@ -23,6 +23,7 @@ namespace Core.Plugin.Unity.Drawing
         private static readonly string[] optionsString = new string[] { "No condition", "Equal to", "Different than" };
 
         private static readonly Dictionary<string, DrawingAction> _drawingActions = new Dictionary<string, DrawingAction>();
+        private static readonly List<string> _registeredTypes = new List<string>();
 
         static ConditionDrawingHelper()
         {
@@ -63,8 +64,38 @@ namespace Core.Plugin.Unity.Drawing
         /// <returns>The size of the drawn object.</returns>
         public static float Draw(ConditionItem cdtItem, Rect rect)
         {
+            //Debug.Log("1 Is type enum ? " + cdtItem.SelectedOutputQualified);
             if (!string.IsNullOrEmpty(cdtItem.cdt.CurrentTypeStr) && cdtItem.SelectedIndex > 0)
+            {
+                //Debug.Log("2 Is type enum ? " + Type.GetType(cdtItem.SelectedOutputQualified).IsEnum);
+                if (Type.GetType(cdtItem.SelectedOutputQualified).IsEnum)
+                {
+                    if (!_drawingActions.ContainsKey(cdtItem.cdt.CurrentTypeStr))
+                        _registeredTypes.Add(cdtItem.cdt.CurrentTypeStr);
+                    if (!_drawingActions.ContainsKey(cdtItem.cdt.CurrentTypeStr))
+                    {
+                        _drawingActions.Add(cdtItem.cdt.CurrentTypeStr, new DrawingAction((Rect r, AConditionRuntime cdt) =>
+                        {
+                            var t = Type.GetType(cdtItem.SelectedOutputQualified);
+                            var mid = r.width / 2f;
+                            //Debug.Log("enum");
+                            cdt._selectedIdx = EditorGUI.Popup(new Rect(r.x, r.y, mid, 15), cdt._selectedIdx, optionsString);
+                            if (string.IsNullOrEmpty(cdt.InputEnum))
+                            {
+                                //Debug.Log("Activator is receiving type " + t.ToString());
+                                cdt.InputEnum = Activator.CreateInstance(t).ToString();
+                            }
+                            //Debug.Log("selected idx => " + cdt._selectedIdx);
+                            //Debug.Log("selected idx enum => " + (Enum)Enum.Parse(t, cdt.InputEnum));
+                            if (cdt._selectedIdx != 0)
+                                cdt.InputEnum = EditorGUI.EnumPopup(new Rect(r.x + r.width / 2f + 5, r.y, mid - 25f, 15), (Enum)Enum.Parse(t, cdt.InputEnum)).ToString();
+                            return 15;
+                        }));
+                    }
+                }
+
                 return _drawingActions[cdtItem.cdt.CurrentTypeStr].Invoke(rect, cdtItem.cdt);
+            }
             return 0;
         }
 

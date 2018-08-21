@@ -164,6 +164,7 @@ namespace Core.Plugin.Unity.Drawing
             p.Next(false);
             p.Next(false);
             p.Next(false);
+            p.Next(false);
             EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p);
 
             item.CallbackCount = item.OnOutputChanged.GetPersistentEventCount();
@@ -195,10 +196,12 @@ namespace Core.Plugin.Unity.Drawing
             var item = new Core.Plugin.Unity.Runtime.ConditionItem
             {
                 Outputs = (string[])serializedObject.targetObject.GetType().GetField("OutputsAsStrings", System.Reflection.BindingFlags.FlattenHierarchy
+                | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance).GetValue(serializedObject.targetObject),
+                OutputsQualified = (string[])serializedObject.targetObject.GetType().GetField("OutputsAsStringsQualified", System.Reflection.BindingFlags.FlattenHierarchy
                 | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance).GetValue(serializedObject.targetObject)
             };
             item.Initialize(typeof(ACondition));
-            Debug.Log(serializedObject.targetObject.GetType());
+            //Debug.Log(serializedObject.targetObject.GetType());
 
             //Debug.Log("Static field => " + serializedObject.targetObject.GetType().GetField("OutputsAsStrings", System.Reflection.BindingFlags.FlattenHierarchy | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetValue(null));
             //var field = (string[])serializedObject.targetObject.GetType().GetField("OutputsAsStrings", System.Reflection.BindingFlags.FlattenHierarchy | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetValue(null);

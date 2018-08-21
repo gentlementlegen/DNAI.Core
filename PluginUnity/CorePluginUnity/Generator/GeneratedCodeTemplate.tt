@@ -42,6 +42,15 @@ namespace DNAI.<#=Namespace#>
 				<# } #>
 			};
 
+			public static string[] OutputsAsStringsQualified = new string[]
+			{
+				"void",
+				<# foreach (var item in Outputs)
+				{#>
+					Type.GetType("<#=item.Split(' ')[0]#>").AssemblyQualifiedName,
+				<# } #>
+			};
+
 			//[Serializable]
 			//public class UnityEventOutputChange : UnityEvent<EventOutputChange>
 			//{
