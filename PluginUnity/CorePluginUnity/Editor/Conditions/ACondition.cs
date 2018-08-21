@@ -35,12 +35,6 @@ namespace Core.Plugin.Unity.Editor.Conditions
             { new ConditionEvaluator() },
         };
 
-        [SerializeField]
-        private int _selectedIdx;
-
-        [SerializeField]
-        private List<string> _registeredTypes = new List<string>();
-
         #region Number Options
         //[SerializeField]
         //public enum CONDITION_NUMBER { NO_CONDITION, MORE, LESS, EQUAL, DIFFERENT }
@@ -74,8 +68,8 @@ namespace Core.Plugin.Unity.Editor.Conditions
 
         //public Type CurrentType => _currentType;
 
-        [SerializeField]
-        private string _currentTypeStr;// = "System.Int64";
+        //[SerializeField]
+        //private string _currentTypeStr;// = "System.Int64";
         //private Type _currentType;// = typeof(int);
 
         //private ConditionEvaluator _currentEvaluator;
@@ -330,6 +324,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             //    _currentType = Type.GetType(_currentTypeStr);
             //Debug.Log("2. Drawing => " + Type.GetType(_currentTypeStr));
             //if (_currentType != null)
+            Debug.Log("Drawing in ACondition = " + _currentTypeStr + " " + _selectedIdx);
             if (!string.IsNullOrEmpty(_currentTypeStr))
                 return _drawingActions[_currentTypeStr].Invoke(rect, out _selectedIdx);
             return 0;

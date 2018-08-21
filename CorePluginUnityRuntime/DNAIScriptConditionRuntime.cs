@@ -36,10 +36,9 @@ namespace Core.Plugin.Unity.Runtime
 
         public string Test;
 
-        public static readonly string[] Outputs = new string[]
+        public string[] Outputs = new string[]
         {
             "No Output Selected"
-            // TODO register outputs
 		};
 
         public UnityEventOutputChange OnOutputChanged;

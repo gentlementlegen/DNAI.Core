@@ -33,6 +33,15 @@ namespace DNAI.<#=Namespace#>
 				<#=item#>
 			<# } #>
 
+			public static string[] OutputsAsStrings = new string[]
+			{
+				"No Output Selected",
+				<# foreach (var item in Outputs)
+				{#>
+					"<#=item#>",
+				<# } #>
+			};
+
 			//[Serializable]
 			//public class UnityEventOutputChange : UnityEvent<EventOutputChange>
 			//{

@@ -143,7 +143,7 @@ namespace Core.Plugin.Unity.Drawing
             //item.Test = EditorGUI.TextField(new Rect(rect.x + 18, rect.y, rect.width - 18, rect.height), ConditionItem.Outputs[0].Item1);
 
             // Draws the condition item selector
-            item.SelectedIndex = EditorGUI.Popup(new Rect(rect.x + 18, rect.y + 2, rect.width - 18, 20), item.SelectedIndex, ConditionItem.Outputs);
+            item.SelectedIndex = EditorGUI.Popup(new Rect(rect.x + 18, rect.y + 2, rect.width - 18, 20), item.SelectedIndex, item.Outputs);
 
             newRect.y += item.Draw(newRect);
 
@@ -157,6 +157,7 @@ namespace Core.Plugin.Unity.Drawing
             //Debug.Log("p is => " + p);
             var it = p.serializedObject.GetIterator();
             p.Next(true);
+            p.Next(false);
             p.Next(false);
             p.Next(false);
             EditorGUI.PropertyField(new Rect(rect.x + 18, newRect.y + 5, rect.width - 18, 20), p);
@@ -187,9 +188,23 @@ namespace Core.Plugin.Unity.Drawing
         private void AddItem(ReorderableList list)
         {
             //var item = ScriptableObject.CreateInstance<ConditionItem>();
-            var item = new Core.Plugin.Unity.Runtime.ConditionItem();
-            // TODO : generate the string list for outputs
+            var item = new Core.Plugin.Unity.Runtime.ConditionItem
+            {
+                Outputs = (string[])serializedObject.targetObject.GetType().GetField("OutputsAsStrings", System.Reflection.BindingFlags.FlattenHierarchy
+                | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance).GetValue(serializedObject.targetObject)
+            };
             item.Initialize(typeof(ACondition));
+            Debug.Log(serializedObject.targetObject.GetType());
+
+            //Debug.Log("Static field => " + serializedObject.targetObject.GetType().GetField("OutputsAsStrings", System.Reflection.BindingFlags.FlattenHierarchy | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetValue(null));
+            //var field = (string[])serializedObject.targetObject.GetType().GetField("OutputsAsStrings", System.Reflection.BindingFlags.FlattenHierarchy | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public).GetValue(null);
+            //Debug.Log(field[0]);
+            //var member = serializedObject.targetObject.GetType().GetMember("OutputsAsStrings", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            //Debug.Log(serializedObject.targetObject.GetType().GetMember("OutputsAsStrings", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance));
+            //foreach (var output in field)
+            //{
+            //    Debug.Log(output);
+            //}
             listExample._cdtList.Add(item);
 
             EditorUtility.SetDirty(target);

@@ -22,10 +22,10 @@ namespace Core.Plugin.Unity.Runtime
     public partial class AConditionRuntime : ICondition /*: ISerializationCallbackReceiver*/
     {
         [SerializeField]
-        private int _selectedIdx;
+        protected int _selectedIdx;
 
         [SerializeField]
-        private List<string> _registeredTypes = new List<string>();
+        protected List<string> _registeredTypes = new List<string>();
 
         #region Number Options
         [SerializeField]
@@ -51,7 +51,7 @@ namespace Core.Plugin.Unity.Runtime
         public CallbackFunc Callback;
 
         [SerializeField]
-        private string _currentTypeStr;// = "System.Int64";
+        protected string _currentTypeStr;// = "System.Int64";
 
 
         public AConditionRuntime()
@@ -215,6 +215,7 @@ namespace Core.Plugin.Unity.Runtime
 
         public virtual float Draw(Rect r)
         {
+            Debug.Log("Drawing in AConditionRuntime");
             return 0;
         }
 
