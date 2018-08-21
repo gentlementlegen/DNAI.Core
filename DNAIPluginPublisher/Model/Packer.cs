@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -119,7 +120,21 @@ namespace DNAIPluginPublisher.Model
         // TODO : implement path
         private string GetUnityPath()
         {
-            return "\"D:\\Program Files (x86)\\Unity\\Editor\\Unity.exe\"";
+            var path = "";
+
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Unity Technologies\Installer\Unity"))
+            {
+                if (key != null)
+                {
+                    Object o = key.GetValue("Location x64");
+                    if (o != null)
+                    {
+                        path = o as string;
+                    }
+                }
+            }
+
+            return path + @"\Editor\Unity.exe";
         }
 
         public void Dispose()
