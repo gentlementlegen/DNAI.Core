@@ -145,7 +145,11 @@ namespace Core.Plugin.Unity.Drawing
             // Draws the condition item selector
             item.SelectedIndex = EditorGUI.Popup(new Rect(rect.x + 18, rect.y + 2, rect.width - 18, 20), item.SelectedIndex, item.Outputs);
 
-            newRect.y += item.Draw(newRect);
+            //Debug.Log("Before drawing y=" + newRect.y);
+            //newRect.y += item.Draw(newRect);
+            newRect.y += ConditionDrawingHelper.Draw(item, newRect);
+            //Debug.Log("After drawing y=" + newRect.y);
+
 
             // Draws the callback zone to assign it
             //SerializedObject s = new SerializedObject(listExample);

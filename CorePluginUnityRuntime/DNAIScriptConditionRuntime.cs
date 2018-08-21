@@ -88,6 +88,7 @@ namespace Core.Plugin.Unity.Runtime
             //if (cdt.CurrentType == null)
             //cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);
 
+            Debug.Log("drawing in Runtime " + rect);
             if (_selectedIndex > 0)
                 drawSize = (cdt as ICondition).Draw(rect);
             return drawSize;

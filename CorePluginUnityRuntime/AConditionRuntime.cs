@@ -19,10 +19,12 @@ namespace Core.Plugin.Unity.Runtime
     /// so this class handles every callbkack that can be used within the editor.
     /// </summary>
     [Serializable]
-    public partial class AConditionRuntime : ICondition /*: ISerializationCallbackReceiver*/
+    public partial class AConditionRuntime : ICondition, ISerializationCallbackReceiver
     {
+        public string CurrentTypeStr => _currentTypeStr;
+
         [SerializeField]
-        protected int _selectedIdx;
+        public int _selectedIdx;
 
         [SerializeField]
         protected List<string> _registeredTypes = new List<string>();
@@ -30,13 +32,11 @@ namespace Core.Plugin.Unity.Runtime
         #region Number Options
         [SerializeField]
         public enum CONDITION_NUMBER { NO_CONDITION, MORE, LESS, EQUAL, DIFFERENT }
-        private string[] optionsNumber = new string[] { "No condition", "More than", "Less than", "Equal to", "Different than" };
         #endregion
 
         #region String Options
         [SerializeField]
         public enum CONDITION_STRING { NO_CONDITION, EQUAL, DIFFERENT }
-        private string[] optionsString = new string[] { "No condition", "Equal to", "Different than" };
         #endregion
 
         #region Input Serialized Values
@@ -219,17 +219,17 @@ namespace Core.Plugin.Unity.Runtime
             return 0;
         }
 
-        //public void OnBeforeSerialize()
-        //{
-        //}
+        public virtual void OnBeforeSerialize()
+        {
+        }
 
-        //public void OnAfterDeserialize()
-        //{
-        //    //Debug.Log("On after desserialize !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + _registeredTypes.Count);
-        //    foreach (var item in _registeredTypes)
-        //    {
-        //        RegisterEnum(item);
-        //    }
-        //}
+        public virtual void OnAfterDeserialize()
+        {
+            //Debug.Log("On after desserialize !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + _registeredTypes.Count);
+            foreach (var item in _registeredTypes)
+            {
+                RegisterEnum(item);
+            }
+        }
     }
 }

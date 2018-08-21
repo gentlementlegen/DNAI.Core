@@ -22,6 +22,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
     /// so this class handles every time that can be used within the editor.
     /// </summary>
     [Serializable]
+    [Obsolete("This class should not be used since Unity doesn't handle inheritance serialization. Use ConditionDrawingHelper instead.", false)]
     public partial class ACondition : AConditionRuntime, ISerializationCallbackReceiver
     {
         private static readonly Dictionary<Type, Type> _matchingTypes = new Dictionary<Type, Type>
@@ -87,7 +88,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             _drawingActions.Add(typeof(Int64).ToString(), new DrawingAction((Rect rect, out int selectedIndex) =>
             {
                 var mid = rect.width / 2f;
-                //Debug.Log("int");
+                Debug.Log("int and  rect = " + rect);
                 selectedIndex = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), _selectedIdx, optionsNumber);
                 if (_selectedIdx != 0)
                     InputInt = EditorGUI.IntField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), InputInt);
@@ -324,7 +325,7 @@ namespace Core.Plugin.Unity.Editor.Conditions
             //    _currentType = Type.GetType(_currentTypeStr);
             //Debug.Log("2. Drawing => " + Type.GetType(_currentTypeStr));
             //if (_currentType != null)
-            Debug.Log("Drawing in ACondition = " + _currentTypeStr + " " + _selectedIdx);
+            Debug.Log("Drawing in ACondition = " + _currentTypeStr + " " + _selectedIdx + " " + rect);
             if (!string.IsNullOrEmpty(_currentTypeStr))
                 return _drawingActions[_currentTypeStr].Invoke(rect, out _selectedIdx);
             return 0;
@@ -335,11 +336,11 @@ namespace Core.Plugin.Unity.Editor.Conditions
             //_currentEvaluator.SetRefOutput(cdt);
         }
 
-        public void OnBeforeSerialize()
+        public override void OnBeforeSerialize()
         {
         }
 
-        public void OnAfterDeserialize()
+        public override void OnAfterDeserialize()
         {
             //Debug.Log("On after desserialize !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + _registeredTypes.Count);
             foreach (var item in _registeredTypes)

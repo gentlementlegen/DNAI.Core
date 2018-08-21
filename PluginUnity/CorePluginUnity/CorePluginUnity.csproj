@@ -71,6 +71,7 @@
     <Compile Include="API\Objects.cs" />
     <Compile Include="Context\UnitySynchronizationContext.cs" />
     <Compile Include="Context\UnityTask.cs" />
+    <Compile Include="Drawing\ConditionDrawingHelper.cs" />
     <Compile Include="Drawing\DNAIScriptConditionDrawer.cs" />
     <Compile Include="Drawing\DrawingHelper.cs" />
     <Compile Include="Drawing\IEditorDrawable.cs" />
