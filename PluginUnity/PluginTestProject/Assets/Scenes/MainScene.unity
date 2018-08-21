@@ -1164,9 +1164,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cdtList:
   - cdt:
-      _selectedIdx: 1
+      _selectedIdx: 0
       _registeredTypes: []
-      InputInt: -6
+      InputInt: 0
       InputFloat: 0
       InputString: 
       InputEnum: 
@@ -1175,6 +1175,9 @@ MonoBehaviour:
     Outputs:
     - No Output Selected
     - System.Int32 result
+    OutputsQualified:
+    - void
+    - System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
     OnOutputChanged:
       m_PersistentCalls:
         m_Calls:
@@ -1189,20 +1192,9 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-        - m_Target: {fileID: 0}
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
       m_TypeName: Core.Plugin.Unity.Runtime.UnityEventOutputChange, CorePluginUnityRuntime,
         Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-    CallbackCount: 2
+    CallbackCount: 1
     _selectedIndex: 1
   lastResult: 0
   TextNumber: {fileID: 1421208212}

@@ -273,7 +273,7 @@ namespace Core.Plugin.Unity.Drawing
             listIA.ForEach(x => x.OnEnable());
             rList = new ReorderableList(listIA, typeof(ScriptManager));
             rList.draggable = false;
-            rList.elementHeight *= 2;
+            rList.elementHeight *= 7f;
             rList.drawHeaderCallback = DrawHeaderInternal;
             rList.drawElementCallback = DrawElementInternal;
             rList.onAddCallback = AddElementInternal;
@@ -347,6 +347,12 @@ namespace Core.Plugin.Unity.Drawing
             EditorGUI.LabelField(rect, "Loaded Scripts");
         }
 
+        readonly GUIStyle _titleStyle = new GUIStyle()
+        {
+            fontSize = 20,
+            fontStyle = FontStyle.BoldAndItalic
+        };
+
         /// <summary>
         /// Draws an element in the loaded script list.
         /// </summary>
@@ -361,6 +367,9 @@ namespace Core.Plugin.Unity.Drawing
 
             var thirdWidth = rect.width * 0.85f;
             var halfHeight = rect.height / 2;
+
+            GUI.Label(rect, listIA[index].scriptManager.ScriptName, _titleStyle);
+            rect.y += 25;
 
             //			var gameObjectRect = new Rect( rect.x, rect.y, thirdWidth, halfHeight );
             //			var dropdownRect = new Rect( rect.x + thirdWidth, rect.y, thirdWidth * 2, halfHeight );

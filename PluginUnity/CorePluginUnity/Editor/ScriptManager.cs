@@ -42,6 +42,10 @@ namespace Core.Plugin.Unity.Editor
         public string AssemblyName
         { get => _codeConverter.AssemblyName; }
 
+        [UnityEngine.SerializeField]
+        private string _scriptName;
+        public string ScriptName => _scriptName;
+
         /// The list of IA references contained in the Duly file.
         public List<KeyValuePair<string, Type>> iaList = new List<KeyValuePair<string, Type>>();
 
@@ -108,6 +112,7 @@ namespace Core.Plugin.Unity.Editor
             {
                 _manager.Reset();
                 _manager.LoadCommandsFrom(path);
+                _scriptName = GetScriptName();
                 //var codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
                 //codeConverter.ConvertCode();
             }).ContinueWith((param) => OnScriptLoaded(param.Status.ToString()));
@@ -181,6 +186,19 @@ namespace Core.Plugin.Unity.Editor
             if (_manager.FilePath == null && _filePath != null)
                 _manager.LoadCommandsFrom(_filePath);
             return Task.Run(() => _codeConverter.ConvertCode());
+        }
+
+        /// <summary>
+        /// Gets the main script class name.
+        /// </summary>
+        /// <returns></returns>
+        public string GetScriptName()
+        {
+            if (_manager?.Controller != null)
+            {
+                return _manager.Controller.GetMainContextName() ?? "Script";
+            }
+            return "Script";
         }
     }
 }
