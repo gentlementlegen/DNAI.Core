@@ -433,45 +433,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0ebb1338aebe5348baa1be21bea7390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cdtList:
-  - cdt:
-      _selectedIdx: 0
-      _registeredTypes: []
-      InputInt: 0
-      InputFloat: 0
-      InputString: 
-      InputEnum: 
-      _currentTypeStr: No
-    Test: 
-    OnOutputChanged:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 0}
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-      m_TypeName: Assets.Scripts.Test.UnityEventOutputChange, Assembly-CSharp, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    CallbackCount: 2
-    _selectedIndex: 0
 --- !u!4 &202586359
 Transform:
   m_ObjectHideFlags: 0
@@ -1203,20 +1164,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cdtList:
   - cdt:
-      _matchingInstanceTypes:
-      - Input: 0
-        Condition: 0
-        _selectedIdx: 0
-      _selectedIdx: 0
-      _registeredTypes:
-      - DNAI.MoreOrLess.COMPARISON, MoreOrLess, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-      InputInt: 0
+      _selectedIdx: 1
+      _registeredTypes: []
+      InputInt: -6
       InputFloat: 0
       InputString: 
       InputEnum: 
-      _currentTypeStr: System.Int64
+      _currentTypeStr: System.Int32
     Test: 
+    Outputs:
+    - No Output Selected
+    - System.Int32 result
     OnOutputChanged:
       m_PersistentCalls:
         m_Calls:
@@ -1231,9 +1189,20 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-      m_TypeName: DNAI.MoreOrLess.UnityEventOutputChange, MoreOrLess, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    CallbackCount: 1
+        - m_Target: {fileID: 0}
+          m_MethodName: 
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: Core.Plugin.Unity.Runtime.UnityEventOutputChange, CorePluginUnityRuntime,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    CallbackCount: 2
     _selectedIndex: 1
   lastResult: 0
   TextNumber: {fileID: 1421208212}

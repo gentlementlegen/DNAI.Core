@@ -74,6 +74,10 @@
       <Project>{DC0C6FC8-7D9D-4AC6-9B64-C8E3C39CA105}</Project>
       <Name>CorePackage</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CorePluginUnityRuntime\CorePluginUnityRuntime.csproj">
+      <Project>{B7030D04-822E-4BDF-8635-580E89BAC38A}</Project>
+      <Name>CorePluginUnityRuntime</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PluginUnity\CorePluginUnity\CorePluginUnity.csproj">
       <Project>{12e93799-d3c3-4cc9-b419-8c6930e65d4f}</Project>
       <Name>CorePluginUnity</Name>

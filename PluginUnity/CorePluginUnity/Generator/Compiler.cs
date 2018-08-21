@@ -172,7 +172,8 @@ namespace Core.Plugin.Unity.Generator
 #if UNITY_ENGINE
                 _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Managed\UnityEngine.dll");
                 _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Managed\UnityEditor.dll");
-                _parameters.ReferencedAssemblies.Add(assemblyPath + "../Editor/CorePluginUnity.dll");
+                //_parameters.ReferencedAssemblies.Add(assemblyPath + "../Editor/CorePluginUnity.dll");
+                _parameters.ReferencedAssemblies.Add(assemblyPath + "CorePluginUnityRuntime.dll");
 #else
                 _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEngine.dll");
                 _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEditor.dll");
