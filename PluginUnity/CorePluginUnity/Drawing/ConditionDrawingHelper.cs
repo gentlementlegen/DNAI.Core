@@ -29,7 +29,6 @@ namespace Core.Plugin.Unity.Drawing
             _drawingActions.Add(typeof(Int64).ToString(), new DrawingAction((Rect rect, AConditionRuntime cdt) =>
             {
                 var mid = rect.width / 2f;
-                Debug.Log("int and  rect = " + rect);
                 cdt._selectedIdx = EditorGUI.Popup(new Rect(rect.x, rect.y, mid, 15), cdt._selectedIdx, optionsNumber);
                 if (cdt._selectedIdx != 0)
                     cdt.InputInt = EditorGUI.IntField(new Rect(rect.x + rect.width / 2f + 5, rect.y, mid - 25f, 15), cdt.InputInt);
@@ -67,6 +66,17 @@ namespace Core.Plugin.Unity.Drawing
             if (!string.IsNullOrEmpty(cdtItem.cdt.CurrentTypeStr) && cdtItem.SelectedIndex > 0)
                 return _drawingActions[cdtItem.cdt.CurrentTypeStr].Invoke(rect, cdtItem.cdt);
             return 0;
+        }
+
+        /// <summary>
+        /// Gets the drawing size of a condition item.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public static float GetItemSize(ConditionItem item)
+        {
+            // + 15 stands for the draw size currently returned by the drawing callbacks
+            return 110f + ((item.CallbackCount > 1) ? (item.CallbackCount - 1) * 45f : 0f) + (item.SelectedIndex > 0 ? 15 : 0);
         }
     }
 }

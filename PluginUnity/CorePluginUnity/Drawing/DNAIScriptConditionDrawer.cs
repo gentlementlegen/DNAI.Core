@@ -223,7 +223,8 @@ namespace Core.Plugin.Unity.Drawing
 
         private float ElementHeightCallback(int idx)
         {
-            return listExample._cdtList[idx].ItemSize;
+            //return listExample._cdtList[idx].ItemSize;
+            return ConditionDrawingHelper.GetItemSize(listExample._cdtList[idx]);
         }
 
         public override void OnInspectorGUI()
