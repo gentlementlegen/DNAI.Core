@@ -60,6 +60,7 @@ namespace DNAIPluginPublisher.ViewModel
         /// </summary>
         public static void Cleanup()
         {
+            SimpleIoc.Default.GetInstance<MainViewModel>().Cleanup();
         }
     }
 }

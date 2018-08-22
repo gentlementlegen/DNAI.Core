@@ -37,7 +37,7 @@ namespace DNAIPluginPublisher.ViewModel
             }
         }
 
-        private string _userName = "";
+        private string _userName = Properties.Settings.Default.Username;
 
         public string UserName
         {
@@ -48,10 +48,11 @@ namespace DNAIPluginPublisher.ViewModel
             set
             {
                 Set(ref _userName, value);
+                Properties.Settings.Default.Username = value;
             }
         }
 
-        private string _version = "";
+        private string _version = Properties.Settings.Default.Version;
 
         public string Version
         {
