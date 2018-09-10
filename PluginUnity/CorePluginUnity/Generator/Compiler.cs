@@ -53,7 +53,7 @@ namespace Core.Plugin.Unity.Generator
             var functions = new List<Entity>();
             var dataTypes = new List<Entity>();
 
-            AssemblyName = Path.GetFileNameWithoutExtension(_manager.FilePath).RemoveIllegalCharacters();
+            AssemblyName = _manager.Controller.GetMainContextName();
 
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
             //UnityEngine.Debug.Log("compiling scripts length => " + ids.Count);
