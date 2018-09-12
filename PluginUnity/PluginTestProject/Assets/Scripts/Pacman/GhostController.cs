@@ -53,12 +53,11 @@ namespace Assets.Scripts.Pacman
             //}
             transform.position = Vector3.MoveTowards(transform.position,
                 TerrainManager.Instance.GetWorldPosition((int)_targetPos.X, (int)_targetPos.Y),
-                _distanceDelta);
+                _distanceDelta * Time.deltaTime);
         }
 
         private void GhostController_PositionChanged(object sender, Vector2Int position)
         {
-            Debug.Log("Position changed");
             _currPos = TerrainManager.Instance.GetGridPosition(transform.position.x, transform.position.y).AsPosition();
             var targetGridPos = TerrainManager.Instance.GetGridPosition(_target.transform.position.x, _target.transform.position.y).AsPosition();
             var nodes = _astar.GetDestinationPath(_currPos, targetGridPos);

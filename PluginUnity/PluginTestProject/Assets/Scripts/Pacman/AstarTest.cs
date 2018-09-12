@@ -16,9 +16,9 @@ public class AstarTest : MonoBehaviour
     [SerializeField]
     private Transform target;*/
 
-    private List<int> path;
+    //private List<int> path;
 
-    private Position currPosition = null;
+    //private Position currPosition = null;
 
     private int GetNodeIndex(Position node)
     {
@@ -121,11 +121,11 @@ public class AstarTest : MonoBehaviour
         if (curr)
     }*/
 
-    private IEnumerable<Position> GetNextPosition()
-    {
-        foreach (int currPos in path)
-        {
-            yield return _nodes[currPos];
-        }
-    }
+    //private IEnumerable<Position> GetNextPosition()
+    //{
+    //    foreach (int currPos in path)
+    //    {
+    //        yield return _nodes[currPos];
+    //    }
+    //}
 }

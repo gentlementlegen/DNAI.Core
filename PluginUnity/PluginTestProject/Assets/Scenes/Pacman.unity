@@ -852,7 +852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _astar: {fileID: 1459632669}
-  _distanceDelta: 0.02
+  _distanceDelta: 0.5
 --- !u!212 &1155491277
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1694,6 +1694,11 @@ Prefab:
     - target: {fileID: 1321100883054872, guid: c8b290cfe8cc1ec45ac7b9b257d4f9ad, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114016282410706902, guid: c8b290cfe8cc1ec45ac7b9b257d4f9ad,
+        type: 2}
+      propertyPath: _distanceDelta
+      value: 0.7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c8b290cfe8cc1ec45ac7b9b257d4f9ad, type: 2}
