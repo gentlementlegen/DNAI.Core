@@ -4,4 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Pacman.unity
+    guid: ebe881384b75cf140b5a285b2656f6c5
+  - enabled: 1
+    path: Assets/Scenes/MainScene.unity
+    guid: f4c9f7590789df9469a962b5b029e9a3

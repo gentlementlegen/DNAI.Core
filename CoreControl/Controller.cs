@@ -214,7 +214,7 @@ namespace CoreControl
         /// <returns></returns>
         public string GetMainContextName()
         {
-            return GetEntities(GetIds(EntityFactory.EntityType.CONTEXT | EntityFactory.EntityType.PUBLIC)).Find(x => !string.IsNullOrEmpty(x.Name)).Name;
+            return GetEntities(GetIds(EntityFactory.EntityType.CONTEXT | EntityFactory.EntityType.PUBLIC))?.Find(x => !string.IsNullOrEmpty(x.Name))?.Name;
         }
 
         /// <summary>
@@ -562,6 +562,7 @@ namespace CoreControl
         /// <returns></returns>
         public List<EntityFactory.Entity> GetEntities(List<UInt32> ids)
         {
+            if (ids == null) return null;
             var ret = new List<EntityFactory.Entity>();
 
             foreach (var id in ids)

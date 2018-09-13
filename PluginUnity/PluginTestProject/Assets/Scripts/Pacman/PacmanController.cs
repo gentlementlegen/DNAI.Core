@@ -49,7 +49,7 @@ namespace Assets.Scripts.Pacman
             {
                 AddDirection(TerrainManager.Direction.Right);
             }
-            transform.position = Vector3.MoveTowards(transform.position, _target, _distanceDelta);
+            transform.position = Vector3.MoveTowards(transform.position, _target, _distanceDelta * Time.deltaTime);
             if (Vector3.Distance(transform.position, _target) < 0.01f)
                 UpdateTarget();
 

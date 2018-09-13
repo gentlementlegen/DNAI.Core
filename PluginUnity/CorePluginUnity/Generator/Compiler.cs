@@ -53,7 +53,7 @@ namespace Core.Plugin.Unity.Generator
             var functions = new List<Entity>();
             var dataTypes = new List<Entity>();
 
-            AssemblyName = Path.GetFileNameWithoutExtension(_manager.FilePath).RemoveIllegalCharacters();
+            AssemblyName = _manager.Controller.GetMainContextName();
 
             var ids = _manager.Controller.GetIds(EntityType.CONTEXT | EntityType.PUBLIC);
             //UnityEngine.Debug.Log("compiling scripts length => " + ids.Count);
@@ -172,7 +172,7 @@ namespace Core.Plugin.Unity.Generator
 #if UNITY_ENGINE
                 _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Managed\UnityEngine.dll");
                 _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Managed\UnityEditor.dll");
-                _parameters.ReferencedAssemblies.Add(assemblyPath + "../Editor/CorePluginUnity.dll");
+                //_parameters.ReferencedAssemblies.Add(assemblyPath + "../Editor/CorePluginUnity.dll");
 #else
                 _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEngine.dll");
                 _parameters.ReferencedAssemblies.Add(unityLibPath + @"\Editor\Data\Managed\UnityEditor.dll");
@@ -180,6 +180,7 @@ namespace Core.Plugin.Unity.Generator
 
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
+                _parameters.ReferencedAssemblies.Add(assemblyPath + "CorePluginUnityRuntime.dll");
 
                 _parameters.ReferencedAssemblies.Add("System.Core.dll");
                 _parameters.ReferencedAssemblies.Add("Microsoft.CSharp.dll");

@@ -7,8 +7,8 @@ namespace Assets.Scripts.Pacman
     public class AstarPacman : MonoBehaviour
     {
   //      private readonly PosGraph _graph = new PosGraph();
-        private Dictionary<int, int> _idx = new Dictionary<int, int>();
-        private readonly List<int> _tList = new List<int>();
+        //private Dictionary<int, int> _idx = new Dictionary<int, int>();
+        //private readonly List<int> _tList = new List<int>();
 
         private void Start()
         {
