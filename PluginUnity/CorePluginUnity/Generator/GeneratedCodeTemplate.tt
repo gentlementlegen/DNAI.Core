@@ -113,7 +113,7 @@ namespace DNAI.<#=Namespace#>
 						{
 							var varName = output.Split(' ')[1]; #>
 							if (results.ContainsKey("<#=varName#>"))
-								<#=varName#> = results["<#=varName#>"];
+								<#=varName#> = Convert.ChangeType(results["<#=varName#>"], <#=varName#>.GetType());
 						<# }
 					} #>
 				}
