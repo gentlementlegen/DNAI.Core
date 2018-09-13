@@ -88,6 +88,7 @@ namespace CoreCommand
             RegisterCommand<Command.Class.RemoveAttribute, EmptyReply>                                  (Resolver.V1_0_0.Code, "CLASS.REMOVE_ATTRIBUTE", "CLASS.ATTRIBUTE_REMOVED");
             RegisterCommand<Command.Class.RenameAttribute, EmptyReply>                                  (Resolver.V1_0_0.Code, "CLASS.RENAME_ATTRIBUTE", "CLASS.ATTRIBUTE_RENAMED");
             RegisterCommand<Command.Class.SetFunctionAsMember, Command.Class.SetFunctionAsMember.Reply> (Resolver.V1_0_0.Code, "CLASS.SET_FUNCTION_AS_MEMBER", "CLASS.FUNCTION_SET_AS_MEMBER");
+            RegisterCommand<Command.Class.GetAttributes, Command.Class.GetAttributes.Reply>             (Resolver.V1_0_0.Code, "CLASS.GET_ATTRIBUTES", "CLASS.ATTRIBUTES_GET");
 
             //ENUM
 

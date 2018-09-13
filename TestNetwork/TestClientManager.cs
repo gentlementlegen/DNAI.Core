@@ -22,7 +22,7 @@ namespace TestNetwork
             try
             {
                 CoreNetwork.ClientManager coreSide = new CoreNetwork.ClientManager(new CoreCommand.BinaryManager());
-                EventServerClient.Communication.TcpManager guiSide = new EventServerClient.Communication.TcpManager();
+                EventClient.Communication.TcpManager guiSide = new EventClient.Communication.TcpManager();
 
                 Assert.IsTrue(File.Exists(serverZip));
 
@@ -96,8 +96,15 @@ namespace TestNetwork
                 server.Kill();
                 server.WaitForExit();
             }
-            
-            Directory.Delete(serverDirectory, true);
+
+            try
+            {
+                Directory.Delete(serverDirectory, true);
+            }
+            catch (Exception)
+            {
+
+            }
 
             if (err != null)
                 throw err;

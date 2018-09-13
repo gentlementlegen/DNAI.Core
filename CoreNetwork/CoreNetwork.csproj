@@ -49,9 +49,9 @@
       <Project>{022ffc42-784d-4d25-8598-3e356dc7b7db}</Project>
       <Name>CoreCommand</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EventServerClient\EventServerClient.csproj">
+    <ProjectReference Include="..\EventServerClient\EventClient.csproj">
       <Project>{2c4dee9a-8b97-449b-9839-0cbd35a5306e}</Project>
-      <Name>EventServerClient</Name>
+      <Name>EventClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

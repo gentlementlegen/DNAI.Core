@@ -17,9 +17,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreControl", "CoreControl\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestControler", "TestControler\TestControler.csproj", "{8DE4C3E0-0FFB-4783-90F5-5D107A150328}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventServerClient", "EventServerClient\EventServerClient.csproj", "{2C4DEE9A-8B97-449B-9839-0CBD35A5306E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventClient", "EventServerClient\EventClient.csproj", "{2C4DEE9A-8B97-449B-9839-0CBD35A5306E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventServerClientTest", "EventServerClientTest\EventServerClientTest.csproj", "{43E1DE0E-2E05-4FBB-B19D-26D41C060716}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEventClient", "EventServerClientTest\TestEventClient.csproj", "{43E1DE0E-2E05-4FBB-B19D-26D41C060716}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreCommand", "CoreCommand\CoreCommand.csproj", "{022FFC42-784D-4D25-8598-3E356DC7B7DB}"
 EndProject

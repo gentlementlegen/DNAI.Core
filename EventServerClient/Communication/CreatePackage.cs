@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventServerClient.Communication
+namespace EventClient.Communication
 {
     public class CreatePackage
     {

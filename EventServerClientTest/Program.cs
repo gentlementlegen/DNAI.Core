@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using EventServerClient.Communication;
+using EventClient.Communication;
 
-namespace EventServerClientTest
+namespace TestEventClient
 {
     class Program
     {

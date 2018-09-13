@@ -1,5 +1,5 @@
 ﻿using CoreCommand;
-using EventServerClient.Communication;
+using EventClient.Communication;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

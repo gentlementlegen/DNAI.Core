@@ -75,9 +75,9 @@
       <Project>{4bdcaf42-5631-40f4-a497-6d8410085579}</Project>
       <Name>CoreNetwork</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EventServerClient\EventServerClient.csproj">
+    <ProjectReference Include="..\EventServerClient\EventClient.csproj">
       <Project>{2c4dee9a-8b97-449b-9839-0cbd35a5306e}</Project>
-      <Name>EventServerClient</Name>
+      <Name>EventClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

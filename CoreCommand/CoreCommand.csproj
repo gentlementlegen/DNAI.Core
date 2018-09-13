@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\Class\AddAttribute.cs" />
+    <Compile Include="Command\Class\GetAttributes.cs" />
     <Compile Include="Command\Global\CreateProject.cs" />
     <Compile Include="Command\Class\SetFunctionAsMember.cs" />
     <Compile Include="Command\Function\Call.cs" />

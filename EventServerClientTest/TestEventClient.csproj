@@ -51,9 +51,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EventServerClient\EventServerClient.csproj">
+    <ProjectReference Include="..\EventServerClient\EventClient.csproj">
       <Project>{2c4dee9a-8b97-449b-9839-0cbd35a5306e}</Project>
-      <Name>EventServerClient</Name>
+      <Name>EventClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
