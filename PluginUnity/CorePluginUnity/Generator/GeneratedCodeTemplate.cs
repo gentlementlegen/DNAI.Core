@@ -299,14 +299,21 @@ namespace DNAI.");
             
             #line default
             #line hidden
-            this.Write(" = results[\"");
+            this.Write(" = Convert.ChangeType(results[\"");
             
             #line 116 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
-            this.Write("\"];\r\n\t\t\t\t\t\t");
+            this.Write("\"], ");
+            
+            #line 116 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(varName));
+            
+            #line default
+            #line hidden
+            this.Write(".GetType());\r\n\t\t\t\t\t\t");
             
             #line 117 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  }
