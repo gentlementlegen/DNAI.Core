@@ -204,7 +204,7 @@ namespace TestControler
 
             Dictionary<string, dynamic> args = new Dictionary<string, dynamic>
             {
-                { "lastResult", controller.GetEnumerationValue(COMPARISON, "NONE") }
+                { "lastResult", (System.Int64)controller.GetEnumerationValue(COMPARISON, "NONE") }
             };
 
             Dictionary<string, dynamic> returns;
@@ -219,12 +219,12 @@ namespace TestControler
 
                 if (returns["result"] > mystery_number)
                 {
-                    args["lastResult"] = controller.GetEnumerationValue(COMPARISON, "LESS");
+                    args["lastResult"] = (System.Int64)controller.GetEnumerationValue(COMPARISON, "LESS");
                     System.Diagnostics.Debug.WriteLine("==> It's less");
                 }
                 else if (returns["result"] < mystery_number)
                 {
-                    args["lastResult"] = controller.GetEnumerationValue(COMPARISON, "MORE");
+                    args["lastResult"] = (System.Int64)controller.GetEnumerationValue(COMPARISON, "MORE");
                     System.Diagnostics.Debug.WriteLine("==> It's more");
                 }
                 else

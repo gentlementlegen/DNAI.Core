@@ -97,13 +97,10 @@ namespace CorePackage.Entity.Type
             //return value.GetType() != typeof(string) && values.Keys.Contains((string)value);
             if (valType.IsEnum && values.ContainsKey(valType.GetEnumName(value)))
                 return true;
-
-            if (valType != values.Values.First().Value.GetType())
-                return false;
-
+            
             foreach (Variable curr in values.Values)
             {
-                if (curr.Value == value)
+                if (curr.Value == Convert.ChangeType(value, curr.Value.GetType()))
                     return true;
             }
             return false;
