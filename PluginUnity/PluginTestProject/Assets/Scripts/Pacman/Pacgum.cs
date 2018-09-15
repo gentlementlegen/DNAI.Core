@@ -14,7 +14,7 @@ namespace Assets.Scripts.Pacman
         private int _reward = 100;
 
         /// <summary>
-        /// When the player hits the pacman, just eat it.
+        /// When the player hits the pacgum, just eat it.
         /// </summary>
         /// <param name="other"></param>
         private void OnTriggerStay2D(Collider2D other)
