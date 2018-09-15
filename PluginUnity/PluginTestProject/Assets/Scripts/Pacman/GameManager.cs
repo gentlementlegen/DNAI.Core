@@ -1,30 +1,47 @@
-﻿using DNAI.MoreOrLess;
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Pacman
 {
+    /// <summary>
+    /// Event info givng the current game state and the previous one.
+    /// </summary>
     public class GameStateEvent : EventArgs
     {
         public GameManager.GameState CurrentState;
         public GameManager.GameState PreviousState;
     }
 
-
-
+    /// <summary>
+    /// Maanger for the Pacman game.
+    /// </summary>
     public class GameManager : MonoBehaviour
     {
+        /// <summary>
+        /// Singleton for the manager.
+        /// </summary>
         public static GameManager Instance { get; private set; }
 
+        /// <summary>
+        /// Represent the different possible states of the game.
+        /// </summary>
         public enum GameState { Play, Pause, End, Menu, Warmup, Death }
 
+        /// <summary>
+        /// Holds the current state of the game.
+        /// </summary>
         public GameState State { get; private set; } = GameState.Menu;
 
+        /// <summary>
+        /// Triggered when the game state changes.
+        /// </summary>
         public event EventHandler OnGameStateChange;
 
+        /// <summary>
+        /// The player's score.
+        /// </summary>
         public int Score { get; private set; }
 
         [Header("UI")]
@@ -34,11 +51,18 @@ namespace Assets.Scripts.Pacman
         [Header("Prefabs")]
         [SerializeField]
         private GameObject _playerPrefab;
+
         private GameObject _playerInstance;
 
+        /// <summary>
+        /// Singleton assignment.
+        /// </summary>
         private void Awake()
         {
-            Instance = this;
+            if (Instance != null)
+                Destroy(gameObject);
+            else
+                Instance = this;
         }
 
         private void Start()
@@ -46,6 +70,10 @@ namespace Assets.Scripts.Pacman
             SetGameState(GameState.Menu);
         }
 
+        /// <summary>
+        /// Reacts the the enter button to start / end the game,
+        /// and escape for pause.
+        /// </summary>
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Return))
@@ -66,6 +94,10 @@ namespace Assets.Scripts.Pacman
             }
         }
 
+        /// <summary>
+        /// Warmup time, with the music.
+        /// </summary>
+        /// <returns></returns>
         private IEnumerator StartRoundRoutine()
         {
             SetGameState(GameState.Warmup);
@@ -73,6 +105,9 @@ namespace Assets.Scripts.Pacman
             SetGameState(GameState.Play);
         }
 
+        /// <summary>
+        /// Pauses / unpauses the game.
+        /// </summary>
         private void PauseGame()
         {
             if (State == GameState.Menu || State == GameState.End)
@@ -89,12 +124,19 @@ namespace Assets.Scripts.Pacman
             }
         }
 
+        /// <summary>
+        /// Adds score.
+        /// </summary>
+        /// <param name="score"></param>
         public void AddScore(int score)
         {
             Score += score;
             _textScore.text = Score.ToString();
         }
 
+        /// <summary>
+        /// Sets the game to end state, destroys the player and saves the score.
+        /// </summary>
         public void OnPlayerWin()
         {
             SoundManager.Instance.StopSounds();
@@ -105,6 +147,10 @@ namespace Assets.Scripts.Pacman
             Score = 0;
         }
 
+        /// <summary>
+        /// Sets the new game state and triggers the event.
+        /// </summary>
+        /// <param name="state"></param>
         private void SetGameState(GameState state)
         {
             OnGameStateChange?.Invoke(this, new GameStateEvent { CurrentState = state, PreviousState = State });
@@ -126,11 +172,6 @@ namespace Assets.Scripts.Pacman
         {
             SetGameState(GameState.Death);
             SoundManager.Instance.PlayDeathSound();
-        }
-
-        public void OnOutputChanged(EventArgs e)
-        {
-            Debug.Log("Callback output changed");
         }
     }
 }

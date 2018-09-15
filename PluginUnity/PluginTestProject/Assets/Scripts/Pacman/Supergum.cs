@@ -2,6 +2,9 @@
 
 namespace Assets.Scripts.Pacman
 {
+    /// <summary>
+    /// Supergum.
+    /// </summary>
     public class Supergum : MonoBehaviour
     {
         [SerializeField]
@@ -12,7 +15,7 @@ namespace Assets.Scripts.Pacman
 
         private void OnTriggerStay2D(Collider2D other)
         {
-            if (other.tag == "Player" /*&& Vector3.Distance(transform.position, other.transform.position) < 0.01f*/)
+            if (other.tag == "Player")
             {
                 GameManager.Instance.AddScore(_reward);
                 TerrainManager.Instance.OnGumEaten();
