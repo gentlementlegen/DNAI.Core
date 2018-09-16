@@ -162,7 +162,7 @@ namespace CorePackage.Entity.Type
                 {
                     if (valAttr.Name == attribute)
                     {
-                        valAttr.SetValue(obj, value);
+                        valAttr.SetValue(obj, Convert.ChangeType(value, valAttr.FieldType));
                         found = true;
                         break;
                     }

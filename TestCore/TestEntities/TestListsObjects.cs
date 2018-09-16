@@ -276,7 +276,7 @@ namespace CoreTest.TestEntities
                 public double toto;
             }
 
-            public double X;
+            public float X;
             public List<double> Y;
             public ZType Z;
         }
@@ -295,7 +295,7 @@ namespace CoreTest.TestEntities
 
             Dictionary<string, dynamic> dicValue = new Dictionary<string, dynamic>
             {
-                { "X", 3.14 },
+                { "X", 3.14f },
                 { "Y", new List<double> { 4.12 } },
                 { "Z", new Dictionary<string, dynamic> { { "toto", -3093.334 } } }
             };
@@ -306,7 +306,7 @@ namespace CoreTest.TestEntities
             }");
             Pos realValue = new Pos
             {
-                X = 3.14,
+                X = 3.14f,
                 Y = new List<double> { 4.12 },
                 Z = new Pos.ZType { toto = -3093.334 }
             };
@@ -314,6 +314,8 @@ namespace CoreTest.TestEntities
             Assert.IsTrue(obj.IsValueOfType(dicValue));
             Assert.IsTrue(obj.IsValueOfType(jsonValue));
             Assert.IsTrue(obj.IsValueOfType(realValue));
+
+            obj.SetAttributeValue(realValue, "X", 3.40);
         }
     }
 }
