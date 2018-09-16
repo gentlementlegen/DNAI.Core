@@ -30,7 +30,7 @@ namespace CorePackage.Execution
         /// Is input passed by reference
         /// </summary>
         private bool reference;
-        
+                
         /// <summary>
         /// Constructor that asks for the declaration to bind
         /// </summary>
@@ -40,6 +40,7 @@ namespace CorePackage.Execution
             this.name = name;
             this.definition = value;
             this.reference = reference;
+            IsValueSet = false;
         }
 
         public Entity.Variable Definition
@@ -77,6 +78,7 @@ namespace CorePackage.Execution
                 if (IsLinked)
                     throw new InvalidOperationException("You cant set value of a linked input");
                 Definition.Value = value;
+                IsValueSet = true;
             }
         }
         
@@ -97,6 +99,11 @@ namespace CorePackage.Execution
         }
 
         /// <summary>
+        /// Tells if input value is set or not
+        /// </summary>
+        public bool IsValueSet { get; set; }
+
+        /// <summary>
         /// Link the input to an instruction at a specific output
         /// </summary>
         /// <remarks>Throws an Error.NotFoundException is not found</remarks>
@@ -109,6 +116,7 @@ namespace CorePackage.Execution
             if (!linked.IsOutputCompatible(outputname, definition.Type))
                 throw new InvalidOperationException("Want to link an input to an incompatible output: "+ Value.ToString() + "(" + definition.Type.ToString() + ") incompatible with " + linked.GetOutputValue(outputname) + "(" + linked.GetOutput(outputname).Definition.Type.ToString() + ")");
             link = new Link(linked, outputname);
+            IsValueSet = true;
         }
 
         /// <summary>
@@ -117,6 +125,7 @@ namespace CorePackage.Execution
         public void Unlink()
         {
             link = null;
+            IsValueSet = false;
         }
 
         /// <summary>

@@ -30,7 +30,10 @@ namespace CorePackage.Execution
 
             foreach (String curr in attributes)
             {
-                stored.SetAttributeValue(objReference.Value, curr, GetInputValue(curr));
+                Input inp = GetInput(curr);
+
+                if (inp.IsValueSet)
+                    stored.SetAttributeValue(objReference.Value, curr, inp.Value);
             }
         }
     }
