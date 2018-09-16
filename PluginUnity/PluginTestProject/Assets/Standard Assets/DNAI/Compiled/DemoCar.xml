@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DemoCar</name>
+    </assembly>
+    <members>
+        <member name="T:DNAI.DemoCar.DemoCar">
+            <summary>
+             Base behaviour for DNAI IA.
+            </summary>
+            </member>
+        <member name="F:DNAI.DemoCar.DemoCar._manager">
+            <summary>
+             Called when output values of the DNAI script change.
+            </summary>
+            </member>
+    </members>
+</doc>

@@ -121,6 +121,7 @@ namespace Core.Plugin.Unity.Editor
 
         public void ReloadScript()
         {
+            _manager.Reset();
             _manager.LoadCommandsFrom(FilePath);
         }
 
