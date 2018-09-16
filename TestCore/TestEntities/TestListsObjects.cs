@@ -88,6 +88,7 @@ namespace CoreTest.TestEntities
             List<List<int>> val = new List<List<int>>();
             
             instruction.SetInputValue("array", val);
+            instruction.SetInputValue("element", new List<int>());
 
             Assert.IsTrue(instruction.GetInputValue("array").Count == 0);
             Assert.IsTrue(instruction.GetInputValue("element").Count == 0);

@@ -27,6 +27,7 @@ namespace CorePackage.Execution
         public Debug(Entity.Variable toprint) : base()
         {
             AddInput("to_print", toprint, true);
+            GetInput("to_print").IsValueSet = true;
         }
 
         /// <summary>

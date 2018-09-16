@@ -62,6 +62,11 @@ namespace CorePackage.Execution
         {
             get
             {
+                if (!IsValueSet)
+                {
+                    throw new InvalidOperationException("Trying to access to the input " + Name + " value which is unknown");
+                }
+
                 if (IsLinked)
                 {
                     if (reference)

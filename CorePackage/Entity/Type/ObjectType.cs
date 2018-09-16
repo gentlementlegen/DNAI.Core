@@ -444,9 +444,12 @@ namespace CorePackage.Entity.Type
         }
 
         /// <see cref="DataType.GetDeepCopyOf(dynamic)"/>
-        public override dynamic GetDeepCopyOf(dynamic value)
+        public override dynamic GetDeepCopyOf(dynamic value, System.Type type = null)
         {
-            dynamic val = Activator.CreateInstance(value.GetType());
+            if (type == null)
+                type = value.GetType();
+
+            dynamic val = Activator.CreateInstance(type);
 
             foreach (KeyValuePair<string, IDefinition> attr in attributes.GetEntities())
             {
