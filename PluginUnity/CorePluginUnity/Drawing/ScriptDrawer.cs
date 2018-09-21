@@ -225,7 +225,7 @@ namespace Core.Plugin.Unity.Drawing
         {
             var manager = new CoreCommand.BinaryManager();
             manager.LoadCommandsFrom(e.FullPath);
-            var elem = listIA.Find(x => x.scriptManager.FilePath == e.FullPath);
+            var elem = listIA.Find(x => x.scriptManager.FilePathAbsolute == e.FullPath);
             //Debug.Log("On File changed. Elem = " + elem + " elem script name = " + e.FullPath + " registered path " + elem?.scriptManager.FilePath);
 
             if (elem != null)
@@ -236,8 +236,7 @@ namespace Core.Plugin.Unity.Drawing
             {
                 var newElem = new ListAIHandler();
                 newElem.OnEnable();
-                newElem.scriptManager.FilePath = e.FullPath;
-                newElem.scriptManager.LoadScript(e.FullPath);
+                newElem.scriptManager.FilePathRelative = newElem.scriptManager.LoadScript(e.FullPath);
                 listIA.Add(newElem);
             }
         }
@@ -249,12 +248,11 @@ namespace Core.Plugin.Unity.Drawing
         /// <param name="e"></param>
         private void OnFileCreated(object sender, FileSystemEventArgs e)
         {
-            if (listIA.Any(x => x.scriptManager.FilePath == e.FullPath))
+            if (listIA.Any(x => x.scriptManager.FilePathAbsolute == e.FullPath))
                 return;
             var newElem = new ListAIHandler();
             newElem.OnEnable();
-            newElem.scriptManager.FilePath = e.FullPath;
-            newElem.scriptManager.LoadScript(e.FullPath);
+            newElem.scriptManager.FilePathRelative = newElem.scriptManager.LoadScript(e.FullPath);
             listIA.Add(newElem);
         }
 
@@ -383,7 +381,7 @@ namespace Core.Plugin.Unity.Drawing
             //Debug.Log("[DEBUG] list ia => " + listIA[index].scriptManager);
             //Debug.Log("[DEBUG] list ia => " + listIA[index].scriptManager.FilePath);
 
-            listIA[index].scriptManager.FilePath = GUI.TextField(gameObjectRect, listIA[index].scriptManager.FilePath);
+            listIA[index].scriptManager.FilePathRelative = GUI.TextField(gameObjectRect, listIA[index].scriptManager.FilePathRelative);
 
             if (miniButton == null)
                 miniButton = "miniButton";
@@ -400,7 +398,7 @@ namespace Core.Plugin.Unity.Drawing
                 if (!string.IsNullOrEmpty(newPath))
                 {
                     //listIA[index].scriptManager.FilePath = newPath;
-                    listIA[index].scriptManager.FilePath = listIA[index].scriptManager.LoadScript(newPath);
+                    listIA[index].scriptManager.FilePathRelative = listIA[index].scriptManager.LoadScript(newPath);
                     ListAI[index].AIName = ListAI[index].scriptManager.GetLoadedScriptName();
                     AssetDatabase.Refresh();
                     _editorWindow.Focus();
