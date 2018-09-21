@@ -202,9 +202,12 @@ namespace CorePackage.Entity.Type
         }
 
         /// <see cref="DataType.GetDeepCopyOf(dynamic)"/>
-        public override dynamic GetDeepCopyOf(dynamic value)
+        public override dynamic GetDeepCopyOf(dynamic value, System.Type type = null)
         {
-            dynamic toret = Activator.CreateInstance(value.GetType());
+            if (type == null)
+                type = value.GetType();
+
+            dynamic toret = Activator.CreateInstance(type);
 
             foreach (var curr in value)
             {

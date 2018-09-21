@@ -29,7 +29,7 @@ namespace CorePackage.Entity
         /// </summary>
         /// <param name="value">The value to copy</param>
         /// <returns>A new instance which is equal to the given one</returns>
-        public abstract dynamic GetDeepCopyOf(dynamic value);
+        public abstract dynamic GetDeepCopyOf(dynamic value, System.Type type = null);
 
         public abstract dynamic OperatorAdd(dynamic lOp, dynamic rOp);
 

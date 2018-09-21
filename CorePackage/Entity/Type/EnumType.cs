@@ -249,9 +249,9 @@ namespace CorePackage.Entity.Type
         }
 
         /// <see cref="DataType.GetDeepCopyOf(dynamic)"/>
-        public override dynamic GetDeepCopyOf(dynamic value)
+        public override dynamic GetDeepCopyOf(dynamic value, System.Type type = null)
         {
-            return stored.GetDeepCopyOf(value);
+            return stored.GetDeepCopyOf(value, type);
         }
     }
 }

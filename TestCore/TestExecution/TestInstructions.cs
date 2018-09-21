@@ -216,6 +216,7 @@ namespace CoreTest
             
             //print("Hello World !")
             CorePackage.Execution.Debug print_hello = new CorePackage.Execution.Debug(new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.String, "Hello World !"));
+            print_hello.SetInputValue("to_print", "Hello");
             //witness = 84
             CorePackage.Execution.Setter true_change = new CorePackage.Execution.Setter(witness);
             true_change.SetInputValue("value", 84);

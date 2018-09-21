@@ -9,6 +9,7 @@ namespace CorePackage.Execution
     public class Append : ExecutionRefreshInstruction
     {
         private DataType _containerType = Entity.Type.Scalar.Integer;
+        private Entity.Type.ListType _listType;
 
         /// <summary>
         /// The type of the container.
@@ -21,6 +22,7 @@ namespace CorePackage.Execution
                 GetInput("element").Definition.Type = value;
                 GetInput("array").Definition.Type = new Entity.Type.ListType(value);
                 _containerType = value;
+                _listType = new Entity.Type.ListType(_containerType);
             }
         }
 
@@ -42,29 +44,10 @@ namespace CorePackage.Execution
         public override void Execute()
         {
             dynamic val = GetInputValue("array");
-            dynamic item = GetInputValue("element");
+            System.Type valType = val.GetType();
 
-            if (val == null)
-            {
-                System.Diagnostics.Debug.WriteLine("List: null");
-            }
-            else
-            {
-                string typename = val.GetType().ToString();
-                string valname = val.ToString();
-                System.Diagnostics.Debug.WriteLine("List: " + typename + ": " + valname);
-            }
-
-            if (item == null)
-            {
-                System.Diagnostics.Debug.WriteLine("Item: null");
-            }
-            else
-            {
-                string typename = item.GetType().ToString();
-                string itemname = item.ToString();
-                System.Diagnostics.Debug.WriteLine("Item: " + typename + ": " + itemname);
-            }
+            Input input = GetInput("element");
+            dynamic item = input.Definition.Type.GetDeepCopyOf(input.Value, valType.GenericTypeArguments[0]);
 
             val?.Add(item);
             SetOutputValue("count", val?.Count);
