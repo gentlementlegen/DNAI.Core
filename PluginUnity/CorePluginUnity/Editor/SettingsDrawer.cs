@@ -147,11 +147,15 @@ namespace Core.Plugin.Unity.Editor
                     Repaint();
                 });
             }
+            if (GUILayout.Button("Logout"))
+            {
+                SetDisconnected();
+            }
+            _settings.AutoLogin = GUILayout.Toggle(_settings.AutoLogin, "Remember me");
             if (GUILayout.Button("Download"))
             {
                 CloudFileWatcher.Access.DownloadSolution();
             }
-            _settings.AutoLogin = GUILayout.Toggle(_settings.AutoLogin, "Remember me");
             //CloudFileWatcher.Watch(_settings.AutoLogin);
         }
 
