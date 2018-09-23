@@ -381,7 +381,7 @@ namespace Core.Plugin.Unity.Drawing
             //Debug.Log("[DEBUG] list ia => " + listIA[index].scriptManager);
             //Debug.Log("[DEBUG] list ia => " + listIA[index].scriptManager.FilePath);
 
-            listIA[index].scriptManager.FilePathRelative = GUI.TextField(gameObjectRect, listIA[index].scriptManager.FilePathRelative);
+            /*listIA[index].scriptManager.FilePathRelative =*/ EditorGUI.TextField(gameObjectRect, listIA[index].scriptManager.FilePathRelative);
 
             if (miniButton == null)
                 miniButton = "miniButton";

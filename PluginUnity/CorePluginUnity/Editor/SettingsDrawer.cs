@@ -117,9 +117,9 @@ namespace Core.Plugin.Unity.Editor
         {
             GUILayout.Label("Credentials");
             GUILayout.Label("Username");
-            _settings.Username = GUILayout.TextField(_settings.Username);
+            _settings.Username = EditorGUILayout.TextField(_settings.Username);
             GUILayout.Label("Password");
-            _password = GUILayout.PasswordField(_password, '*', 25);
+            _password = EditorGUILayout.PasswordField(_password);
             GUILayout.Label(_connectionStatus);
             if (GUILayout.Button("Login"))
             {
