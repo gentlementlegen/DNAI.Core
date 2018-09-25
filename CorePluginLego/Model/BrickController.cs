@@ -5,6 +5,8 @@ namespace CorePluginLego.Model
 {
     public class BrickController : IDisposable
     {
+        public bool IsConnected { get; private set; }
+
         private readonly IConnection _connection;
         private Brick _brick;
 
@@ -17,6 +19,7 @@ namespace CorePluginLego.Model
         {
             _brick = await _connection.Connect();
             _brick.BrickChanged += Brick_BrickChanged;
+            IsConnected = true;
         }
 
         private void Brick_BrickChanged(object sender, BrickChangedEventArgs e)
@@ -32,6 +35,7 @@ namespace CorePluginLego.Model
         public void Dispose()
         {
             _connection?.Dispose();
+            IsConnected = false;
         }
     }
 }

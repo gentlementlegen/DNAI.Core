@@ -57,37 +57,69 @@ namespace CorePluginLego.ViewModel
                     ?? (_connectCommand = new RelayCommand(
                     async () =>
                     {
-                        Status = "Connecting";
-                        _controller = new BrickController(new ConnectionBluetooth("COM3"));
-                        await _controller.ConnectAsync();
-                        Status = "Connected";
+                        if (_controller == null || !_controller.IsConnected)
+                        {
+                            Status = "Connecting...";
+                            _controller = new BrickController(new ConnectionBluetooth(ComPort));
+                            await _controller.ConnectAsync();
+                            Status = "Disconnect";
+                        }
+                        else
+                        {
+                            _controller.Dispose();
+                            Status = "Connect";
+                        }
                     }));
             }
         }
 
-        private RelayCommand _forwardCommand;
+        private RelayCommand<int> _moveCommand;
 
         /// <summary>
         /// Gets the MyCommand.
         /// </summary>
-        public RelayCommand ForwardCommand
+        public RelayCommand<int> MoveCommand
         {
             get
             {
-                return _forwardCommand
-                    ?? (_forwardCommand = new RelayCommand(
-                    () =>
+                return _moveCommand
+                    ?? (_moveCommand = new RelayCommand<int>(
+                    (dir) =>
                     {
+                        AutoPilot = false;
                         _controller.SendCommand((brick) =>
                         {
-                            brick.DirectCommand.TurnMotorAtPowerForTimeAsync(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, 40, 100, false);
+                            brick.DirectCommand.TurnMotorAtPowerForTimeAsync(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * dir, 100, false);
                         });
-                    },
-                    () => true));
+                    }, (dir) => _controller?.IsConnected == true));
             }
         }
 
-        private string _status = "Disconnected";
+        private RelayCommand<int> _turnCommand;
+
+        /// <summary>
+        /// Gets the TurnCommand.
+        /// </summary>
+        public RelayCommand<int> TurnCommand
+        {
+            get
+            {
+                return _turnCommand
+                    ?? (_turnCommand = new RelayCommand<int>(
+                    (dir) =>
+                    {
+                        AutoPilot = false;
+                        _controller.SendCommand((brick) =>
+                        {
+                            brick.BatchCommand.TurnMotorAtPowerForTime(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * dir, 100, false);
+                            brick.BatchCommand.TurnMotorAtPowerForTime(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * -dir, 100, false);
+                        });
+                    },
+                    (dir) => _controller?.IsConnected == true));
+            }
+        }
+
+        private string _status = "Connect";
 
         /// <summary>
         /// Sets and gets the Status property.
@@ -102,6 +134,27 @@ namespace CorePluginLego.ViewModel
             set
             {
                 Set(ref _status, value);
+            }
+        }
+
+        private bool _autoPilot;
+
+        public bool AutoPilot
+        { get => _autoPilot; set => Set(ref _autoPilot, value); }
+
+        private string _comPort = "COM3";
+
+        public string ComPort
+        { get => _comPort; set => Set(ref _comPort, value); }
+
+        private int _velocity = 40;
+
+        public int Velocity
+        {
+            get => _velocity;
+            set
+            {
+                Set(ref _velocity, value);
             }
         }
     }
