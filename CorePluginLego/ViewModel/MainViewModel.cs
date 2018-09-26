@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using CorePluginLego.Model;
 using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Win32;
 
 namespace CorePluginLego.ViewModel
 {
@@ -119,6 +120,34 @@ namespace CorePluginLego.ViewModel
             }
         }
 
+        private RelayCommand _pickFileCommand;
+
+        /// <summary>
+        /// Gets the PickFileCommand.
+        /// </summary>
+        public RelayCommand PickFileCommand
+        {
+            get
+            {
+                return _pickFileCommand
+                    ?? (_pickFileCommand = new RelayCommand(
+                    () =>
+                    {
+                        var dialog = new System.Windows.Forms.OpenFileDialog();
+                        switch (dialog.ShowDialog())
+                        {
+                            case System.Windows.Forms.DialogResult.OK:
+                                Path = dialog.FileName;
+                                break;
+                            case System.Windows.Forms.DialogResult.Cancel:
+                                break;
+                            default:
+                                break;
+                        }
+                    }));
+            }
+        }
+
         private string _status = "Connect";
 
         /// <summary>
@@ -140,7 +169,17 @@ namespace CorePluginLego.ViewModel
         private bool _autoPilot;
 
         public bool AutoPilot
-        { get => _autoPilot; set => Set(ref _autoPilot, value); }
+        {
+            get => _autoPilot;
+            set
+            {
+                Set(ref _autoPilot, value);
+                if (value)
+                    _controller.StartAutoPilot(Path);
+                else
+                    _controller.StopAutopilot();
+            }
+        }
 
         private string _comPort = "COM3";
 
@@ -157,5 +196,10 @@ namespace CorePluginLego.ViewModel
                 Set(ref _velocity, value);
             }
         }
+
+        private string _path;
+
+        public string Path
+        { get => _path; set => Set(ref _path, value); }
     }
 }

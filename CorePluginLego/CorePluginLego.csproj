@@ -9,11 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CorePluginLego</RootNamespace>
     <AssemblyName>CorePluginLego</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,6 +54,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -127,6 +129,36 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BinarySerializer\BinarySerializer.csproj">
+      <Project>{89733d6e-a3d3-46eb-801d-8c7302308e23}</Project>
+      <Name>BinarySerializer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreCommand\CoreCommand.csproj">
+      <Project>{022ffc42-784d-4d25-8598-3e356dc7b7db}</Project>
+      <Name>CoreCommand</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreControl\CoreControl.csproj">
+      <Project>{dd2b786e-17b1-443b-a449-49199b6a46a8}</Project>
+      <Name>CoreControl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreDaemon\CoreDaemon.csproj">
+      <Project>{17546f12-066e-4435-afd1-22dc480fa744}</Project>
+      <Name>CoreDaemon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreNetwork\CoreNetwork.csproj">
+      <Project>{4bdcaf42-5631-40f4-a497-6d8410085579}</Project>
+      <Name>CoreNetwork</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CorePackage\CorePackage.csproj">
+      <Project>{dc0c6fc8-7d9d-4ac6-9b64-c8e3c39ca105}</Project>
+      <Name>CorePackage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventServerClient\EventClient.csproj">
+      <Project>{2c4dee9a-8b97-449b-9839-0cbd35a5306e}</Project>
+      <Name>EventClient</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

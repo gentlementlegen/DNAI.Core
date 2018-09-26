@@ -6,8 +6,8 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
 		xmlns:s="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d ignore"
-        Height="350"
-        Width="350"
+        Height="370"
+        Width="300"
         Title="DNAI Lego"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     
@@ -23,6 +23,7 @@
 
 		<Grid Margin="10">
 			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
@@ -42,7 +43,7 @@
 						Command="{Binding ConnectCommand}"/>
 			</Grid>-->
 
-			<UniformGrid Grid.Row="1" Margin="0 0 0 10"
+			<UniformGrid Grid.Row="1"
 						 Columns="2">
 				<TextBlock Grid.Column="0"  TextWrapping="Wrap"
 						   Text="Connection" />
@@ -53,9 +54,15 @@
 				<TextBlock Text="Car velocity" />
 				<TextBox Text="{Binding Velocity}" />
 			</UniformGrid>
-			
+
+			<DockPanel Grid.Row="2" Margin="0 0 0 10"
+					   FlowDirection="RightToLeft">
+				<Button Content="Path" Command="{Binding PickFileCommand}"/>
+				<TextBox Text="{Binding Path}" TextAlignment="Right" IsReadOnly="True"/>
+			</DockPanel>
+
 			<!-- Manual controls -->
-			<Grid Grid.Row="2">
+			<Grid Grid.Row="3">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition />
 				</Grid.ColumnDefinitions>
