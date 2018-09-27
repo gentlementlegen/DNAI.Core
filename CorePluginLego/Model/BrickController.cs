@@ -1,5 +1,6 @@
 ﻿using Lego.Ev3.Core;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 
@@ -8,12 +9,17 @@ namespace CorePluginLego.Model
     public class BrickController : IDisposable
     {
         public bool IsConnected { get; private set; }
+        public float Distance { get; private set; } = 100;
+
+        public float Velocity = 40;
+        private float MinDistance = 10;
 
         private readonly IConnection _connection;
         private Brick _brick;
         private readonly BackgroundWorker _backgroundWorker;
         private bool _isAutoPilot;
-        private readonly CoreCommand.BinaryManager _manager = new CoreCommand.BinaryManager();
+        private static readonly CoreCommand.BinaryManager _manager = new CoreCommand.BinaryManager();
+        private readonly AI _ai = new AI();
 
         public BrickController(IConnection connection)
         {
@@ -36,6 +42,7 @@ namespace CorePluginLego.Model
         private void Brick_BrickChanged(object sender, BrickChangedEventArgs e)
         {
             Console.WriteLine("brick changed");
+            Distance = e.Ports[InputPort.Four].SIValue;
         }
 
         public void SendCommand(Action<Brick> action)
@@ -81,7 +88,10 @@ namespace CorePluginLego.Model
                     e.Cancel = true;
                     break;
                 }
-                Console.WriteLine("hello");
+                _ai.minDistance = MinDistance;
+                _ai.speed = Velocity;
+                _ai.UpdateDirection(_ai, Distance, Distance);
+                Console.WriteLine(_ai.X + " Y" + _ai.Y + " Z" + _ai.Z + " dist" + _ai.minDistance + " speed" + _ai.speed);
                 Thread.Sleep(1);
             }
         }
@@ -90,6 +100,20 @@ namespace CorePluginLego.Model
         {
             _isAutoPilot = false;
             _backgroundWorker.CancelAsync();
+        }
+
+        public class AI
+        {
+            public float X;
+            public float Y;
+            public float Z;
+            public float minDistance;
+            public float speed;
+
+            public void UpdateDirection(AI @this, float @leftDistance, float @rightDistance)
+            {
+                _manager.Controller.CallFunction(8, new Dictionary<string, dynamic> { { "this", (AI)@this }, { "leftDistance", (float)@leftDistance }, { "rightDistance", (float)@rightDistance }, });
+            }
         }
     }
 }

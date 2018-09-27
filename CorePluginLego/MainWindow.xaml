@@ -67,7 +67,9 @@
 					<ColumnDefinition />
 				</Grid.ColumnDefinitions>
 				<UniformGrid Columns="3" Rows="3">
-					<Button Content="" Visibility="Hidden"/>
+					<TextBlock Text="{Binding Distance}" VerticalAlignment="Center"
+							   HorizontalAlignment="Center"
+							   FontSize="20"/>
 					<Button FontFamily="Segoe MDL2 Assets" Content="&#xF0AD;"
 							Height="70" FontSize="30"
 							Command="{Binding MoveCommand, UpdateSourceTrigger=PropertyChanged}">
@@ -75,7 +77,9 @@
 							<s:Int32>1</s:Int32>
 						</Button.CommandParameter>
 					</Button>
-					<Button Content="" Visibility="Hidden"/>
+					<TextBlock Text="{Binding Distance}" VerticalAlignment="Center"
+							   HorizontalAlignment="Center"
+							   FontSize="20"/>
 					<Button FontFamily="Segoe MDL2 Assets" Content="&#xF0B0;"
 							FontSize="30"
 							Command="{Binding TurnCommand, UpdateSourceTrigger=PropertyChanged}">

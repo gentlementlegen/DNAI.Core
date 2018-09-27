@@ -194,6 +194,8 @@ namespace CorePluginLego.ViewModel
             set
             {
                 Set(ref _velocity, value);
+                if (_controller != null)
+                    _controller.Velocity = value;
             }
         }
 
@@ -201,5 +203,7 @@ namespace CorePluginLego.ViewModel
 
         public string Path
         { get => _path; set => Set(ref _path, value); }
+
+        public string Distance => _controller?.Distance.ToString();
     }
 }
