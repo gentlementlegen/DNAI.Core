@@ -2,6 +2,7 @@
 using CorePluginLego.Model;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
+using System;
 
 namespace CorePluginLego.ViewModel
 {
@@ -193,8 +194,7 @@ namespace CorePluginLego.ViewModel
             get => _velocity;
             set
             {
-                Set(ref _velocity, value);
-                if (_controller != null)
+                if (Set(ref _velocity, value) && _controller != null)
                     _controller.Velocity = value;
             }
         }
@@ -203,6 +203,18 @@ namespace CorePluginLego.ViewModel
 
         public string Path
         { get => _path; set => Set(ref _path, value); }
+
+        private float _minDistance = 10f;
+
+        public float MinDistance
+        {
+            get => _minDistance;
+            set
+            {
+                if (Set(ref _minDistance, value) && _controller != null)
+                    _controller.MinDistance = value;
+            }
+        }
 
         public string Distance => _controller?.Distance.ToString();
     }

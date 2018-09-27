@@ -12,7 +12,7 @@ namespace CorePluginLego.Model
         public float Distance { get; private set; } = 100;
 
         public float Velocity = 40;
-        private float MinDistance = 10;
+        public float MinDistance = 10;
 
         private readonly IConnection _connection;
         private Brick _brick;

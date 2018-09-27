@@ -6,7 +6,7 @@
         xmlns:ignore="http://www.galasoft.ch/ignore"
 		xmlns:s="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d ignore"
-        Height="370"
+        Height="390"
         Width="300"
         Title="DNAI Lego"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
@@ -53,6 +53,8 @@
 				<TextBox Text="{Binding ComPort}" />
 				<TextBlock Text="Car velocity" />
 				<TextBox Text="{Binding Velocity}" />
+				<TextBlock Text="Car wall limit" />
+				<TextBox Text="{Binding MinDistance}" />
 			</UniformGrid>
 
 			<DockPanel Grid.Row="2" Margin="0 0 0 10"
