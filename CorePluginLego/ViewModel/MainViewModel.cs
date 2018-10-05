@@ -1,7 +1,6 @@
-﻿using GalaSoft.MvvmLight;
-using CorePluginLego.Model;
+﻿using CorePluginLego.Model;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using Microsoft.Win32;
 using System;
 
 namespace CorePluginLego.ViewModel
@@ -17,14 +16,14 @@ namespace CorePluginLego.ViewModel
         private readonly IDataService _dataService;
         private readonly IConnection _connection;
 
-        private BrickController _controller;
+        private BrickControllerNxt _controller;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel(IDataService dataService)
         {
-            _connection = new ConnectionBluetooth();
+            _connection = new ConnectionBluetoothNxt();
 
             _dataService = dataService;
             _dataService.GetData(
@@ -59,10 +58,12 @@ namespace CorePluginLego.ViewModel
                     ?? (_connectCommand = new RelayCommand(
                     async () =>
                     {
-                        if (_controller == null || !_controller.IsConnected)
+                        if (_controller?.IsConnected != true)
                         {
                             Status = "Connecting...";
-                            _controller = new BrickController(new ConnectionBluetooth(ComPort));
+                            //_controller = new BrickController(new ConnectionBluetooth("COM5"));
+                            _controller = new BrickControllerNxt(new ConnectionBluetoothNxt(Convert.ToByte(ComPort)));
+                            System.Threading.Thread.Sleep(100);
                             await _controller.ConnectAsync();
                             Status = "Disconnect";
                         }
@@ -73,6 +74,11 @@ namespace CorePluginLego.ViewModel
                         }
                     }));
             }
+        }
+
+        private void Brick_BrickChanged(object sender, Lego.Ev3.Core.BrickChangedEventArgs e)
+        {
+            //throw new NotImplementedException();
         }
 
         private RelayCommand<int> _moveCommand;
@@ -91,7 +97,9 @@ namespace CorePluginLego.ViewModel
                         AutoPilot = false;
                         _controller.SendCommand((brick) =>
                         {
-                            brick.DirectCommand.TurnMotorAtPowerForTimeAsync(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * dir, 100, false);
+                            //brick.DirectCommand.TurnMotorAtPowerForTimeAsync(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * dir, 100, false);
+                            brick.MotorA.Run((sbyte)(Velocity * dir), 360);
+                            brick.MotorB.Run((sbyte)(Velocity * dir), 360);
                         });
                     }, (dir) => _controller?.IsConnected == true));
             }
@@ -113,8 +121,10 @@ namespace CorePluginLego.ViewModel
                         AutoPilot = false;
                         _controller.SendCommand((brick) =>
                         {
-                            brick.BatchCommand.TurnMotorAtPowerForTime(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * dir, 100, false);
-                            brick.BatchCommand.TurnMotorAtPowerForTime(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * -dir, 100, false);
+                            //brick.BatchCommand.TurnMotorAtPowerForTime(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * dir, 100, false);
+                            brick.MotorA.Run((sbyte)(Velocity * dir), 360);
+                            //brick.BatchCommand.TurnMotorAtPowerForTime(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * -dir, 100, false);
+                            brick.MotorA.Run((sbyte)(Velocity * -dir), 360);
                         });
                     },
                     (dir) => _controller?.IsConnected == true));
@@ -140,8 +150,10 @@ namespace CorePluginLego.ViewModel
                             case System.Windows.Forms.DialogResult.OK:
                                 Path = dialog.FileName;
                                 break;
+
                             case System.Windows.Forms.DialogResult.Cancel:
                                 break;
+
                             default:
                                 break;
                         }
@@ -153,7 +165,7 @@ namespace CorePluginLego.ViewModel
 
         /// <summary>
         /// Sets and gets the Status property.
-        /// Changes to that property's value raise the PropertyChanged event. 
+        /// Changes to that property's value raise the PropertyChanged event.
         /// </summary>
         public string Status
         {
@@ -182,7 +194,7 @@ namespace CorePluginLego.ViewModel
             }
         }
 
-        private string _comPort = "COM3";
+        private string _comPort = "6";
 
         public string ComPort
         { get => _comPort; set => Set(ref _comPort, value); }

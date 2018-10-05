@@ -1,11 +1,10 @@
 ﻿using Lego.Ev3.Core;
 using Lego.Ev3.Desktop;
-using System;
 using System.Threading.Tasks;
 
 namespace CorePluginLego.Model
 {
-    public class ConnectionBluetooth : IConnection, IDisposable
+    public class ConnectionBluetooth : IConnection<Brick>
     {
         private readonly Brick _brick;
 

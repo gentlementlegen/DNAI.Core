@@ -1,4 +1,5 @@
 ﻿using Lego.Ev3.Core;
+using NKH.MindSqualls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,7 +7,7 @@ using System.Threading;
 
 namespace CorePluginLego.Model
 {
-    public class BrickController : IDisposable
+    public class BrickControllerNxt : IDisposable
     {
         public bool IsConnected { get; private set; }
         public float Distance { get; private set; } = 100;
@@ -14,14 +15,14 @@ namespace CorePluginLego.Model
         public float Velocity = 40;
         public float MinDistance = 10;
 
-        private readonly IConnection<Brick> _connection;
-        private Brick _brick;
+        private readonly IConnection<NxtBrick> _connection;
+        private NxtBrick _brick;
         private readonly BackgroundWorker _backgroundWorker;
         private bool _isAutoPilot;
         private static readonly CoreCommand.BinaryManager _manager = new CoreCommand.BinaryManager();
         private readonly AI _ai = new AI();
 
-        public BrickController(IConnection<Brick> connection)
+        public BrickControllerNxt(IConnection<NxtBrick> connection)
         {
             _connection = connection;
 
@@ -34,9 +35,24 @@ namespace CorePluginLego.Model
 
         public async System.Threading.Tasks.Task ConnectAsync()
         {
-            _brick = await _connection.Connect();
-            _brick.BrickChanged += Brick_BrickChanged;
+            //_brick = await _connection.Connect();
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                _brick = new NxtBrick(NxtCommLinkType.Bluetooth, 6);
+                _brick.MotorA = new NxtMotor();
+                _brick.MotorB = new NxtMotor();
+                _brick.Sensor2 = new NxtUltrasonicSensor();
+                _brick.Sensor2.PollInterval = 50;
+                _brick.Sensor2.OnPolled += Sensor2_OnPolled;
+                _brick.Connect();
+            });
             IsConnected = true;
+        }
+
+        private void Sensor2_OnPolled(NxtPollable polledItem)
+        {
+            Distance = (float)(_brick.Sensor2 as NxtUltrasonicSensor).DistanceCm;
+            Console.WriteLine("brick changed distance => " + Distance);
         }
 
         private void Brick_BrickChanged(object sender, BrickChangedEventArgs e)
@@ -45,7 +61,7 @@ namespace CorePluginLego.Model
             Distance = e.Ports[InputPort.Four].SIValue;
         }
 
-        public void SendCommand(Action<Brick> action)
+        public void SendCommand(Action<NxtBrick> action)
         {
             action?.Invoke(_brick);
         }
@@ -92,7 +108,12 @@ namespace CorePluginLego.Model
                 _ai.speed = Velocity;
                 _ai.UpdateDirection(_ai, Distance, Distance);
                 Console.WriteLine(_ai.X + " Y" + _ai.Y + " Z" + _ai.Z + " dist" + _ai.minDistance + " speed" + _ai.speed);
-                Thread.Sleep(1);
+                if (_ai.Z > 10)
+                {
+                    _brick.MotorA.Run(100, 180);
+                    _brick.MotorB.Run(100, 180);
+                }
+                Thread.Sleep(100);
             }
         }
 
