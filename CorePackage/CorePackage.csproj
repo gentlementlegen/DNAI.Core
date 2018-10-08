@@ -97,6 +97,7 @@
     <Compile Include="Execution\ExecRefresh\FunctionCall.cs" />
     <Compile Include="Execution\ExecRefresh\Insert.cs" />
     <Compile Include="Execution\ExecRefresh\MachineLearningRunner.cs" />
+    <Compile Include="Execution\AccessRefresh\Random.cs" />
     <Compile Include="Execution\ExecRefresh\Remove.cs" />
     <Compile Include="Execution\ExecRefresh\RemoveIndex.cs" />
     <Compile Include="Execution\ExecRefresh\RemoveValueAtKey.cs" />
