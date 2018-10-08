@@ -41,17 +41,18 @@ namespace CorePluginLego.Model
                 _brick = new NxtBrick(NxtCommLinkType.Bluetooth, 6);
                 _brick.MotorA = new NxtMotor();
                 _brick.MotorB = new NxtMotor();
-                _brick.Sensor2 = new NxtUltrasonicSensor();
-                _brick.Sensor2.PollInterval = 50;
-                _brick.Sensor2.OnPolled += Sensor2_OnPolled;
+                _brick.MotorC = new NxtMotor();
+                _brick.Sensor1 = new NxtUltrasonicSensor();
+                _brick.Sensor1.PollInterval = 50;
+                _brick.Sensor1.OnPolled += Sensor1_OnPolled;
                 _brick.Connect();
             });
             IsConnected = true;
         }
 
-        private void Sensor2_OnPolled(NxtPollable polledItem)
+        private void Sensor1_OnPolled(NxtPollable polledItem)
         {
-            Distance = (float)(_brick.Sensor2 as NxtUltrasonicSensor).DistanceCm;
+            Distance = (float)(_brick.Sensor1 as NxtUltrasonicSensor).DistanceCm;
             Console.WriteLine("brick changed distance => " + Distance);
         }
 
@@ -108,10 +109,15 @@ namespace CorePluginLego.Model
                 _ai.speed = Velocity;
                 _ai.UpdateDirection(_ai, Distance, Distance);
                 Console.WriteLine(_ai.X + " Y" + _ai.Y + " Z" + _ai.Z + " dist" + _ai.minDistance + " speed" + _ai.speed);
-                if (_ai.Z > 10)
+                if (_ai.Z > 15)
                 {
-                    _brick.MotorA.Run(100, 180);
                     _brick.MotorB.Run(100, 180);
+                    _brick.MotorC.Run(100, 180);
+                }
+                else
+                {
+                    _brick.MotorB.Brake();
+                    _brick.MotorC.Brake();
                 }
                 Thread.Sleep(100);
             }

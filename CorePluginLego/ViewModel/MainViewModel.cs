@@ -37,13 +37,12 @@ namespace CorePluginLego.ViewModel
                 });
         }
 
-        ////public override void Cleanup()
-        ////{
-        ////    // Clean up if needed
-
-        ////    base.Cleanup();
-        ////}
-        ///
+        public override void Cleanup()
+        {
+            // Clean up if needed
+            base.Cleanup();
+            _controller?.Dispose();
+        }
 
         private RelayCommand _connectCommand;
 
@@ -98,8 +97,8 @@ namespace CorePluginLego.ViewModel
                         _controller.SendCommand((brick) =>
                         {
                             //brick.DirectCommand.TurnMotorAtPowerForTimeAsync(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * dir, 100, false);
-                            brick.MotorA.Run((sbyte)(Velocity * dir), 360);
                             brick.MotorB.Run((sbyte)(Velocity * dir), 360);
+                            brick.MotorC.Run((sbyte)(Velocity * dir), 360);
                         });
                     }, (dir) => _controller?.IsConnected == true));
             }
@@ -122,9 +121,9 @@ namespace CorePluginLego.ViewModel
                         _controller.SendCommand((brick) =>
                         {
                             //brick.BatchCommand.TurnMotorAtPowerForTime(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * dir, 100, false);
-                            brick.MotorA.Run((sbyte)(Velocity * dir), 360);
+                            brick.MotorB.Run((sbyte)(Velocity * dir), 360);
                             //brick.BatchCommand.TurnMotorAtPowerForTime(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * -dir, 100, false);
-                            brick.MotorA.Run((sbyte)(Velocity * -dir), 360);
+                            brick.MotorC.Run((sbyte)(Velocity * -dir), 360);
                         });
                     },
                     (dir) => _controller?.IsConnected == true));
