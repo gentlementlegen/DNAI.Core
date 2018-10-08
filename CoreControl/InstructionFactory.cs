@@ -60,7 +60,12 @@ namespace CoreControl
             CLEAR,
             FILL,
             SET_VALUE_AT,
-            RETURN
+            RETURN,
+            HAS_KEY,
+            SET_VALUE_AT_KEY,
+            REMOVE_VALUE_AT_KEY,
+            MACHINE_LEARNING_RUNNER,
+            RANDOM
         };
 
         /// <summary>
@@ -109,7 +114,12 @@ namespace CoreControl
             { INSTRUCTION_ID.CLEAR, 1 },
             { INSTRUCTION_ID.FILL, 1 },
             { INSTRUCTION_ID.SET_VALUE_AT, 1 },
-            { INSTRUCTION_ID.RETURN, 0 }
+            { INSTRUCTION_ID.RETURN, 0 },
+            { INSTRUCTION_ID.HAS_KEY, 0 },
+            { INSTRUCTION_ID.SET_VALUE_AT_KEY, 0 },
+            { INSTRUCTION_ID.REMOVE_VALUE_AT_KEY, 0 },
+            { INSTRUCTION_ID.MACHINE_LEARNING_RUNNER, 0 },
+            { INSTRUCTION_ID.RANDOM, 0 }
         };
 
         /// <summary>
@@ -158,7 +168,12 @@ namespace CoreControl
             { INSTRUCTION_ID.CLEAR,             (List<IDefinition> args) => new Clear((DataType)args[0]) },
             { INSTRUCTION_ID.FILL,              (List<IDefinition> args) => new Fill((DataType)args[0]) },
             { INSTRUCTION_ID.SET_VALUE_AT,      (List<IDefinition> args) => new SetValueAt((DataType)args[0]) },
-            { INSTRUCTION_ID.RETURN,            (List<IDefinition> args) => new Return() }
+            { INSTRUCTION_ID.RETURN,            (List<IDefinition> args) => new Return() },
+            { INSTRUCTION_ID.HAS_KEY,           (List<IDefinition> args) => new HasKey() },
+            { INSTRUCTION_ID.SET_VALUE_AT_KEY,  (List<IDefinition> args) => new SetValueAtKey() },
+            { INSTRUCTION_ID.REMOVE_VALUE_AT_KEY,       (List<IDefinition> args) => new RemoveValueAtKey() },
+            { INSTRUCTION_ID.MACHINE_LEARNING_RUNNER,   (List<IDefinition> args) => new MachineLearningRunner() },
+            { INSTRUCTION_ID.RANDOM,            (List<IDefinition> args) => new CorePackage.Execution.Random() }
         };
 
         /// <summary>

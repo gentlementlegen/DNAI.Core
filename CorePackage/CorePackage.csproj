@@ -44,6 +44,8 @@
     <Compile Include="Entity\Context.cs" />
     <Compile Include="Entity\DataType.cs" />
     <Compile Include="Entity\Function.cs" />
+    <Compile Include="Entity\Type\AnyType.cs" />
+    <Compile Include="Entity\Type\DictType.cs" />
     <Compile Include="Entity\Type\EnumType.cs" />
     <Compile Include="Entity\Type\ListType.cs" />
     <Compile Include="Entity\Type\ObjectType.cs" />
@@ -57,6 +59,7 @@
     <Compile Include="Execution\AccessRefresh\EnumSplitter.cs" />
     <Compile Include="Execution\AccessRefresh\Getter.cs" />
     <Compile Include="Execution\AccessRefresh\GetAttributes.cs" />
+    <Compile Include="Execution\AccessRefresh\HasKey.cs" />
     <Compile Include="Execution\AccessRefresh\Operator.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\BinaryOperator.cs" />
     <Compile Include="Execution\AccessRefresh\Operators\Binary\LogicalOperator.cs" />
@@ -93,12 +96,15 @@
     <Compile Include="Execution\ExecRefresh\Formula.cs" />
     <Compile Include="Execution\ExecRefresh\FunctionCall.cs" />
     <Compile Include="Execution\ExecRefresh\Insert.cs" />
+    <Compile Include="Execution\ExecRefresh\MachineLearningRunner.cs" />
     <Compile Include="Execution\ExecRefresh\Remove.cs" />
     <Compile Include="Execution\ExecRefresh\RemoveIndex.cs" />
+    <Compile Include="Execution\ExecRefresh\RemoveValueAtKey.cs" />
     <Compile Include="Execution\ExecRefresh\SetAttribute.cs" />
     <Compile Include="Execution\ExecRefresh\Setter.cs" />
     <Compile Include="Execution\AccessRefresh\Size.cs" />
     <Compile Include="Execution\ExecRefresh\SetValueAt.cs" />
+    <Compile Include="Execution\ExecRefresh\SetValueAtKey.cs" />
     <Compile Include="Execution\ExecRefresh\Statement.cs" />
     <Compile Include="Execution\ExecRefresh\Statements\Break.cs" />
     <Compile Include="Execution\ExecRefresh\Statements\Continue.cs" />

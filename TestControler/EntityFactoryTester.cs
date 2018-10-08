@@ -33,27 +33,27 @@ namespace TestControler
             
             factory.Create<Context>();
             uint ctx = factory.LastID;
-            Assert.IsTrue(ctx == 6 && factory.Size == 7);
+            Assert.IsTrue(ctx == 8 && factory.Size == 9);
 
             factory.Create<Function>();
             uint fnt = factory.LastID;
-            Assert.IsTrue(fnt == 7 && factory.Size == 8);
+            Assert.IsTrue(fnt == 9 && factory.Size == 10);
 
             factory.Create<Variable>();
             uint var = factory.LastID;
-            Assert.IsTrue(var == 8 && factory.Size == 9);
+            Assert.IsTrue(var == 10 && factory.Size == 11);
 
             factory.Create<EnumType>();
             uint enu = factory.LastID;
-            Assert.IsTrue(enu == 9 && factory.Size == 10);
+            Assert.IsTrue(enu == 11 && factory.Size == 12);
 
             factory.Create<ListType>();
             uint lst = factory.LastID;
-            Assert.IsTrue(lst == 10 && factory.Size == 11);
+            Assert.IsTrue(lst == 12 && factory.Size == 13);
 
             factory.Create<ObjectType>();
             uint obj = factory.LastID;
-            Assert.IsTrue(obj == 11 && factory.Size == 12);
+            Assert.IsTrue(obj == 13 && factory.Size == 14);
 
             Assert.IsTrue(factory.Find(CoreControl.EntityFactory.BASE_ID.GLOBAL_CTX).GetType() == typeof(Context));
             Assert.IsTrue(factory.Find(CoreControl.EntityFactory.BASE_ID.BOOLEAN_TYPE) == Scalar.Boolean);

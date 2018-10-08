@@ -457,5 +457,10 @@ namespace CorePackage.Entity.Type
             }
             return val;
         }
+
+        public Dictionary<string, IDefinition> GetEntities()
+        {
+            return attributes.GetEntities();
+        }
     }
 }

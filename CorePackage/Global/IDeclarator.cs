@@ -88,6 +88,8 @@ namespace CorePackage.Global
         /// <returns>List of entities with the given visibility</returns>
         Dictionary<string, IDefinition> GetEntities(AccessMode visibility);
 
+        Dictionary<string, IDefinition> GetEntities();
+
         /// <summary>
         /// Checks if an entity is in the declarator
         /// </summary>

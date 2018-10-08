@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace CoreCommand
 {   
@@ -14,7 +15,7 @@ namespace CoreCommand
     public class BinaryManager : IManager
     {
         private static UInt32 MagicNumber = 0xFA7BEA57; //FATBEAST
-
+        
         /// <summary>
         /// Controller on which dispatch command
         /// </summary>

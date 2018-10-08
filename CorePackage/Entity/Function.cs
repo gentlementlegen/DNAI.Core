@@ -45,6 +45,8 @@ namespace CorePackage.Entity
         /// </summary>
         private Dictionary<UInt32, Execution.Instruction> instructions = new Dictionary<uint, Execution.Instruction>();
 
+        public IEnumerable<Execution.Instruction> Instructions { get { return instructions.Values; } }
+
         /// <summary>
         /// Represents the current internal instruction index
         /// </summary>
@@ -467,6 +469,11 @@ namespace CorePackage.Entity
         public bool Contains(string name)
         {
             return scope.Contains(name);
+        }
+
+        public Dictionary<string, IDefinition> GetEntities()
+        {
+            return scope.GetEntities();
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CorePackage.Entity.Type;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CoreControl
 {
@@ -8,6 +10,8 @@ namespace CoreControl
     /// </summary>
     public class EntityFactory
     {
+        public static UInt32 MagicNumber = 0xFA7BEA57; //FATBEAST
+
         /// <summary>
         /// Ids of entities created by default
         /// </summary>
@@ -18,7 +22,9 @@ namespace CoreControl
             INTEGER_TYPE = 2,
             FLOATING_TYPE = 3,
             CHARACTER_TYPE = 4,
-            STRING_TYPE = 5
+            STRING_TYPE = 5,
+            DICT_TYPE = 6,
+            ANY_TYPE = 7
         }
 
         /// <summary>
@@ -70,6 +76,8 @@ namespace CoreControl
         /// </summary>
         private Dictionary<UInt32, CorePackage.Global.IDefinition> definitions = new Dictionary<uint, CorePackage.Global.IDefinition>();
 
+        public Dictionary<UInt32, CorePackage.Global.IDefinition> Definitions { get { return definitions; } }
+
         /// <summary>
         /// Associates an entity definition to its id
         /// </summary>
@@ -118,6 +126,18 @@ namespace CoreControl
             CorePackage.Entity.Type.Scalar.String.Parent = root;
             CorePackage.Entity.Type.Scalar.String.Name = "String";
             root.Declare(CorePackage.Entity.Type.Scalar.String, "String", CorePackage.Global.AccessMode.EXTERNAL);
+
+            //dict type is in 6
+            AddEntity(CorePackage.Entity.Type.DictType.Instance);
+            CorePackage.Entity.Type.DictType.Instance.Parent = root;
+            CorePackage.Entity.Type.DictType.Instance.Name = "Dict";
+            root.Declare(CorePackage.Entity.Type.DictType.Instance, "Dict", CorePackage.Global.AccessMode.EXTERNAL);
+
+            //any type is in 7
+            AddEntity(CorePackage.Entity.Type.AnyType.Instance);
+            CorePackage.Entity.Type.AnyType.Instance.Parent = root;
+            CorePackage.Entity.Type.AnyType.Instance.Name = "Any";
+            root.Declare(CorePackage.Entity.Type.AnyType.Instance, "Any", CorePackage.Global.AccessMode.EXTERNAL);
         }
 
         /// <summary>
@@ -533,6 +553,35 @@ namespace CoreControl
             Rename(containerID, lastName, newName);
         }
 
+        /// <summary>
+        /// Find the type of the entity given
+        /// </summary>
+        /// <param name="entityId">Id of the entity</param>
+        /// <returns>Type of the entity</returns>
+        public ENTITY GetEntityType(UInt32 entityId)
+        {
+            CorePackage.Global.Definition entity = FindDefinitionOfType<CorePackage.Global.Definition>(entityId);
+
+            if (entity.GetType() == typeof(CorePackage.Entity.Type.EnumType))
+                return EntityFactory.ENTITY.ENUM_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ObjectType))
+                return EntityFactory.ENTITY.OBJECT_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ListType))
+                return EntityFactory.ENTITY.LIST_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.DataType)
+                || entity.GetType() == typeof(CorePackage.Entity.Type.ScalarType)
+                || entity.GetType() == typeof(CorePackage.Entity.Type.DictType)
+                || entity.GetType() == typeof(CorePackage.Entity.Type.AnyType))
+                return EntityFactory.ENTITY.DATA_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Function))
+                return EntityFactory.ENTITY.FUNCTION;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Variable))
+                return EntityFactory.ENTITY.VARIABLE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Context))
+                return EntityFactory.ENTITY.CONTEXT;
+            throw new InvalidOperationException("Controller.GetEntityType : Entity " + entity.FullName + " as invalid entity type " + entity.GetType().ToString());
+        }
+
         public void merge(EntityFactory factory)
         {
             foreach (KeyValuePair<uint, CorePackage.Global.IDefinition> curr in factory.definitions)
@@ -552,5 +601,6 @@ namespace CoreControl
                 globalContext.Declare(curr.Value, key, factoryContext.GetVisibilityOf(curr.Key));
             }
         }
+
     }
 }

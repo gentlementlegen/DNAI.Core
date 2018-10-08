@@ -17,6 +17,12 @@ namespace TestSerializer
             public Int32 posY { get; set; }
         }
 
+        public class TestInheritance : Nested
+        {
+            [BinarySerializer.BinaryFormat]
+            public Int32 toto { get; set; }
+        }
+
         public enum VISI
         {
             PUBLIC = 49,
@@ -63,8 +69,11 @@ namespace TestSerializer
 
             [BinarySerializer.BinaryFormat]
             public VISI vis { get; set; }
-        }
 
+            [BinarySerializer.BinaryFormat]
+            public TestInheritance inherit { get; set; }
+        }
+        
         [TestMethod]
         public void SerializerCoverage()
         {
@@ -91,7 +100,13 @@ namespace TestSerializer
                     posX = 493,
                     posY = -394
                 },
-                vis = VISI.PRIVATE
+                vis = VISI.PRIVATE,
+                inherit = new TestInheritance
+                {
+                    posX = 302,
+                    posY = 39,
+                    toto = 42
+                }
             };
 
             FileStream file = File.Create("toto.txt");
@@ -135,6 +150,11 @@ namespace TestSerializer
             Assert.IsTrue(datatoserial.test.posY == -394);
 
             Assert.IsTrue(datatoserial.vis == VISI.PRIVATE);
+
+            Assert.IsTrue(
+                datatoserial.inherit.posX == 302
+                && datatoserial.inherit.posY == 39
+                && datatoserial.inherit.toto == 42);
         }
     }
 }

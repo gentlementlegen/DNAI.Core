@@ -111,25 +111,7 @@ namespace CoreControl
         /// <returns>Type of the given entity</returns>
         public EntityFactory.ENTITY GetEntityType(UInt32 entityId)
         {
-            CorePackage.Global.Definition entity = entity_factory.FindDefinitionOfType<CorePackage.Global.Definition>(entityId);
-
-            if (entity.GetType() == typeof(CorePackage.Entity.Type.EnumType))
-                return EntityFactory.ENTITY.ENUM_TYPE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ObjectType))
-                return EntityFactory.ENTITY.OBJECT_TYPE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ListType))
-                return EntityFactory.ENTITY.LIST_TYPE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.DataType))
-                return EntityFactory.ENTITY.DATA_TYPE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ScalarType))
-                return EntityFactory.ENTITY.DATA_TYPE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Function))
-                return EntityFactory.ENTITY.FUNCTION;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Variable))
-                return EntityFactory.ENTITY.VARIABLE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Context))
-                return EntityFactory.ENTITY.CONTEXT;
-            throw new InvalidOperationException("Controller.GetEntityType : Entity " + entity.FullName + " as invalid entity type " + entity.GetType().ToString());
+            return entity_factory.GetEntityType(entityId);
         }
 
         /// <summary>

@@ -934,7 +934,11 @@ namespace TestCommand
                 Filename = "moreOrLess.duly"
             }, witness);
 
-            MoreOrLessExecuter(witness, playFunction.EntityID);
+            var bman = witness as BinaryManager;
+            var ctxs = bman.Controller.GetEntitiesOfType(EntityFactory.ENTITY.CONTEXT, 0);
+            var funcs = bman.Controller.GetEntitiesOfType(EntityFactory.ENTITY.FUNCTION, ctxs[0].Id);
+
+            MoreOrLessExecuter(witness, funcs[0].Id);
         }
 
         public class Pos
