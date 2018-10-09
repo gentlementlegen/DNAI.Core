@@ -8,16 +8,28 @@ namespace CorePackage.Execution
 {
     public class Random : AccessRefreshInstruction
     {
-        private System.Random RandomManager { get; set; } = new System.Random();
+        private static readonly int NowTStamp = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+
+        private static System.Random RandomManager { get; set; }
+
+        private static int numberCreated = 0;
 
         public Random()
         {
-            AddOutput("value", new Entity.Variable(Entity.Type.Scalar.Floating));
+            if (numberCreated % 100 == 0) // system that regenerates random
+            {
+                RandomManager = new System.Random(NowTStamp);
+                numberCreated = 0;
+            }
+
+            AddOutput("value", new Entity.Variable(Entity.Type.Scalar.Floating, RandomManager.NextDouble()));
+
+            ++numberCreated;
         }
 
         public override void Execute()
         {
-            SetOutputValue("value", RandomManager.NextDouble());
+            /* Do nothing */
         }
     }
 }

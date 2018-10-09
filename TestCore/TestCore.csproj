@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestAuxiliary.cs" />
+    <Compile Include="TestEntities\TestDict.cs" />
     <Compile Include="TestEntities\TestEnumType.cs" />
     <Compile Include="TestEntities\TestListsObjects.cs" />
     <Compile Include="TestEntities\TestScalarTypes.cs" />

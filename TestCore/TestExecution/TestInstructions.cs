@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using CorePackage.Entity;
+using CorePackage.Entity.Type;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -486,6 +488,14 @@ namespace CoreTest
             whileTester.setEntryPoint(whileTester.addInstruction(remove));
             whileTester.Call();
             Assert.IsTrue(remove.GetOutputValue("removed"));
+        }
+
+        [TestMethod]
+        public void TestRandomNode()
+        {
+            var randIns = new CorePackage.Execution.Random();
+
+            Assert.IsTrue(randIns.GetOutputValue("value") == randIns.GetOutputValue("value"));
         }
     }
 }
