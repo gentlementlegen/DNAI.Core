@@ -64,6 +64,7 @@ namespace CorePluginLego.ViewModel
                             _controller = new BrickControllerNxt(new ConnectionBluetoothNxt(Convert.ToByte(ComPort)));
                             System.Threading.Thread.Sleep(100);
                             await _controller.ConnectAsync();
+                            _controller.OnDistanceChanged += (object a, EventArgs b) => Distance = _controller.Distance.ToString();
                             Status = "Disconnect";
                         }
                         else
@@ -121,9 +122,9 @@ namespace CorePluginLego.ViewModel
                         _controller.SendCommand((brick) =>
                         {
                             //brick.BatchCommand.TurnMotorAtPowerForTime(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * dir, 100, false);
-                            brick.MotorB.Run((sbyte)(Velocity * dir), 360);
+                            brick.MotorB.Run((sbyte)(Velocity * -dir), 360);
                             //brick.BatchCommand.TurnMotorAtPowerForTime(Lego.Ev3.Core.OutputPort.A | Lego.Ev3.Core.OutputPort.B, Velocity * -dir, 100, false);
-                            brick.MotorC.Run((sbyte)(Velocity * -dir), 360);
+                            brick.MotorC.Run((sbyte)(Velocity * dir), 360);
                         });
                     },
                     (dir) => _controller?.IsConnected == true));
@@ -215,7 +216,7 @@ namespace CorePluginLego.ViewModel
         public string Path
         { get => _path; set => Set(ref _path, value); }
 
-        private float _minDistance = 10f;
+        private float _minDistance = 20f;
 
         public float MinDistance
         {
@@ -227,6 +228,16 @@ namespace CorePluginLego.ViewModel
             }
         }
 
-        public string Distance => _controller?.Distance.ToString();
+        private string _distance;
+
+        public string Distance
+        {
+            get => _distance;
+
+            set
+            {
+                Set(ref _distance, value);
+            }
+        }
     }
 }

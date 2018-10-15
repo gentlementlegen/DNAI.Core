@@ -9,11 +9,24 @@ namespace CorePluginLego.Model
 {
     public class BrickControllerNxt : IDisposable
     {
+        private float _distance = 100;
+
         public bool IsConnected { get; private set; }
-        public float Distance { get; private set; } = 100;
+
+        public float Distance
+        {
+            get => _distance;
+            set
+            {
+                _distance = value;
+                OnDistanceChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public event EventHandler OnDistanceChanged;
 
         public float Velocity = 40;
-        public float MinDistance = 10;
+        public float MinDistance = 25;
 
         private readonly IConnection<NxtBrick> _connection;
         private NxtBrick _brick;
@@ -21,6 +34,7 @@ namespace CorePluginLego.Model
         private bool _isAutoPilot;
         private static readonly CoreCommand.BinaryManager _manager = new CoreCommand.BinaryManager();
         private readonly AI _ai = new AI();
+        private readonly Random _rd = new Random();
 
         public BrickControllerNxt(IConnection<NxtBrick> connection)
         {
@@ -43,7 +57,7 @@ namespace CorePluginLego.Model
                 _brick.MotorB = new NxtMotor();
                 _brick.MotorC = new NxtMotor();
                 _brick.Sensor1 = new NxtUltrasonicSensor();
-                _brick.Sensor1.PollInterval = 50;
+                _brick.Sensor1.PollInterval = 25;
                 _brick.Sensor1.OnPolled += Sensor1_OnPolled;
                 _brick.Connect();
             });
@@ -52,8 +66,8 @@ namespace CorePluginLego.Model
 
         private void Sensor1_OnPolled(NxtPollable polledItem)
         {
-            Distance = (float)(_brick.Sensor1 as NxtUltrasonicSensor).DistanceCm;
-            Console.WriteLine("brick changed distance => " + Distance);
+            Distance = (float)(_brick.Sensor1 as NxtUltrasonicSensor)?.DistanceCm;
+            //Console.WriteLine("brick changed distance => " + Distance);
         }
 
         private void Brick_BrickChanged(object sender, BrickChangedEventArgs e)
@@ -76,7 +90,7 @@ namespace CorePluginLego.Model
 
         public void StartAutoPilot(string aiPath)
         {
-            if (_isAutoPilot || _backgroundWorker?.CancellationPending == true)
+            if (_isAutoPilot /*|| _backgroundWorker?.CancellationPending == true*/)
                 return;
 
             _isAutoPilot = true;
@@ -109,17 +123,23 @@ namespace CorePluginLego.Model
                 _ai.speed = Velocity;
                 _ai.UpdateDirection(_ai, Distance, Distance);
                 Console.WriteLine(_ai.X + " Y" + _ai.Y + " Z" + _ai.Z + " dist" + _ai.minDistance + " speed" + _ai.speed);
-                if (_ai.Z > 15)
+                if (_ai.Z > MinDistance)
                 {
-                    _brick.MotorB.Run(100, 180);
-                    _brick.MotorC.Run(100, 180);
+                    _brick.MotorB.Run(100, 90);
+                    _brick.MotorC.Run(100, 90);
                 }
                 else
                 {
                     _brick.MotorB.Brake();
                     _brick.MotorC.Brake();
+
+                    // HACK: choses one random direction to turn. Should be done in DNAI.
+                    var dir = _rd.Next(-1, 1) >= 0 ? 1 : -1;
+                    _brick.MotorB.Run((sbyte)(Velocity * dir), 180);
+                    _brick.MotorC.Run((sbyte)(Velocity * -dir), 180);
+                    Thread.Sleep(950);
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(50);
             }
         }
 
