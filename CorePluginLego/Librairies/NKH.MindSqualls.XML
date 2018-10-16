@@ -1,0 +1,3402 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NKH.MindSqualls</name>
+    </assembly>
+    <members>
+        <member name="T:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor">
+            <summary>
+            <para>Class representing the Acceleration / Tilt Sensor sensor from HiTechnic:
+            <a href="http://www.hitechnic.com" target="_blank">http://www.hitechnic.com</a></para>
+            </summary>
+            <remarks>
+            <para>A special thanks to the people at HiTechnic for providing me with the necessary technical information.</para>
+            <para>Also a special thanks to Ronny H. for providing me with qualified implementation details on the acceleration sensor before I had purchased my own copy.</para>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.XAxisAcceleration">
+            <summary>
+            <para>Acceleration coordinate of the X-axis.</para>
+            </summary>
+            <returns>The acceleration coordinate</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.YAxisAcceleration">
+            <summary>
+            <para>Acceleration coordinate of the Y-axis.</para>
+            </summary>
+            <returns>The acceleration coordinate</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.ZAxisAcceleration">
+            <summary>
+            <para>Acceleration coordinate of the Z-axis.</para>
+            </summary>
+            <returns>The acceleration coordinate</returns>
+        </member>
+        <member name="F:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.scalíng">
+            <summary>
+            <para>Change this value, to finetune the value of the acceleration sensor.</para>
+            <para>The current value, = 9.82/206.3, is the best fit for my own sensor.</para>
+            <remarks>
+            <para>The component used in the sensor is only guaranteed to be accurate to +/- 10%.</para>
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.XAxisUpper8Bits">
+            <summary>
+            <para>X axis upper 8 bits</para>
+            </summary>
+            <returns>The X-component of the acceleration vector</returns>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.YAxisUpper8Bits"/>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.ZAxisUpper8Bits"/>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.XAxisLower2Bits"/>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.YAxisUpper8Bits">
+            <summary>
+            <para>Y axis upper 8 bits</para>
+            </summary>
+            <returns>The Y-component of the acceleration vector</returns>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.XAxisUpper8Bits"/>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.ZAxisUpper8Bits"/>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.YAxisLower2Bits"/>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.ZAxisUpper8Bits">
+            <summary>
+            <para>Z axis upper 8 bits</para>
+            </summary>
+            <returns>The Z-component of the acceleration vector</returns>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.XAxisUpper8Bits"/>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.YAxisUpper8Bits"/>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.ZAxisLower2Bits"/>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.XAxisLower2Bits">
+            <summary>
+            <para>X axis lower 2 bits</para>
+            </summary>
+            <remarks>
+            <para>Should only be used if the full precision is needed.</para>
+            </remarks>
+            <returns>The lower 2 bits of the X-component of the acceleration vector</returns>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.XAxisUpper8Bits"/>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.YAxisLower2Bits">
+            <summary>
+            <para>Y axis lower 2 bits</para>
+            </summary>
+            <remarks>
+            <para>Should only be used if the full precision is needed.</para>
+            </remarks>
+            <returns>The lower 2 bits of the Y-component of the acceleration vector</returns>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.YAxisUpper8Bits"/>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.ZAxisLower2Bits">
+            <summary>
+            <para>Z axis lower 2 bits</para>
+            </summary>
+            <remarks>
+            <para>Should only be used if the full precision is needed.</para>
+            </remarks>
+            <returns>The lower 2 bits of the Z-component of the acceleration vector</returns>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicAccelerationSensor.ZAxisUpper8Bits"/>
+        </member>
+        <member name="T:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor">
+            <summary>
+            <para>Class representing the Color sensor from HiTechnic:
+            <a href="http://www.hitechnic.com" target="_blank">http://www.hitechnic.com</a></para>
+            </summary>
+            <remarks>
+            <para>The HiTechnic color sensor should not be confused with the NXT 2.0 color sensor.</para>
+            <para>A special thanks to the people at HiTechnic for providing me with the necessary technical information.</para>
+            </remarks>
+            <seealso cref="T:NKH.MindSqualls.Nxt2ColorSensor"/>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.ColorNumber">
+            <summary>
+            <para>Returns a single number color estimate.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.RedReading">
+            <summary>
+            <para>Returns the current detection level for the color red.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.GreenReading">
+            <summary>
+            <para>Returns the current detection level for the color green.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.BlueReading">
+            <summary>
+            <para>Returns the current detection level for the color blue.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.RawRedSensorReading">
+            <summary>
+            <para>Returns the current sensor analog signal level for the color red.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.RawGreenSensorReading">
+            <summary>
+            <para>Returns the current sensor analog signal level for the color green.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.RawBlueSensorReading">
+            <summary>
+            <para>Returns the current sensor analog signal level for the color blue.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.ColorIndexNumber">
+            <summary>
+            <para>Returns a single 6 bit number color index. Bits 5 and 4 encode the red signal level, bits 3 and 2 encode the green signal level and bits 1 and 0 encode the blue signal levels.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.NormalizedRedReading">
+            <summary>
+            <para>Return the current relative level for the red color component.</para>
+            </summary>
+            <remarks>The normalization sets the highest value of the three red, green and blue reading to 255 and adjusts the other two proportionately.</remarks>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.NormalizedGreenReading">
+            <summary>
+            <para>Return the current relative level for the green color component.</para>
+            </summary>
+            <remarks>The normalization sets the highest value of the three red, green and blue reading to 255 and adjusts the other two proportionately.</remarks>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor.NormalizedBlueReading">
+            <summary>
+            <para>Return the current relative level for the blue color component.</para>
+            </summary>
+            <remarks>The normalization sets the highest value of the three red, green and blue reading to 255 and adjusts the other two proportionately.</remarks>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="T:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor">
+            <summary>
+            <para>Class representing the Compass sensor from HiTechnic:
+            <a href="http://www.hitechnic.com" target="_blank">http://www.hitechnic.com</a></para>
+            </summary>
+            <remarks>
+            <para>A special thanks to the people at HiTechnic for providing me with the necessary technical information.</para>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.ModeControl">
+            <summary>
+            <para>Returns the current value of the mode control of the sensor.</para>
+            </summary>
+            <returns>The value of the mode control</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.TwoDegreeHeading">
+            <summary>
+            <para>Returns the current heading to a 2-degree accuracy.</para>
+            </summary>
+            <returns>The heading</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.OneDegreeAdder">
+            <summary>
+            <para>Returns an 1-degree adder to use with the TwoDegreeHeading()-method.</para>
+            </summary>
+            <returns>The adder</returns>
+        </member>
+        <member name="P:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.Heading">
+            <summary>
+            <para>Heading</para>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.RangeA">
+            <summary>
+            <para>Lower boundary of the Range-interval.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.RangeB"/>
+            <seealso cref="E:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.OnInsideRange"/>
+            <seealso cref="E:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.OnOutsideRange"/>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.Poll"/>
+        </member>
+        <member name="P:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.RangeB">
+            <summary>
+            <para>Upper boundary of the Range-interval.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.RangeA"/>
+            <seealso cref="E:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.OnInsideRange"/>
+            <seealso cref="E:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.OnOutsideRange"/>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.Poll"/>
+        </member>
+        <member name="E:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.OnInsideRange">
+            <summary>
+            <para>This event is fired when the Heading passes inside the Range-interval.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.RangeA"/>
+            <seealso cref="P:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.RangeB"/>
+            <seealso cref="E:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.OnOutsideRange"/>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.Poll"/>
+        </member>
+        <member name="E:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.OnOutsideRange">
+            <summary>
+            <para>This event is fired when the Heading passes outside the Range-interval.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.RangeA"/>
+            <seealso cref="P:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.RangeB"/>
+            <seealso cref="E:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.OnInsideRange"/>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.Poll"/>
+        </member>
+        <member name="F:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.pollData">
+            <summary>
+            <para>The data from the previous poll of the sensor.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.Poll"/>
+        </member>
+        <member name="M:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.Poll">
+            <summary>
+            <para>Polls the sensor, and fires the NXT-G like events if appropriate.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.RangeA"/>
+            <seealso cref="P:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.RangeB"/>
+            <seealso cref="E:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.OnInsideRange"/>
+            <seealso cref="E:NKH.MindSqualls.HiTechnic.HiTechnicCompassSensor.OnOutsideRange"/>
+        </member>
+        <member name="T:NKH.MindSqualls.MotorControl.MotorControlMotorPort">
+            <summary>
+            <para>Used as argument for the MotorControl methods.</para>
+            </summary>
+            <seealso cref="T:NKH.MindSqualls.NxtMotorPort"/>
+        </member>
+        <member name="F:NKH.MindSqualls.MotorControl.MotorControlMotorPort.PortA">
+            <summary>
+            <para>Motor port A.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.MotorControl.MotorControlMotorPort.PortB">
+            <summary>
+            <para>Motor port B.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.MotorControl.MotorControlMotorPort.PortC">
+            <summary>
+            <para>Motor port C.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.MotorControl.MotorControlMotorPort.PortsAB">
+            <summary>
+            <para>Motor ports A and B (synced).</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.MotorControl.MotorControlMotorPort.PortsAC">
+            <summary>
+            <para>Motor ports A and C (synced).</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.MotorControl.MotorControlMotorPort.PortsBC">
+            <summary>
+            <para>Motor ports B and C (synced).</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.MotorControl.MotorControlMotorPort.PortsABC">
+            <summary>
+            <para>Motor ports A, B and C (synced).</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.MotorControl.MotorControlProxy">
+            <summary>
+            <para>This class is a proxy for the MotorControl software which must be downloaded to, and running on the NXT brick.</para>
+            </summary>
+            <remarks>
+            <para>It requires that MotorControl is downloaded to the NXT block and is running.</para>
+            <a href="http://www.mindstorms.rwth-aachen.de/trac/wiki/MotorControl" target="_blank">http://www.mindstorms.rwth-aachen.de/trac/wiki/MotorControl</a>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.MotorControlProxy.CONTROLLED_MOTORCMD(NKH.MindSqualls.NxtCommunicationProtocol,NKH.MindSqualls.MotorControl.MotorControlMotorPort,System.String,System.String,System.Char)">
+            <summary>
+            <para>Sends a command to the NXT brick to run CONTROLLED_MOTORCMD - to run the motor(s) with the given parameters.</para>
+            </summary>
+            <remarks>
+            <para>From the MotorControl documentation:</para>
+            <para>This is the most important command. It contains a lot of parameters to tell the according motor(s) how and where to move. This is the actual reason MotorControl was developed. However, in certain situations, CLASSIC_MOTORCMD should be used instead (see below why). One of the reasons we have to decide in the high-level-client when to use CONTROLLED_MOTORCMD and when not is that in NXC, CPU-time is valuable, while on a computer we've got plenty!</para>
+            </remarks>
+            <param name="commLink">The communication link to the NXT brick.</param>
+            <param name="port">Motor port(s)</param>
+            <param name="power">Power - 3 chars from "0" to "200". "0" to "100" = power 0 to 100; "101" to "200" = power -1 to -100.</param>
+            <param name="tachoLimit">Tacho limit - 6 chars from "0" to "999999". "0" means driving forever, no limit (better not use it, see also CLASSIC_MOTORCMD); everything else: drive to specific position.</param>
+            <param name="mode">Mode: 1 char, bitfield. Compose bits to integer (by OR or +), convert to char - Start with 0x00 (000); Set 0x01 (001) / add 1: Set for HoldBrake (keeps active brake on after end of movement); Set 0x02 (010) / add 2: Set to enable SpeedRegulation; Set 0x04 (100) / add 4: Set to enable SmoothStart.</param>
+            <seealso cref="M:NKH.MindSqualls.MotorControl.MotorControlProxy.CLASSIC_MOTORCMD(NKH.MindSqualls.NxtCommunicationProtocol,NKH.MindSqualls.MotorControl.MotorControlMotorPort,System.String,System.String,System.Char)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.MotorControlProxy.RESET_ERROR_CORRECTION(NKH.MindSqualls.NxtCommunicationProtocol,NKH.MindSqualls.MotorControl.MotorControlMotorPort)">
+            <summary>
+            <para>Sends a command to the NXT brick to run RESET_ERROR_CORRECTION - to reset the NXT's internal error correction mechanism.</para>
+            </summary>
+            <remarks>
+            <para>From the MotorControl documentation:</para>
+            <para>This command can be used to reset the NXT's internal error correction mechanism (i.e. reset the TachoCount property). The same thing can be achieved using the IO map commands (with the output module).</para>
+            </remarks>
+            <param name="commLink">The communication link to the NXT brick.</param>
+            <param name="port">Motor port(s)</param>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.MotorControlProxy.ISMOTORREADY(NKH.MindSqualls.NxtCommunicationProtocol,NKH.MindSqualls.MotorControl.MotorControlMotorPort)">
+            <summary>
+            <para>Sends a command to the NXT block to run ISMOTORREADY - query if the motor is ready.</para>
+            </summary>
+            <remarks>
+            <para>From the MotorControl documentation:</para>
+            <para>This command is used to determine the state of a single motor: Is it currently executing a command (i.e. moving) or is it ready to accept new commands? Bi-directional communication is used. We send a request and keep asking for the reply (i.e. we poll the computer's inbox). We have to make sure that for each request we make, we also retrieve the answer (to leave MotorControl in a clean state). Please note that we can (in theory) make multiple requests concerning different motors at the same time, as long as we keep polling the incoming mailbox and collect all replies.</para>
+            </remarks>
+            <param name="commLink">The communication link to the NXT brick.</param>
+            <param name="port">Motor port</param>
+            <returns>True (idle/ready); false (still busy).</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.MotorControlProxy.CLASSIC_MOTORCMD(NKH.MindSqualls.NxtCommunicationProtocol,NKH.MindSqualls.MotorControl.MotorControlMotorPort,System.String,System.String,System.Char)">
+            <summary>
+            <para>Sends a command to the NXT brick to run CLASSIC_MOTORCMD - to run the motor(s) with the given parameters.</para>
+            </summary>
+            <remarks>
+            <para>From the MotorControl documentation:</para>
+            <para>This command is very similar to the classic SetOutputState: Sometimes we don't need any fance position control algorith, we just want to drive the motors. So this command is used when we have a TachoLimit of 0. Actually we don't have to invoke our NXC MotorControl program at all if we just want to drive without a TachoLimit. We could use SetOutputState, but this is a bit dangerous: It could interfere with a command that's already being executed by MotorControl. For this and some other design reasons, we pass the parameters on to MotorControl just as we do for controlled operations. Another situation when this command is applicable: Stopping in COAST mode, i.e. when you set a TachoLimit, but you want the motor to coast to a very soft stop. Then the NXC program doesn't have to do anything for us. In this case, this command just does a ResetErrorCorrection and a SetOutput for us in NXC.</para>
+            <para>Summary: When to use CLASSIC_MOTORCMD (instead of CONTROLLED_MOTORCMD)?</para>
+            <list type="bullet">
+            <item>When you've got a TachoLimit = 0.</item>
+            <item>When you want your motor to coast (spin freely) after a TachoLimit has been reached (it will overshoot then).</item>
+            <item>When you want to change the power of a currently running motor, you can use this command to overwrite the power level at runtime (only works if the operation wasn't started with CONTROLLED_MOTORCMD).</item>
+            </list>
+            </remarks>
+            <param name="commLink">The communication link to the NXT brick.</param>
+            <param name="port">Motor port(s)</param>
+            <param name="power">Power - 3 chars from "0" to "200". "0" to "100" = power 0 to 100; "101" to "200" = power -1 to -100.</param>
+            <param name="tachoLimit">Tacho limit - 6 chars from "0" to "999999". "0" means driving forever (no limit); everything else: drive to specific position.</param>
+            <param name="speedRegulation">Speed regulation. 1 char - "0" = disabled; "1" = enabled.</param>
+            <seealso cref="M:NKH.MindSqualls.MotorControl.MotorControlProxy.CONTROLLED_MOTORCMD(NKH.MindSqualls.NxtCommunicationProtocol,NKH.MindSqualls.MotorControl.MotorControlMotorPort,System.String,System.String,System.Char)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.MotorControlProxy.JUMBOPACKET(NKH.MindSqualls.NxtCommunicationProtocol)">
+            <summary>
+            <para>Not implemented yet in MotorControl.</para>
+            </summary>
+            <param name="commLink"></param>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.MotorControlProxy.IsMotorControlOnNxt(NKH.MindSqualls.NxtCommunicationProtocol)">
+            <summary>
+            <para>Queries if the MotorControl-program is on the NXT</para>
+            </summary>
+            <param name="commLink">The communication link to the NXT brick.</param>
+            <returns>True if the MotorControl-program is on the NXT, false if not</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.MotorControlProxy.IsMotorControlRunningOnNxt(NKH.MindSqualls.NxtCommunicationProtocol)">
+            <summary>
+            <para>Queries if the MotorControl-program is currently running on the NXT.</para>
+            </summary>
+            <param name="commLink">The communication link to the NXT brick.</param>
+            <returns>True if the MotorControl-program is running, false if not</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.MotorControlProxy.StartMotorControl(NKH.MindSqualls.NxtCommunicationProtocol)">
+            <summary>
+            <para>Starts the MotorControl-program.</para>
+            </summary>
+            <param name="commLink">The communication link to the NXT brick.</param>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.MotorControlProxy.StopMotorControl(NKH.MindSqualls.NxtCommunicationProtocol)">
+            <summary>
+            <para>Stops the MotorControl-program.</para>
+            </summary>
+            <remarks>
+            <para>Stops any running program, even it the program is not the MotorControl-program.</para>
+            </remarks>
+            <param name="commLink">The communication link to the NXT brick.</param>
+        </member>
+        <member name="T:NKH.MindSqualls.MotorControl.McNxtBrick">
+            <summary>
+            <para>Class representing the NXT brick.</para>
+            <para>It adds methods that can be used to control the running of the MotorControl-program.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.McNxtBrick.#ctor(NKH.MindSqualls.NxtCommLinkType,System.Byte)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <remarks>
+            <para>It requires that MotorControl is downloaded to the NXT block and is running.</para>
+            </remarks>
+            <param name="commLinkType">Indicates whether Bluetooth or USB should be used for the communication with the NXT brick.</param>
+            <param name="serialPortNo">The COM port used. Only relevant for Bluetooth links.</param>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.McNxtBrick.IsMotorControlOnNxt">
+            <summary>
+            <para>Queries if the MotorControl-program is on the NXT</para>
+            </summary>
+            <returns>True if the MotorControl-program is on the NXT, false if not</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.McNxtBrick.IsMotorControlRunning">
+            <summary>
+            <para>Queries if the MotorControl-program is currently running on the NXT.</para>
+            </summary>
+            <returns>True if the MotorControl-program is running, false if not</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.McNxtBrick.StartMotorControl">
+            <summary>
+            <para>Starts the MotorControl-program.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.McNxtBrick.StopMotorControl">
+            <summary>
+            <para>Stops the MotorControl-program.</para>
+            </summary>
+            <remarks>
+            <para>Stops any running program, even it the program is not the MotorControl-program.</para>
+            </remarks>
+        </member>
+        <member name="T:NKH.MindSqualls.MotorControl.McNxtMotor">
+            <summary>
+            <para>Class representing a motor.</para>
+            <para>It uses the MotorControl-program to achieve higher precision when driving a NXT motor.</para>
+            </summary>
+            <remarks>
+            <para>It requires that MotorControl is downloaded to the NXT block and is running.</para>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.McNxtMotor.Run(System.SByte,System.UInt32)">
+            <summary>
+            <para>Run the motor.</para>
+            </summary>
+            <param name="power">The power for the motor</param>
+            <param name="tachoLimit">The duration in degrees, 0 = unlimited</param>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.McNxtMotor.RunAndCoast(System.SByte,System.UInt32)">
+            <summary>
+            <para>Run the motor and end coasting (spinning freely).</para>
+            </summary>
+            <param name="power">The power for the motor</param>
+            <param name="tachoLimit">The duration in degrees, 0 = unlimited</param>
+        </member>
+        <member name="T:NKH.MindSqualls.MotorControl.McNxtMotorSync">
+            <summary>
+            <para>Class representing a synchronized pair of motors.</para>
+            <para>It uses the MotorControl-program to achieve higher precision when driving a synchronized NXT motor-pair.</para>
+            </summary>
+            <remarks>
+            <para>It requires that MotorControl is downloaded to the NXT block and is running.</para>
+            </remarks>
+            <seealso cref="T:NKH.MindSqualls.NxtMotorSync"/>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.McNxtMotorSync.#ctor(NKH.MindSqualls.NxtMotor,NKH.MindSqualls.NxtMotor)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="motorX">The 1. motor of the synchronized pair</param>
+            <param name="motorY">The 2. motor of the synchronized pair</param>
+        </member>
+        <member name="M:NKH.MindSqualls.MotorControl.McNxtMotorSync.Run(System.SByte,System.UInt16,System.SByte)">
+            <summary>
+            <para>Run the motors (in sync).</para>
+            </summary>
+            <param name="power">The poser</param>
+            <param name="tachoLimit">The tacho limit in degrees, 0 means unlimited</param>
+            <param name="turnRatio">Turn ratio is not upported by MotorControl and is ignored</param>
+        </member>
+        <member name="T:NKH.MindSqualls.Nxt2Color">
+            <summary>
+            <para>Color-values for the NXT 2.0 Color sensor.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.Nxt2Color.Black">
+            <summary>
+            <para>Black</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.Nxt2Color.Blue">
+            <summary>
+            <para>Blue</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.Nxt2Color.Green">
+            <summary>
+            <para>Green</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.Nxt2Color.Yellow">
+            <summary>
+            <para>Yellow</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.Nxt2Color.Red">
+            <summary>
+            <para>Red</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.Nxt2Color.White">
+            <summary>
+            <para>White</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.Nxt2ColorSensorMode">
+            <summary>
+            <para>Sensor-modes for the NXT 2.0 color sensor.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.Nxt2ColorSensorMode.ColorDetector">
+            <summary>
+            <para>Color detector mode with no light.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.Nxt2ColorSensorMode.LightSensor">
+            <summary>
+            <para>Light sensor mode with or without light.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.Nxt2ColorSensor">
+            <summary>
+            <para>Class representing the NXT 2.0 color sensor.</para>
+            </summary>
+            <remarks>
+            <para>The color sensor has two modes; it can act as a color detector and as a light sensor. In the last capacity it can be seen as a replacement for the NXT light sensor. The sensor can also act as a lamp.</para>
+            <para>The NXT 2.0 color sensor should not be confused with the HiTechnic color sensor.</para>
+            </remarks>
+            <seealso cref="T:NKH.MindSqualls.NxtLightSensor"/>
+            <seealso cref="T:NKH.MindSqualls.HiTechnic.HiTechnicColorSensor"/>
+        </member>
+        <member name="M:NKH.MindSqualls.Nxt2ColorSensor.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.Nxt2ColorSensor.SensorMode">
+            <summary>
+            <para>Returns the current mode of the sensor; color detector or light sensor mode.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.Nxt2ColorSensor.SetColorDetectorMode">
+            <summary>
+            <para>Switches the sensor into color detector mode.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.Nxt2ColorSensor.SetLightSensorMode(System.Nullable{NKH.MindSqualls.Nxt2Color})">
+            <summary>
+            <para>Switches the sensor into light sensor mode.</para>
+            </summary>
+            <param name="color">The floodlight color. The sensor will accept red, green and blue, or black and null for no floodlights.</param>
+        </member>
+        <member name="P:NKH.MindSqualls.Nxt2ColorSensor.Color">
+            <summary>
+            <para>Returns the color when the sensor is in color detector mode.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.Nxt2ColorSensor.Intensity">
+            <summary>
+            <para>Returns the light intensity when the sensor is in light detector mode.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.Nxt2ColorSensor.SetColorRange(NKH.MindSqualls.Nxt2Color,NKH.MindSqualls.Nxt2Color)">
+            <summary>
+            <para>Sets the minimum and the maximum of the color range.</para>
+            </summary>
+            <param name="minRange">Minimum</param>
+            <param name="maxRange">Maximum</param>
+            <seealso cref="E:NKH.MindSqualls.Nxt2ColorSensor.OnInsideRange"/>
+            <seealso cref="E:NKH.MindSqualls.Nxt2ColorSensor.OnOutsideRange"/>
+        </member>
+        <member name="E:NKH.MindSqualls.Nxt2ColorSensor.OnInsideRange">
+            <summary>
+            <para>This event is fired whenever the detected color passes from outside of the color-range to inside.</para>
+            </summary>
+            <remarks>
+            <para>The detector must be in color detector mode for the event to fire.</para>
+            </remarks>
+            <seealso cref="M:NKH.MindSqualls.Nxt2ColorSensor.SetColorRange(NKH.MindSqualls.Nxt2Color,NKH.MindSqualls.Nxt2Color)"/>
+            <seealso cref="E:NKH.MindSqualls.Nxt2ColorSensor.OnOutsideRange"/>
+        </member>
+        <member name="E:NKH.MindSqualls.Nxt2ColorSensor.OnOutsideRange">
+            <summary>
+            <para>This event is fired whenever the detected color passes from inside of the color-range to outside.</para>
+            </summary>
+            <remarks>
+            <para>The detector must be in color detector mode for the event to fire.</para>
+            </remarks>
+            <seealso cref="M:NKH.MindSqualls.Nxt2ColorSensor.SetColorRange(NKH.MindSqualls.Nxt2Color,NKH.MindSqualls.Nxt2Color)"/>
+            <seealso cref="E:NKH.MindSqualls.Nxt2ColorSensor.OnInsideRange"/>
+        </member>
+        <member name="P:NKH.MindSqualls.Nxt2ColorSensor.TriggerIntensity">
+            <summary>
+            <para>Trigger intensity.</para>
+            </summary>
+            <seealso cref="E:NKH.MindSqualls.Nxt2ColorSensor.OnAboveIntensity"/>
+        </member>
+        <member name="E:NKH.MindSqualls.Nxt2ColorSensor.OnAboveIntensity">
+            <summary>
+            <para>This event is fired whenever the measured light intensity passes above the trigger-intensity.</para>
+            </summary>
+            <remarks>
+            <para>The detector must be in light sensor mode for the event to fire.</para>
+            </remarks>
+            <seealso cref="P:NKH.MindSqualls.Nxt2ColorSensor.TriggerIntensity"/>
+        </member>
+        <member name="M:NKH.MindSqualls.Nxt2ColorSensor.Poll">
+            <summary>
+            <para>Polls the sensor, and fires the NXT-G like events if appropriate.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.Nxt2ColorSensor.SetColorRange(NKH.MindSqualls.Nxt2Color,NKH.MindSqualls.Nxt2Color)"/>
+            <seealso cref="E:NKH.MindSqualls.Nxt2ColorSensor.OnInsideRange"/>
+            <seealso cref="E:NKH.MindSqualls.Nxt2ColorSensor.OnOutsideRange"/>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtActiveSensor">
+            <summary>
+            <para>Abstract class representing a Active Sensor.</para>
+            </summary>
+            <remarks>
+            <para>According to the LEGO MINDSTORMS NXT Hardware Developer Kit p. 7, sensors is divided into three types: active sensors (e.g. Robotics Invention Systems sensors), passive sensors (e.g. the NXT touch, light, and sound sensors), and digital sensors (e.g. the NXT ultrasonic sensor and the HiTechnic compass sensor). The three abstract classes NxtActiveSensor, NxtPassiveSensor, and NxtDigitalSensor reflect this.</para>
+            </remarks>
+            <seealso cref="T:NKH.MindSqualls.NxtPassiveSensor"/>
+            <seealso cref="T:NKH.MindSqualls.NxtDigitalSensor"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtActiveSensor.#ctor(NKH.MindSqualls.NxtSensorType,NKH.MindSqualls.NxtSensorMode)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="sensorType">Sensor type</param>
+            <param name="sensorMode">Sensor mode</param>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtBluetoothConnection">
+            <summary>
+            <para>Class representation communication over a Bluetooth connection.</para>
+            </summary>
+            <seealso cref="T:NKH.MindSqualls.NxtUsbConnection"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBluetoothConnection.#ctor(System.String)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="serialPortName">The COM port used by the Bluetooth link</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBluetoothConnection.#ctor(System.Byte)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="serialPortNo">The COM port used by the Bluetooth link</param>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtBluetoothConnection.serialPortName">
+            <summary>
+            <para>The name of the serial port, e.g. COM40.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtBluetoothConnection.serialPort">
+            <summary>
+            <para>The serial port used by the bluetooth connection.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtBluetoothConnection.serialPortLock">
+            <summary>
+            <para>Object to control mutex locking on the serial port.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBluetoothConnection.Connect">
+            <summary>
+            <para>Connect to the NXT brick via bluetooth.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBluetoothConnection.Disconnect">
+            <summary>
+            <para>Disconnect from the brick.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBluetoothConnection.IsConnected">
+            <summary>
+            <para>Indicates if connected to the NXT brick.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBluetoothConnection.Send(System.Byte[])">
+            <summary>
+            <para>Sends a request for the NXT brick, and if applicable, receive the reply.</para>
+            </summary>
+            <param name="request">The request</param>
+            <returns>The reply as a byte-array, or null</returns>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtCommLinkType">
+            <summary>
+            <para>Types of communication links usable for the NXT brick.</para>
+            </summary>
+            <remarks>
+            <para>Introduced with v2.0 of the framework.</para>
+            </remarks>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommLinkType.Bluetooth">
+            <summary>
+            <para>Use Bluetooth for the communications link.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommLinkType.USB">
+            <summary>
+            <para>Use USB for the communications link.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtBrick">
+            <summary>
+            <para>Class representing the NXT brick.</para>
+            </summary>    
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.#ctor(System.Byte)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="serialPortNo">The COM port used by the Bluetooth link</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.#ctor(System.String)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="serialPortName">The COM port used by the Bluetooth link</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.#ctor(NKH.MindSqualls.NxtCommLinkType,System.Byte)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <remarks>
+            <para>Introduced with v2.0 of the framework.</para>
+            </remarks>
+            <param name="commLinkType">Indicates whether Bluetooth or USB should be used for the communication with the NXT brick.</param>
+            <param name="serialPortNo">The COM port used. Only relevant for Bluetooth links.</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.#ctor">
+            <summary>
+            <para>Private constructor.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.CommLink">
+            <summary>
+            <para>The communication link to the NXT brick.</para>
+            </summary>
+            <remarks>
+            <para>The current version of the API only supports bluetooth links. Possibly a future version will support USB as well.</para>
+            </remarks>
+            <exception cref="T:NKH.MindSqualls.NxtConnectionException">Throws a NxtConnectionException if not connected.</exception>
+            <seealso cref="M:NKH.MindSqualls.NxtBrick.Connect"/>
+            <seealso cref="M:NKH.MindSqualls.NxtBrick.Disconnect"/>
+            <seealso cref="P:NKH.MindSqualls.NxtBrick.IsConnected"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.Connect">
+            <summary>
+            <para>Connect to the NXT brick.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtBrick.CommLink"/>
+            <seealso cref="M:NKH.MindSqualls.NxtBrick.Disconnect"/>
+            <seealso cref="P:NKH.MindSqualls.NxtBrick.IsConnected"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.Disconnect">
+            <summary>
+            <para>Disconnect from the NXT brick.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtBrick.CommLink"/>
+            <seealso cref="M:NKH.MindSqualls.NxtBrick.Connect"/>
+            <seealso cref="P:NKH.MindSqualls.NxtBrick.IsConnected"/>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.IsConnected">
+            <summary>
+            <para>Indicates if the NXT brick is connected.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtBrick.CommLink"/>
+            <seealso cref="M:NKH.MindSqualls.NxtBrick.Connect"/>
+            <seealso cref="M:NKH.MindSqualls.NxtBrick.Disconnect"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.FindFiles(System.String)">
+            <summary>
+            <para>Lists files in the NXT brick according to the file mask.</para>
+            </summary>
+            <param name="fileMask">A fileMask</param>
+            <returns>A list of file names</returns>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.Program">
+            <summary>
+            <para>This property returns the name of the currently running program, or null if no program is running.</para>
+            <para>Set the property to a program name to run the program, or to null to stop any running program.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.Programs">
+            <summary>
+            <para>The programs currently stored in the NXT brick.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.Sounds">
+            <summary>
+            <para>The sounds currently stored in the NXT brick.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.PlaySoundfile(System.String)">
+            <summary>
+            <para>Plays a sound file stored in the NXT brick.</para>
+            </summary>
+            <param name="soundFile">The sound file</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.StopSound">
+            <summary>
+            <para>Stops all playing sound; sound files and tones.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.PlayTone(System.UInt16,System.UInt16)">
+            <summary>
+            <para>Plays a tone.</para>
+            </summary>
+            <param name="frequency">Frequency for the tone, Hz</param>
+            <param name="duration">Duration of the tone, ms</param>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.Name">
+            <summary>
+            <para>The name of the NXT brick.</para>
+            </summary>
+            <remarks>
+            <para>For some reason only the first 8 characters is remembered when the NXT is turned off. This is with version 1.4 of the firmware, and it may be fixed with newer versions.</para>
+            </remarks>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.BatteryLevel">
+            <summary>
+            <para>The battery level of the NXT brick in millivolts.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.MotorA">
+            <summary>
+            <para>The motor attached to port A.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.MotorB">
+            <summary>
+            <para>The motor attached to port B.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.MotorC">
+            <summary>
+            <para>The motor attached to port C.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.AttachMotor(NKH.MindSqualls.NxtMotor,NKH.MindSqualls.NxtMotorPort)">
+            <summary>
+            <para>Attaches a motor to the NXT brick.</para>
+            </summary>
+            <param name="motor">The motor</param>
+            <param name="port">The port to attach the motor to</param>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.Sensor1">
+            <summary>
+            <para>The sensor attached to port 1.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.Sensor2">
+            <summary>
+            <para>The sensor attached to port 2.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.Sensor3">
+            <summary>
+            <para>The sensor attached to port 3.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtBrick.Sensor4">
+            <summary>
+            <para>The sensor attached to port 4.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.AttachSensor(NKH.MindSqualls.NxtSensor,NKH.MindSqualls.NxtSensorPort)">
+            <summary>
+            <para>Attaches a sensor to the NXT brick.</para>
+            </summary>
+            <param name="sensor">The sensor</param>
+            <param name="port">The port to attach the sensor to</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtBrick.InitSensors">
+            <summary>
+            <para>Initializes all the sensors of the brick.</para>
+            <remarks>Normally this is done as part of the Connect() method, and is not something you need to worry about. However, whenever a program is started on the brick e.g. the MotorControl-program, you will need to call this method to re-initialize the sensors.</remarks>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtCommunicationProtocol">
+            <summary>
+            <para>Abstract class representing the NXT communication protocol.</para>
+            </summary>
+            <remarks>
+            <para>The communication protocol for the NXT brick is specified in the documents:</para>
+            
+            <para>Lego Mindstorms NXT,<br/>
+            Bluetooth Developer Kit,<br/>
+            Appendix 1: LEGO MINDSTORMS NXT Communication protocol<br/>
+            - and:<br/>
+            Appendix 2: LEGO MINDSTORMS NXT Direct commands</para>
+            
+            <para>- which can be downloaded at:<br/>
+            <a href="http://mindstorms.lego.com/overview/NXTreme.aspx" target="_blank">http://mindstorms.lego.com/overview/NXTreme.aspx</a></para>
+            
+            <para>For NXT 2.0 specific informaton:<br/>
+            <a href="http://www.ni.com/pdf/manuals/372574c.pdf" target="_blank">http://www.ni.com/pdf/manuals/372574c.pdf</a></para>
+            
+            <para>A special thanks goes to Bram Fokke for his NXT# project:<br/>
+            <a href="http://nxtsharp.fokke.net/" target="_blank">http://nxtsharp.fokke.net/</a></para>
+            
+            <para>Without his work, I doubt very much if my own work would have gotten off the ground. I have even st... ehem... borrowed a bit of his code here and there. However the major part of the code is my own.</para>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommunicationProtocol.ReplyRequired">
+            <summary>
+            <para>Flag indicating if a reply should always be recieved.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.Connect">
+            <summary>
+            <para>Connect to the NXT brick.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.Disconnect">
+            <summary>
+            <para>Disconnect from the NXT brick.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtCommunicationProtocol.IsConnected">
+            <summary>
+            <para>Returns a boolean indicating if the NXT brick is connected.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.Send(System.Byte[])">
+            <summary>
+            <para>Send a request to the NXT brick, and return a reply.</para>
+            </summary>
+            <param name="request">The request to the NXT brick</param>
+            <returns>The reply from the NXT brick, or null</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.StartProgram(System.String)">
+            <summary>
+            <para>STARTPROGRAM</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 5.</para>
+            </remarks>
+            <param name="fileName">File name</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.StopProgram">
+            <summary>
+            <para>STOPPROGRAM</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 5.</para>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.PlaySoundfile(System.Boolean,System.String)">
+            <summary>
+            <para>PLAYSOUNDFILE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 5.</para>
+            </remarks>
+            <param name="loop">Loop sound file indefinately?</param>
+            <param name="fileName">File name</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.PlayTone(System.UInt16,System.UInt16)">
+            <summary>
+            <para>PLAYTONE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 6.</para>
+            </remarks>
+            <param name="frequency">Frequency for the tone, Hz</param>
+            <param name="duration">Duration of the tone, ms</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.SetOutputState(NKH.MindSqualls.NxtMotorPort,System.SByte,NKH.MindSqualls.NxtMotorMode,NKH.MindSqualls.NxtMotorRegulationMode,System.SByte,NKH.MindSqualls.NxtMotorRunState,System.UInt32)">
+            <summary>
+            <para>SETOUTPUTSTATE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 6.</para>
+            </remarks>
+            <param name="motorPort">Motor port</param>
+            <param name="power">Power set point</param>
+            <param name="mode">Mode</param>
+            <param name="regulationMode">Regulation mode</param>
+            <param name="turnRatio">Turn ratio</param>
+            <param name="runState">Run state</param>
+            <param name="tachoLimit">Tacho limit, 0: run forever</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.SetInputMode(NKH.MindSqualls.NxtSensorPort,NKH.MindSqualls.NxtSensorType,NKH.MindSqualls.NxtSensorMode)">
+            <summary>
+            <para>SETINPUTMODE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 7.</para>
+            </remarks>
+            <param name="sensorPort">Input Port</param>
+            <param name="sensorType">Sensor Type</param>
+            <param name="sensorMode">Sensor Mode</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.GetOutputState(NKH.MindSqualls.NxtMotorPort)">
+            <summary>
+            <para>GETOUTPUTSTATE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 8.</para>
+            </remarks>
+            <param name="motorPort">Ourput Port</param>
+            <returns>Returns a parsed NxtGetOutputStateReply with the reply</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.GetInputValues(NKH.MindSqualls.NxtSensorPort)">
+            <summary>
+            <para>GETINPUTVALUES</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 8.</para>
+            <para>Used with passive sensors like the Touch, Light and Sound sensors.</para>
+            </remarks>
+            <param name="sensorPort">Input Port</param>
+            <returns>Returns a NxtGetInputValues with the parsed reply</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.ResetInputScaledValue(NKH.MindSqualls.NxtSensorPort)">
+            <summary>
+            <para>RESETINPUTSCALEDVALUE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 8.</para>
+            </remarks>
+            <param name="sensorPort">Input Port</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.MessageWrite(NKH.MindSqualls.NxtMailbox,System.String)">
+            <summary>
+            <para>MESSAGEWRITE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 9.</para>
+            </remarks>
+            <param name="inBox">Inbox number</param>
+            <param name="messageData">Message data</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.MessageWrite(NKH.MindSqualls.NxtMailbox,System.Byte[])">
+            <summary>
+            <para>MESSAGEWRITE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 9.</para>
+            </remarks>
+            <param name="inBox">Inbox number</param>
+            <param name="messageData">Message data</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.ResetMotorPosition(NKH.MindSqualls.NxtMotorPort,System.Boolean)">
+            <summary>
+            <para>RESETMOTORPOSITION</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 9.</para>
+            </remarks>
+            <param name="motorPort">Output port</param>
+            <param name="relative">Relative? True: position relative to last movement, False: absolute position</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.GetBatteryLevel">
+            <summary>
+            <para>GETBATTERYLEVEL</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 9.</para>
+            </remarks>
+            <returns>Voltage in millivolts</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.StopSoundPlayback">
+            <summary>
+            <para>STOPSOUNDPLAYBACK</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 9.</para>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.KeepAlive">
+            <summary>
+            <para>KEEPALIVE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 10.</para>
+            </remarks>
+            <returns>Current sleep time limit, ms</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.LsGetStatus(NKH.MindSqualls.NxtSensorPort)">
+            <summary>
+            <para>LSGETSTATUS</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 10.</para>
+            <para>Returns the number of bytes ready in the LowSpeed port. Used with digital sensors like the Ultrasonic sensor.</para>
+            </remarks>
+            <param name="sensorPort">Sensor port</param>
+            <returns>Bytes Ready (count of available bytes to read)</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.LsRead(NKH.MindSqualls.NxtSensorPort)"/>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.LsWrite(NKH.MindSqualls.NxtSensorPort,System.Byte[],System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.LsWrite(NKH.MindSqualls.NxtSensorPort,System.Byte[],System.Byte)">
+            <summary>
+            <para>LSWRITE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 10.</para>
+            <para>Writes data to the LowSpeed port. Used with digital sensors like the Ultrasonic sensor.</para>
+            </remarks>
+            <param name="sensorPort">Sensor port</param>
+            <param name="txData">Tx Data</param>
+            <param name="rxDataLength">Rx Data Length</param>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.LsRead(NKH.MindSqualls.NxtSensorPort)"/>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.LsGetStatus(NKH.MindSqualls.NxtSensorPort)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.LsRead(NKH.MindSqualls.NxtSensorPort)">
+            <summary>
+            <para>LSREAD</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 10.</para>
+            <para>Reads data from the LowSpeed port. Used with digital sensors like the Ultrasonic sensor.</para>
+            </remarks>
+            <param name="sensorPort">The sensor port</param>
+            <returns>The data read from the port</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.LsGetStatus(NKH.MindSqualls.NxtSensorPort)"/>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.LsWrite(NKH.MindSqualls.NxtSensorPort,System.Byte[],System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.GetCurrentProgramName">
+            <summary>
+            <para>GETCURRENTPROGRAMNAME</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 11.</para>
+            </remarks>
+            <returns>File name of the running program</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.MessageRead(NKH.MindSqualls.NxtMailbox2,NKH.MindSqualls.NxtMailbox,System.Boolean)">
+            <summary>
+            <para>MESSAGEREAD</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 2, p. 11.</para>
+            </remarks>
+            <param name="remoteInboxNo">Remote Inbox number</param>
+            <param name="localInboxNo">Local Inbox number</param>
+            <param name="remove">Remove? True: clears message from Remote Inbox</param>
+            <returns>Message data</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.OpenRead(System.String)">
+            <summary>
+            <para>OPEN READ COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 7.</para>
+            <para>Close the handle after use. The handle is automatically closed if an error occurs.</para>
+            </remarks>
+            <param name="fileName">The name of the file</param>
+            <returns>A NxtOpenReadReply with the result of the request</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.OpenWrite(System.String,System.UInt32)">
+            <summary>
+            <para>OPEN WRITE COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 7.</para>
+            <para>Close the handle after use. The handle is automatically closed if an error occurs.</para>
+            </remarks>
+            <param name="fileName">The file name</param>
+            <param name="fileSize">The file size</param>
+            <returns>A handle to the file</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.Read(System.Byte,System.UInt16)">
+            <summary>
+            <para>READ COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 8.</para>
+            </remarks>
+            <param name="handle">A handle to the file</param>
+            <param name="bytesToRead">Number of data bytes to be read</param>
+            <returns>A byte array with the read data</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.Write(System.Byte,System.Byte[])">
+            <summary>
+            <para>WRITE COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 8.</para>
+            </remarks>
+            <param name="handle">File handle to write to</param>
+            <param name="data">Data to write</param>
+            <returns>Number of bytes written</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.Close(System.Byte)">
+            <summary>
+            <para>CLOSE COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 8.</para>
+            </remarks>
+            <param name="handle">File handle to close</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.Delete(System.String)">
+            <summary>
+            <para>DELETE COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 9.</para>
+            </remarks>
+            <param name="fileName">The file name</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.FindFirst(System.String)">
+            <summary>
+            <para>FIND FIRST</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 9.</para>
+            <para>Close the handle after use. The handle is automatically closed if an error occurs.</para>
+            </remarks>
+            <param name="fileName">Filename or -mask to search</param>
+            <returns>A NxtFindFileReply containing the result for the search</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.FindNext(System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.FindNext(System.Byte)">
+            <summary>
+            <para>FIND NEXT</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 10.</para>
+            <para>Close the handle after use. The handle is automatically closed if an error occurs.</para>
+            </remarks>
+            <param name="handle">Handle from the previous found file or from the FindFirst command</param>
+            <returns>A NxtFindFileReply containing the result for the search</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.FindFirst(System.String)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.SendAndParseNxtFindFileReply(System.Byte[])">
+            <summary>
+            <para>Sends a FindFirst- or FindNext-request and parses the result as a NxtFindFileReply.</para>
+            </summary>
+            <param name="request">The request</param>
+            <returns>A NxtFindFileReply containing the parsed result</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.FindFirst(System.String)"/>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.FindNext(System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.GetFirmwareVersion">
+            <summary>
+            <para>GET FIRMWARE VERSION</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 11.</para>
+            </remarks>
+            <returns>A NxtGetFirmwareVersionReply with the protocol-, and the firmware versions.</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.OpenWriteLinear(System.String,System.UInt32)">
+            <summary>
+            <para>OPEN WRITE LINEAR COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 11.</para>
+            </remarks>
+            <param name="fileName">The file name</param>
+            <param name="fileSize">The file size</param>
+            <returns>A handle to the file</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.OpenReadLinear(System.String)">
+            <summary>
+            <para>OPEN READ LINEAR COMMAND (INTERNAL COMMAND)</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 12.</para>
+            </remarks>
+            <param name="fileName">The file name</param>
+            <returns>Pointer to linear memory segment</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.OpenWriteData(System.String,System.UInt32)">
+            <summary>
+            <para>OPEN WRITE DATA COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 12.</para>
+            </remarks>
+            <param name="fileName">The file name</param>
+            <param name="fileSize">The file size</param>
+            <returns>A handle to the file</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.OpenAppendData(System.String)">
+            <summary>
+            <para>OPEN APPEND DATA COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 13.</para>
+            </remarks>
+            <param name="fileName">The file name</param>
+            <returns>A NxtOpenAppendDataReply withe the parsed reply</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.RequestFirstModule(System.String)">
+            <summary>
+            <para>REQUEST FIRST MODULE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 19.</para>
+            </remarks>
+            <param name="resourceName">Modulename or -mask to search</param>
+            <returns>A NxtRequestModuleReply containing the result for the search</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.RequestNextModule(System.Byte)"/>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.CloseModuleHandle(System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.RequestNextModule(System.Byte)">
+            <summary>
+            <para>REQUEST NEXT MODULE</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 19.</para>
+            </remarks>
+            <param name="handle">Handle number from the previous Request Next Module command or from the very first Request First Module command</param>
+            <returns>A NxtRequestModuleReply containing the result for the search</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.RequestFirstModule(System.String)"/>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.CloseModuleHandle(System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.SendAndParseNxtRequestModuleReply(System.Byte[])">
+            <summary>
+            <para>Sends a RequestFirstModule- or RequestNextModule-request and parses the result as a NxtRequestModule.</para>
+            </summary>
+            <param name="request">The request</param>
+            <returns>A NxtRequestModuleReply containing the parsed result</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.RequestFirstModule(System.String)"/>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.RequestNextModule(System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.CloseModuleHandle(System.Byte)">
+            <summary>
+            <para>CLOSE MODULE HANDLE COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 20.</para>
+            </remarks>
+            <param name="handle">Handle number</param>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.RequestFirstModule(System.String)"/>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.RequestNextModule(System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.ReadIoMap(System.UInt32,System.UInt16,System.UInt16)">
+            <summary>
+            <para>READ IO MAP COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 20.</para>
+            </remarks>
+            <param name="moduleId">The module ID</param>
+            <param name="offset">The offset to read from</param>
+            <param name="bytesToRead">Number of bytes to be read</param>
+            <returns>IO-map content</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.WriteIoMap(System.UInt32,System.UInt16,System.Byte[])">
+            <summary>
+            <para>WRITE IO MAP COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 21.</para>
+            </remarks>
+            <param name="moduleId">The module ID</param>
+            <param name="offset">The offset to write to</param>
+            <param name="ioMapContent">IO-map content to be stored in IO-map[index]...IO-map[index+N]</param>
+            <returns>The number of data that have been written</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.Boot">
+            <summary>
+            <para>BOOT COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 13.</para>
+            <para>This command can only be accepted by USB.</para>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.SetBrickName(System.String)">
+            <summary>
+            <para>SET BRICK NAME COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 13.</para>
+            <para>For some reason only the first 8 characters is remembered when the NXT is turned off. This is with version 1.4 of the firmware, and it may be fixed with newer versions.</para>
+            </remarks>
+            <param name="brickName">The new name of the NXT brick</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.GetDeviceInfo">
+            <summary>
+            <para>GET DEVICE INFO</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 14.</para>
+            <para>For some reason only the first 8 characters of the BXT name is remembered when the NXT is turned off. This is with version 1.4 of the firmware, and it may be fixed with newer versions.</para>
+            </remarks>
+            <returns>A NxtGetDeviceInfoReply containing the parsed result</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.DeleteUserFlash">
+            <summary>
+            <para>DELETE USER FLASH</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 14.</para>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.PollCommandLength(System.Byte)">
+            <summary>
+            <para>POLL COMMAND LENGTH</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 15.</para>
+            </remarks>
+            <param name="bufferNo">Buffer Number: 0x00 = Poll Buffer, 0x01 = High Speed buffer</param>
+            <returns>Number of bytes for the command ready in the buffer</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.PollCommand(System.Byte,System.Byte)">
+            <summary>
+            <para>POLL COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 15.</para>
+            </remarks>
+            <param name="bufferNo">Buffer Number: 0x00 = Poll Buffer, 0x01 = High Speed buffer</param>
+            <param name="commandLength">Command length</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.BluetoothFactoryReset">
+            <summary>
+            <para>BLUETOOTH FACTORY RESET COMMAND</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 15.</para>
+            <para>This command cannot be transmitted via Bluetooth because all Bluetooth functionality is reset by this command!</para>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocol.ValidateFilename(System.String)">
+            <summary>
+            <para>This function validates that the filename is correct for the NXT brick.</para>
+            </summary>
+            <param name="fileName">The file name</param>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtFindFileReply">
+            <summary>
+            <para>Reply type for the FindFirst() and FindNext() functions.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.FindFirst"/>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.FindNext"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtFindFileReply.fileFound">
+            <summary>
+            <para>Boolean indicating if a file was found or not.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtFindFileReply.handle">
+            <summary>
+            <para>The file handle.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtFindFileReply.fileName">
+            <summary>
+            <para>The file name.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtFindFileReply.fileSize">
+            <summary>
+            <para>The filesize.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtGetDeviceInfoReply">
+            <summary>
+            <para>Reply type for the GetDeviceInfo() function.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.GetDeviceInfo"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetDeviceInfoReply.nxtName">
+            <summary>
+            <para>The name of the NXT brick.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetDeviceInfoReply.btAdress">
+            <summary>
+            <para>The bluetooth address.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetDeviceInfoReply.bluetoothSignalStrength">
+            <summary>
+            <para>The bluetooth signal strength.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetDeviceInfoReply.freeUserFlash">
+            <summary>
+            <para>The size of the free user flash.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtGetFirmwareVersionReply">
+            <summary>
+            <para>Reply type for the GetFirmwareVersion() function.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.GetFirmwareVersion"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetFirmwareVersionReply.protocolVersion">
+            <summary>
+            <para>The protocol version.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetFirmwareVersionReply.firmwareVersion">
+            <summary>
+            <para>The firmware version.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtGetInputValuesReply">
+            <summary>
+            <para>Reply type for the GetInputValues() function.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.GetInputValues"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetInputValuesReply.valid">
+            <summary>
+            <para>A boolean indicating if the returned result is valid or not.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetInputValuesReply.calibrated">
+            <summary>
+            <para>A boolean indicating if the returned result is calibrated or not.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetInputValuesReply.sensorType">
+            <summary>
+            <para>The sensor type.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetInputValuesReply.sensorMode">
+            <summary>
+            <para>The sensor mode.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetInputValuesReply.rawAdValue">
+            <summary>
+            <para>The raw A/D value.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetInputValuesReply.normalizedAdValue">
+            <summary>
+            <para>The normalized A/D value.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetInputValuesReply.scaledValue">
+            <summary>
+            <para>The scaled value.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetInputValuesReply.calibratedValue">
+            <summary>
+            <para>The calibrated value.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtGetOutputStateReply">
+            <summary>
+            <para>Reply type for the GetOutputState() function.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.GetOutputState"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetOutputStateReply.power">
+            <summary>
+            <para>The motor power.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetOutputStateReply.mode">
+            <summary>
+            <para>The motor mode.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetOutputStateReply.regulationMode">
+            <summary>
+            <para>The regulation mode.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetOutputStateReply.turnRatio">
+            <summary>
+            <para>The turn ratio.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetOutputStateReply.runState">
+            <summary>
+            <para>The run state.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetOutputStateReply.tachoLimit">
+            <summary>
+            <para>The tacho limit in degrees, 0 means unlimited.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetOutputStateReply.tachoCount">
+            <summary>
+            <para>The tacho count.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetOutputStateReply.blockTachoCount">
+            <summary>
+            <para>The block tacho count.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtGetOutputStateReply.rotationCount">
+            <summary>
+            <para>The rotation count.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtGetOutputStateReply.ToString">
+            <summary>
+            <para>ToString()-override.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtOpenAppendDataReply">
+            <summary>
+            <para>Reply type for the OpenAppendData() function.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.OpenAppendData"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtOpenAppendDataReply.handle">
+            <summary>
+            <para>File handle.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtOpenAppendDataReply.availableFilesize">
+            <summary>
+            <para>Available file size.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtOpenReadReply">
+            <summary>
+            <para>Reply type for the OpenRead() function.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.OpenRead"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtOpenReadReply.handle">
+            <summary>
+            <para>File handle.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtOpenReadReply.fileSize">
+            <summary>
+            <para>File size.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtRequestModuleReply">
+            <summary>
+            <para>Reply type for the RequestFirstModule() and RequestNextModule() functions.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.RequestFirstModule"/>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.RequestNextModule"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtRequestModuleReply.ModuleFound">
+            <summary>
+            <para>Boolean indicating if a module was found, or not.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtRequestModuleReply.handle">
+            <summary>
+            <para>Module handle.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtRequestModuleReply.moduleName">
+            <summary>
+            <para>Module name.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtRequestModuleReply.moduleId">
+            <summary>
+            <para>Module ID.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtRequestModuleReply.moduleIdPP">
+            <summary>
+            <para>Module ID, PP-value.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtRequestModuleReply.moduleIdTT">
+            <summary>
+            <para>Module ID, TT-value.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtRequestModuleReply.moduleIdCC">
+            <summary>
+            <para>Module ID, CC-value.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtRequestModuleReply.moduleIdFF">
+            <summary>
+            <para>Module ID, FF-value.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtRequestModuleReply.moduleSize">
+            <summary>
+            <para>Module size.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtRequestModuleReply.moduleIoMapSize">
+            <summary>
+            <para>Module IO-map size.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtCommand">
+            <summary>
+            <para>Commands to the NXT brick.</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1 &amp; 2.</para>
+            </remarks>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.StartProgram">
+            <summary>
+            <para>BDK, Appendix 2, p. 5.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.StopProgram">
+            <summary>
+            <para>BDK, Appendix 2, p. 5.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.PlaySoundfile">
+            <summary>
+            <para>BDK, Appendix 2, p. 5.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.PlayTone">
+            <summary>
+            <para>BDK, Appendix 2, p. 6.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.SetOutputState">
+            <summary>
+            <para>BDK, Appendix 2, p. 6.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.SetInputMode">
+            <summary>
+            <para>BDK, Appendix 2, p. 7.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.GetOutputState">
+            <summary>
+            <para>BDK, Appendix 2, p. 8.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.GetInputValues">
+            <summary>
+            <para>BDK, Appendix 2, p. 8.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.ResetInputScaledValue">
+            <summary>
+            <para>BDK, Appendix 2, p. 8.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.MessageWrite">
+            <summary>
+            <para>BDK, Appendix 2, p. 9.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.ResetMotorPosition">
+            <summary>
+            <para>BDK, Appendix 2, p. 9.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.GetBatteryLevel">
+            <summary>
+            <para>BDK, Appendix 2, p. 9.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.StopSoundPlayback">
+            <summary>
+            <para>BDK, Appendix 2, p. 9.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.KeepAlive">
+            <summary>
+            <para>BDK, Appendix 2, p. 10.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.LsGetStatus">
+            <summary>
+            <para>BDK, Appendix 2, p. 10.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.LsWrite">
+            <summary>
+            <para>BDK, Appendix 2, p. 10.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.LsRead">
+            <summary>
+            <para>BDK, Appendix 2, p. 10.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.GetCurrentProgramName">
+            <summary>
+            <para>BDK, Appendix 2, p. 11.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.MessageRead">
+            <summary>
+            <para>BDK, Appendix 2, p. 11.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.OpenRead">
+            <summary>
+            <para>BDK, Appendix 1, p. 7.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.OpenWrite">
+            <summary>
+            <para>BDK, Appendix 1, p. 7.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.Read">
+            <summary>
+            <para>BDK, Appendix 1, p. 8.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.Write">
+            <summary>
+            <para>BDK, Appendix 1, p. 8.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.Close">
+            <summary>
+            <para>BDK, Appendix 1, p. 8.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.Delete">
+            <summary>
+            <para>BDK, Appendix 1, p. 9.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.FindFirst">
+            <summary>
+            <para>BDK, Appendix 1, p. 9.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.FindNext">
+            <summary>
+            <para>BDK, Appendix 1, p. 10.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.GetFirmwareVersion">
+            <summary>
+            <para>BDK, Appendix 1, p. 11.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.OpenWriteLinear">
+            <summary>
+            <para>BDK, Appendix 1, p. 11.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.OpenReadLinear">
+            <summary>
+            <para>BDK, Appendix 1, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.OpenWriteData">
+            <summary>
+            <para>BDK, Appendix 1, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.OpenAppendData">
+            <summary>
+            <para>BDK, Appendix 1, p. 13.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.RequestFirstModule">
+            <summary>
+            <para>BDK, Appendix 1, p. 19.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.RequestNextModule">
+            <summary>
+            <para>BDK, Appendix 1, p. 19.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.CloseModuleHandle">
+            <summary>
+            <para>BDK, Appendix 1, p. 20.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.ReadIoMap">
+            <summary>
+            <para>BDK, Appendix 1, p. 20.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.WriteIoMap">
+            <summary>
+            <para>BDK, Appendix 1, p. 21.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.Boot">
+            <summary>
+            <para>BDK, Appendix 1, p. 13.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.SetBrickName">
+            <summary>
+            <para>BDK, Appendix 1, p. 13.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.GetDeviceInfo">
+            <summary>
+            <para>BDK, Appendix 1, p. 14.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.DeleteUserFlash">
+            <summary>
+            <para>BDK, Appendix 1, p. 14.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.PollCommandLength">
+            <summary>
+            <para>BDK, Appendix 1, p. 15.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.PollCommand">
+            <summary>
+            <para>BDK, Appendix 1, p. 15.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommand.BluetoothFactoryReset">
+            <summary>
+            <para>BDK, Appendix 1, p. 15.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtErrorMessage">
+            <summary>
+            <para>ERROR MESSAGE BACK TO THE HOST</para>
+            </summary>
+            <remarks>
+            <para>Reference: BDK, Appendix 1, p. 16.<br/>
+            Reference: BDK, Appendix 2, p. 12.</para>
+            </remarks>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.Succes">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.PendingCommunicationTransactionInProgress">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.SpecifiedMailboxQueueIsEmpty">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.NoMoreHandles">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.NoSpace">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.NoMoreFiles">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.EndOfFileExpected">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.EndOfFile">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.NotALinearFile">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.FileNotFound">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.HandleAllReadyClosed">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.NoLinearSpace">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.UndefinedError">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.FileIsBusy">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.NoWriteBuffers">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.AppendNotPossible">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.FileIsFull">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.FileExists">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.ModuleNotFound">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.OutIfBoundary">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.IllegalFileName">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.IllegalHandle">
+            <summary>
+            <para>BDK, Appendix 1, p. 16.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.RequestFailed">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.UnknownCommandOpcode">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.InsanePacket">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.DataContainsOutOfRangeValues">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.CommunicationBusError">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.NoFreeMemoryInCommunicationBuffer">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.SpecifiedChannelOrConnectionIsNotValid">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.SpecifiedChannelOrConnectionNotConfiguredOrBusy">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.NoActiveProgram">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.IllegalSizeSpecified">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.IllegalMailboxQueueIdSpecified">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.AttemptedToAccessInvalidFieldOfAStructure">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.BadInputOrOutputSpecified">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.InsufficientMemoryAvailable">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtErrorMessage.BadArguments">
+            <summary>
+            <para>BDK, Appendix 2, p. 12.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtMotorMode">
+            <summary>
+            <para>Reference: BDK, Appendix 2, p. 6.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorMode.MOTORON">
+            <summary>
+            <para>Turn on the specified motor.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorMode.BRAKE">
+            <summary>
+            <para>Use run/break instead of run/float in PWM.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorMode.REGULATED">
+            <summary>
+            <para>Turns on the regulation.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtMotorPort">
+            <summary>
+            <para>Reference: BDK, Appendix 2, p. 6.</para>
+            </summary>
+            <seealso cref="T:NKH.MindSqualls.NxtSensorPort"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorPort.PortA">
+            <summary>
+            <para>Motor port A.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorPort.PortB">
+            <summary>
+            <para>Motor port B.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorPort.PortC">
+            <summary>
+            <para>Motor port C.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorPort.All">
+            <summary>
+            <para>All motor ports.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtMotorRegulationMode">
+            <summary>
+            <para>Reference: BDK, Appendix 2, p. 6.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorRegulationMode.REGULATION_MODE_IDLE">
+            <summary>
+            <para>No regulation will be enabled.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorRegulationMode.REGULATION_MODE_MOTOR_SPEED">
+            <summary>
+            <para>Power control will be enabled on specified output.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorRegulationMode.REGULATION_MODE_MOTOR_SYNC">
+            <summary>
+            <para>Syncronization will be enabled (Needs enabled on two output).</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtMotorRunState">
+            <summary>
+            <para>Reference: BDK, Appendix 2, p. 6.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorRunState.MOTOR_RUN_STATE_IDLE">
+            <summary>
+            <para>Output will be idle.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorRunState.MOTOR_RUN_STATE_RAMPUP">
+            <summary>
+            <para>Output will ramp-up.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorRunState.MOTOR_RUN_STATE_RUNNING">
+            <summary>
+            <para>Output will be running.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorRunState.MOTOR_RUN_STATE_RAMPDOWN">
+            <summary>
+            <para>Output will ramp-down.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtSensorMode">
+            <summary>
+            <para>Reference: BDK, Appendix 2, p. 7.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorMode.RAWMODE">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorMode.BOOLEANMODE">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorMode.TRANSITIONCNTMODE">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorMode.PERIODCOUNTERMODE">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorMode.PCTFULLSCALEMODE">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorMode.CELSIUSMODE">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorMode.FAHRENHEITMODE">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorMode.ANGLESTEPMODE">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtSensorPort">
+            <summary>
+            <para>Reference: BDK, Appendix 2, p. 7.</para>
+            </summary>
+            <seealso cref="T:NKH.MindSqualls.NxtMotorPort"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorPort.Port1">
+            <summary>
+            <para>Sensor port 1.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorPort.Port2">
+            <summary>
+            <para>Sensor port 2.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorPort.Port3">
+            <summary>
+            <para>Sensor port 3.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorPort.Port4">
+            <summary>
+            <para>Sensor port 4.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtSensorType">
+            <summary>
+            <para>Reference: BDK, Appendix 2, p. 7.</para>
+            </summary>
+            <remarks>
+            <para>Explantion of the values is found on p. 46 of the Executable File Specification document.</para>
+            </remarks>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.NO_SENSOR">
+            <summary>
+            <para>No sensor configured.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.SWITCH">
+            <summary>
+            <para>NXT or RCX touch sensor.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.TEMPERATURE">
+            <summary>
+            <para>RCX temperature sensor.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.REFLECTION">
+            <summary>
+            <para>RCX light sensor.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.ANGLE">
+            <summary>
+            <para>RCX rotation sensor.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.LIGHT_ACTIVE">
+            <summary>
+            <para>NXT light sensor with floodlight enabled.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.LIGHT_INACTIVE">
+            <summary>
+            <para>NXT light sensor with floodlight disabled.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.SOUND_DB">
+            <summary>
+            <para>NXT sound sensor; dB scaling.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.SOUND_DBA">
+            <summary>
+            <para>NXT sound sensor; dBA scaling.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.CUSTOM">
+            <summary>
+            <para>Unused in NXT programs.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.LOWSPEED">
+            <summary>
+            <para>I<sup>2</sup>C digital sensor.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.LOWSPEED_9V">
+            <summary>
+            <para>I<sup>2</sup>C digital sensor; 9V power.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.HIGHSPEED">
+            <summary>
+            <para>Unused in NXT programs.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.COLORFULL">
+            <summary>
+            <para>NXT color sensor in color detector mode.</para>
+            </summary>
+            <remarks>
+            <para>NXT 2.0 only.</para>
+            </remarks>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.COLORRED">
+            <summary>
+            <para>NXT color sensor in light sensor mode with red light.</para>
+            </summary>
+            <remarks>
+            <para>NXT 2.0 only.</para>
+            </remarks>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.COLORGREEN">
+            <summary>
+            <para>NXT color sensor in light sensor mode with green light.</para>
+            </summary>
+            <remarks>
+            <para>NXT 2.0 only.</para>
+            </remarks>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.COLORBLUE">
+            <summary>
+            <para>NXT color sensor in light sensor mode with blue light.</para>
+            </summary>
+            <remarks>
+            <para>NXT 2.0 only.</para>
+            </remarks>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensorType.COLORNONE">
+            <summary>
+            <para>NXT color sensor in light sensor mode with no light.</para>
+            </summary>
+            <remarks>
+            <para>NXT 2.0 only.</para>
+            </remarks>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtMailbox">
+            <summary>
+            <para>Reference: BDK, Appendix 2, p. 9.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox.Box0">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox.Box1">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox.Box2">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox.Box3">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox.Box4">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox.Box5">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox.Box6">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox.Box7">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox.Box8">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox.Box9">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtMailbox2">
+            <summary>
+            <para>Reference: BDK, Appendix 2, p. 9.<br/>
+            Reference: BDK, Appendix 2, p. 11. (see MessageRead() function).</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box0">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box1">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box2">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box3">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box4">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box5">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box6">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box7">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box8">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box9">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box10">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box11">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box12">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box13">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box14">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box15">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box16">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box17">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box18">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMailbox2.Box19">
+            <summary>
+            <para>... TBD ...</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtDigitalSensor">
+            <summary>
+            <para>Abstract class representing a Digital sensor, i.e. a sensor using the I<sup>2</sup>C protocol.</para>
+            </summary>
+            <remarks>
+            <para>The "Device Memory Arrangement" for a Digital sensor is specified at p. 10 of the document:</para>
+            <para>LEGO MINDSTORMS NXT,<br/>
+            Hardware Developer Kit</para>
+            <para>which can be downloaded at:<br/>
+            <a href="http://mindstorms.lego.com/overview/NXTreme.aspx" target="_blank">http://mindstorms.lego.com/overview/NXTreme.aspx</a></para>
+            <para>The Ultrasonic sensor protocol is specifed in appendix 7 of the HDK.</para>
+            <para>"Digital I/O Communication Methods" is also explained in the Executable File Specification document, p. 70-72.</para>
+            <para>.oOo.</para>
+            <para>According to the LEGO MINDSTORMS NXT Hardware Developer Kit p. 7, sensors is divided into three types: active sensors (e.g. Robotics Invention Systems sensors), passive sensors (e.g. the NXT touch, light, and sound sensors), and digital sensors (e.g. the NXT ultrasonic sensor and the HiTechnic compass sensor). The three abstract classes NxtActiveSensor, NxtPassiveSensor, and NxtDigitalSensor reflect this.</para>
+            </remarks>
+            <seealso cref="T:NKH.MindSqualls.NxtActiveSensor"/>
+            <seealso cref="T:NKH.MindSqualls.NxtPassiveSensor"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtDigitalSensor.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtDigitalSensor.InitSensor">
+            <summary>
+            <para>Initializes the digital sensor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtDigitalSensor.SendN(System.Byte[],System.Byte)">
+            <summary>
+            <para>Sends an I<sup>2</sup>C request to the Ultrasonic sensor, and receive the reply if applicable.</para>
+            </summary>
+            <param name="request">The I2C request</param>
+            <param name="rxDataLength">Length of the expected reply</param>
+            <returns>The reply from the sensor, or a null-value</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtDigitalSensor.Send1(System.Byte[])">
+            <summary>
+            <para>Sends an I<sup>2</sup>C request to the Ultrasonic sensor, and receives the reply.</para>
+            </summary>
+            <remarks>
+            <pare>Intended for the special case where a 1-byte reply is expexted.</pare>
+            </remarks>
+            <param name="request">The I2C request</param>
+            <returns>The reply from the sensor</returns>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtDigitalSensor.lsReadDelayTimeMs">
+            <summary>
+            <para>Delay-time (in milliseconds) from when a LsWrite() has been sent to a LsRead() is attempted.</para>
+            </summary>
+            <remarks>
+            <para>Bluetooth connection: By waiting a few milliseconds, the chance of calling the I<sup>2</sup>C bus before it is ready is reduced. This reduces the times where an error-condition arises, and thereby increases the overall efficiency and throughput.</para>
+            <para>USB connection: Not used.</para>
+            </remarks>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtDigitalSensor.deviceAddress">
+            <summary>
+            <para>Both the Ultrasonic sensor and the Compass plus Color sensors from HiTecnic uses 0x02 as the device address. However the documentation do not put any constraints to this value.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtDigitalSensor.ReadVersion">
+            <summary>
+            <para>Returns the version of the sensor.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtDigitalSensor.ReadProductId">
+            <summary>
+            <para>Returns the name of the manufacturer, e.g. "LEGO".</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtDigitalSensor.ReadSensorType">
+            <summary>
+            <para>Returns the sensor type, e.g. "Sonar".</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtDigitalSensor.ReadByteFromAddress(System.Byte)">
+            <summary>
+            <para>Reads the value of the variable stored at the address.</para>
+            </summary>
+            <param name="address">The address of the variable</param>
+            <returns>The value of the variable</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtDigitalSensor.ReadWordFromAdress(System.Byte)">
+            <summary>
+            <para>Reads the value of the variable stored at the two consecutive bytes at the address.</para>
+            </summary>
+            <param name="address">The address of the variable</param>
+            <returns>The value of the variable</returns>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtException">
+            <summary>
+            <para>Generic NXT exception.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtException.#ctor(System.String)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="Message">The exception message.</param>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtConnectionException">
+            <summary>
+            <para>This exception is thrown when there is no connection to the NXT brick.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtConnectionException.#ctor(System.String)">
+            <summary>
+            <para>Constructor</para>
+            </summary>
+            <param name="Message"></param>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtCommunicationProtocolException">
+            <summary>
+            <para>Exception thrown when there is an error in the communication to the NXT brick.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocolException.#ctor(NKH.MindSqualls.NxtCommand,NKH.MindSqualls.NxtErrorMessage,System.String)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="command">The command</param>
+            <param name="errorMessage">The error code</param>
+            <param name="Message">The exception message</param>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommunicationProtocolException.command">
+            <summary>
+            <para>The NxtCommand that resulted in the exception.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtCommunicationProtocolException.errorMessage">
+            <summary>
+            <para>The NxtErrorMessage that was returned from the NXT brick.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtCommunicationProtocolException.ToString">
+            <summary>
+            <para>ToString() override.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtLightSensor">
+            <summary>
+            <para>Class representing the Light sensor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtLightSensor.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtLightSensor.GenerateLight">
+            <summary>
+            <para>Indicates if the sensor should supply its own light.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtLightSensor.Intensity">
+            <summary>
+            <para>The intensity of the measured light.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtLightSensor.ThresholdIntensity">
+            <summary>
+            <para>Threshold intensity.</para>
+            </summary>
+            <seealso cref="E:NKH.MindSqualls.NxtLightSensor.OnAboveThresholdIntensity"/>
+            <seealso cref="E:NKH.MindSqualls.NxtLightSensor.OnBelowThresholdIntensity"/>
+        </member>
+        <member name="E:NKH.MindSqualls.NxtLightSensor.OnAboveThresholdIntensity">
+            <summary>
+            <para>This event is fired whenever the measured light intensity passes above the threshold-intensity.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtLightSensor.ThresholdIntensity"/>
+            <seealso cref="E:NKH.MindSqualls.NxtLightSensor.OnBelowThresholdIntensity"/>
+        </member>
+        <member name="E:NKH.MindSqualls.NxtLightSensor.OnBelowThresholdIntensity">
+            <summary>
+            <para>This event is fired whenever the measured light intensity passes below the threshold-intensity.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtLightSensor.ThresholdIntensity"/>
+            <seealso cref="E:NKH.MindSqualls.NxtLightSensor.OnAboveThresholdIntensity"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtLightSensor.Poll">
+            <summary>
+            <para>Polls the sensor, and fires the NXT-G like events if appropriate.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtLightSensor.ThresholdIntensity"/>
+            <seealso cref="E:NKH.MindSqualls.NxtLightSensor.OnAboveThresholdIntensity"/>
+            <seealso cref="E:NKH.MindSqualls.NxtLightSensor.OnBelowThresholdIntensity"/>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtMotorEvent">
+            <summary>
+            <para>Delegate used for the NXT-G like events implemented in the motor.</para>
+            </summary>
+            <param name="motor">The motor</param>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtMotor">
+            <summary>
+            <para>Class representing a motor.</para>
+            </summary>
+            <seealso cref="T:NKH.MindSqualls.NxtMotorSync"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotor.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotor.#ctor(System.Boolean)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="reverse">Indicates if the motor-direction should be reversed.</param>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotor.motorPort">
+            <summary>
+            <para>The port on the NXT brick that the motor is attached to.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtMotor.Port">
+            <summary>
+            <para>The port on the NXT brick that the motor is attached to.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotor.Run(System.SByte,System.UInt32)">
+            <summary>
+            <para>Run the motor.</para>
+            </summary>
+            <param name="power">The power for the motor</param>
+            <param name="tachoLimit">The duration in degrees, 0 = unlimited</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotor.Coast">
+            <summary>
+            <para>Coast the motor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotor.Brake">
+            <summary>
+            <para>Brake the motor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotor.Idle">
+            <summary>
+            <para>Sets the motor into the idle state.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtMotor.TachoCount">
+            <summary>
+            <para>Returns the current tacho count of the motor (in degrees).</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotor.ResetMotorPosition(System.Boolean)">
+            <summary>
+            <para>Resets the motors tachometer.</para>
+            </summary>
+            <param name="relative">True if the reset is relative to the last movement, false if the absolute position</param>
+            <seealso cref="M:NKH.MindSqualls.NxtCommunicationProtocol.ResetMotorPosition"/>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtMotor.TriggerTachoCount">
+            <summary>
+            <para>Trigger value for the tachocount.</para>
+            </summary>
+            <seealso cref="E:NKH.MindSqualls.NxtMotor.OnBelowTachoCount"/>
+            <seealso cref="E:NKH.MindSqualls.NxtMotor.OnAboveTachoCount"/>
+        </member>
+        <member name="E:NKH.MindSqualls.NxtMotor.OnBelowTachoCount">
+            <summary>
+            <para>This event is fired when the tachocount of the motor goes below the trigger-value.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtMotor.TriggerTachoCount"/>
+            <seealso cref="E:NKH.MindSqualls.NxtMotor.OnAboveTachoCount"/>
+            <seealso cref="M:NKH.MindSqualls.NxtMotor.Poll"/>
+        </member>
+        <member name="E:NKH.MindSqualls.NxtMotor.OnAboveTachoCount">
+            <summary>
+            <para>This event is fired when the tachocount of the motor goes above the trigger-value.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtMotor.TriggerTachoCount"/>
+            <seealso cref="E:NKH.MindSqualls.NxtMotor.OnBelowTachoCount"/>
+            <seealso cref="M:NKH.MindSqualls.NxtMotor.Poll"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotor.pollData">
+            <summary>
+            <para>The data from the previous poll of the motor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotor.Poll">
+            <summary>
+            <para>Poll the motor.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtMotorSync">
+            <summary>
+            <para>Class representing a synchronized pair of motors.</para>
+            </summary>
+            <seealso cref="T:NKH.MindSqualls.NxtMotor"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorSync.motorX">
+            <summary>
+            <para>The first motor of the synchronized pair.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtMotorSync.motorY">
+            <summary>
+            <para>The second motor of the synchronized pair.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotorSync.#ctor(NKH.MindSqualls.NxtMotor,NKH.MindSqualls.NxtMotor)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="motorX">The 1. motor of the synchronized pair</param>
+            <param name="motorY">The 2. motor of the synchronized pair</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotorSync.Run(System.SByte,System.UInt16,System.SByte)">
+            <summary>
+            <para>Run the motors (in sync).</para>
+            </summary>
+            <param name="power">The poser</param>
+            <param name="tachoLimit">The tacho limit in degrees, 0 means unlimited</param>
+            <param name="turnRatio">The turn ratio</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotorSync.ResetMotorPosition(System.Boolean)">
+            <summary>
+            <para>Calls ResetMotorPosition() on both motors.</para>
+            </summary>
+            <param name="relative">True if the reset is relative to the last movement, false if the absolute position</param>
+            <seealso cref="M:NKH.MindSqualls.NxtMotor.ResetMotorPosition"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotorSync.Coast">
+            <summary>
+            <para>Coasts the motors.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotorSync.Brake">
+            <summary>
+            <para>Brakes the motors.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtMotorSync.Idle">
+            <summary>
+            <para>Puts the motors into the idle state.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtNoSensor">
+            <summary>
+            <para>Class representing a port with no sensor attached.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtNoSensor.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtNoSensor.Poll">
+            <summary>
+            <para>This empty Pool-method effectively cancels polling on this port.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtPassiveSensor">
+            <summary>
+            <para>Abstract class representing a Passive Sensor.</para>
+            </summary>
+            <remarks>
+            <para>According to the LEGO MINDSTORMS NXT Hardware Developer Kit p. 7, sensors is divided into three types: active sensors (e.g. Robotics Invention Systems sensors), passive sensors (e.g. the NXT touch, light, and sound sensors), and digital sensors (e.g. the NXT ultrasonic sensor and the HiTechnic compass sensor). The three abstract classes NxtActiveSensor, NxtPassiveSensor, and NxtDigitalSensor reflect this.</para>
+            </remarks>
+            <seealso cref="T:NKH.MindSqualls.NxtActiveSensor"/>
+            <seealso cref="T:NKH.MindSqualls.NxtDigitalSensor"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtPassiveSensor.#ctor(NKH.MindSqualls.NxtSensorType,NKH.MindSqualls.NxtSensorMode)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="sensorType">Sensor type</param>
+            <param name="sensorMode">Sensor mode</param>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtPassiveSensor.pollData">
+            <summary>
+            <para>The data from the last poll of the sensor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtPassiveSensor.Poll">
+            <summary>
+            <para>Poll the sensor.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.Polled">
+            <summary>
+            <para>Delegate used when a motor or sensor is polled.</para>
+            </summary>
+            <param name="polledItem">The motor/sensor.</param>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtPollable">
+            <summary>
+            <para>Abstract class used as superclass for the NxtMotor and NxtSensor classes.</para>
+            </summary>
+            <remarks>
+            <para>This class has been modified from using System.Timers.Timer (in versions 1.0 and 1.1) to using System.Threading.Timer in order to be able to function with the compact framework (i.e. to run on a PDA). A special thanks to Giorgio T. for his suggestion.</para>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtPollable.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtPollable.brick">
+            <summary>
+            <para>The NXT brick that the sensor/motor is attached to.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtPollable.Brick">
+            <summary>
+            <para>The NXT brick that the sensor/motor is attached to.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtPollable.PollInterval">
+            <summary>
+            <para>Indicates if the sensor, or motor, is auto-polled or not.</para>
+            </summary>
+            <value>
+            <para>A positive value means that the sensor is auto-pooled, and with the indicated interval i milliseconds.</para>
+            <para>Zero, or a negative value, means that the sensor is not auto-polled.</para>
+            </value>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtPollable.autoPollTimer">
+            <summary>
+            <para>The auto-poll timer.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtPollable.autoPollTimer_Callback(System.Object)">
+            <summary>
+            <para>This event is triggered by the auto-poll timer.</para>
+            </summary>
+        </member>
+        <member name="E:NKH.MindSqualls.NxtPollable.OnPolled">
+            <summary>
+            <para>This event is fired when the sensor, or motor, is polled.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtPollable.Poll">
+            <summary>
+            <para>Poll the sensor/motor.</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtSensorEvent">
+            <summary>
+            <para>Delegate used for the NXT-G like events implemented in the various sensors.</para>
+            </summary>
+            <param name="sensor">The sensor</param>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtSensor">
+            <summary>
+            <para>Superclass representing a generic sensor.</para>
+            </summary>
+            <remarks>
+            <para>Used as base class for the specific sensor classes.</para>
+            </remarks>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensor.sensorPort">
+            <summary>
+            <para>The port the sensor is attached to.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtSensor.sensorType">
+            <summary>
+            <para>The type of the sensor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtSensor.#ctor(NKH.MindSqualls.NxtSensorType,NKH.MindSqualls.NxtSensorMode)">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+            <param name="sensorType">The type of the sensor</param>
+            <param name="sensorMode">The sensors mode</param>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtSensor.InitSensor">
+            <summary>
+            <para>Initialize the sensor.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtSensor.Port">
+            <summary>
+            <para>The port on the NXT brick that the sensor is attached to.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtSensor.Poll">
+            <summary>
+            <para>Poll the sensor</para>
+            </summary>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtSoundSensor">
+            <summary>
+            <para>Class representing the Sound sensor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtSoundSensor.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtSoundSensor.dBA">
+            <summary>
+            <para>Indicating if the sensor should return results as dB or as dBA (adjusted for the human ear).</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtSoundSensor.Intensity">
+            <summary>
+            <para>The measured sound intensity.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtSoundSensor.dBA"/>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtSoundSensor.ThresholdIntensity">
+            <summary>
+            <para>Threshold sound intensity.</para>
+            </summary>
+            <seealso cref="E:NKH.MindSqualls.NxtSoundSensor.OnAboveThresholdIntensity"/>
+            <seealso cref="E:NKH.MindSqualls.NxtSoundSensor.OnBelowThresholdIntensity"/>
+        </member>
+        <member name="E:NKH.MindSqualls.NxtSoundSensor.OnAboveThresholdIntensity">
+            <summary>
+            <para>This event is fired whenever the measured sound intensity passes above the threshold-level.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtSoundSensor.ThresholdIntensity"/>
+            <seealso cref="E:NKH.MindSqualls.NxtSoundSensor.OnBelowThresholdIntensity"/>
+            <seealso cref="M:NKH.MindSqualls.NxtSoundSensor.Poll"/>
+        </member>
+        <member name="E:NKH.MindSqualls.NxtSoundSensor.OnBelowThresholdIntensity">
+            <summary>
+            <para>This event is fired whenever the measured sound intensity passes below the threshold-level.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtSoundSensor.ThresholdIntensity"/>
+            <seealso cref="E:NKH.MindSqualls.NxtSoundSensor.OnAboveThresholdIntensity"/>
+            <seealso cref="M:NKH.MindSqualls.NxtSoundSensor.Poll"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtSoundSensor.Poll">
+            <summary>
+            <para>Polls the sensor, and fires the NXT-G like events if appropriate.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtSoundSensor.ThresholdIntensity"/>
+            <seealso cref="E:NKH.MindSqualls.NxtSoundSensor.OnAboveThresholdIntensity"/>
+            <seealso cref="E:NKH.MindSqualls.NxtSoundSensor.OnBelowThresholdIntensity"/>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtTouchSensor">
+            <summary>
+            <para>Class representing the Touch sensor.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtTouchSensor.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtTouchSensor.IsPressed">
+            <summary>
+            <para>Indicating if the sensor-button is pressed or not.</para>
+            </summary>
+        </member>
+        <member name="E:NKH.MindSqualls.NxtTouchSensor.OnPressed">
+            <summary>
+            <para>This event is fired when the touch sensor is pressed.</para>
+            </summary>
+            <seealso cref="E:NKH.MindSqualls.NxtTouchSensor.OnReleased"/>
+            <seealso cref="M:NKH.MindSqualls.NxtTouchSensor.Poll"/>
+        </member>
+        <member name="E:NKH.MindSqualls.NxtTouchSensor.OnReleased">
+            <summary>
+            <para>This event is fired when the touch sensor is released.</para>
+            </summary>
+            <seealso cref="E:NKH.MindSqualls.NxtTouchSensor.OnPressed"/>
+            <seealso cref="M:NKH.MindSqualls.NxtTouchSensor.Poll"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtTouchSensor.Poll">
+            <summary>
+            <para>Polls the sensor, and fires the NXT-G like events if appropriate.</para>
+            </summary>
+            <seealso cref="E:NKH.MindSqualls.NxtTouchSensor.OnPressed"/>
+            <seealso cref="E:NKH.MindSqualls.NxtTouchSensor.OnReleased"/>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtUltrasonicSensor">
+            <summary>
+            <para>Class representing the Ultrasonic sensor.</para>
+            </summary>
+            <remarks>
+            <para>The I2C protocol for the Ultrasonic sensor is specified in the document:</para>
+            <para>Lego Mindstorms NXT,<br/>
+            Hardware Developer Kit,<br/>
+            Appendix 7: LEGO MINDSTORMS NXT Ultrasonic Sensor I2C communication protocol</para>
+            <para>which can be downloaded at:<br/>
+            <a href="http://mindstorms.lego.com/overview/NXTreme.aspx" target="_blank">http://mindstorms.lego.com/overview/NXTreme.aspx</a></para>
+            <para>A special thanks goes to Dick Swan and Templar for their invaluable explanations in:<br/>
+            <a href="http://forums.nxtasy.org/index.php?showtopic=141" target="_blank">http://forums.nxtasy.org/index.php?showtopic=141</a></para>
+            <para>The resulting code stated out being part of the NxtUltrasonicSensor class but has since been moved to the NxtDigitalSensor class.</para>
+            </remarks>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.#ctor">
+            <summary>
+            <para>Constructor.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtUltrasonicSensor.DistanceCm">
+            <summary>
+            <para>Returns the measured distance in cm.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadFactoryZero">
+            <summary>
+            <para>Returns the "factory zero" of the sensor.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadFactoryScaleFactor">
+            <summary>
+            <para>Returns the "factory scale factor" of the sensor.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadFactoryScaleDivisor">
+            <summary>
+            <para>Returns the factory scale divisor of the sensor.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadMeasurementUnits">
+            <summary>
+            <para>Returns the measurement units if the sensor, e.g. "10E-2m".</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadContinuousMeasurementsInterval">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 2.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.ContinuousMeasurementCommand"/>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.SetContinuousMeasurementInterval(System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadCommandState">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 2.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadMeasurementByteX(System.Byte)">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 2.</para>
+            </summary>
+            <param name="x">The byte no.</param>
+            <returns>... TBD ...</returns>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadActualZero">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 2.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.SetActualZero(System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadActualScaleFactor">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 3.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.SetActualScaleFactor(System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadActualScaleDivisor">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 3.</para>
+            </summary>
+            <returns>... TBD ...</returns>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.SetActualScaleDivisor(System.Byte)"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.OffCommand">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 3.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.SingleShotCommand">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 3.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.ContinuousMeasurementCommand"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.ContinuousMeasurementCommand">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 3.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadContinuousMeasurementsInterval"/>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.SetContinuousMeasurementInterval(System.Byte)"/>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.SingleShotCommand"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.EventCaptureCommand">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 3.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.RequestWarmReset">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 3.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.SetContinuousMeasurementInterval(System.Byte)">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 3.</para>
+            </summary>
+            <param name="interval">The interval</param>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.ContinuousMeasurementCommand"/>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadContinuousMeasurementsInterval"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.SetActualZero(System.Byte)">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 3.</para>
+            </summary>
+            <param name="value">The value</param>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadActualZero"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.SetActualScaleFactor(System.Byte)">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 3.</para>
+            </summary>
+            <param name="value">The value</param>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadActualScaleFactor"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.SetActualScaleDivisor(System.Byte)">
+            <summary>
+            <para>Reference: HDK, Appendix 7, p. 3.</para>
+            </summary>
+            <remarks>
+            <para>See the remark for ReadActualScaleDivisor().</para>
+            </remarks>
+            <param name="value">The value</param>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.ReadActualScaleDivisor"/>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtUltrasonicSensor.ThresholdDistanceCm">
+            <summary>
+            <para>Threshold  distance.</para>
+            </summary>
+            <seealso cref="E:NKH.MindSqualls.NxtUltrasonicSensor.OnWithinThresholdDistanceCm"/>
+            <seealso cref="E:NKH.MindSqualls.NxtUltrasonicSensor.OnOutsideThresholdDistanceCm"/>
+        </member>
+        <member name="E:NKH.MindSqualls.NxtUltrasonicSensor.OnWithinThresholdDistanceCm">
+            <summary>
+            <para>This event is fired if the sensor detects an object within the threshold distance.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtUltrasonicSensor.ThresholdDistanceCm"/>
+            <seealso cref="E:NKH.MindSqualls.NxtUltrasonicSensor.OnOutsideThresholdDistanceCm"/>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.Poll"/>
+        </member>
+        <member name="E:NKH.MindSqualls.NxtUltrasonicSensor.OnOutsideThresholdDistanceCm">
+            <summary>
+            <para>This event is fired if the sensor does not detect an object within the threshold distance.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtUltrasonicSensor.ThresholdDistanceCm"/>
+            <seealso cref="E:NKH.MindSqualls.NxtUltrasonicSensor.OnWithinThresholdDistanceCm"/>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.Poll"/>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtUltrasonicSensor.pollData">
+            <summary>
+            <para>The data from the previous poll of the sensor.</para>
+            </summary>
+            <seealso cref="M:NKH.MindSqualls.NxtUltrasonicSensor.Poll"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUltrasonicSensor.Poll">
+            <summary>
+            <para>Polls the sensor, and fires the NXT-G like events if appropriate.</para>
+            </summary>
+            <seealso cref="P:NKH.MindSqualls.NxtUltrasonicSensor.ThresholdDistanceCm"/>
+            <seealso cref="E:NKH.MindSqualls.NxtUltrasonicSensor.OnWithinThresholdDistanceCm"/>
+            <seealso cref="E:NKH.MindSqualls.NxtUltrasonicSensor.OnOutsideThresholdDistanceCm"/>
+        </member>
+        <member name="T:NKH.MindSqualls.NxtUsbConnection">
+            <summary>
+            <para>Class representing communication over an USB connection.</para>
+            </summary>
+            <remarks>
+            <para>Introduced with v2.0 of the framework.</para>
+            </remarks>
+            <seealso cref="T:NKH.MindSqualls.NxtBluetoothConnection"/>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUsbConnection.Connect">
+            <summary>
+            <para>This method has no function for an USB connection.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUsbConnection.Disconnect">
+            <summary>
+            <para>This method has no function for an USB connection.</para>
+            </summary>
+        </member>
+        <member name="P:NKH.MindSqualls.NxtUsbConnection.IsConnected">
+            <summary>
+            <para>Indicates if connected to the NXT brick.</para>
+            </summary>
+        </member>
+        <member name="F:NKH.MindSqualls.NxtUsbConnection.usbLock">
+            <summary>
+            <para>Object to control mutex locking on the USB.</para>
+            </summary>
+        </member>
+        <member name="M:NKH.MindSqualls.NxtUsbConnection.Send(System.Byte[])">
+            <summary>
+            <para>Sends a request for the NXT brick, and if applicable, receive the reply.</para>
+            </summary>
+            <param name="request">The request</param>
+            <returns>The reply as a byte-array, or null</returns>
+        </member>
+    </members>
+</doc>
