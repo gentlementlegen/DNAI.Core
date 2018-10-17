@@ -137,9 +137,9 @@ namespace CorePluginLego.Model
                     var dir = _rd.Next(-1, 1) >= 0 ? 1 : -1;
                     _brick.MotorB.Run((sbyte)(Velocity * dir), 180);
                     _brick.MotorC.Run((sbyte)(Velocity * -dir), 180);
-                    Thread.Sleep(950);
+                    Thread.Sleep(1050);
                 }
-                Thread.Sleep(50);
+                Thread.Sleep(100);
             }
         }
 
