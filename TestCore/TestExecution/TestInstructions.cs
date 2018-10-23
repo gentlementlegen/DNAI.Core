@@ -497,5 +497,34 @@ namespace CoreTest
 
             Assert.IsTrue(randIns.GetOutputValue("value") == randIns.GetOutputValue("value"));
         }
+
+        [TestMethod]
+        public void TestCastNode()
+        {
+            var castToFloat = new CorePackage.Execution.Cast(Scalar.Floating);
+
+            castToFloat.SetInputValue("reference", 4);
+            Assert.IsTrue(castToFloat.GetOutputValue("succeed"));
+            Assert.IsTrue(castToFloat.GetOutputValue("value") == 4.0);
+
+            castToFloat.SetInputValue("reference", "coucou");
+            Assert.IsFalse(castToFloat.GetOutputValue("succeed"));
+
+            castToFloat.SetInputValue("reference", 4f);
+            Assert.IsTrue(castToFloat.GetOutputValue("succeed"));
+            Assert.IsTrue(castToFloat.GetOutputValue("value") == 4f);
+
+            castToFloat.SetInputValue("reference", 'o');
+            Assert.IsFalse(castToFloat.GetOutputValue("succeed"));
+
+            var castToInt = new CorePackage.Execution.Cast(Scalar.Integer);
+
+            castToInt.SetInputValue("reference", 4.3);
+            Assert.IsTrue(castToInt.GetOutputValue("succeed"));
+            Assert.IsTrue(castToInt.GetOutputValue("value") == 4);
+
+            castToInt.SetInputValue("reference", "coucou");
+            Assert.IsFalse(castToFloat.GetOutputValue("succeed"));
+        }
     }
 }

@@ -107,12 +107,12 @@ namespace CoreCommand
             RegisterCommand<Command.Global.CreateProject, Command.Global.CreateProject.Reply>           (Resolver.V1_0_0.Code, "GLOBAL.CREATE_PROJECT", "GLOBAL.PROJECT_CREATED", true);
             RegisterCommand<Command.Global.RemoveProject, Command.Global.RemoveProject.Reply>           (Resolver.V1_0_0.Code, "GLOBAL.REMOVE_PROJECT", "GLOBAL.PROJECT_REMOVED", true);
             RegisterCommand<Command.Global.GetProjectEntities, Command.Global.GetProjectEntities.Reply> (Resolver.V1_0_0.Code, "GLOBAL.GET_PROJECT_ENTITIES", "GLOBAL.PROJECT_ENTITIES_GET", false);
-            RegisterCommand                                                                             (Resolver.V1_0_0.Code, "GLOBAL.SAVE", "GLOBAL.SAVED", false, (Command.Global.Save cmd) =>
+            RegisterCommand(Resolver.V1_0_0.Code, "GLOBAL.SAVE", "GLOBAL.SAVED", false, (Command.Global.Save cmd) =>
             {
                 SaveCommandsTo(cmd.Filename);
                 return cmd.Resolve(null);
             });
-            RegisterCommand                                                                             (Resolver.V1_0_0.Code, "GLOBAL.LOAD", "GLOBAL.LOADED", true, (Command.Global.Load cmd) =>
+            RegisterCommand(Resolver.V1_0_0.Code, "GLOBAL.LOAD", "GLOBAL.LOADED", true, (Command.Global.Load cmd) =>
             {
                 Command.Global.Load.Reply toret = new Command.Global.Load.Reply
                 {
@@ -124,6 +124,8 @@ namespace CoreCommand
 
                 return toret;
             });
+            RegisterCommand<Command.Global.Save, EmptyReply>(Resolver.V1_0_0.Code, "GLOBAL.SAVE_TO", "GLOBAL.SAVED", false);
+            RegisterCommand<Command.Global.Load, Command.Global.Load.Reply>(Resolver.V1_0_0.Code, "GLOBAL.LOAD_TO", "GLOBAL.LOADED", true);
             RegisterCommand                                                                             (Resolver.V1_0_0.Code, "GLOBAL.RESET", "GLOBAL.RESET_DONE", false, (EmptyCommand cmd) =>
             {
                 Reset();

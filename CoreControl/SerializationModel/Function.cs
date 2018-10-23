@@ -16,5 +16,14 @@ namespace CoreControl.SerializationModel
 
         [BinarySerializer.BinaryFormat]
         public List<Instruction> Instructions { get; set; }
+
+        [BinarySerializer.BinaryFormat]
+        public int EntryPointIndex { get; set; }
+
+        [BinarySerializer.BinaryFormat]
+        public List<DataLink> DataLinks { get; set; }
+
+        [BinarySerializer.BinaryFormat]
+        public List<FlowLink> FlowLinks { get; set; }
     }
 }

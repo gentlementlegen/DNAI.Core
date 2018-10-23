@@ -14,6 +14,7 @@ namespace CoreCommand.Command.Global
 
         public EmptyReply Resolve(Controller controller)
         {
+            controller.SaveTo(Filename);
             return null;
         }
     }

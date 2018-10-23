@@ -56,6 +56,7 @@
     <Compile Include="Error\OperatorNotOverloaded.cs" />
     <Compile Include="Error\OperatorNotPermitted.cs" />
     <Compile Include="Execution\AccessRefreshInstruction.cs" />
+    <Compile Include="Execution\AccessRefresh\Cast.cs" />
     <Compile Include="Execution\AccessRefresh\EnumSplitter.cs" />
     <Compile Include="Execution\AccessRefresh\Getter.cs" />
     <Compile Include="Execution\AccessRefresh\GetAttributes.cs" />

@@ -8,6 +8,7 @@ namespace CoreControl.SerializationModel
 {
     public class Context
     {
+        [BinarySerializer.BinaryFormat]
         public List<UInt32> Children { get; set; }
     }
 }

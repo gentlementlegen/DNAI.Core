@@ -65,7 +65,8 @@ namespace CoreControl
             SET_VALUE_AT_KEY,
             REMOVE_VALUE_AT_KEY,
             MACHINE_LEARNING_RUNNER,
-            RANDOM
+            RANDOM,
+            CAST
         };
 
         /// <summary>
@@ -119,7 +120,8 @@ namespace CoreControl
             { INSTRUCTION_ID.SET_VALUE_AT_KEY, 0 },
             { INSTRUCTION_ID.REMOVE_VALUE_AT_KEY, 0 },
             { INSTRUCTION_ID.MACHINE_LEARNING_RUNNER, 0 },
-            { INSTRUCTION_ID.RANDOM, 0 }
+            { INSTRUCTION_ID.RANDOM, 0 },
+            { INSTRUCTION_ID.CAST, 1 }
         };
 
         /// <summary>
@@ -173,7 +175,63 @@ namespace CoreControl
             { INSTRUCTION_ID.SET_VALUE_AT_KEY,  (List<IDefinition> args) => new SetValueAtKey() },
             { INSTRUCTION_ID.REMOVE_VALUE_AT_KEY,       (List<IDefinition> args) => new RemoveValueAtKey() },
             { INSTRUCTION_ID.MACHINE_LEARNING_RUNNER,   (List<IDefinition> args) => new MachineLearningRunner() },
-            { INSTRUCTION_ID.RANDOM,            (List<IDefinition> args) => new CorePackage.Execution.Random() }
+            { INSTRUCTION_ID.RANDOM,            (List<IDefinition> args) => new CorePackage.Execution.Random() },
+            { INSTRUCTION_ID.CAST,              (List<IDefinition> args) => new Cast((DataType)args[0]) }
+        };
+
+        /// <summary>
+        /// Dictionnary that associates the type of the instruction to its identifier
+        /// </summary>
+        private static readonly Dictionary<System.Type, INSTRUCTION_ID> types = new Dictionary<Type, INSTRUCTION_ID>
+        {
+            { typeof(And), INSTRUCTION_ID.AND },
+            { typeof(Or), INSTRUCTION_ID.OR },
+            { typeof(Different), INSTRUCTION_ID.DIFFERENT },
+            { typeof(Equal), INSTRUCTION_ID.EQUAL },
+            { typeof(Greater), INSTRUCTION_ID.GREATER },
+            { typeof(GreaterEqual), INSTRUCTION_ID.GREATER_EQUAL },
+            { typeof(Less), INSTRUCTION_ID.LOWER },
+            { typeof(LessEqual), INSTRUCTION_ID.LOWER_EQUAL },
+            { typeof(Access), INSTRUCTION_ID.ACCESS },
+            { typeof(BinaryAnd), INSTRUCTION_ID.BINARY_AND },
+            { typeof(BinaryOr), INSTRUCTION_ID.BINARY_OR },
+            { typeof(Xor), INSTRUCTION_ID.XOR },
+            { typeof(Add), INSTRUCTION_ID.ADD },
+            { typeof(Substract), INSTRUCTION_ID.SUB },
+            { typeof(Divide), INSTRUCTION_ID.DIV },
+            { typeof(Multiplicate), INSTRUCTION_ID.MUL },
+            { typeof(Modulo), INSTRUCTION_ID.MOD },
+            { typeof(LeftShift), INSTRUCTION_ID.LEFT_SHIFT },
+            { typeof(RightShift), INSTRUCTION_ID.RIGHT_SHIFT },
+            { typeof(BinaryNot), INSTRUCTION_ID.BINARY_NOT },
+            { typeof(Not), INSTRUCTION_ID.NOT },
+            { typeof(Inverse), INSTRUCTION_ID.INVERSE },
+            { typeof(EnumSplitter), INSTRUCTION_ID.ENUM_SPLITTER },
+            { typeof(Getter), INSTRUCTION_ID.GETTER },
+            { typeof(Setter), INSTRUCTION_ID.SETTER },
+            { typeof(FunctionCall), INSTRUCTION_ID.FUNCTION_CALL },
+            { typeof(If), INSTRUCTION_ID.IF },
+            { typeof(While), INSTRUCTION_ID.WHILE },
+            { typeof(Append), INSTRUCTION_ID.APPEND },
+            { typeof(Insert), INSTRUCTION_ID.INSERT },
+            { typeof(Remove), INSTRUCTION_ID.REMOVE },
+            { typeof(RemoveIndex), INSTRUCTION_ID.REMOVE_INDEX },
+            { typeof(Size), INSTRUCTION_ID.SIZE },
+            { typeof(Foreach), INSTRUCTION_ID.FOREACH },
+            { typeof(GetAttributes), INSTRUCTION_ID.GET_ATTRIBUTES },
+            { typeof(SetAttribute), INSTRUCTION_ID.SET_ATTRIBUTES },
+            { typeof(Break), INSTRUCTION_ID.BREAK },
+            { typeof(Continue), INSTRUCTION_ID.CONTINUE },
+            { typeof(Clear), INSTRUCTION_ID.CLEAR },
+            { typeof(Fill), INSTRUCTION_ID.FILL },
+            { typeof(SetValueAt), INSTRUCTION_ID.SET_VALUE_AT },
+            { typeof(Return), INSTRUCTION_ID.RETURN },
+            { typeof(HasKey), INSTRUCTION_ID.HAS_KEY },
+            { typeof(SetValueAtKey), INSTRUCTION_ID.SET_VALUE_AT_KEY },
+            { typeof(RemoveValueAtKey), INSTRUCTION_ID.REMOVE_VALUE_AT_KEY },
+            { typeof(MachineLearningRunner), INSTRUCTION_ID.MACHINE_LEARNING_RUNNER },
+            { typeof(CorePackage.Execution.Random), INSTRUCTION_ID.RANDOM },
+            { typeof(Cast), INSTRUCTION_ID.CAST }
         };
 
         /// <summary>
@@ -188,7 +246,22 @@ namespace CoreControl
                 throw new KeyNotFoundException("Given instruction isn't referenced in factory");
             if (arguments.Count < number_of_arguments[to_create])
                 throw new InvalidProgramException("Not enought arguments to construct intruction");
-            return creators[to_create](arguments);
+
+            Instruction created = creators[to_create](arguments);
+
+            created.ConstructionList = arguments;
+
+            return created;
+        }
+
+        /// <summary>
+        /// Returns the instruction id of a given instruction
+        /// </summary>
+        /// <param name="instruction">Instruction to which find the type</param>
+        /// <returns>Type of the instruction</returns>
+        public static INSTRUCTION_ID GetInstructionType(Instruction instruction)
+        {
+            return types[instruction.GetType()];
         }
     }
 }

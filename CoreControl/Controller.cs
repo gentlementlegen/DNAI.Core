@@ -23,6 +23,45 @@ namespace CoreControl
             entity_factory = new EntityFactory();
         }
 
+        public void SaveTo(string filename)
+        {
+            CoreSerializer serializer = new CoreSerializer
+            {
+                Factory = entity_factory
+            };
+
+            serializer.SaveTo(filename);
+        }
+
+        public void LoadFrom(string filename)
+        {
+            CoreSerializer serializer = new CoreSerializer
+            {
+                Factory = new EntityFactory()
+            };
+
+            merge(serializer.LoadFrom(filename));
+        }
+
+        public UInt32 FindEntity(string path)
+        {
+            String[] names = path.Substring(1).Split('/');
+            CorePackage.Global.IDefinition cwe = entity_factory.Find(EntityFactory.BASE_ID.GLOBAL_CTX);
+
+            foreach (string name in names)
+            {
+                if (cwe is CorePackage.Global.IDeclarator decl)
+                {
+                    cwe = decl.Find(name);
+                }
+                else
+                {
+                    throw new KeyNotFoundException($"Cannot access to entity {name} from {cwe.Name}: Not a declarator");
+                }
+            }
+            return entity_factory.GetEntityID(cwe);
+        }
+
         /// <summary>
         /// Will declare an entity in a container with a specific name and visibility
         /// </summary>

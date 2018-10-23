@@ -96,6 +96,7 @@ namespace CoreControl
             //global context is in 0
             AddEntity(new CorePackage.Entity.Context());
             CorePackage.Global.IDeclarator root = GetDeclaratorOf(0);
+            (root as CorePackage.Global.IDefinition).Name = "";
 
             //boolean type is in 1
             AddEntity(CorePackage.Entity.Type.Scalar.Boolean);
@@ -569,9 +570,9 @@ namespace CoreControl
             else if (entity.GetType() == typeof(CorePackage.Entity.Type.ListType))
                 return EntityFactory.ENTITY.LIST_TYPE;
             else if (entity.GetType() == typeof(CorePackage.Entity.DataType)
-                || entity.GetType() == typeof(CorePackage.Entity.Type.ScalarType)
-                || entity.GetType() == typeof(CorePackage.Entity.Type.DictType)
-                || entity.GetType() == typeof(CorePackage.Entity.Type.AnyType))
+                || entity.GetType() == typeof(ScalarType)
+                || entity.GetType() == typeof(DictType)
+                || entity.GetType() == typeof(AnyType))
                 return EntityFactory.ENTITY.DATA_TYPE;
             else if (entity.GetType() == typeof(CorePackage.Entity.Function))
                 return EntityFactory.ENTITY.FUNCTION;

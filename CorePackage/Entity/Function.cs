@@ -84,6 +84,11 @@ namespace CorePackage.Entity
         }
 
         /// <summary>
+        /// Entry point of the function
+        /// </summary>
+        public Execution.ExecutionRefreshInstruction EntryPoint { get { return entrypoint; } }
+
+        /// <summary>
         /// Allow user to set a parameter value from its name
         /// </summary>
         /// <param name="name">Name of the parameter</param>

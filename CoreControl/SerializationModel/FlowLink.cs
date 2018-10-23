@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace CoreControl.SerializationModel
 {
-    public class Instruction
+    public class FlowLink
     {
         [BinarySerializer.BinaryFormat]
-        public InstructionFactory.INSTRUCTION_ID InstructionType { get; set; }
+        public uint OutflowInstructionID { get; set; }
 
         [BinarySerializer.BinaryFormat]
-        public List<UInt32> Construction { get; set; }
+        public uint OutflowPin { get; set; }
 
         [BinarySerializer.BinaryFormat]
-        public Dictionary<string, string> InputValues { get; set; }
+        public uint InflowInstructionID { get; set; }
     }
 }

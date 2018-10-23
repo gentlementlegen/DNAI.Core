@@ -56,9 +56,11 @@
     <Compile Include="InstructionFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerializationModel\Context.cs" />
+    <Compile Include="SerializationModel\DataLink.cs" />
     <Compile Include="SerializationModel\Entity.cs" />
     <Compile Include="SerializationModel\DataType.cs" />
     <Compile Include="SerializationModel\EnumType.cs" />
+    <Compile Include="SerializationModel\FlowLink.cs" />
     <Compile Include="SerializationModel\Function.cs" />
     <Compile Include="SerializationModel\Instruction.cs" />
     <Compile Include="SerializationModel\ListType.cs" />
