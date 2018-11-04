@@ -107,25 +107,25 @@ namespace CoreCommand
             RegisterCommand<Command.Global.CreateProject, Command.Global.CreateProject.Reply>           (Resolver.V1_0_0.Code, "GLOBAL.CREATE_PROJECT", "GLOBAL.PROJECT_CREATED", true);
             RegisterCommand<Command.Global.RemoveProject, Command.Global.RemoveProject.Reply>           (Resolver.V1_0_0.Code, "GLOBAL.REMOVE_PROJECT", "GLOBAL.PROJECT_REMOVED", true);
             RegisterCommand<Command.Global.GetProjectEntities, Command.Global.GetProjectEntities.Reply> (Resolver.V1_0_0.Code, "GLOBAL.GET_PROJECT_ENTITIES", "GLOBAL.PROJECT_ENTITIES_GET", false);
-            RegisterCommand(Resolver.V1_0_0.Code, "GLOBAL.SAVE", "GLOBAL.SAVED", false, (Command.Global.Save cmd) =>
-            {
-                SaveCommandsTo(cmd.Filename);
-                return cmd.Resolve(null);
-            });
-            RegisterCommand(Resolver.V1_0_0.Code, "GLOBAL.LOAD", "GLOBAL.LOADED", true, (Command.Global.Load cmd) =>
-            {
-                Command.Global.Load.Reply toret = new Command.Global.Load.Reply
-                {
-                    Projects = new List<uint>()
-                };
+            //RegisterCommand(Resolver.V1_0_0.Code, "GLOBAL.SAVE", "GLOBAL.SAVED", false, (Command.Global.Save cmd) =>
+            //{
+            //    SaveCommandsTo(cmd.Filename);
+            //    return cmd.Resolve(null);
+            //});
+            //RegisterCommand(Resolver.V1_0_0.Code, "GLOBAL.LOAD", "GLOBAL.LOADED", true, (Command.Global.Load cmd) =>
+            //{
+            //    Command.Global.Load.Reply toret = new Command.Global.Load.Reply
+            //    {
+            //        Projects = new List<uint>()
+            //    };
 
-                //make LoadCommandsFrom return project list in order to return it
-                LoadCommandsFrom(cmd.Filename);
+            //    //make LoadCommandsFrom return project list in order to return it
+            //    LoadCommandsFrom(cmd.Filename);
 
-                return toret;
-            });
-            RegisterCommand<Command.Global.Save, EmptyReply>(Resolver.V1_0_0.Code, "GLOBAL.SAVE_TO", "GLOBAL.SAVED", false);
-            RegisterCommand<Command.Global.Load, Command.Global.Load.Reply>(Resolver.V1_0_0.Code, "GLOBAL.LOAD_TO", "GLOBAL.LOADED", true);
+            //    return toret;
+            //});
+            RegisterCommand<Command.Global.Save, EmptyReply>                                            (Resolver.V1_0_0.Code, "GLOBAL.SAVE_TO", "GLOBAL.SAVED", false);
+            RegisterCommand<Command.Global.Load, Command.Global.Load.Reply>                             (Resolver.V1_0_0.Code, "GLOBAL.LOAD_FROM", "GLOBAL.LOADED", true);
             RegisterCommand                                                                             (Resolver.V1_0_0.Code, "GLOBAL.RESET", "GLOBAL.RESET_DONE", false, (EmptyCommand cmd) =>
             {
                 Reset();
@@ -245,58 +245,69 @@ namespace CoreCommand
         ///<see cref="IManager.SaveCommandsTo(string)"/>
         public void SaveCommandsTo(string filename)
         {
-            var types = new List<string>();
-
-            using (var stream = File.Create(filename))
+            if (!CallCommand(new Command.Global.Save { Filename = filename }))
             {
-                BinarySerializer.Serializer.Serialize(MagicNumber, stream);
-
-                foreach (var command in _commands)
-                {
-                    if (!_commandsType.ContainsKey(command.GetType()))
-                        throw new InvalidDataException("BinaryManager.SaveCommandsTo : Given command \"" + command.GetType().ToString() + "\" is not registered");
-                    types.Add(_commandsType[command.GetType()]);
-                }
-
-                BinarySerializer.Serializer.Serialize(types, stream);
-
-                foreach (var command in _commands)
-                {
-                    BinarySerializer.Serializer.Serialize(command, stream);
-                }
+                throw new InvalidOperationException($"Couldn't save the project into {filename}");
             }
+
+            //var types = new List<string>();
+
+            //using (var stream = File.Create(filename))
+            //{
+            //    BinarySerializer.Serializer.Serialize(MagicNumber, stream);
+
+            //    foreach (var command in _commands)
+            //    {
+            //        if (!_commandsType.ContainsKey(command.GetType()))
+            //            throw new InvalidDataException("BinaryManager.SaveCommandsTo : Given command \"" + command.GetType().ToString() + "\" is not registered");
+            //        types.Add(_commandsType[command.GetType()]);
+            //    }
+
+            //    BinarySerializer.Serializer.Serialize(types, stream);
+
+            //    foreach (var command in _commands)
+            //    {
+            //        BinarySerializer.Serializer.Serialize(command, stream);
+            //    }
+            //}
         }
 
         ///<see cref="IManager.LoadCommandsFrom(string)"/>
         public void LoadCommandsFrom(string filename)
         {
-            using (var file = new StreamReader(filename))
-            {
-                UInt32 magic = BinarySerializer.Serializer.Deserialize<UInt32>(file.BaseStream);
+            Controller.LoadFrom(filename);
+            //if (!CallCommand(new Command.Global.Load { Filename = filename }))
+            //{
+            //    throw new FileLoadException($"Unable to load the project from {filename}");
+            //}
 
-                if (magic != MagicNumber)
-                {
-                    file.Close();
-                    throw new InvalidOperationException("Given file \"" + filename + "\" is not a DNAI file or is corrupted");
-                }
+            //using (var file = new StreamReader(filename))
+            //{
+            //    UInt32 magic = BinarySerializer.Serializer.Deserialize<UInt32>(file.BaseStream);
 
-                Controller save = Controller;
+            //    if (magic != MagicNumber)
+            //    {
+            //        file.Close();
+            //        throw new InvalidOperationException("Given file \"" + filename + "\" is not a DNAI file or is corrupted");
+            //    }
 
-                Reset();
+            //    Controller save = Controller;
 
-                foreach (var command in BinarySerializer.Serializer.Deserialize<List<string>>(file.BaseStream))//ProtoBuf.Serializer.DeserializeWithLengthPrefix<List<string>>(file.BaseStream, _prefix)
-                {
-                    if (!CallCommand(command, file.BaseStream, null))
-                        throw new InvalidOperationException("BinaryManager.LoadCommandsFrom : Error while executing command \"" + command + "\"");
-                }
+            //    Reset();
 
-                FilePath = filename;
+            //    foreach (var command in BinarySerializer.Serializer.Deserialize<List<string>>(file.BaseStream))//ProtoBuf.Serializer.DeserializeWithLengthPrefix<List<string>>(file.BaseStream, _prefix)
+            //    {
+            //        if (!CallCommand(command, file.BaseStream, null))
+            //            throw new InvalidOperationException("BinaryManager.LoadCommandsFrom : Error while executing command \"" + command + "\"");
+            //    }
 
-                save.merge(Controller);
-                Controller = save;
+            //    FilePath = filename;
 
-                file.Close();
-            }
+            //    save.merge(Controller);
+            //    Controller = save;
+
+            //    file.Close();
+            //}
         }
 
         /// <see cref="IManager.CallCommand(string, Stream, Stream)"/>
@@ -324,6 +335,7 @@ namespace CoreCommand
             reply = default(Reply);
             return false;
         }
+
         public bool CallCommand<Reply>(ICommand<Reply> tosend, MemoryStream input = null, MemoryStream output = null)
         {
             if (input == null)

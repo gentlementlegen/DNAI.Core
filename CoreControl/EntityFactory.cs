@@ -1,4 +1,6 @@
-﻿using CorePackage.Entity.Type;
+﻿using CoreControl.SerializationModel;
+using CorePackage.Entity.Type;
+using CorePackage.Global;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +20,14 @@ namespace CoreControl
         public enum BASE_ID : uint
         {
             GLOBAL_CTX = 0,
-            BOOLEAN_TYPE = 1,
-            INTEGER_TYPE = 2,
-            FLOATING_TYPE = 3,
-            CHARACTER_TYPE = 4,
-            STRING_TYPE = 5,
-            DICT_TYPE = 6,
-            ANY_TYPE = 7
+            BOOLEAN_TYPE,
+            INTEGER_TYPE,
+            FLOATING_TYPE,
+            CHARACTER_TYPE,
+            STRING_TYPE,
+            DICT_TYPE,
+            ANY_TYPE,
+            MATRIX_TYPE
         }
 
         /// <summary>
@@ -95,50 +98,56 @@ namespace CoreControl
         {
             //global context is in 0
             AddEntity(new CorePackage.Entity.Context());
-            CorePackage.Global.IDeclarator root = GetDeclaratorOf(0);
-            (root as CorePackage.Global.IDefinition).Name = "";
+            IDeclarator root = GetDeclaratorOf(0);
+            (root as IDefinition).Name = "";
 
             //boolean type is in 1
-            AddEntity(CorePackage.Entity.Type.Scalar.Boolean);
-            CorePackage.Entity.Type.Scalar.Boolean.Parent = root;
-            CorePackage.Entity.Type.Scalar.Boolean.Name = "Bool";
-            root.Declare(CorePackage.Entity.Type.Scalar.Boolean, "Bool", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(Scalar.Boolean);
+            Scalar.Boolean.Parent = root;
+            Scalar.Boolean.Name = "Bool";
+            root.Declare(Scalar.Boolean, "Bool", AccessMode.EXTERNAL);
 
             //integer type is in 2
-            AddEntity(CorePackage.Entity.Type.Scalar.Integer);
-            CorePackage.Entity.Type.Scalar.Integer.Parent = root;
-            CorePackage.Entity.Type.Scalar.Integer.Name = "Integer";
-            root.Declare(CorePackage.Entity.Type.Scalar.Integer, "Integer", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(Scalar.Integer);
+            Scalar.Integer.Parent = root;
+            Scalar.Integer.Name = "Integer";
+            root.Declare(Scalar.Integer, "Integer", AccessMode.EXTERNAL);
 
             //floating type is in 3
-            AddEntity(CorePackage.Entity.Type.Scalar.Floating);
-            CorePackage.Entity.Type.Scalar.Floating.Parent = root;
-            CorePackage.Entity.Type.Scalar.Floating.Name = "Floating";
-            root.Declare(CorePackage.Entity.Type.Scalar.Floating, "Floating", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(Scalar.Floating);
+            Scalar.Floating.Parent = root;
+            Scalar.Floating.Name = "Floating";
+            root.Declare(Scalar.Floating, "Floating", AccessMode.EXTERNAL);
 
             //character type is in 4
-            AddEntity(CorePackage.Entity.Type.Scalar.Character);
-            CorePackage.Entity.Type.Scalar.Character.Parent = root;
-            CorePackage.Entity.Type.Scalar.Character.Name = "Character";
-            root.Declare(CorePackage.Entity.Type.Scalar.Character, "Character", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(Scalar.Character);
+            Scalar.Character.Parent = root;
+            Scalar.Character.Name = "Character";
+            root.Declare(Scalar.Character, "Character", AccessMode.EXTERNAL);
 
             //string type is in 5
-            AddEntity(CorePackage.Entity.Type.Scalar.String);
-            CorePackage.Entity.Type.Scalar.String.Parent = root;
-            CorePackage.Entity.Type.Scalar.String.Name = "String";
-            root.Declare(CorePackage.Entity.Type.Scalar.String, "String", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(Scalar.String);
+            Scalar.String.Parent = root;
+            Scalar.String.Name = "String";
+            root.Declare(Scalar.String, "String", AccessMode.EXTERNAL);
 
             //dict type is in 6
-            AddEntity(CorePackage.Entity.Type.DictType.Instance);
-            CorePackage.Entity.Type.DictType.Instance.Parent = root;
-            CorePackage.Entity.Type.DictType.Instance.Name = "Dict";
-            root.Declare(CorePackage.Entity.Type.DictType.Instance, "Dict", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(DictType.Instance);
+            DictType.Instance.Parent = root;
+            DictType.Instance.Name = "Dict";
+            root.Declare(DictType.Instance, "Dict", AccessMode.EXTERNAL);
 
             //any type is in 7
-            AddEntity(CorePackage.Entity.Type.AnyType.Instance);
-            CorePackage.Entity.Type.AnyType.Instance.Parent = root;
-            CorePackage.Entity.Type.AnyType.Instance.Name = "Any";
-            root.Declare(CorePackage.Entity.Type.AnyType.Instance, "Any", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(AnyType.Instance);
+            AnyType.Instance.Parent = root;
+            AnyType.Instance.Name = "Any";
+            root.Declare(AnyType.Instance, "Any", AccessMode.EXTERNAL);
+
+            //matrix type is in 8
+            AddEntity(Matrix.Instance);
+            Matrix.Instance.Parent = root;
+            Matrix.Instance.Name = "Matrix";
+            root.Declare(Matrix.Instance, "Matrix", AccessMode.EXTERNAL);
         }
 
         /// <summary>
@@ -162,7 +171,7 @@ namespace CoreControl
         /// </summary>
         /// <typeparam name="T">Type of the entity to declare</typeparam>
         /// <returns>Freshly instanciated entity</returns>
-        public T Create<T>() where T : CorePackage.Global.IDefinition
+        public T Create<T>() where T : IDefinition
         {
             T toadd = (T)Activator.CreateInstance(typeof(T));
 
@@ -296,7 +305,7 @@ namespace CoreControl
         /// <param name="visibility">Visibility of the entity to declare</param>
         /// <returns>The identifier of the freshly declared entity</returns>
         public UInt32 Declare<Entity>(UInt32 containerID, string name, CorePackage.Global.AccessMode visibility)
-            where Entity : CorePackage.Global.IDefinition
+            where Entity : IDefinition
         {
             Entity todecl = Create<Entity>();
 
@@ -561,40 +570,39 @@ namespace CoreControl
         /// <returns>Type of the entity</returns>
         public ENTITY GetEntityType(UInt32 entityId)
         {
-            CorePackage.Global.Definition entity = FindDefinitionOfType<CorePackage.Global.Definition>(entityId);
+            Definition entity = FindDefinitionOfType<Definition>(entityId);
 
             if (entity.GetType() == typeof(CorePackage.Entity.Type.EnumType))
-                return EntityFactory.ENTITY.ENUM_TYPE;
+                return ENTITY.ENUM_TYPE;
             else if (entity.GetType() == typeof(CorePackage.Entity.Type.ObjectType))
-                return EntityFactory.ENTITY.OBJECT_TYPE;
+                return ENTITY.OBJECT_TYPE;
             else if (entity.GetType() == typeof(CorePackage.Entity.Type.ListType))
-                return EntityFactory.ENTITY.LIST_TYPE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.DataType)
-                || entity.GetType() == typeof(ScalarType)
-                || entity.GetType() == typeof(DictType)
-                || entity.GetType() == typeof(AnyType))
-                return EntityFactory.ENTITY.DATA_TYPE;
+                return ENTITY.LIST_TYPE;
+            else if (typeof(CorePackage.Entity.DataType).IsAssignableFrom(entity.GetType()))
+                return ENTITY.DATA_TYPE;
             else if (entity.GetType() == typeof(CorePackage.Entity.Function))
-                return EntityFactory.ENTITY.FUNCTION;
+                return ENTITY.FUNCTION;
             else if (entity.GetType() == typeof(CorePackage.Entity.Variable))
-                return EntityFactory.ENTITY.VARIABLE;
+                return ENTITY.VARIABLE;
             else if (entity.GetType() == typeof(CorePackage.Entity.Context))
-                return EntityFactory.ENTITY.CONTEXT;
+                return ENTITY.CONTEXT;
             throw new InvalidOperationException("Controller.GetEntityType : Entity " + entity.FullName + " as invalid entity type " + entity.GetType().ToString());
         }
 
         public void merge(EntityFactory factory)
         {
-            foreach (KeyValuePair<uint, CorePackage.Global.IDefinition> curr in factory.definitions)
+            foreach (KeyValuePair<uint, IDefinition> curr in factory.definitions)
             {
-                if (curr.Key > 5)
+                if (curr.Key > (uint)BASE_ID.MATRIX_TYPE)
+                {
                     AddEntity(curr.Value);
+                }
             }
 
             CorePackage.Entity.Context globalContext = (CorePackage.Entity.Context)definitions[0];
             CorePackage.Entity.Context factoryContext = (CorePackage.Entity.Context)factory.definitions[0];
 
-            foreach (KeyValuePair<string, CorePackage.Global.IDefinition> curr in factoryContext.GetEntities())
+            foreach (KeyValuePair<string, IDefinition> curr in factoryContext.GetEntities())
             {
                 string key = curr.Key;
                 while (globalContext.Contains(key)) key += "_copy"; //handles circular references

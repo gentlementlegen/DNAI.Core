@@ -14,7 +14,12 @@ namespace CoreControl
         /// Entity factory used to manage entities
         /// </summary>
         private EntityFactory entity_factory = new EntityFactory();
-        
+
+        /// <summary>
+        /// Version of the file
+        /// </summary>
+        public static SerializationModel.Version Version { get; } = new SerializationModel.Version { Value = "0.3.0" };
+
         /// <summary>
         /// Resets the controller state to initial values.
         /// </summary>
@@ -39,8 +44,9 @@ namespace CoreControl
             {
                 Factory = new EntityFactory()
             };
+            Controller tomerge = serializer.LoadFrom(filename);
 
-            merge(serializer.LoadFrom(filename));
+            merge(tomerge);
         }
 
         public UInt32 FindEntity(string path)
@@ -336,8 +342,9 @@ namespace CoreControl
         public UInt32 SetClassFunctionAsMember(UInt32 classID, string funcname)
         {
             CorePackage.Entity.Type.ObjectType objtype = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID);
+            CorePackage.Entity.Variable thisParam = objtype.SetFunctionAsMember(funcname);
 
-            entity_factory.AddEntity(objtype.SetFunctionAsMember(funcname));
+            entity_factory.AddEntity(thisParam);
 
             return entity_factory.LastID;
         }

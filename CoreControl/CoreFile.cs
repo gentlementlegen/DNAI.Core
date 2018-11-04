@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CoreControl
 {
@@ -10,6 +7,9 @@ namespace CoreControl
     {
         [BinarySerializer.BinaryFormat]
         public UInt32 MagicNumber { get; set; }
+
+        [BinarySerializer.BinaryFormat]
+        public SerializationModel.Version Version { get; set; }
 
         [BinarySerializer.BinaryFormat]
         public List<SerializationModel.Entity> Entities { get; set; }

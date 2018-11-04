@@ -955,7 +955,7 @@ namespace TestCommand
         [TestMethod]
         public void TestAstar()
         {
-            CoreCommand.BinaryManager manager = new CoreCommand.BinaryManager();
+            BinaryManager manager = new BinaryManager();
 
             manager.LoadCommandsFrom("astar.dnai");
 

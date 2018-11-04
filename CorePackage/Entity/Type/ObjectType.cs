@@ -120,6 +120,7 @@ namespace CorePackage.Entity.Type
             
             Variable toret = (Variable)func.Declare(new Variable(this), "this", AccessMode.EXTERNAL);
             func.SetVariableAs("this", Function.VariableRole.PARAMETER);
+            toret.Name = "this";
             return toret;
         }
 
@@ -150,11 +151,8 @@ namespace CorePackage.Entity.Type
 
             if (typeof(System.Collections.IEnumerable).IsAssignableFrom(obj.GetType()))
             {
-                if (obj.ContainsKey(attribute))
-                {
-                    obj[attribute] = value;
-                    found = true;
-                }
+                obj[attribute] = value;
+                found = true;
             }
             else
             {
@@ -460,7 +458,7 @@ namespace CorePackage.Entity.Type
 
         public Dictionary<string, IDefinition> GetEntities()
         {
-            return attributes.GetEntities();
+            return context.GetEntities();
         }
     }
 }

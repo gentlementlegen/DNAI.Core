@@ -57,6 +57,7 @@
     <Compile Include="TestEntities\TestDict.cs" />
     <Compile Include="TestEntities\TestEnumType.cs" />
     <Compile Include="TestEntities\TestListsObjects.cs" />
+    <Compile Include="TestEntities\TestMatrix.cs" />
     <Compile Include="TestEntities\TestScalarTypes.cs" />
     <Compile Include="TestExecution\TestInstructions.cs" />
     <Compile Include="TestExecution\UnitTest.cs" />

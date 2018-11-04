@@ -19,9 +19,12 @@ namespace CoreControl
 
         private Dictionary<IDefinition, UInt32> NewIds { get; set; } = new Dictionary<IDefinition, uint>();
 
+        public Dictionary<uint, uint> FileIdToCoreId { get; set; }
+
         private CoreFile File { get; set; } = new CoreFile
         {
             MagicNumber = EntityFactory.MagicNumber,
+            Version = Controller.Version,
             Entities = new List<SerializationModel.Entity>()
         };
 
@@ -50,6 +53,11 @@ namespace CoreControl
             // then we just have to get each data individually
             foreach (IDefinition definition in NewIds.Keys)
             {
+                if (entities.Count == 9)
+                {
+                    Console.WriteLine("On debug ici");
+                }
+
                 dynamic entity = GetSerializableEntityFrom(definition);
 
                 if (entity == null)
@@ -124,6 +132,8 @@ namespace CoreControl
                 typeid = SerializationModel.DataType.WHICH.DICT;
             else if (definition == AnyType.Instance)
                 typeid = SerializationModel.DataType.WHICH.ANY;
+            else if (definition == Matrix.Instance)
+                typeid = SerializationModel.DataType.WHICH.MATRIX;
             else
                 throw new InvalidOperationException("Entity cannot be serialized as data type");
 
@@ -174,7 +184,7 @@ namespace CoreControl
 
                 foreach (var input in instr.Inputs)
                 {
-                    if (input.Value.IsValueSet)
+                    if (input.Value.IsValueSet && !input.Value.IsLinked)
                     {
                         toadd.InputValues[input.Key] = GetJsonValue(input.Value.Value);
                     }
@@ -310,7 +320,20 @@ namespace CoreControl
             Controller.Reset();
             File.Entities.Clear();
             NewIds.Clear();
-            
+
+            FileIdToCoreId = new Dictionary<uint, uint>
+            {
+                { 0, (uint)EntityFactory.BASE_ID.GLOBAL_CTX },
+                { 1, (uint)EntityFactory.BASE_ID.BOOLEAN_TYPE },
+                { 2, (uint)EntityFactory.BASE_ID.INTEGER_TYPE },
+                { 3, (uint)EntityFactory.BASE_ID.FLOATING_TYPE },
+                { 4, (uint)EntityFactory.BASE_ID.CHARACTER_TYPE },
+                { 5, (uint)EntityFactory.BASE_ID.STRING_TYPE },
+                { 6, (uint)EntityFactory.BASE_ID.DICT_TYPE },
+                { 7, (uint)EntityFactory.BASE_ID.ANY_TYPE },
+                { 8, (uint)EntityFactory.BASE_ID.MATRIX_TYPE }
+            };
+
             using (var loadFile = new StreamReader(filename))
             {
                 //récupérer les entites du fichier
@@ -319,6 +342,12 @@ namespace CoreControl
                 if (File.MagicNumber != EntityFactory.MagicNumber)
                 {
                     throw new FileLoadException("Trying to load an invalid or corrupted dnai file");
+                }
+
+                //vérification de la version
+                if (File.Version > Controller.Version)
+                {
+                    throw new FileLoadException($"Trying to load a file compiled from DNAI.Core {File.Version.Value}: update your DNAI.Core");
                 }
 
                 //récupération des données des entités
@@ -338,6 +367,7 @@ namespace CoreControl
             //déclaration de toutes les entités
             for (int i = 0; i < entities.Count; i++)
             {
+                //si l'entité est un contexte
                 if (entities[i] is SerializationModel.Context context)
                 {
                     SerializationModel.Entity parent = File.Entities[i];
@@ -348,7 +378,7 @@ namespace CoreControl
 
                         if (child.Type != EntityFactory.ENTITY.DATA_TYPE)
                         {
-                            child.Id = Controller.Declare(child.Type, parent.Id, child.Name, child.Visibility);
+                            FileIdToCoreId[child.Id] = Controller.Declare(child.Type, FileIdToCoreId[parent.Id], child.Name, child.Visibility);
                         }
                     }
                 }
@@ -373,7 +403,9 @@ namespace CoreControl
             //réplication des instructions
             foreach (var func in funcs)
             {
-                ReplicateInstructionsFrom(func.Key, func.Value);
+                uint funcId = FileIdToCoreId[func.Key.Id];
+
+                ReplicateInstructionsFrom(funcId, func.Value);
             }
 
             return Controller;
@@ -406,32 +438,32 @@ namespace CoreControl
 
         #endregion
 
-        private void ReplicateEnumFrom(SerializationModel.Entity entity, SerializationModel.EnumType data)
+        private void ReplicateEnumFrom(uint entityId, SerializationModel.EnumType data)
         {
-            Controller.SetEnumerationType(entity.Id, GetControllerID(data.StoredType));
+            Controller.SetEnumerationType(entityId, GetControllerID(data.StoredType));
 
             foreach (KeyValuePair<string, string> value in data.Values)
             {
                 object jsonValue = GetValueFromJSON(value.Value);
 
-                Controller.SetEnumerationValue(entity.Id, value.Key, jsonValue);
+                Controller.SetEnumerationValue(entityId, value.Key, jsonValue);
             }
         }
 
-        private void ReplicateFunctionFrom(SerializationModel.Entity entity, SerializationModel.Function data)
+        private void ReplicateFunctionFrom(uint entityId, SerializationModel.Function data)
         {
             foreach (string param in data.Parameters)
             {
-                Controller.SetFunctionParameter(entity.Id, param);
+                Controller.SetFunctionParameter(entityId, param);
             }
 
             foreach (string ret in data.Returns)
             {
-                Controller.SetFunctionReturn(entity.Id, ret);
+                Controller.SetFunctionReturn(entityId, ret);
             }
         }
 
-        private void ReplicateInstructionsFrom(SerializationModel.Entity entity, SerializationModel.Function data)
+        private void ReplicateInstructionsFrom(uint entityId, SerializationModel.Function data)
         {
             var instructionIDs = new Dictionary<uint, uint>();
             uint i = 0;
@@ -439,13 +471,13 @@ namespace CoreControl
             //replicate instructions
             foreach (SerializationModel.Instruction instr in data.Instructions)
             {
-                uint instrId = Controller.AddInstruction(entity.Id, instr.InstructionType, GetControllerIdsList(instr.Construction));
+                uint instrId = Controller.AddInstruction(entityId, instr.InstructionType, GetControllerIdsList(instr.Construction));
                 
                 //replicate input values
                 foreach (var inputValue in instr.InputValues)
                 {
                     Controller.SetInstructionInputValue(
-                        entity.Id,
+                        entityId,
                         instrId,
                         inputValue.Key,
                         GetValueFromJSON(inputValue.Value)
@@ -459,7 +491,7 @@ namespace CoreControl
             foreach (SerializationModel.DataLink dataLink in data.DataLinks)
             {
                 Controller.LinkInstructionData(
-                    entity.Id,
+                    entityId,
                     instructionIDs[dataLink.OutputInstructionID],
                     dataLink.Output,
                     instructionIDs[dataLink.InputInstructionID],
@@ -471,7 +503,7 @@ namespace CoreControl
             foreach (SerializationModel.FlowLink flowLink in data.FlowLinks)
             {
                 Controller.LinkInstructionExecution(
-                    entity.Id,
+                    entityId,
                     instructionIDs[flowLink.OutflowInstructionID],
                     flowLink.OutflowPin,
                     instructionIDs[flowLink.InflowInstructionID]
@@ -480,47 +512,49 @@ namespace CoreControl
 
             if (data.EntryPointIndex != -1)
             {
-                Controller.SetFunctionEntryPoint(entity.Id, instructionIDs[(uint)data.EntryPointIndex]);
+                Controller.SetFunctionEntryPoint(entityId, instructionIDs[(uint)data.EntryPointIndex]);
             }
         }
 
-        private void ReplicateListTypeFrom(SerializationModel.Entity entity, SerializationModel.ListType data)
+        private void ReplicateListTypeFrom(uint entityId, SerializationModel.ListType data)
         {
-            Controller.SetListType(entity.Id, GetControllerID(data.StoredType));
+            Controller.SetListType(entityId, GetControllerID(data.StoredType));
         }
 
-        private void ReplicateObjectTypeFrom(SerializationModel.Entity entity, SerializationModel.ObjectType data)
+        private void ReplicateObjectTypeFrom(uint entityId, SerializationModel.ObjectType data)
         {
             foreach (var attr in data.Attributes)
             {
-                Controller.AddClassAttribute(entity.Id, attr.Key, GetControllerID(attr.Value), EntityFactory.VISIBILITY.PUBLIC);
+                Controller.AddClassAttribute(entityId, attr.Key, GetControllerID(attr.Value), EntityFactory.VISIBILITY.PUBLIC);
             }
         }
 
-        private void ReplicateVariableFrom(SerializationModel.Entity entity, SerializationModel.Variable data)
+        private void ReplicateVariableFrom(uint entityId, SerializationModel.Variable data)
         {
-            Controller.SetVariableType(entity.Id, GetControllerID(data.Type));
-            Controller.SetVariableValue(entity.Id, GetValueFromJSON(data.Value));
+            Controller.SetVariableType(entityId, GetControllerID(data.Type));
+            Controller.SetVariableValue(entityId, GetValueFromJSON(data.Value));
         }
         
         private void ReplicateEntityFrom(SerializationModel.Entity entity, dynamic data)
         {
+            uint entityId = FileIdToCoreId[entity.Id];
+
             switch (entity.Type)
             {
                 case EntityFactory.ENTITY.VARIABLE:
-                    ReplicateVariableFrom(entity, data);
+                    ReplicateVariableFrom(entityId, data);
                     break;
                 case EntityFactory.ENTITY.FUNCTION:
-                    ReplicateFunctionFrom(entity, data);
+                    ReplicateFunctionFrom(entityId, data);
                     break;
                 case EntityFactory.ENTITY.ENUM_TYPE:
-                    ReplicateEnumFrom(entity, data);
+                    ReplicateEnumFrom(entityId, data);
                     break;
                 case EntityFactory.ENTITY.OBJECT_TYPE:
-                    ReplicateObjectTypeFrom(entity, data);
+                    ReplicateObjectTypeFrom(entityId, data);
                     break;
                 case EntityFactory.ENTITY.LIST_TYPE:
-                    ReplicateListTypeFrom(entity, data);
+                    ReplicateListTypeFrom(entityId, data);
                     break;
             }
         }

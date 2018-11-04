@@ -66,6 +66,7 @@
     <Compile Include="SerializationModel\ListType.cs" />
     <Compile Include="SerializationModel\ObjectType.cs" />
     <Compile Include="SerializationModel\Variable.cs" />
+    <Compile Include="SerializationModel\Version.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BinarySerializer\BinarySerializer.csproj">

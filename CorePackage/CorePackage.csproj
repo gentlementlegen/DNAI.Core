@@ -30,10 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MathNet.Numerics, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.4.6.0\lib\net461\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Dynamic" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
@@ -48,6 +53,7 @@
     <Compile Include="Entity\Type\DictType.cs" />
     <Compile Include="Entity\Type\EnumType.cs" />
     <Compile Include="Entity\Type\ListType.cs" />
+    <Compile Include="Entity\Type\Matrix.cs" />
     <Compile Include="Entity\Type\ObjectType.cs" />
     <Compile Include="Entity\Type\ScalarType.cs" />
     <Compile Include="Entity\Variable.cs" />
@@ -58,6 +64,7 @@
     <Compile Include="Execution\AccessRefreshInstruction.cs" />
     <Compile Include="Execution\AccessRefresh\Cast.cs" />
     <Compile Include="Execution\AccessRefresh\EnumSplitter.cs" />
+    <Compile Include="Execution\AccessRefresh\GetShape.cs" />
     <Compile Include="Execution\AccessRefresh\Getter.cs" />
     <Compile Include="Execution\AccessRefresh\GetAttributes.cs" />
     <Compile Include="Execution\AccessRefresh\HasKey.cs" />
@@ -97,11 +104,12 @@
     <Compile Include="Execution\ExecRefresh\Formula.cs" />
     <Compile Include="Execution\ExecRefresh\FunctionCall.cs" />
     <Compile Include="Execution\ExecRefresh\Insert.cs" />
-    <Compile Include="Execution\ExecRefresh\MachineLearningRunner.cs" />
+    <Compile Include="Execution\ExecRefresh\Predict.cs" />
     <Compile Include="Execution\AccessRefresh\Random.cs" />
     <Compile Include="Execution\ExecRefresh\Remove.cs" />
     <Compile Include="Execution\ExecRefresh\RemoveIndex.cs" />
     <Compile Include="Execution\ExecRefresh\RemoveValueAtKey.cs" />
+    <Compile Include="Execution\ExecRefresh\Resize.cs" />
     <Compile Include="Execution\ExecRefresh\SetAttribute.cs" />
     <Compile Include="Execution\ExecRefresh\Setter.cs" />
     <Compile Include="Execution\AccessRefresh\Size.cs" />
@@ -116,6 +124,7 @@
     <Compile Include="Execution\ExecRefresh\Statements\Return.cs" />
     <Compile Include="Execution\ExecRefresh\Statements\While.cs" />
     <Compile Include="Execution\ExecutionRefreshInstruction.cs" />
+    <Compile Include="Execution\AccessRefresh\GetIndexValue.cs" />
     <Compile Include="Execution\Instruction.cs" />
     <Compile Include="Execution\Pins\Input.cs" />
     <Compile Include="Execution\Pins\Link.cs" />
@@ -126,6 +135,9 @@
     <Compile Include="Global\IDeclarator.cs" />
     <Compile Include="Global\IOperable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -28,12 +28,7 @@ namespace CorePackage.Execution
             dynamic value = GetInputValue(Reference);
             System.Type type = value.GetType();
 
-            if (ResultType.IsValueOfType(value))
-            {
-                SetOutputValue(Value, value);
-                SetOutputValue(Succeed, true);
-            }
-            else if (type.IsValueType)
+            if (type.IsValueType)
             {
                 try
                 {
@@ -46,6 +41,11 @@ namespace CorePackage.Execution
                 {
                     SetOutputValue(Succeed, false);
                 }
+            }
+            else if (ResultType.IsValueOfType(value))
+            {
+                SetOutputValue(Value, value);
+                SetOutputValue(Succeed, true);
             }
             else
             {
