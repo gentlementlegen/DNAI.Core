@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,9 +23,8 @@ namespace CorePackage.Entity.Type
 
         public override dynamic GetDeepCopyOf(dynamic value, System.Type type = null)
         {
-            Matrix<double> cpy = Matrix<double>.Build.DenseOfColumns(value);
+            Matrix<double> cpy = value.Clone();
 
-            value.CopyTo(cpy);
             return cpy;
         }
 
@@ -40,12 +40,14 @@ namespace CorePackage.Entity.Type
 
         public override bool IsValueOfType(dynamic value)
         {
-            return value.GetType() == typeof(Matrix<double>);
+            System.Type valtype = value.GetType();
+
+            return typeof(Matrix<double>).IsAssignableFrom(valtype);
         }
 
         public override dynamic OperatorAccess(dynamic lOp, dynamic rOp)
         {
-            return lOp.Column(rOp);
+            throw new NotImplementedException();
         }
 
         public override dynamic OperatorAdd(dynamic lOp, dynamic rOp)
@@ -126,6 +128,64 @@ namespace CorePackage.Entity.Type
         public override dynamic OperatorXor(dynamic lOp, dynamic rOp)
         {
             throw new NotImplementedException();
+        }
+
+        public string toCSV(dynamic value)
+        {
+            string data = "";
+
+            for (int r = 0; r < value.RowCount; r++)
+            {
+                if (r > 0)
+                {
+                    data += "\n";
+                }
+
+                for (int c = 0; c < value.ColumnCount; c++)
+                {
+                    if (c > 0)
+                    {
+                        data += ',';
+                    }
+
+                    if (value[r, c] == 0.0)
+                    {
+                        data += "0.0";
+                    }
+                    else
+                    {
+                        data += value[r, c].ToString(CultureInfo.InvariantCulture);
+                    }
+                }
+            }
+
+            return data;
+        }
+
+        public dynamic fromCSV(string data)
+        {
+            List<IEnumerable<double>> mat = new List<IEnumerable<double>>();
+
+            data = data.Replace("\r\n", "\n");
+
+            foreach (string row in data.Split('\n'))
+            {
+                if (String.IsNullOrEmpty(row))
+                {
+                    break;
+                }
+                
+                List<double> rw = new List<double>();
+
+                foreach (string col in row.Split(','))
+                {
+                    rw.Add(double.Parse(col, CultureInfo.InvariantCulture));
+                }
+
+                mat.Add(rw);
+            }
+
+            return Matrix<double>.Build.DenseOfRows(mat);
         }
     }
 }

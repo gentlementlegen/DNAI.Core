@@ -526,5 +526,41 @@ namespace CoreTest
             castToInt.SetInputValue("reference", "coucou");
             Assert.IsFalse(castToFloat.GetOutputValue("succeed"));
         }
+
+        [TestMethod]
+        public void TestPredictNode()
+        {
+            var predictNode = new CorePackage.Execution.Predict();
+
+            var data = CorePackage.Entity.Type.Matrix.Instance.fromCSV(System.IO.File.ReadAllText("input2.data"));
+
+            predictNode.SetInputValue("model", "model.json");
+            predictNode.SetInputValue("weights", "model.h5");
+            predictNode.SetInputValue("inputs", data);
+
+            predictNode.Execute();
+
+            List<double> predictions = new List<double> { 0.09620169, 0.10115829, 0.040401924, 0.035338867, 0.0020403452, 0.1024301, 0.22896671, 0.014211091, 0.3776973, 0.0015536636 };
+
+            var outputs = predictNode.GetOutputValue("outputs");
+
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(predictions[i] == outputs[0, i]);
+            }
+
+            data = CorePackage.Entity.Type.Matrix.Instance.fromCSV(System.IO.File.ReadAllText("5.txt"));
+
+            predictNode.SetInputValue("inputs", data);
+
+            predictNode.Execute();
+
+            outputs = predictNode.GetOutputValue("outputs");
+
+            var row = outputs.Row(0);
+            var index = row.MaximumIndex();
+
+            Assert.IsTrue(index == 5);
+        }
     }
 }
