@@ -31,6 +31,13 @@ namespace CorePackage.Entity
         /// <returns>A new instance which is equal to the given one</returns>
         public abstract dynamic GetDeepCopyOf(dynamic value, System.Type type = null);
 
+        /// <summary>
+        /// Creates an instance of variable from json value
+        /// </summary>
+        /// <param name="value">JSON value</param>
+        /// <returns>Real instance</returns>
+        public abstract dynamic CreateFromJSON(string value);
+
         public abstract dynamic OperatorAdd(dynamic lOp, dynamic rOp);
 
         public abstract dynamic OperatorSub(dynamic lOp, dynamic rOp);

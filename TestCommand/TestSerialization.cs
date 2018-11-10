@@ -1031,5 +1031,31 @@ namespace TestCommand
             Assert.IsTrue(path.Count == 3);
             Assert.IsTrue(!path.Except(new List<int> { 2, 0, 1 }).Any());
         }
+
+        [TestMethod]
+        public void TestDigitRecognizer()
+        {
+            Controller ctrl = new Controller();
+
+            ctrl.LoadFrom("DigitRecognizer.dnai");
+
+            var data = File.ReadAllText("5.txt");
+
+            var func = ctrl.FindEntity("/DigitRecognizer/recognizeDigit");
+
+            var param = ctrl.FindEntity("/DigitRecognizer/recognizeDigit/pixels");
+
+            ctrl.SetVariableJSONValue(param, @"
+                {
+                    ""Values"": [" + data.Replace("\n", ",") + @"],
+                    ""RowCount"": 28,
+                    ""ColumnCount"": 28
+                }
+            ");
+
+            var returns = ctrl.CallFunction(func, new Dictionary<string, dynamic>());
+
+            Assert.IsTrue(returns["result"] == 5);
+        }
     }
 }

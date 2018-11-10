@@ -1,4 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -186,6 +187,38 @@ namespace CorePackage.Entity.Type
             }
 
             return Matrix<double>.Build.DenseOfRows(mat);
+        }
+
+        public override dynamic CreateFromJSON(string value)
+        {
+            /*
+             {
+                "Values":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+                "ColumnCount":10,
+                "RowCount":10
+              }
+            */
+
+            var matData = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(value);
+            var values = (JArray)matData["Values"];
+            var cCount = matData.Value<int>("ColumnCount");
+            var rCount = matData.Value<int>("RowCount");
+            var i = 0;
+
+            var rows = new List<IEnumerable<double>>();
+
+            for (int row = 0; row < rCount; row++)
+            {
+                var currColumn = new List<double>();
+
+                for (int col = 0; col < cCount; col++)
+                {
+                    currColumn.Add((double)Convert.ChangeType(values[i], typeof(double)));
+                    ++i;
+                }
+                rows.Add(currColumn);
+            }
+            return Matrix<double>.Build.DenseOfRows(rows);
         }
     }
 }

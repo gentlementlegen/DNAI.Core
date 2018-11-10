@@ -119,5 +119,10 @@ namespace CorePackage.Entity.Type
         {
             throw new NotImplementedException();
         }
+
+        public override dynamic CreateFromJSON(string value)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject(value);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -129,6 +130,18 @@ namespace CorePackage.Entity.Type
         public override dynamic OperatorXor(dynamic lOp, dynamic rOp)
         {
             throw new NotImplementedException();
+        }
+
+        public override dynamic CreateFromJSON(string value)
+        {
+            var data = (JObject)Newtonsoft.Json.JsonConvert.DeserializeObject(value);
+            var toret = Instantiate();
+
+            foreach (var val in data)
+            {
+                toret[val.Key] = val.Value;
+            }
+            return toret;
         }
     }
 }

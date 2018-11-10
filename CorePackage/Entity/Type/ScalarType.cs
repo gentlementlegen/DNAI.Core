@@ -203,6 +203,11 @@ namespace CorePackage.Entity.Type
             NormalizeType(ref lOp, ref rOp);
             return lOp ^ rOp;
         }
+
+        public override dynamic CreateFromJSON(string value)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject(value);
+        }
     }
 
     /// <summary>

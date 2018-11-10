@@ -420,11 +420,6 @@ namespace CoreControl
             return File.Entities[(int)fileID].Id;
         }
 
-        private dynamic GetValueFromJSON(string jsondata)
-        {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject(jsondata);
-        }
-
         private List<uint> GetControllerIdsList(List<uint> fileIdsList)
         {
             var ids = new List<uint>();
@@ -444,9 +439,7 @@ namespace CoreControl
 
             foreach (KeyValuePair<string, string> value in data.Values)
             {
-                object jsonValue = GetValueFromJSON(value.Value);
-
-                Controller.SetEnumerationValue(entityId, value.Key, jsonValue);
+                Controller.SetEnumerationJSONValue(entityId, value.Key, value.Value);
             }
         }
 
@@ -476,11 +469,11 @@ namespace CoreControl
                 //replicate input values
                 foreach (var inputValue in instr.InputValues)
                 {
-                    Controller.SetInstructionInputValue(
+                    Controller.SetInstructionInputJSONValue(
                         entityId,
                         instrId,
                         inputValue.Key,
-                        GetValueFromJSON(inputValue.Value)
+                        inputValue.Value
                     );
                 }
 
@@ -532,7 +525,7 @@ namespace CoreControl
         private void ReplicateVariableFrom(uint entityId, SerializationModel.Variable data)
         {
             Controller.SetVariableType(entityId, GetControllerID(data.Type));
-            Controller.SetVariableValue(entityId, GetValueFromJSON(data.Value));
+            Controller.SetVariableJSONValue(entityId, data.Value);
         }
         
         private void ReplicateEntityFrom(SerializationModel.Entity entity, dynamic data)

@@ -117,6 +117,14 @@ namespace CoreTest.TestEntities
             Assert.IsTrue(intlistappend.GetInputValue("array").Count == 1);
             Assert.IsTrue(val[0].Count == 1);
             Assert.IsTrue(val[0] == intlistappend.GetInputValue("array"));
+
+            List<dynamic> jsonlist = intlist.CreateFromJSON("[3, 9, 1, 2]");
+
+            Assert.IsTrue(intlist.IsValueOfType(jsonlist));
+            Assert.IsTrue(jsonlist[0] == 3);
+            Assert.IsTrue(jsonlist[1] == 9);
+            Assert.IsTrue(jsonlist[2] == 1);
+            Assert.IsTrue(jsonlist[3] == 2);
         }
 
         [TestMethod]
@@ -290,8 +298,10 @@ namespace CoreTest.TestEntities
 
             ztype.AddAttribute("toto", CorePackage.Entity.Type.Scalar.Floating, CorePackage.Global.AccessMode.EXTERNAL);
 
+            var ltype = new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating);
+
             obj.AddAttribute("X", CorePackage.Entity.Type.Scalar.Floating, CorePackage.Global.AccessMode.EXTERNAL);
-            obj.AddAttribute("Y", new CorePackage.Entity.Type.ListType(CorePackage.Entity.Type.Scalar.Floating), CorePackage.Global.AccessMode.EXTERNAL);
+            obj.AddAttribute("Y", ltype, CorePackage.Global.AccessMode.EXTERNAL);
             obj.AddAttribute("Z", ztype, CorePackage.Global.AccessMode.EXTERNAL);
 
             Dictionary<string, dynamic> dicValue = new Dictionary<string, dynamic>
@@ -317,6 +327,16 @@ namespace CoreTest.TestEntities
             Assert.IsTrue(obj.IsValueOfType(realValue));
 
             obj.SetAttributeValue(realValue, "X", 3.40);
+
+            var jsonval = obj.CreateFromJSON(@"{
+                ""X"": 3.14,
+                ""Y"": [4.12],
+                ""Z"": { ""toto"": -3093.334 }
+            }");
+
+            Assert.IsTrue(obj.GetAttributeValue(jsonval, "X") == 3.14);
+            Assert.IsTrue(ltype.IsValueOfType(obj.GetAttributeValue(jsonval, "Y")));
+            Assert.IsTrue(ztype.IsValueOfType(obj.GetAttributeValue(jsonval, "Z")));
         }
     }
 }

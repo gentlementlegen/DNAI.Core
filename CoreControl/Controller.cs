@@ -179,7 +179,14 @@ namespace CoreControl
         {
             entity_factory.FindDefinitionOfType<CorePackage.Entity.Variable>(variableID).Value = value;
         }
-        
+
+        public void SetVariableJSONValue(UInt32 variableID, string value)
+        {
+            var entity = entity_factory.FindDefinitionOfType<CorePackage.Entity.Variable>(variableID);
+
+            entity.Value = entity.Type.CreateFromJSON(value);
+        }
+
         /// <summary>
         /// Get a variable value
         /// </summary>
@@ -255,6 +262,19 @@ namespace CoreControl
             CorePackage.Entity.Type.EnumType to_find = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.EnumType>(enumID);
             CorePackage.Entity.Variable var = new CorePackage.Entity.Variable(to_find.Stored, value);
             to_find.SetValue(name, var);
+        }
+
+        /// <summary>
+        /// Set an enumeration value
+        /// </summary>
+        /// <param name="enumID">Identifier of specific enumeration</param>
+        /// <param name="name">Name of the enum value to set</param>
+        /// <param name="value">Value to set in the enum</param>
+        public void SetEnumerationJSONValue(UInt32 enumID, string name, string value)
+        {
+            CorePackage.Entity.Type.EnumType to_find = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.EnumType>(enumID);
+
+            SetEnumerationValue(enumID, name, to_find.CreateFromJSON(value));
         }
 
         /// <summary>
@@ -530,6 +550,15 @@ namespace CoreControl
             CorePackage.Entity.Function func = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID);
 
             func.findInstruction<CorePackage.Execution.Instruction>(instruction).SetInputValue(inputname, inputValue);
+        }
+
+        public void SetInstructionInputJSONValue(UInt32 functionID, UInt32 instruction, string inputname, string inputValue)
+        {
+            var func = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID);
+            var inst =  func.findInstruction<CorePackage.Execution.Instruction>(instruction);
+            var val = inst.GetInput(inputname).Definition.Type.CreateFromJSON(inputValue);
+
+            inst.SetInputValue(inputname, val);
         }
 
         /// <summary>

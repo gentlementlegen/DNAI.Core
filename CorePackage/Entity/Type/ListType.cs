@@ -1,6 +1,9 @@
 ﻿using CorePackage.Error;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace CorePackage.Entity.Type
@@ -214,6 +217,18 @@ namespace CorePackage.Entity.Type
                 toret.Add(Convert.ChangeType(stored.GetDeepCopyOf(curr), curr.GetType()));
             }
             return toret;
+        }
+
+        public override dynamic CreateFromJSON(string value)
+        {
+            var arr = (JArray)JsonConvert.DeserializeObject(value);
+            var data = new List<dynamic>();
+
+            foreach (var var in arr)
+            {
+                data.Add(Stored.CreateFromJSON(JsonConvert.SerializeObject(var)));
+            }
+            return data;
         }
     }
 }

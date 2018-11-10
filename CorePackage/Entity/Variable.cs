@@ -77,7 +77,7 @@ namespace CorePackage.Entity
                 }
                 else
                 {
-                    throw new ArgumentException("Trying to set a value of a type inconsistant with " + this.type.GetType() + ": " + value.ToString());
+                    throw new ArgumentException("Trying to set a value of a type inconsistant with " + this.type.GetType() + ": " + value.GetType() + "=>" + value.ToString());
                 }
             }
         }

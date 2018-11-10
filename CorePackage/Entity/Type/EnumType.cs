@@ -1,4 +1,5 @@
 ﻿using CorePackage.Error;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -252,6 +253,16 @@ namespace CorePackage.Entity.Type
         public override dynamic GetDeepCopyOf(dynamic value, System.Type type = null)
         {
             return stored.GetDeepCopyOf(value, type);
+        }
+
+        public override dynamic CreateFromJSON(string value)
+        {
+            if (value.Contains($"{Name}."))
+            {
+                return GetValue(value.Replace($"{Name}.", "")).Value;
+            }
+
+            return Stored.CreateFromJSON(value);
         }
     }
 }
