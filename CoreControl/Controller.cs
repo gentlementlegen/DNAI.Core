@@ -214,7 +214,7 @@ namespace CoreControl
         /// <returns></returns>
         public string GetMainContextName()
         {
-            return GetEntities(GetIds(EntityFactory.EntityType.CONTEXT | EntityFactory.EntityType.PUBLIC))?.Find(x => !string.IsNullOrEmpty(x.Name))?.Name;
+            return GetEntities(GetIds(EntityFactory.EntityType.CONTEXT | EntityFactory.EntityType.PUBLIC))?.Find(x => !string.IsNullOrEmpty(x.Name))?.Name ?? "Unnamed";
         }
 
         /// <summary>
