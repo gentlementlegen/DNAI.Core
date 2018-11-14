@@ -13,6 +13,8 @@ namespace CorePluginMobile.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
+        public IDataStore<Services.API.File> ScriptsStore => DependencyService.Get<IDataStore<Services.API.File>>() ?? new MockScriptStore();
+        internal Services.API.ApiAccess Accessor = new Services.API.ApiAccess();
 
         bool isBusy = false;
         public bool IsBusy

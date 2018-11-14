@@ -8,11 +8,38 @@ namespace CorePluginMobile.ViewModels
 {
     public class DNAIViewModel : BaseViewModel
     {
-        public ObservableCollection<string> Items { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<File> Items { get; set; } = new ObservableCollection<File>();
 
         public ICommand UrlCommand { get; }
+        public ICommand ConnectCommand
+        {
+            get => _urlCommand
+                ?? (_urlCommand = new Command(async () =>
+                                              {
+                                                  var token = await Accessor.GetToken(Name, Password);
+                                                  Accessor.SetAuthorization(token);
+                                                  RefreshScriptsCommand.Execute(null);
+                                              }));
+        }
 
-        private ApiAccess _access = new ApiAccess();
+        public ICommand RefreshScriptsCommand
+        {
+            get => _refreshScriptCommand
+                ?? (_refreshScriptCommand = new Command(async () =>
+                {
+                    var files = await Accessor.GetFiles(Accessor.Token.user_id);
+                    Items.Clear();
+                    if (files != null)
+                    {
+                        foreach (var file in files)
+                        {
+                            Items.Add(file);
+                        }
+                    }
+                }));
+        }
+
+        private Command _urlCommand;
 
         private string _name;
 
@@ -23,6 +50,7 @@ namespace CorePluginMobile.ViewModels
         }
 
         private string _password;
+        private ICommand _refreshScriptCommand;
 
         public string Password
         {
@@ -32,11 +60,8 @@ namespace CorePluginMobile.ViewModels
 
         public DNAIViewModel()
         {
-            UrlCommand = new Command(() => _access.DownloadSolution());
-
-            Items.Add("AI 1");
-            Items.Add("AI 2");
-            Items.Add("AI 3");
+            UrlCommand = new Command(() => Accessor.DownloadSolution());
+            Items.Add(new File { Title = "toto " });
         }
     }
 }

@@ -32,14 +32,14 @@ namespace CorePluginMobile.Services.API
         }
     }
 
-    internal class File
+    public class File
     {
-        public string _id;
-        public string Title;
-        public string Description;
-        public string Type;
-        public List<string> Paths;
-        public List<string> Owners;
+        public string _id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Type { get; set; }
+        public List<string> Paths { get; set; }
+        public List<string> Owners { get; set; }
     }
 
     internal class FileType

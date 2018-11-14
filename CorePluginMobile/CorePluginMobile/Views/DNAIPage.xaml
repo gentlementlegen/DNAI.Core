@@ -12,10 +12,22 @@
 			<Label Text="DNAI" FontSize="100" HorizontalTextAlignment="Center"/>
 			<Entry Placeholder="Name" Text="{Binding Name}"/>
 			<Entry Placeholder="Password" IsPassword="True" Text="{Binding Password}"/>
-			<Button Text="Connect" />
+			<Button Text="Connect" Command="{Binding ConnectCommand}" />
 			<ListView
 				IsPullToRefreshEnabled="True"
 				ItemsSource="{Binding Items}">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<ViewCell>
+							<StackLayout Padding="10">
+								<Label Text="{Binding Title}"
+								LineBreakMode="NoWrap" 
+								Style="{DynamicResource ListItemTextStyle}" 
+								FontSize="16" />
+							</StackLayout>
+						</ViewCell>
+					</DataTemplate>
+				</ListView.ItemTemplate>
 			</ListView>
 			<Button Text="Start" Command="{Binding UrlCommand}" />
 		</StackLayout>
