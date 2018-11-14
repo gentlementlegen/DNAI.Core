@@ -1,4 +1,5 @@
-﻿using CorePluginMobile.Services.API;
+﻿using Android.Widget;
+using CorePluginMobile.Services.API;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -6,11 +7,19 @@ using Xamarin.Forms;
 
 namespace CorePluginMobile.ViewModels
 {
+    public class ConnectionEventArgs : EventArgs
+    {
+        public bool Success = true;
+    }
+
     public class DNAIViewModel : BaseViewModel
     {
         public ObservableCollection<File> Items { get; set; } = new ObservableCollection<File>();
 
         public ICommand UrlCommand { get; }
+
+        public event EventHandler<ConnectionEventArgs> OnConnection;
+
         public ICommand ConnectCommand
         {
             get => _urlCommand
@@ -18,6 +27,7 @@ namespace CorePluginMobile.ViewModels
                                               {
                                                   var token = await Accessor.GetToken(Name, Password);
                                                   Accessor.SetAuthorization(token);
+                                                  OnConnection?.Invoke(this, new ConnectionEventArgs { Success = !token.IsEmpty() });
                                                   RefreshScriptsCommand.Execute(null);
                                               }));
         }
@@ -27,8 +37,12 @@ namespace CorePluginMobile.ViewModels
             get => _refreshScriptCommand
                 ?? (_refreshScriptCommand = new Command(async () =>
                 {
-                    var files = await Accessor.GetFiles(Accessor.Token.user_id);
+                    if (IsBusy)
+                        return;
+
+                    IsBusy = true;
                     Items.Clear();
+                    var files = await Accessor.GetFiles(Accessor.Token.user_id);
                     if (files != null)
                     {
                         foreach (var file in files)
@@ -36,6 +50,7 @@ namespace CorePluginMobile.ViewModels
                             Items.Add(file);
                         }
                     }
+                    IsBusy = false;
                 }));
         }
 
@@ -60,8 +75,11 @@ namespace CorePluginMobile.ViewModels
 
         public DNAIViewModel()
         {
-            UrlCommand = new Command(() => Accessor.DownloadSolution());
-            Items.Add(new File { Title = "toto " });
+            UrlCommand = new Command(() =>
+            {
+                MessagingCenter.Send(this, "SwitchPage", 1);
+                });
+            //Items.Add(new File { Title = "toto " });
         }
     }
 }

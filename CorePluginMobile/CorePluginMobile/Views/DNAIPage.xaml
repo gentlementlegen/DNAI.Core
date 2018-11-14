@@ -9,12 +9,16 @@
             <!--<Label Text="Welcome to Xamarin.Forms!"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />-->
-			<Label Text="DNAI" FontSize="100" HorizontalTextAlignment="Center"/>
+			<!--<Label Text="DNAI" FontSize="100" HorizontalTextAlignment="Center"/>-->
 			<Entry Placeholder="Name" Text="{Binding Name}"/>
 			<Entry Placeholder="Password" IsPassword="True" Text="{Binding Password}"/>
 			<Button Text="Connect" Command="{Binding ConnectCommand}" />
 			<ListView
 				IsPullToRefreshEnabled="True"
+				RefreshCommand="{Binding RefreshScriptsCommand}"
+				IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+				CachingStrategy="RecycleElement"
+				VerticalOptions="FillAndExpand"
 				ItemsSource="{Binding Items}">
 				<ListView.ItemTemplate>
 					<DataTemplate>

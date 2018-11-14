@@ -9,8 +9,14 @@
 				<views:DNAIPage />
 			</x:Arguments>
 		</NavigationPage>
-		
-        <NavigationPage Title="Browse">
+
+		<NavigationPage Title="Camera">
+			<x:Arguments>
+				<views:CameraPage />
+			</x:Arguments>
+		</NavigationPage>
+
+		<!--<NavigationPage Title="Browse">
             <NavigationPage.Icon>
                 <OnPlatform x:TypeArguments="FileImageSource">
                     <On Platform="iOS" Value="tab_feed.png"/>
@@ -19,7 +25,7 @@
             <x:Arguments>
                 <views:ItemsPage />
             </x:Arguments>
-        </NavigationPage>
+        </NavigationPage>-->
         
         <NavigationPage Title="About">
             <NavigationPage.Icon>

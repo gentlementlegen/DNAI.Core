@@ -11,6 +11,11 @@ namespace CorePluginMobile.Views
         public MainPage()
         {
             InitializeComponent();
+
+            MessagingCenter.Subscribe<ViewModels.DNAIViewModel, int>(this, "SwitchPage", (sender, arg) =>
+            {
+                CurrentPage = Children[arg];
+            });
         }
     }
 }
