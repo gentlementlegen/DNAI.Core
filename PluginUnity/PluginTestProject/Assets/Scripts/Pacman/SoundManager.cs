@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Pacman
 {
+    /// <summary>
+    /// Manages the sound in the game.
+    /// </summary>
     public class SoundManager : MonoBehaviour
     {
+        /// <summary>
+        /// Sound singleton instance.
+        /// </summary>
         public static SoundManager Instance { get; private set; }
 
         [SerializeField]
@@ -20,9 +25,15 @@ namespace Assets.Scripts.Pacman
 
         private void Awake()
         {
-            Instance = this;
+            if (Instance != null)
+                Destroy(gameObject);
+            else
+                Instance = this;
         }
 
+        /// <summary>
+        /// Subscribes to the game state changing event.
+        /// </summary>
         private void Start()
         {
             _audioSource = GetComponent<AudioSource>();
@@ -30,6 +41,11 @@ namespace Assets.Scripts.Pacman
             StartCoroutine(SoundRoutine());
         }
 
+        /// <summary>
+        /// Plays the game starting sound if needed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GameStateChanged(object sender, System.EventArgs e)
         {
             var ev = e as GameStateEvent;
@@ -41,6 +57,9 @@ namespace Assets.Scripts.Pacman
             }
         }
 
+        /// <summary>
+        /// Unsubscribes to the game state change event to avoid leaks.
+        /// </summary>
         private void OnDestroy()
         {
             GameManager.Instance.OnGameStateChange -= GameStateChanged;
@@ -79,10 +98,8 @@ namespace Assets.Scripts.Pacman
         {
             while (true)
             {
-                //yield return new WaitUntil(() => !_audioSource.isPlaying);
                 if (_queuedClips.Count > 0)
                 {
-                    //_audioSource.clip = _queuedClips.Dequeue();
                     var clip = _queuedClips.Dequeue();
                     _audioSource.PlayOneShot(clip);
                     yield return new WaitForSeconds(clip.length);

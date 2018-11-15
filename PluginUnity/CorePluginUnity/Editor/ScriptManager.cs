@@ -31,8 +31,13 @@ namespace Core.Plugin.Unity.Editor
         /// The path to the loaded file.
         [UnityEngine.SerializeField]
         private string _filePath;
-        public string FilePath
+        public string FilePathRelative
         { get => _filePath; set => _filePath = value; }
+
+        [UnityEngine.SerializeField]
+        private string _filePathAbsolute;
+        public string FilePathAbsolute
+        { get => _filePathAbsolute; set => _filePathAbsolute = value; }
 
         /// The current processing status.
         private string _processingStatus;
@@ -116,12 +121,14 @@ namespace Core.Plugin.Unity.Editor
                 //var codeConverter = new DulyCodeConverter(_manager as ProtobufManager);
                 //codeConverter.ConvertCode();
             }).ContinueWith((param) => OnScriptLoaded(param.Status.ToString()));
-            return fileFullPath;
+            FilePathAbsolute = fileFullPath;
+            return "Assets/Standard Assets/DNAI/Scripts/" + Path.GetFileName(path);
         }
 
         public void ReloadScript()
         {
-            _manager.LoadCommandsFrom(FilePath);
+            _manager.Reset();
+            _manager.LoadCommandsFrom(FilePathAbsolute);
         }
 
         public string GetLoadedScriptName()

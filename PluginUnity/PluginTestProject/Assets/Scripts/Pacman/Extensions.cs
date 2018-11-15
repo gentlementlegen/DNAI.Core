@@ -2,6 +2,9 @@
 
 namespace Assets.Scripts.Pacman
 {
+    /// <summary>
+    /// Extension classes for help.
+    /// </summary>
     public static class Extensions
     {
         public static string Display(this Position p)

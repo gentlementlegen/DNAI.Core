@@ -2,6 +2,9 @@
 
 namespace Assets.Scripts.Pacman
 {
+    /// <summary>
+    /// Represents a pacgum.
+    /// </summary>
     public class Pacgum : MonoBehaviour
     {
         [SerializeField]
@@ -10,9 +13,13 @@ namespace Assets.Scripts.Pacman
         [SerializeField]
         private int _reward = 100;
 
+        /// <summary>
+        /// When the player hits the pacgum, just eat it.
+        /// </summary>
+        /// <param name="other"></param>
         private void OnTriggerStay2D(Collider2D other)
         {
-            if (other.tag == "Player" /*&& Vector3.Distance(transform.position, other.transform.position) < 0.01f*/)
+            if (other.tag == "Player")
             {
                 GameManager.Instance.AddScore(_reward);
                 TerrainManager.Instance.OnGumEaten();

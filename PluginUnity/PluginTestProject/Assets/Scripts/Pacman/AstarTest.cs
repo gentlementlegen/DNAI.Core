@@ -1,131 +1,129 @@
-﻿using Assets.Scripts.Pacman;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using static DNAI.Astar2.Astar2;
 
-public class AstarTest : MonoBehaviour
+namespace Assets.Scripts.Pacman
 {
-	private readonly PosGraph _graph = new PosGraph();
-    private Dictionary<int, int> _idx = new Dictionary<int, int>();
-    private List<Position> _nodes = new List<Position>();
-    private readonly List<int> _tList = new List<int>();
-
-    /*[SerializeField]
-    private PacmanController pacman;
-
-    [SerializeField]
-    private Transform target;*/
-
-    //private List<int> path;
-
-    //private Position currPosition = null;
-
-    private int GetNodeIndex(Position node)
+    /// <summary>
+    /// Represents an astar behaviour using the DNAI script.
+    /// </summary>
+    public class AstarTest : MonoBehaviour
     {
-        return _idx[(int)node.Y * TerrainManager.Terrain[(int)node.Y].Length + (int)node.X];
-    }
+        /// <summary>
+        /// Position graph representing the terrain.
+        /// </summary>
+        private readonly PosGraph _graph = new PosGraph();
 
-    private void Start()
-    {
-	  	_graph.links = new List<List<int>> ();
-		_graph.nodes = new List<Position> ();
+        /// <summary>
+        /// Ids of the graph.
+        /// </summary>
+        private readonly Dictionary<int, int> _idx = new Dictionary<int, int>();
 
-        for (int y = 0; y < TerrainManager.Terrain.Length; y++)
+        /// <summary>
+        /// List of the nodes.
+        /// </summary>
+        private readonly List<Position> _nodes = new List<Position>();
+
+        /// <summary>
+        /// List of teleporting spots.
+        /// </summary>
+        private readonly List<int> _tList = new List<int>();
+
+        /// <summary>
+        /// Gets the node index correcponding to a position.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        private int GetNodeIndex(Position node)
         {
-            for (int x = 0; x < TerrainManager.Terrain[y].Length; x++)
+            return _idx[(int)node.Y * TerrainManager.Terrain[(int)node.Y].Length + (int)node.X];
+        }
+
+        /// <summary>
+        /// Builds the graph.
+        /// Basically just reads the array in the TerrainManager and looks for walkable spaces.
+        /// If it is walkable, adds it to the graph and links it to the other nodes.
+        /// There is on special case which is the teleporting spot, handled at the end.
+        /// </summary>
+        private void Start()
+        {
+            _graph.links = new List<List<int>>();
+            _graph.nodes = new List<Position>();
+
+            for (int y = 0; y < TerrainManager.Terrain.Length; y++)
             {
-                char pos = TerrainManager.Terrain[y][x];
-                if (pos == '.' || pos == 'O' || pos == ' ' || pos == 'T')
+                for (int x = 0; x < TerrainManager.Terrain[y].Length; x++)
                 {
-                    var posNode = new Position()
+                    char pos = TerrainManager.Terrain[y][x];
+                    if (pos == '.' || pos == 'O' || pos == ' ' || pos == 'T')
                     {
-                        X = x,
-                        Y = y,
-                        Z = 0
-                    };
-                    var i = _graph.appendNode(posNode, _graph);
+                        var posNode = new Position()
+                        {
+                            X = x,
+                            Y = y,
+                            Z = 0
+                        };
+                        var i = _graph.appendNode(posNode, _graph);
 
-                    //Debug.Log("Adding node (" + x.ToString() + ", " + y.ToString() + "): index(" + i.ToString() + ") => LinksLength: " + ((List<List<int>>)_graph.links).Count);
+                        _idx.Add(y * TerrainManager.Terrain[y].Length + x, i);
+                        _nodes.Add(posNode);
 
-                    _idx.Add(y * TerrainManager.Terrain[y].Length + x, i);
-                    _nodes.Add(posNode);
+                        if (pos == 'T')
+                            _tList.Add(i);
 
-                    if (pos == 'T')
-                        _tList.Add(i);
-                    
-                    // top
-                    if (pos != 'T' && TerrainManager.Terrain [y - 1] [x] != 'X') {
+                        // top
+                        if (pos != 'T' && TerrainManager.Terrain[y - 1][x] != 'X')
+                        {
 
-                        var j = _idx[(y - 1) * TerrainManager.Terrain[y].Length + x];
-                                                
-						_graph.linkNodes (i, j, true, _graph);
-                    }
+                            var j = _idx[(y - 1) * TerrainManager.Terrain[y].Length + x];
 
-                    // left
-					if (pos != 'T' && TerrainManager.Terrain [y] [x - 1] != 'X') {
+                            _graph.linkNodes(i, j, true, _graph);
+                        }
 
-                        var j = _idx[y * TerrainManager.Terrain[y].Length + x - 1];
+                        // left
+                        if (pos != 'T' && TerrainManager.Terrain[y][x - 1] != 'X')
+                        {
 
-                        _graph.linkNodes (i, j, true, _graph);
+                            var j = _idx[y * TerrainManager.Terrain[y].Length + x - 1];
+
+                            _graph.linkNodes(i, j, true, _graph);
+                        }
                     }
                 }
             }
-        }
-        _graph.linkNodes(_tList[0], _tList[1], true, _graph);
-        
-        //path = (List<int>)_graph.pathFindAStar(0, 256, _graph);
-
-        //currPosition = _nodes[path[0]];
-
-        //foreach (int curr in path)
-        //{
-        //    Debug.Log("=> " + _nodes[curr].Display());
-        //}
-
-        /*var l = (List<List<int>>)_graph.links;
-        var n = (List<Position>)_graph.nodes;
-
-        for (int i = 0; i < l.Count; i++)
-        {
-            List<int> link = l[i];
-            foreach (var li in link)
-            {
-                Debug.Log("[Idx => " + i + " li => " + li + "]");
-            }
+            _graph.linkNodes(_tList[0], _tList[1], true, _graph);
         }
 
-        for (int i = 0; i < n.Count; i++)
+        /// <summary>
+        /// Gets the path between point from and to.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public List<int> GetDestinationPath(Position from, Position to)
         {
-            Position node = n[i];
-            Debug.Log("[idx => " + i + " node => " + node.Display() + "]");
-        }*/
+            return GetDestinationPath(GetNodeIndex(from), GetNodeIndex(to));
+        }
+
+        /// <summary>
+        /// Gets the path between point from and to.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public List<int> GetDestinationPath(int from, int to)
+        {
+            return _graph.pathFindAStar(from, to, _graph) as List<int>;
+        }
+
+        /// <summary>
+        /// Returns a node in the graph.
+        /// </summary>
+        /// <param name="idx"></param>
+        /// <returns></returns>
+        public Position GetNode(int idx)
+        {
+            return _graph.getNode(idx, _graph);
+        }
     }
-
-    public List<int> GetDestinationPath(Position from, Position to)
-    {
-        return GetDestinationPath(GetNodeIndex(from), GetNodeIndex(to));
-    }
-
-    public List<int> GetDestinationPath(int from, int to)
-    {
-        return _graph.pathFindAStar(from, to, _graph) as List<int>;
-    }
-
-    public Position GetNode(int idx)
-    {
-        return _graph.getNode(idx, _graph);
-    }
-
-    /*public void Update()
-    {
-        if (curr)
-    }*/
-
-    //private IEnumerable<Position> GetNextPosition()
-    //{
-    //    foreach (int currPos in path)
-    //    {
-    //        yield return _nodes[currPos];
-    //    }
-    //}
 }
