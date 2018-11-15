@@ -7,6 +7,7 @@ using Xamarin.Forms;
 
 using CorePluginMobile.Models;
 using CorePluginMobile.Services;
+using CoreCommand;
 
 namespace CorePluginMobile.ViewModels
 {
@@ -15,6 +16,7 @@ namespace CorePluginMobile.ViewModels
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
         public IDataStore<Services.API.File> ScriptsStore => DependencyService.Get<IDataStore<Services.API.File>>() ?? new MockScriptStore();
         internal Services.API.ApiAccess Accessor = new Services.API.ApiAccess();
+        protected static readonly BinaryManager _binaryManager = new BinaryManager();
 
         bool isBusy = false;
         public bool IsBusy

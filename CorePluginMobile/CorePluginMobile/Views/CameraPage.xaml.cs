@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using CorePluginMobile.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace CorePluginMobile.Views
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class CameraPage : ContentPage
-	{
-		public CameraPage ()
-		{
-			InitializeComponent ();
-		}
-	}
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class CameraPage : ContentPage
+    {
+        private readonly CameraViewModel _cameraViewModel;
+
+        public CameraPage()
+        {
+            InitializeComponent();
+
+            BindingContext = _cameraViewModel = new CameraViewModel();
+        }
+    }
 }

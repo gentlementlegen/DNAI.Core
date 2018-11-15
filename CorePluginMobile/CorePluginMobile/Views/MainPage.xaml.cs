@@ -1,6 +1,4 @@
-﻿using System;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace CorePluginMobile.Views
@@ -12,10 +10,7 @@ namespace CorePluginMobile.Views
         {
             InitializeComponent();
 
-            MessagingCenter.Subscribe<ViewModels.DNAIViewModel, int>(this, "SwitchPage", (sender, arg) =>
-            {
-                CurrentPage = Children[arg];
-            });
+            MessagingCenter.Subscribe<ViewModels.DNAIViewModel, int>(this, "SwitchPage", (sender, arg) => CurrentPage = Children[arg]);
         }
     }
 }

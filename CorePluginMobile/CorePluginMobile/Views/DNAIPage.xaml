@@ -19,6 +19,7 @@
 				IsRefreshing="{Binding IsBusy, Mode=OneWay}"
 				CachingStrategy="RecycleElement"
 				VerticalOptions="FillAndExpand"
+				SelectedItem="{Binding SelectedItem}"
 				ItemsSource="{Binding Items}">
 				<ListView.ItemTemplate>
 					<DataTemplate>
