@@ -52,6 +52,7 @@
     <Compile Include="Command\Enum\GetValue.cs" />
     <Compile Include="Command\Global\GetProjectEntities.cs" />
     <Compile Include="Command\Global\RemoveProject.cs" />
+    <Compile Include="Command\Ressource\SetDirectory.cs" />
     <Compile Include="Command\Variable\GetType.cs" />
     <Compile Include="Command\Variable\GetValue.cs" />
     <Compile Include="Command\Function\Instruction\LinkData.cs" />

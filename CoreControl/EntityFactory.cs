@@ -27,7 +27,8 @@ namespace CoreControl
             STRING_TYPE,
             DICT_TYPE,
             ANY_TYPE,
-            MATRIX_TYPE
+            MATRIX_TYPE,
+            RESSOURCE_TYPE
         }
 
         /// <summary>
@@ -36,8 +37,8 @@ namespace CoreControl
         /// <remarks>Makes a transition in order to hide CorePackage.Global.AccessMode enum</remarks>
         public enum VISIBILITY
         {
-            PUBLIC = CorePackage.Global.AccessMode.EXTERNAL,
-            PRIVATE = CorePackage.Global.AccessMode.INTERNAL
+            PUBLIC = AccessMode.EXTERNAL,
+            PRIVATE = AccessMode.INTERNAL
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace CoreControl
 
         public class Entity
         {
-            public EntityFactory.ENTITY Type { get; set; }
+            public ENTITY Type { get; set; }
 
             public string Name { get; set; }
 
@@ -74,17 +75,12 @@ namespace CoreControl
 
         }
 
-        /// <summary>
-        /// Associates an id to its entity definition
-        /// </summary>
-        private Dictionary<UInt32, CorePackage.Global.IDefinition> definitions = new Dictionary<uint, CorePackage.Global.IDefinition>();
-
-        public Dictionary<UInt32, CorePackage.Global.IDefinition> Definitions { get { return definitions; } }
+        public Dictionary<uint, IDefinition> Definitions { get; } = new Dictionary<uint, IDefinition>();
 
         /// <summary>
         /// Associates an entity definition to its id
         /// </summary>
-        private Dictionary<CorePackage.Global.IDefinition, UInt32> ids = new Dictionary<CorePackage.Global.IDefinition, uint>();
+        private Dictionary<IDefinition, uint> ids = new Dictionary<IDefinition, uint>();
 
         /// <summary>
         /// Represents the id of the next entity that will be declared
@@ -148,6 +144,12 @@ namespace CoreControl
             Matrix.Instance.Parent = root;
             Matrix.Instance.Name = "Matrix";
             root.Declare(Matrix.Instance, "Matrix", AccessMode.EXTERNAL);
+
+            //ressource type is in 9
+            AddEntity(Ressource.Instance);
+            Ressource.Instance.Parent = root;
+            Ressource.Instance.Name = "Ressource";
+            root.Declare(Ressource.Instance, "Ressource", AccessMode.EXTERNAL);
         }
 
         /// <summary>
@@ -185,7 +187,7 @@ namespace CoreControl
         /// <param name="entity">Entity to add</param>
         public void AddEntity(CorePackage.Global.IDefinition entity)
         {
-            definitions[current_uid] = entity;
+            Definitions[current_uid] = entity;
             ids[entity] = current_uid++;
         }
 
@@ -202,11 +204,11 @@ namespace CoreControl
             if (definition_uid <= 5)
                 throw new InvalidOperationException("EntityFactory.remove : cannot remove base entities");
 
-            if (!definitions.ContainsKey(definition_uid))
+            if (!Definitions.ContainsKey(definition_uid))
                 throw new KeyNotFoundException("EntityFactory.remove : given definition uid hasn't been found");
 
-            ids.Remove(definitions[definition_uid]);
-            definitions.Remove(definition_uid);
+            ids.Remove(Definitions[definition_uid]);
+            Definitions.Remove(definition_uid);
         }
 
         /// <summary>
@@ -227,7 +229,7 @@ namespace CoreControl
             if (entity_id <= 5)
                 throw new InvalidOperationException("EntityFactory.remove : cannot remove base entities");
 
-            definitions.Remove(entity_id);
+            Definitions.Remove(entity_id);
             ids.Remove(entity);
         }
 
@@ -237,12 +239,12 @@ namespace CoreControl
         /// <remarks>Throws a KeyNotFoundException if entity hasn't been found</remarks>
         /// <param name="definition_uid">Identifier of an entity</param>
         /// <returns>The entity to find</returns>
-        public CorePackage.Global.IDefinition Find(UInt32 definition_uid)
+        public IDefinition Find(UInt32 definition_uid)
         {
-            if (!definitions.ContainsKey(definition_uid))
+            if (!Definitions.ContainsKey(definition_uid))
                 throw new KeyNotFoundException("EntityFactory.find : given definition of id " + definition_uid.ToString() + " hasn't been found");
 
-            return definitions[definition_uid];
+            return Definitions[definition_uid];
         }
 
         /// <summary>
@@ -250,7 +252,7 @@ namespace CoreControl
         /// </summary>
         /// <param name="definition_uid">Identifier of the basic entity</param>
         /// <returns>Basic entity to find</returns>
-        public CorePackage.Global.IDefinition Find(BASE_ID definition_uid)
+        public IDefinition Find(BASE_ID definition_uid)
         {
             return Find((uint)definition_uid);
         }
@@ -276,7 +278,7 @@ namespace CoreControl
         /// <returns>The entity to find</returns>
         public T FindDefinitionOfType<T>(UInt32 id) where T : class
         {
-            CorePackage.Global.IDefinition to_find = Find(id);
+            IDefinition to_find = Find(id);
             T to_ret = to_find as T;
 
             if (to_ret == null)
@@ -591,16 +593,19 @@ namespace CoreControl
 
         public void merge(EntityFactory factory)
         {
-            foreach (KeyValuePair<uint, IDefinition> curr in factory.definitions)
+            var values = typeof(BASE_ID).GetEnumValues();
+            uint maxBaseId = (uint)values.GetValue(values.Length - 1);
+
+            foreach (KeyValuePair<uint, IDefinition> curr in factory.Definitions)
             {
-                if (curr.Key > (uint)BASE_ID.MATRIX_TYPE)
+                if (curr.Key > maxBaseId)
                 {
                     AddEntity(curr.Value);
                 }
             }
 
-            CorePackage.Entity.Context globalContext = (CorePackage.Entity.Context)definitions[0];
-            CorePackage.Entity.Context factoryContext = (CorePackage.Entity.Context)factory.definitions[0];
+            CorePackage.Entity.Context globalContext = (CorePackage.Entity.Context)Definitions[0];
+            CorePackage.Entity.Context factoryContext = (CorePackage.Entity.Context)factory.Definitions[0];
 
             foreach (KeyValuePair<string, IDefinition> curr in factoryContext.GetEntities())
             {

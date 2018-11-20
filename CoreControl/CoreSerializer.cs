@@ -134,6 +134,8 @@ namespace CoreControl
                 typeid = SerializationModel.DataType.WHICH.ANY;
             else if (definition == Matrix.Instance)
                 typeid = SerializationModel.DataType.WHICH.MATRIX;
+            else if (definition == Ressource.Instance)
+                typeid = SerializationModel.DataType.WHICH.RESSOURCE;
             else
                 throw new InvalidOperationException("Entity cannot be serialized as data type");
 
@@ -331,7 +333,8 @@ namespace CoreControl
                 { 5, (uint)EntityFactory.BASE_ID.STRING_TYPE },
                 { 6, (uint)EntityFactory.BASE_ID.DICT_TYPE },
                 { 7, (uint)EntityFactory.BASE_ID.ANY_TYPE },
-                { 8, (uint)EntityFactory.BASE_ID.MATRIX_TYPE }
+                { 8, (uint)EntityFactory.BASE_ID.MATRIX_TYPE },
+                { 9, (uint)EntityFactory.BASE_ID.RESSOURCE_TYPE }
             };
 
             using (var loadFile = new StreamReader(filename))
@@ -417,7 +420,7 @@ namespace CoreControl
 
         private uint GetControllerID(uint fileID)
         {
-            return File.Entities[(int)fileID].Id;
+            return FileIdToCoreId[File.Entities[(int)fileID].Id];
         }
 
         private List<uint> GetControllerIdsList(List<uint> fileIdsList)

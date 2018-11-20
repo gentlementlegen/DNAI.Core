@@ -58,6 +58,7 @@
     <Compile Include="Entity\Type\ListType.cs" />
     <Compile Include="Entity\Type\Matrix.cs" />
     <Compile Include="Entity\Type\ObjectType.cs" />
+    <Compile Include="Entity\Type\Ressource.cs" />
     <Compile Include="Entity\Type\ScalarType.cs" />
     <Compile Include="Entity\Variable.cs" />
     <Compile Include="Error\InvalidOperatorSignature.cs" />

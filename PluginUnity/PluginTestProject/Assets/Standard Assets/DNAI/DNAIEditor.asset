@@ -14,27 +14,10 @@ MonoBehaviour:
   listIA:
   - scriptManager:
       _fileName: 
-      _filePath: Assets/Standard Assets/DNAI/Scripts/MoreOrLess.dnai
-      _filePathAbsolute: C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\PluginTestProject\Assets\Standard
-        Assets\DNAI\Scripts\MoreOrLess.dnai
-      _scriptName: MoreOrLess
-    AIName: 
+      _filePath: Assets/Standard Assets/DNAI/Scripts/DigitRecognizer.dnai
+      _filePathAbsolute: D:\EIP\Core\PluginUnity\PluginTestProject\Assets\Standard
+        Assets\DNAI\Scripts\DigitRecognizer.dnai
+      _scriptName: DigitRecognizer
+    AIName: Unnamed
     _scriptList:
-    - Play
-    - Reset
-  - scriptManager:
-      _fileName: 
-      _filePath: Assets/Standard Assets/DNAI/Scripts/Astar.dnai
-      _filePathAbsolute: C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\PluginTestProject\Assets\Standard
-        Assets\DNAI\Scripts\Astar.dnai
-      _scriptName: Astar2
-    AIName: 
-    _scriptList: []
-  - scriptManager:
-      _fileName: 
-      _filePath: Assets/Standard Assets/DNAI/Scripts/Dnai Demo Car.dnai
-      _filePathAbsolute: C:\Users\ferna\Documents\Visual Studio 2017\Projects\DulyTFS\PluginUnity\PluginTestProject\Assets\Standard
-        Assets\DNAI\Scripts\Dnai Demo Car.dnai
-      _scriptName: DemoCar
-    AIName: 
-    _scriptList: []
+    - recognize Digit

@@ -99,6 +99,7 @@ namespace Core.Plugin.Unity.Editor
             try
             {
                 // TODO : maybe check if the file is already there and ask for overwrite
+                _manager.Controller.SetRessourceDirectory(fileCopyPath);
                 CloudFileWatcher.Watch(false);
                 Directory.CreateDirectory(fileCopyPath);
                 File.Copy(path, fileFullPath, true);

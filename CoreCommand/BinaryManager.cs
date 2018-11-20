@@ -131,6 +131,9 @@ namespace CoreCommand
                 Reset();
                 return new EmptyReply();
             });
+
+            //RESSOURCE
+            RegisterCommand<Command.Ressource.SetDirectory, EmptyReply>(Resolver.V1_0_0.Code, "RESSOURCE.SET_DIRECTORY", "RESSOURCE.DIRECTORY_SET", false);
         }
 
         /// <summary>
@@ -140,7 +143,7 @@ namespace CoreCommand
         /// <returns>Dynamic resulting object</returns>
         private dynamic GetValueFrom(string serial)
         {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject(serial);
+            return JsonConvert.DeserializeObject(serial);
         }
 
         /// <summary>
@@ -276,6 +279,7 @@ namespace CoreCommand
         public void LoadCommandsFrom(string filename)
         {
             Controller.LoadFrom(filename);
+            FilePath = filename;
             //if (!CallCommand(new Command.Global.Load { Filename = filename }))
             //{
             //    throw new FileLoadException($"Unable to load the project from {filename}");

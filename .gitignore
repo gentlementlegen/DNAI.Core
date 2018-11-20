@@ -262,3 +262,5 @@ paket-files/
 __pycache__/
 *.pyc
 core\.proto
+
+PluginUnity/PluginTestProject/Assets/Standard Assets/DNAI/Plugins/\.Keras_loaded_model/

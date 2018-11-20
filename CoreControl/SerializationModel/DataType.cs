@@ -17,7 +17,8 @@ namespace CoreControl.SerializationModel
             STRING,
             DICT,
             ANY,
-            MATRIX
+            MATRIX,
+            RESSOURCE
         }
 
         [BinarySerializer.BinaryFormat]

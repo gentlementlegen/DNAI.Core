@@ -549,6 +549,8 @@ namespace CoreTest
                 Assert.IsTrue(predictions[i] == outputs[0, i]);
             }
 
+            Assert.IsTrue(outputs.Row(0).MaximumIndex() == 8);
+
             data = CorePackage.Entity.Type.Matrix.Instance.fromCSV(System.IO.File.ReadAllText("5.txt"));
 
             predictNode.SetInputValue("inputs", data);
@@ -561,6 +563,43 @@ namespace CoreTest
             var index = row.MaximumIndex();
 
             Assert.IsTrue(index == 5);
+        }
+
+        [TestMethod]
+        public void TestClassifyNode()
+        {
+            var classifyNode = new CorePackage.Execution.Classify();
+
+            var data = CorePackage.Entity.Type.Matrix.Instance.fromCSV(System.IO.File.ReadAllText("input2.data"));
+
+            classifyNode.SetInputValue("model", "model.json");
+            classifyNode.SetInputValue("weights", "model.h5");
+            classifyNode.SetInputValue("inputs", data);
+
+            classifyNode.Execute();
+
+            List<double> predictions = new List<double> { 0.09620169, 0.10115829, 0.040401924, 0.035338867, 0.0020403452, 0.1024301, 0.22896671, 0.014211091, 0.3776973, 0.0015536636 };
+
+            var outputs = classifyNode.GetOutputValue("outputs");
+
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(predictions[i] == outputs[0, i]);
+            }
+
+            var maxIndex = classifyNode.GetOutputValue("maxIndex");
+            Assert.IsTrue(maxIndex == 8);
+
+            var maxValue = classifyNode.GetOutputValue("maxOutput");
+            Assert.IsTrue(maxValue == 0.3776973);
+
+            data = CorePackage.Entity.Type.Matrix.Instance.fromCSV(System.IO.File.ReadAllText("5.txt"));
+
+            classifyNode.SetInputValue("inputs", data);
+
+            classifyNode.Execute();
+
+            Assert.IsTrue(classifyNode.GetOutputValue("maxIndex") == 5);
         }
     }
 }

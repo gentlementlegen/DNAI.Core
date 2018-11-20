@@ -47,7 +47,7 @@ namespace DNAI.<#=Namespace#>
 				"void",
 				<# foreach (var item in Outputs)
 				{#>
-					Type.GetType("<#=item.Split(' ')[0]#>").AssemblyQualifiedName,
+					typeof(<#=item.Split(' ')[0]#>).AssemblyQualifiedName,
 				<# } #>
 			};
 
@@ -92,7 +92,11 @@ namespace DNAI.<#=Namespace#>
 			static <#=ClassName#>()
 			{
 				//_manager = new BinaryManager();
+
+				UnityEngine.Debug.Log($"Manager: {_manager}");
+				UnityEngine.Debug.Log($"Controller: {_manager.Controller}");
 				_manager.LoadCommandsFrom(@"Assets/Standard Assets/DNAI/Scripts/" + "<#=FilePath#>");
+				_manager.Controller.SetRessourceDirectory(@"Assets/Standard Assets/DNAI/Scripts");
 			}
 
 			///<summary>
@@ -104,16 +108,26 @@ namespace DNAI.<#=Namespace#>
 
 				public void Execute<#=f.Name#>()
 				{
-					var results = new Dictionary<string, dynamic>();
+					var generated_script_execution_results = new Dictionary<string, dynamic>();
 
-					results = _manager.Controller.CallFunction(<#=f.FunctionId#>, new Dictionary<string, dynamic>{ <#=f.FunctionArguments#> });
+					generated_script_execution_results = _manager.Controller.CallFunction(<#=f.FunctionId#>, new Dictionary<string, dynamic>{ <#=f.FunctionArguments#> });
 					<# if (Outputs.Count > 0)
 					{
 						foreach (var output in Outputs)
 						{
+							var varType = output.Split(' ')[0];
 							var varName = output.Split(' ')[1]; #>
-							if (results.ContainsKey("<#=varName#>"))
-								<#=varName#> = Convert.ChangeType(results["<#=varName#>"], <#=varName#>.GetType());
+							if (generated_script_execution_results.ContainsKey("<#=varName#>"))
+							{
+								if (generated_script_execution_results["<#=varName#>"].GetType() != typeof(<#=varType#>))
+								{
+									this.<#=varName#> = Convert.ChangeType(generated_script_execution_results["<#=varName#>"], typeof(<#=varType#>));
+								}
+								else
+								{
+									this.<#=varName#> = generated_script_execution_results["<#=varName#>"];
+								}
+							}
 						<# }
 					} #>
 				}

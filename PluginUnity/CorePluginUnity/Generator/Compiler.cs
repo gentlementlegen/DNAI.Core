@@ -66,7 +66,7 @@ namespace Core.Plugin.Unity.Generator
                 //UnityEngine.Debug.Log("for id " + id + " found functions " + functions.Count);
             }
             var code = _template.GenerateTemplateContent(_manager, variables, functions, dataTypes);
-            //UnityEngine.Debug.Log(code);
+            UnityEngine.Debug.Log(code);
             _compiler.Compile(code, AssemblyName);
         }
 
@@ -181,6 +181,7 @@ namespace Core.Plugin.Unity.Generator
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CorePluginUnityRuntime.dll");
+                _parameters.ReferencedAssemblies.Add(assemblyPath + "MathNet.Numerics.dll");
 
                 _parameters.ReferencedAssemblies.Add("System.Core.dll");
                 _parameters.ReferencedAssemblies.Add("Microsoft.CSharp.dll");
@@ -239,7 +240,7 @@ namespace Core.Plugin.Unity.Generator
         {
             _parameters.OutputAssembly = AssemblyOutputPath + assemblyName + ".dll";
             _parameters.CompilerOptions = $"-doc:\"{AssemblyOutputPath}{assemblyName}.xml\"";
-
+            
             CompilerResults results = _provider.CompileAssemblyFromSource(_parameters, code);
 
             if (results.Errors.HasErrors)

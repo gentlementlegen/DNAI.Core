@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -628,6 +629,16 @@ namespace CoreControl
                 ret.Add(new EntityFactory.Entity { Id = id, Name = def.Name, Type = GetEntityType(id) });
             }
             return ret;
+        }
+
+        /// <summary>
+        /// Set the base directory for the ressources
+        /// </summary>
+        /// <param name="value">Path to the directory</param>
+        public void SetRessourceDirectory(string value)
+        {
+            //if (Path.Fil)
+            CorePackage.Entity.Type.Ressource.Instance.Directory = value;
         }
 
         public void merge(Controller controller)
