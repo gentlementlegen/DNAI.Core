@@ -1,9 +1,9 @@
-﻿using DNAI.DemoCar2;
+﻿using DNAI.Cars2;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public class CarTest : DemoCar2
+    public class CarTest : Cars2
     {
         public float minDistance;
         public float speed = 10f;
@@ -17,8 +17,6 @@ namespace Assets.Scripts
         // Use this for initialization
         void Start()
         {
-            carai.LeftCaptor = new Captor();
-            carai.RightCaptor = new Captor();
             carai.minDistance = minDistance;
             carai.speed = speed;
             //mat = GetComponent<MeshRenderer>().material;
@@ -27,8 +25,31 @@ namespace Assets.Scripts
         // Update is called once per frame
         void Update()
         {
-            carai.UpdateDirection(carai);
-            transform.Translate(new Vector3((float)carai.X, (float)carai.Y, (float)carai.Z) * Time.deltaTime);
+            carai.leftCaptorDistance = minDistance;
+            carai.rightCaptorDistance = minDistance;
+            carai.minDistance = minDistance;
+
+            long val = (long)carai.GetDirection(carai);
+            switch (val)
+            {
+                case (long)Direction.FORWARD:
+                    Debug.Log("forward" + val.ToString());
+                    transform.Translate(Vector3.forward * speed * Time.deltaTime);
+                    break;
+                case (long)Direction.LEFT:
+                    Debug.Log("left" + val.ToString());
+                    //transform.Rotate(Vector3.up * (-angularSpeed) * Time.deltaTime);
+                    transform.Translate(Vector3.forward * speed * Time.deltaTime);
+                    break;
+                case (long)Direction.RIGHT:
+                    Debug.Log("right" + val.ToString());
+                    //transform.Rotate(Vector3.up * angularSpeed * Time.deltaTime);
+                    transform.Translate(Vector3.forward * speed * Time.deltaTime);
+                    break;
+                default:
+                    Debug.Log("stop" + val.ToString());
+                    break;
+            }
         }
     }
 }

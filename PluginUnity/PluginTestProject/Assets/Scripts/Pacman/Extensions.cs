@@ -27,7 +27,7 @@ namespace Assets.Scripts.Pacman
             return new UnityEngine.Vector3(p.X, p.Y, p.Z);
         }
 
-        public static Position AsPosition(this UnityEngine.Vector2Int v)
+        public static Position AsPosition(this UnityEngine.Vector2 v)
         {
             return new Position { X = v.x, Y = v.y, Z = 0 };
         }

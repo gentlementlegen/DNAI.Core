@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cars2</name>
+    </assembly>
+    <members>
+        <member name="T:DNAI.Cars2.Cars2">
+            <summary>
+             Base behaviour for DNAI IA.
+            </summary>
+            </member>
+        <member name="F:DNAI.Cars2.Cars2._manager">
+            <summary>
+             Called when output values of the DNAI script change.
+            </summary>
+            </member>
+    </members>
+</doc>

@@ -144,9 +144,9 @@ namespace Assets.Scripts.Pacman
             return res;
         }
 
-        public Vector2Int GetGridPosition(float x, float y)
+        public Vector2 GetGridPosition(float x, float y)
         {
-            return new Vector2Int(Mathf.RoundToInt(x / _scaleFactor.x), Mathf.RoundToInt(-y / _scaleFactor.y));
+            return new Vector2(Mathf.RoundToInt(x / _scaleFactor.x), Mathf.RoundToInt(-y / _scaleFactor.y));
         }
 
         public Vector3 GetWorldPosition(int x, int y)

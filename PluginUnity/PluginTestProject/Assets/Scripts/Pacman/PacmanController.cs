@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Pacman
 {
-    public delegate void OnPositionChanged(object sender, Vector2Int position);
+    public delegate void OnPositionChanged(object sender, Vector2 position);
 
     /// <summary>
     /// Controller for the pacman (player)
@@ -103,7 +103,7 @@ namespace Assets.Scripts.Pacman
             if (_dir.Count <= 0)
             {
                 _target = TerrainManager.Instance.GetNextAvailableNode(x, y, _currentDir, out x, out y, out isJump);
-                PositionChanged?.Invoke(this, new Vector2Int(x, y));
+                PositionChanged?.Invoke(this, new Vector2(x, y));
             }
             else
             {
@@ -112,7 +112,7 @@ namespace Assets.Scripts.Pacman
                 if (currX == x && currY == y)
                 {
                     newTarget = TerrainManager.Instance.GetNextAvailableNode(x, y, _currentDir, out x, out y, out isJump);
-                    PositionChanged?.Invoke(this, new Vector2Int(currX, currY));
+                    PositionChanged?.Invoke(this, new Vector2(currX, currY));
                 }
                 else
                 {

@@ -66,7 +66,7 @@ namespace Assets.Scripts.Pacman
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="position"></param>
-        private void GhostController_PositionChanged(object sender, Vector2Int position)
+        private void GhostController_PositionChanged(object sender, Vector2 position)
         {
             _currPos = TerrainManager.Instance.GetGridPosition(transform.position.x, transform.position.y).AsPosition();
             var targetGridPos = TerrainManager.Instance.GetGridPosition(_target.transform.position.x, _target.transform.position.y).AsPosition();

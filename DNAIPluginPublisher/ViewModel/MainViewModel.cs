@@ -127,7 +127,10 @@ namespace DNAIPluginPublisher.ViewModel
                         Task.Run(() =>
                         {
                             if (!_cancelToken.IsCancellationRequested)
+                            {
                                 packer.Pack(_provider.Items, Properties.Settings.Default.DirectoryPath, path);
+                                //System.Diagnostics.Process.Start("explorer.exe", "/select, \"" + Path.GetTempPath() + "\"");
+                            }
 
                             if (!_cancelToken.IsCancellationRequested)
                             {
