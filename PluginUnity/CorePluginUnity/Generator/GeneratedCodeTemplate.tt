@@ -92,7 +92,7 @@ namespace DNAI.<#=Namespace#>
 			static <#=ClassName#>()
 			{
 				//_manager = new BinaryManager();
-				_manager.LoadCommandsFrom(@"Assets/Standard Assets/DNAI/Scripts/" + "<#=FilePath#>");
+				_manager.LoadCommandsFrom(@"Assets/DNAI/Scripts/" + "<#=FilePath#>");
 			}
 
 			///<summary>

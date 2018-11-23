@@ -122,7 +122,7 @@ namespace Core.Plugin.Unity.Editor
                 //codeConverter.ConvertCode();
             }).ContinueWith((param) => OnScriptLoaded(param.Status.ToString()));
             FilePathAbsolute = fileFullPath;
-            return "Assets/Standard Assets/DNAI/Scripts/" + Path.GetFileName(path);
+            return Constants.ScriptPath + Path.GetFileName(path);
         }
 
         public void ReloadScript()

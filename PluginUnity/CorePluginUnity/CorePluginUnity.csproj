@@ -164,15 +164,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetPath)" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Standard Assets\DNAI\Editor" &amp;
-"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreCommand.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Standard Assets\DNAI\Plugins" &amp;
-"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreControl.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Standard Assets\DNAI\Plugins" &amp;
-"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CorePackage.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Standard Assets\DNAI\Plugins" &amp;
-"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreNetwork.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Standard Assets\DNAI\Plugins" &amp;
-"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)EventServerClient.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Standard Assets\DNAI\Plugins" &amp;
-"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Standard Assets\DNAI\Plugins" &amp;
-"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)protobuf-net.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Standard Assets\DNAI\Plugins" &amp;
-"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)BinarySerializer.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Standard Assets\DNAI\Plugins" &amp;
-"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CorePluginUnityRuntime.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\Standard Assets\DNAI\Plugins"</PostBuildEvent>
+    <PostBuildEvent>"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetPath)" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Editor" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreCommand.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreControl.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CorePackage.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreNetwork.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)EventServerClient.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)protobuf-net.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)BinarySerializer.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CorePluginUnityRuntime.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins"</PostBuildEvent>
   </PropertyGroup>
 </Project>

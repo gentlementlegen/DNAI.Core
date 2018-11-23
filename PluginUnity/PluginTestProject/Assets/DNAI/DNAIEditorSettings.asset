@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2021544108, guid: 428b0ae85a99ff3429c93ae485c64c81, type: 3}
+  m_Name: DNAIEditorSettings
+  m_EditorClassIdentifier: 
+  Username: admin
+  Token:
+    token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWIyODQ2YzE4Y2QwODUwMDNkODEyZDA1IiwiaWF0IjoxNTQyOTg3NjY5LCJleHAiOjE1NDMwNzQwNjl9.kyLkcdusEwQDS174EM_05nzJdikBdlNTCaXVPFFZNOzC-FQXh9OPIwl78aHebKnUPoqjrQOIQsrJ_I13wfv5uWcr-QYiq6_iuRCgY-CaZTvXQD23H5jjsluPPvIHDTeI3F9CtC20ZqKSkIgywnpuXoqjALwrRKQrctZyAmQ2e2ksV4zTQHHlGD_sI5M90xqh6wFhyfWmgWAO4GA5BewDTDuCwQ9maqRISCRE1LWOPGzGSFjZX39d3u_eAHaxzfp5YU9BE3hC0eiMbC1EgFEis_nV2DA6c4C07mjWahoBUhr91dBUSKQvjPVlF4dBvUdDFTbeyxcxsx4MM5nSeGbHEw
+    refreshToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWIyODQ2YzE4Y2QwODUwMDNkODEyZDA1IiwiaWF0IjoxNTQyOTg3NjY5LCJleHAiOjE1NDMxNjA0Njl9.LFiGlX5k8HAoGlZ5I8FMlKeTHPJgXYzy_ejWkOcI-lhUDP6Xq1h8cp3tZcYKYhP1-QmI7vvfayKj5G09tHDZFFHvQVnH4WrXJW7_NVdm3L7asFBP_u7oVhM_FyIxnt0SH8Q0Fc1p7UCZEoyiiyBZx1TxHsagyQDB02vS4vRl4NTicSicU2nwZSSafV87Lf3TvHoRuLN4U2fsiYN8GNWQhpfFfQmbNfjqYpZOUf-bUHSBVLApWZmlDOvlzmwTLHC-dJrMbTDTT5Ph_p0Hl7r_LYm6C4FX31zgcaq2NHgjm7eDlPfGJIBeeTyf-Crosb1Zmv9Vx1oXykWgw92-IhbqQQ
+    user_id: 5b2846c18cd085003d812d05
+  AutoLogin: 1
