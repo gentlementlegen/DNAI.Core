@@ -21,3 +21,21 @@ MonoBehaviour:
     AIName: Unnamed
     _scriptList:
     - recognize Digit
+  - scriptManager:
+      _fileName: 
+      _filePath: Assets/Standard Assets/DNAI/Scripts/Astar.dnai
+      _filePathAbsolute: D:\EIP\Core\PluginUnity\PluginTestProject\Assets\Standard
+        Assets\DNAI\Scripts\Astar.dnai
+      _scriptName: Astar2
+    AIName: 
+    _scriptList: []
+  - scriptManager:
+      _fileName: 
+      _filePath: Assets/Standard Assets/DNAI/Scripts/MoreOrLess3.0.dnai
+      _filePathAbsolute: D:\EIP\Core\PluginUnity\PluginTestProject\Assets\Standard
+        Assets\DNAI\Scripts\MoreOrLess3.0.dnai
+      _scriptName: MoreOrLess
+    AIName: 
+    _scriptList:
+    - Play
+    - Reset

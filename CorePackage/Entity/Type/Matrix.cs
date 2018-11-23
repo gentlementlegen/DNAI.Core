@@ -135,6 +135,7 @@ namespace CorePackage.Entity.Type
         {
             string data = "";
 
+
             for (int r = 0; r < value.RowCount; r++)
             {
                 if (r > 0)

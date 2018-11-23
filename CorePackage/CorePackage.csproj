@@ -139,6 +139,7 @@
     <Compile Include="Global\IDefinition.cs" />
     <Compile Include="Global\IDeclarator.cs" />
     <Compile Include="Global\IOperable.cs" />
+    <Compile Include="Global\KerasService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

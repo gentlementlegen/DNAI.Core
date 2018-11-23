@@ -536,6 +536,7 @@ namespace CoreTest
 
             predictNode.SetInputValue("model", "model.json");
             predictNode.SetInputValue("weights", "model.h5");
+            predictNode.SetInputValue("shape", "(28,28)");
             predictNode.SetInputValue("inputs", data);
 
             predictNode.Execute();
@@ -574,6 +575,7 @@ namespace CoreTest
 
             classifyNode.SetInputValue("model", "model.json");
             classifyNode.SetInputValue("weights", "model.h5");
+            classifyNode.SetInputValue("shape", "(28,28)");
             classifyNode.SetInputValue("inputs", data);
 
             classifyNode.Execute();
@@ -600,6 +602,8 @@ namespace CoreTest
             classifyNode.Execute();
 
             Assert.IsTrue(classifyNode.GetOutputValue("maxIndex") == 5);
+
+            CorePackage.Global.KerasService.Quit();
         }
     }
 }
