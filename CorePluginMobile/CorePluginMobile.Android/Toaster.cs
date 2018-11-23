@@ -4,7 +4,6 @@ using CorePluginMobile.Services;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(Toaster))]
-
 namespace CorePluginMobile.Droid
 {
     public class Toaster : IToaster

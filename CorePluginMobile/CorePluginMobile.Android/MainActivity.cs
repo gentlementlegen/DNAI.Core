@@ -6,6 +6,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Android.Content;
+using Android.Util;
 
 namespace CorePluginMobile.Droid
 {
@@ -20,11 +22,11 @@ namespace CorePluginMobile.Droid
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
-            
-            //if (savedInstanceState == null)
-            //{
-            //    FragmentManager.BeginTransaction().Replace(Resource.Id.container, CameraFragment.NewInstance()).Commit();
-            //}
+
+            //var details = CameraFragment.NewInstance();
+            //var fragmentTransaction = FragmentManager.BeginTransaction();
+            //fragmentTransaction.Add(Android.Resource.Id.Content, details);
+            //fragmentTransaction.Commit();
         }
     }
 }

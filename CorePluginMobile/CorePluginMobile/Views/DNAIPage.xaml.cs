@@ -1,5 +1,4 @@
-﻿//using Android.Widget;
-using CorePluginMobile.ViewModels;
+﻿using CorePluginMobile.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

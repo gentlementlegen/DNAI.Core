@@ -2,12 +2,23 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CorePluginMobile.Views.CameraPage"
+             xmlns:androidWidget="clr-namespace:Android.Widget;assembly=Mono.Android;targetPlatform=Android"
+             xmlns:androidGraphics="clr-namespace:Android.Graphics;assembly=Mono.Android;targetPlatform=Android"
+             xmlns:androidLocal="clr-namespace:CorePluginMobile.Droid;assembly=CorePluginMobile.Droid;targetPlatform=Android"
 			 Title="Camera">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Camera goes here !"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <androidWidget:TextView x:Arguments="{x:Static androidLocal:MainActivity.Instance}" Text="Simple Native Color Picker" TextSize="24" View.HorizontalOptions="Center">
+                <androidWidget:TextView.Typeface>
+                    <androidGraphics:Typeface x:FactoryMethod="Create">
+                        <x:Arguments>
+                            <x:String>cursive</x:String>
+                            <androidGraphics:TypefaceStyle>Normal</androidGraphics:TypefaceStyle>
+                        </x:Arguments>
+                    </androidGraphics:Typeface>
+                </androidWidget:TextView.Typeface>
+            </androidWidget:TextView>
+            <BoxView Color="Red" HeightRequest="100" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
