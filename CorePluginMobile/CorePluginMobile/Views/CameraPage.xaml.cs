@@ -5,7 +5,7 @@ using Xamarin.Forms.Xaml;
 namespace CorePluginMobile.Views
 {
     //https://github.com/xamarin/xamarin-forms-samples/blob/master/CustomRenderers/ContentPage/Droid/CameraPageRenderer.cs
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+    [XamlCompilation(XamlCompilationOptions.Skip)]
     public partial class CameraPage : ContentPage
     {
         private readonly CameraViewModel _cameraViewModel;
