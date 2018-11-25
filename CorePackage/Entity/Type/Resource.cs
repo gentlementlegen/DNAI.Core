@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace CorePackage.Entity.Type
 {
-    public class Ressource : DataType
+    public class Resource : DataType
     {
-        public static Ressource Instance { get; } = new Ressource();
+        public static Resource Instance { get; } = new Resource();
 
         public string Directory { get; set; } = ".";
 
-        private Ressource()
+        private Resource()
         {
 
         }

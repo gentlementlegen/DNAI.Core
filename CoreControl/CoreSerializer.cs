@@ -134,7 +134,7 @@ namespace CoreControl
                 typeid = SerializationModel.DataType.WHICH.ANY;
             else if (definition == Matrix.Instance)
                 typeid = SerializationModel.DataType.WHICH.MATRIX;
-            else if (definition == Ressource.Instance)
+            else if (definition == Resource.Instance)
                 typeid = SerializationModel.DataType.WHICH.RESSOURCE;
             else
                 throw new InvalidOperationException("Entity cannot be serialized as data type");

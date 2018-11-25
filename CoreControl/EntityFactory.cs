@@ -98,58 +98,58 @@ namespace CoreControl
             (root as IDefinition).Name = "";
 
             //boolean type is in 1
-            AddEntity(Scalar.Boolean);
-            Scalar.Boolean.Parent = root;
-            Scalar.Boolean.Name = "Bool";
-            root.Declare(Scalar.Boolean, "Bool", AccessMode.EXTERNAL);
+            AddEntity(Builtins.Boolean);
+            Builtins.Boolean.Parent = root;
+            Builtins.Boolean.Name = "Bool";
+            root.Declare(Builtins.Boolean, "Bool", AccessMode.EXTERNAL);
 
             //integer type is in 2
-            AddEntity(Scalar.Integer);
-            Scalar.Integer.Parent = root;
-            Scalar.Integer.Name = "Integer";
-            root.Declare(Scalar.Integer, "Integer", AccessMode.EXTERNAL);
+            AddEntity(Builtins.Integer);
+            Builtins.Integer.Parent = root;
+            Builtins.Integer.Name = "Integer";
+            root.Declare(Builtins.Integer, "Integer", AccessMode.EXTERNAL);
 
             //floating type is in 3
-            AddEntity(Scalar.Floating);
-            Scalar.Floating.Parent = root;
-            Scalar.Floating.Name = "Floating";
-            root.Declare(Scalar.Floating, "Floating", AccessMode.EXTERNAL);
+            AddEntity(Builtins.Floating);
+            Builtins.Floating.Parent = root;
+            Builtins.Floating.Name = "Floating";
+            root.Declare(Builtins.Floating, "Floating", AccessMode.EXTERNAL);
 
             //character type is in 4
-            AddEntity(Scalar.Character);
-            Scalar.Character.Parent = root;
-            Scalar.Character.Name = "Character";
-            root.Declare(Scalar.Character, "Character", AccessMode.EXTERNAL);
+            AddEntity(Builtins.Character);
+            Builtins.Character.Parent = root;
+            Builtins.Character.Name = "Character";
+            root.Declare(Builtins.Character, "Character", AccessMode.EXTERNAL);
 
             //string type is in 5
-            AddEntity(Scalar.String);
-            Scalar.String.Parent = root;
-            Scalar.String.Name = "String";
-            root.Declare(Scalar.String, "String", AccessMode.EXTERNAL);
+            AddEntity(Builtins.String);
+            Builtins.String.Parent = root;
+            Builtins.String.Name = "String";
+            root.Declare(Builtins.String, "String", AccessMode.EXTERNAL);
 
             //dict type is in 6
-            AddEntity(DictType.Instance);
-            DictType.Instance.Parent = root;
-            DictType.Instance.Name = "Dict";
-            root.Declare(DictType.Instance, "Dict", AccessMode.EXTERNAL);
+            AddEntity(Builtins.Dictionnary);
+            Builtins.Dictionnary.Parent = root;
+            Builtins.Dictionnary.Name = "Dict";
+            root.Declare(Builtins.Dictionnary, "Dict", AccessMode.EXTERNAL);
 
             //any type is in 7
-            AddEntity(AnyType.Instance);
-            AnyType.Instance.Parent = root;
-            AnyType.Instance.Name = "Any";
-            root.Declare(AnyType.Instance, "Any", AccessMode.EXTERNAL);
+            AddEntity(Builtins.Any);
+            Builtins.Any.Parent = root;
+            Builtins.Any.Name = "Any";
+            root.Declare(Builtins.Any, "Any", AccessMode.EXTERNAL);
 
             //matrix type is in 8
-            AddEntity(Matrix.Instance);
-            Matrix.Instance.Parent = root;
-            Matrix.Instance.Name = "Matrix";
-            root.Declare(Matrix.Instance, "Matrix", AccessMode.EXTERNAL);
+            AddEntity(Builtins.Matrix);
+            Builtins.Matrix.Parent = root;
+            Builtins.Matrix.Name = "Matrix";
+            root.Declare(Builtins.Matrix, "Matrix", AccessMode.EXTERNAL);
 
             //ressource type is in 9
-            AddEntity(Ressource.Instance);
-            Ressource.Instance.Parent = root;
-            Ressource.Instance.Name = "Ressource";
-            root.Declare(Ressource.Instance, "Ressource", AccessMode.EXTERNAL);
+            AddEntity(Builtins.Resource);
+            Builtins.Resource.Parent = root;
+            Builtins.Resource.Name = "Ressource";
+            root.Declare(Builtins.Resource, "Ressource", AccessMode.EXTERNAL);
         }
 
         /// <summary>

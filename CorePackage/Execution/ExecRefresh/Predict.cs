@@ -12,8 +12,8 @@ namespace CorePackage.Execution
     {
         public Predict()
         {
-            AddInput("model", new Entity.Variable(Entity.Type.Ressource.Instance));
-            AddInput("weights", new Entity.Variable(Entity.Type.Ressource.Instance));
+            AddInput("model", new Entity.Variable(Entity.Type.Resource.Instance));
+            AddInput("weights", new Entity.Variable(Entity.Type.Resource.Instance));
             AddInput("inputs", new Entity.Variable(Entity.Type.Matrix.Instance));
             AddInput("shape", new Entity.Variable(Entity.Type.Scalar.String));
             AddOutput("outputs", new Entity.Variable(Entity.Type.Matrix.Instance));

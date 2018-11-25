@@ -49,8 +49,8 @@ namespace CorePackage.Global
         
         public static void Init()
         {
-            string pythonPath = $"{Entity.Type.Ressource.Instance.Directory}/{PythonProgram}";
-            string kerasPath = $"{Entity.Type.Ressource.Instance.Directory}/{KerasScript}";
+            string pythonPath = $"{Entity.Type.Resource.Instance.Directory}/{PythonProgram}";
+            string kerasPath = $"{Entity.Type.Resource.Instance.Directory}/{KerasScript}";
 
             if (!IsProcessRunning && File.Exists(kerasPath))
             {
@@ -117,7 +117,7 @@ namespace CorePackage.Global
 
         public static void LoadModel(string model)
         {
-            string path = $"{Entity.Type.Ressource.Instance.Directory}/{model}";
+            string path = $"{Entity.Type.Resource.Instance.Directory}/{model}";
 
             if (!File.Exists(path))
             {
@@ -132,7 +132,7 @@ namespace CorePackage.Global
 
         public static void LoadWeights(string weights)
         {
-            string path = $"{Entity.Type.Ressource.Instance.Directory}/{weights}";
+            string path = $"{Entity.Type.Resource.Instance.Directory}/{weights}";
 
             if (!File.Exists(path))
             {

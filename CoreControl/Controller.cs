@@ -638,7 +638,7 @@ namespace CoreControl
         public void SetRessourceDirectory(string value)
         {
             //if (Path.Fil)
-            CorePackage.Entity.Type.Ressource.Instance.Directory = value;
+            CorePackage.Entity.Type.Resource.Instance.Directory = value;
         }
 
         public void merge(Controller controller)

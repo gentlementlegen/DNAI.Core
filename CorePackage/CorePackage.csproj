@@ -53,12 +53,13 @@
     <Compile Include="Entity\DataType.cs" />
     <Compile Include="Entity\Function.cs" />
     <Compile Include="Entity\Type\AnyType.cs" />
+    <Compile Include="Entity\Type\Builtins.cs" />
     <Compile Include="Entity\Type\DictType.cs" />
     <Compile Include="Entity\Type\EnumType.cs" />
     <Compile Include="Entity\Type\ListType.cs" />
     <Compile Include="Entity\Type\Matrix.cs" />
     <Compile Include="Entity\Type\ObjectType.cs" />
-    <Compile Include="Entity\Type\Ressource.cs" />
+    <Compile Include="Entity\Type\Resource.cs" />
     <Compile Include="Entity\Type\ScalarType.cs" />
     <Compile Include="Entity\Variable.cs" />
     <Compile Include="Error\InvalidOperatorSignature.cs" />
