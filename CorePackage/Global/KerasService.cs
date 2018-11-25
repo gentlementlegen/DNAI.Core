@@ -51,11 +51,6 @@ namespace CorePackage.Global
         {
             string pythonPath = $"{Entity.Type.Ressource.Instance.Directory}/{PythonProgram}";
             string kerasPath = $"{Entity.Type.Ressource.Instance.Directory}/{KerasScript}";
-            
-            if (!File.Exists(kerasPath))
-            {
-                throw new FileNotFoundException($"Script not found at {kerasPath}");
-            }
 
             if (!IsProcessRunning && File.Exists(kerasPath))
             {
