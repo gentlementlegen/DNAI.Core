@@ -15,22 +15,16 @@ namespace CorePackage.Global
 {
     public static class KerasService
     {
-        private static char EOT { get; } = (char)4;
-
-        private static char LF { get; } = '\n';
-
-        private static string AssemblyPath { get; } = Path.GetDirectoryName(typeof(KerasService).Assembly.Location);
-
         private static bool IsProcessRunning { get; set; } = false;
 
-        private static string PythonProgram { get; } = $"{AssemblyPath}/.Keras_loaded_model/python/Scripts/python";
-        private static string KerasScript { get; } = $"{AssemblyPath}/.Keras_loaded_model/keras_restore_machine_learning.py";
+        private static string PythonProgram { get; } = $".Keras_loaded_model/python/Scripts/python";
+
+        private static string KerasScript { get; } = $".Keras_loaded_model/keras_restore_machine_learning.py";
 
         private static Process PythonProcess { get; } = new Process
         {
             StartInfo = new ProcessStartInfo
             {
-                FileName = PythonProgram,
                 UseShellExecute = false,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
@@ -49,17 +43,21 @@ namespace CorePackage.Global
 
         private static Task ProcessThread { get; set; }
 
-        private static Queue<string> OutputLines { get; } = new Queue<string>();
-
-        private static Queue<string> ErrorLines { get; } = new Queue<string>();
-
         private static string LastModelLoaded { get; set; }
 
         private static string LastWeightsLoaded { get; set; }
-
+        
         public static void Init()
         {
-            if (!IsProcessRunning && File.Exists(KerasScript))
+            string pythonPath = $"{Entity.Type.Ressource.Instance.Directory}/{PythonProgram}";
+            string kerasPath = $"{Entity.Type.Ressource.Instance.Directory}/{KerasScript}";
+            
+            if (!File.Exists(kerasPath))
+            {
+                throw new FileNotFoundException($"Script not found at {kerasPath}");
+            }
+
+            if (!IsProcessRunning && File.Exists(kerasPath))
             {
                 IsProcessRunning = true;
 
@@ -70,12 +68,12 @@ namespace CorePackage.Global
 
                 Debug.WriteLine($"Running server on port {port}");
 
-                PythonProcess.StartInfo.Arguments = $"\"{KerasScript}\" -p {port}";
+                PythonProcess.StartInfo.FileName = pythonPath;
+                PythonProcess.StartInfo.Arguments = $"\"{kerasPath}\" -p {port}";
                 PythonProcess.Start();
 
                 Client = Server.AcceptTcpClient();
-                Input = new StreamWriter(Client.GetStream());
-                Input.AutoFlush = false;
+                Input = new StreamWriter(Client.GetStream()) { AutoFlush = false };
                 Output = new StreamReader(Client.GetStream());
 
                 ProcessThread = Task

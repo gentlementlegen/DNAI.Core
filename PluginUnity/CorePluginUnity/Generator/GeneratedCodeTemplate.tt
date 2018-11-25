@@ -6,6 +6,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@parameter type="System.String" name="parameter1" #>
 using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 using CoreCommand;
@@ -93,10 +94,11 @@ namespace DNAI.<#=Namespace#>
 			{
 				//_manager = new BinaryManager();
 
-				UnityEngine.Debug.Log($"Manager: {_manager}");
-				UnityEngine.Debug.Log($"Controller: {_manager.Controller}");
+				//UnityEngine.Debug.Log($"Manager: {_manager}");
+				//UnityEngine.Debug.Log($"Controller: {_manager.Controller}");
+				string cwd = Directory.GetCurrentDirectory();
+				_manager.Controller.SetRessourceDirectory(cwd + @"/Assets/Standard Assets/DNAI/Scripts");
 				_manager.LoadCommandsFrom(@"Assets/Standard Assets/DNAI/Scripts/" + "<#=FilePath#>");
-				_manager.Controller.SetRessourceDirectory(@"Assets/Standard Assets/DNAI/Scripts");
 			}
 
 			///<summary>

@@ -29,6 +29,7 @@ namespace Core.Plugin.Unity.Generator
         public virtual string TransformText()
         {
             this.Write(@"using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 using CoreCommand;
@@ -41,14 +42,14 @@ using Core.Plugin.Unity.Runtime;
 
 namespace DNAI.");
             
-            #line 19 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 20 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n\t//namespace ");
             
-            #line 21 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 22 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -56,7 +57,7 @@ namespace DNAI.");
             this.Write("\r\n\t//{\r\n\t\t///<summary>\r\n\t\t/// Base behaviour for DNAI IA.\r\n\t\t///</summary>\r\n\t\tpub" +
                     "lic class ");
             
-            #line 26 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 27 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -65,7 +66,7 @@ namespace DNAI.");
                     "itionItem> _cdtList = new List<ConditionItem>();// { new ConditionItem() { cdt =" +
                     " new IntCondition() } };\r\n\r\n\t\t\t");
             
-            #line 31 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 32 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in DataTypes)
 			{
             
@@ -73,14 +74,14 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t");
             
-            #line 33 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 34 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\t");
             
-            #line 34 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 35 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
@@ -88,7 +89,7 @@ namespace DNAI.");
             this.Write("\r\n\t\t\tpublic static string[] OutputsAsStrings = new string[]\r\n\t\t\t{\r\n\t\t\t\t\"No Output" +
                     " Selected\",\r\n\t\t\t\t");
             
-            #line 39 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 40 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Outputs)
 				{
             
@@ -96,14 +97,14 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t\t\"");
             
-            #line 41 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 42 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write("\",\r\n\t\t\t\t");
             
-            #line 42 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 43 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
@@ -111,7 +112,7 @@ namespace DNAI.");
             this.Write("\t\t\t};\r\n\r\n\t\t\tpublic static string[] OutputsAsStringsQualified = new string[]\r\n\t\t\t{" +
                     "\r\n\t\t\t\t\"void\",\r\n\t\t\t\t");
             
-            #line 48 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 49 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Outputs)
 				{
             
@@ -119,14 +120,14 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t\ttypeof(");
             
-            #line 50 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 51 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[0]));
             
             #line default
             #line hidden
             this.Write(").AssemblyQualifiedName,\r\n\t\t\t\t");
             
-            #line 51 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 52 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
@@ -146,7 +147,7 @@ namespace DNAI.");
 			//[Header(""Input variables"")]
 			");
             
-            #line 65 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 66 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Inputs)
 			{ 
             
@@ -154,21 +155,21 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\tpublic ");
             
-            #line 67 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 68 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t\t");
             
-            #line 68 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 69 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\t//[Header(\"Output variables\")]\r\n\t\t\t");
             
-            #line 71 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 72 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Outputs)
 			{ 
             
@@ -176,35 +177,35 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\tprivate ");
             
-            #line 73 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 74 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[0]));
             
             #line default
             #line hidden
             this.Write(" _");
             
-            #line 73 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 74 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[1]));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t\t\tpublic ");
             
-            #line 74 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 75 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\t\t{\r\n\t\t\t\t\tget { return _");
             
-            #line 76 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 77 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[1]));
             
             #line default
             #line hidden
             this.Write("; }\r\n\t\t\t\t\tprivate set\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t_");
             
-            #line 79 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 80 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[1]));
             
             #line default
@@ -213,7 +214,7 @@ namespace DNAI.");
                     "ValueType = value.GetType(), Invoker = this });\r\n\t\t\t\t\t\t_cdtList.FindAll((x) => x" +
                     ".SelectedOutput == \"");
             
-            #line 81 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 82 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
@@ -222,7 +223,7 @@ namespace DNAI.");
                     "null)\r\n\t\t\t\t\t\t\t\ty.OnOutputChanged.Invoke(new EventOutputChange { Value = value, V" +
                     "alueType = value.GetType(), Invoker = this });\r\n\t\t\t\t\t\t});\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t");
             
-            #line 88 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 89 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
@@ -230,27 +231,30 @@ namespace DNAI.");
             this.Write("\r\n\t\t\tprivate static readonly BinaryManager _manager = new BinaryManager();\r\n\r\n\t\t\t" +
                     "static ");
             
-            #line 92 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 93 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
             #line hidden
-            this.Write("()\r\n\t\t\t{\r\n\t\t\t\t//_manager = new BinaryManager();\r\n\r\n\t\t\t\tUnityEngine.Debug.Log($\"Ma" +
-                    "nager: {_manager}\");\r\n\t\t\t\tUnityEngine.Debug.Log($\"Controller: {_manager.Controll" +
-                    "er}\");\r\n\t\t\t\t_manager.LoadCommandsFrom(@\"Assets/Standard Assets/DNAI/Scripts/\" + " +
-                    "\"");
+            this.Write(@"()
+			{
+				//_manager = new BinaryManager();
+
+				//UnityEngine.Debug.Log($""Manager: {_manager}"");
+				//UnityEngine.Debug.Log($""Controller: {_manager.Controller}"");
+				string cwd = Directory.GetCurrentDirectory();
+				_manager.Controller.SetRessourceDirectory(cwd + @""/Assets/Standard Assets/DNAI/Scripts"");
+				_manager.LoadCommandsFrom(@""Assets/Standard Assets/DNAI/Scripts/"" + """);
             
-            #line 98 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 101 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FilePath));
             
             #line default
             #line hidden
-            this.Write("\");\r\n\t\t\t\t_manager.Controller.SetRessourceDirectory(@\"Assets/Standard Assets/DNAI/" +
-                    "Scripts\");\r\n\t\t\t}\r\n\r\n\t\t\t///<summary>\r\n\t\t\t/// Executes the Duly Behaviour by calli" +
-                    "ng the created function.\r\n\t\t\t/// Updates Outputs accordingly.\r\n\t\t\t///</summary>\r" +
-                    "\n\t\t\t");
+            this.Write("\");\r\n\t\t\t}\r\n\r\n\t\t\t///<summary>\r\n\t\t\t/// Executes the Duly Behaviour by calling the c" +
+                    "reated function.\r\n\t\t\t/// Updates Outputs accordingly.\r\n\t\t\t///</summary>\r\n\t\t\t");
             
-            #line 106 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 108 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var f in Functions)
 			{ 
             
@@ -258,7 +262,7 @@ namespace DNAI.");
             #line hidden
             this.Write("\r\n\t\t\t\tpublic void Execute");
             
-            #line 109 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 111 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(f.Name));
             
             #line default
@@ -267,21 +271,21 @@ namespace DNAI.");
                     "ynamic>();\r\n\r\n\t\t\t\t\tgenerated_script_execution_results = _manager.Controller.Call" +
                     "Function(");
             
-            #line 113 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 115 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(f.FunctionId));
             
             #line default
             #line hidden
             this.Write(", new Dictionary<string, dynamic>{ ");
             
-            #line 113 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 115 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(f.FunctionArguments));
             
             #line default
             #line hidden
             this.Write(" });\r\n\t\t\t\t\t");
             
-            #line 114 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 116 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  if (Outputs.Count > 0)
 					{
 						foreach (var output in Outputs)
@@ -293,63 +297,63 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t\t\t\tif (generated_script_execution_results.ContainsKey(\"");
             
-            #line 120 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 122 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write("\"))\r\n\t\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\t\tif (generated_script_execution_results[\"");
             
-            #line 122 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 124 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write("\"].GetType() != typeof(");
             
-            #line 122 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 124 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varType));
             
             #line default
             #line hidden
             this.Write("))\r\n\t\t\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\t\t\tthis.");
             
-            #line 124 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 126 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write(" = Convert.ChangeType(generated_script_execution_results[\"");
             
-            #line 124 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 126 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write("\"], typeof(");
             
-            #line 124 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 126 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varType));
             
             #line default
             #line hidden
             this.Write("));\r\n\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t\telse\r\n\t\t\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\t\t\tthis.");
             
-            #line 128 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 130 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write(" = generated_script_execution_results[\"");
             
-            #line 128 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 130 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write("\"];\r\n\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t");
             
-            #line 131 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 133 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  }
 					} 
             
@@ -357,7 +361,7 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t}\r\n\t\t\t\t\r\n\t\t\t");
             
-            #line 135 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 137 "D:\EIP\Core\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
