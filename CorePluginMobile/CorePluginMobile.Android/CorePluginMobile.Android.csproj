@@ -60,6 +60,8 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="CameraFragment.cs" />
+    <Compile Include="CameraPageRenderer.cs" />
+    <Compile Include="CustomRenderer.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

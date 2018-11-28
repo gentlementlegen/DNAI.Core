@@ -2,12 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CorePluginMobile.Views.CameraPage"
+             xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:androidWidget="clr-namespace:Android.Widget;assembly=Mono.Android;targetPlatform=Android"
              xmlns:androidGraphics="clr-namespace:Android.Graphics;assembly=Mono.Android;targetPlatform=Android"
              xmlns:androidView="clr-namespace:Android.Views;assembly=Mono.Android;targetPlatform=Android"
              xmlns:androidLocal="clr-namespace:CorePluginMobile.Droid;assembly=CorePluginMobile.Droid;targetPlatform=Android"
 			 Title="Camera">
-    <ContentPage.Content>
+    <!--<ContentPage.Content>
         <StackLayout>
             <androidWidget:TextView x:Arguments="{x:Static androidLocal:MainActivity.Instance}" Text="Simple Native Color Picker" TextSize="24" View.HorizontalOptions="Center">
                 <androidWidget:TextView.Typeface>
@@ -23,9 +24,6 @@
             <androidWidget:SeekBar x:Arguments="{x:Static androidLocal:MainActivity.Instance}" Progress="0" Max="256" />
             <androidWidget:SeekBar x:Arguments="{x:Static androidLocal:MainActivity.Instance}" Progress="0" Max="256" />
             <androidWidget:SeekBar x:Arguments="{x:Static androidLocal:MainActivity.Instance}" Progress="0" Max="256" />
-
-            <!--<androidView:TextureView SurfaceTextureListener="{Binding Test}"/>-->
-
         </StackLayout>
-    </ContentPage.Content>
+    </ContentPage.Content>-->
 </ContentPage>

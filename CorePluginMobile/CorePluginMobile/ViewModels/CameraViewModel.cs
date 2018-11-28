@@ -2,6 +2,7 @@
 using CorePluginMobile.Services;
 
 // https://docs.microsoft.com/en-us/xamarin/xamarin-forms/platform/native-views/xaml
+// https://docs.microsoft.com/en-us/xamarin/xamarin-forms/app-fundamentals/custom-renderer/contentpage
 namespace CorePluginMobile.ViewModels
 {
     public class CameraViewModel : BaseViewModel
