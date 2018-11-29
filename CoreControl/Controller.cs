@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -14,13 +15,58 @@ namespace CoreControl
         /// Entity factory used to manage entities
         /// </summary>
         private EntityFactory entity_factory = new EntityFactory();
-        
+
+        /// <summary>
+        /// Version of the file
+        /// </summary>
+        public static SerializationModel.Version Version { get; } = new SerializationModel.Version { Value = "0.3.0" };
+
         /// <summary>
         /// Resets the controller state to initial values.
         /// </summary>
         public void Reset()
         {
             entity_factory = new EntityFactory();
+        }
+
+        public void SaveTo(string filename)
+        {
+            CoreSerializer serializer = new CoreSerializer
+            {
+                Factory = entity_factory
+            };
+
+            serializer.SaveTo(filename);
+        }
+
+        public void LoadFrom(string filename)
+        {
+            CoreSerializer serializer = new CoreSerializer
+            {
+                Factory = new EntityFactory()
+            };
+            Controller tomerge = serializer.LoadFrom(filename);
+
+            merge(tomerge);
+        }
+
+        public UInt32 FindEntity(string path)
+        {
+            String[] names = path.Substring(1).Split('/');
+            CorePackage.Global.IDefinition cwe = entity_factory.Find(EntityFactory.BASE_ID.GLOBAL_CTX);
+
+            foreach (string name in names)
+            {
+                if (cwe is CorePackage.Global.IDeclarator decl)
+                {
+                    cwe = decl.Find(name);
+                }
+                else
+                {
+                    throw new KeyNotFoundException($"Cannot access to entity {name} from {cwe.Name}: Not a declarator");
+                }
+            }
+            return entity_factory.GetEntityID(cwe);
         }
 
         /// <summary>
@@ -111,25 +157,7 @@ namespace CoreControl
         /// <returns>Type of the given entity</returns>
         public EntityFactory.ENTITY GetEntityType(UInt32 entityId)
         {
-            CorePackage.Global.Definition entity = entity_factory.FindDefinitionOfType<CorePackage.Global.Definition>(entityId);
-
-            if (entity.GetType() == typeof(CorePackage.Entity.Type.EnumType))
-                return EntityFactory.ENTITY.ENUM_TYPE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ObjectType))
-                return EntityFactory.ENTITY.OBJECT_TYPE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ListType))
-                return EntityFactory.ENTITY.LIST_TYPE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.DataType))
-                return EntityFactory.ENTITY.DATA_TYPE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ScalarType))
-                return EntityFactory.ENTITY.DATA_TYPE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Function))
-                return EntityFactory.ENTITY.FUNCTION;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Variable))
-                return EntityFactory.ENTITY.VARIABLE;
-            else if (entity.GetType() == typeof(CorePackage.Entity.Context))
-                return EntityFactory.ENTITY.CONTEXT;
-            throw new InvalidOperationException("Controller.GetEntityType : Entity " + entity.FullName + " as invalid entity type " + entity.GetType().ToString());
+            return entity_factory.GetEntityType(entityId);
         }
 
         /// <summary>
@@ -152,7 +180,14 @@ namespace CoreControl
         {
             entity_factory.FindDefinitionOfType<CorePackage.Entity.Variable>(variableID).Value = value;
         }
-        
+
+        public void SetVariableJSONValue(UInt32 variableID, string value)
+        {
+            var entity = entity_factory.FindDefinitionOfType<CorePackage.Entity.Variable>(variableID);
+
+            entity.Value = entity.Type.CreateFromJSON(value);
+        }
+
         /// <summary>
         /// Get a variable value
         /// </summary>
@@ -228,6 +263,19 @@ namespace CoreControl
             CorePackage.Entity.Type.EnumType to_find = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.EnumType>(enumID);
             CorePackage.Entity.Variable var = new CorePackage.Entity.Variable(to_find.Stored, value);
             to_find.SetValue(name, var);
+        }
+
+        /// <summary>
+        /// Set an enumeration value
+        /// </summary>
+        /// <param name="enumID">Identifier of specific enumeration</param>
+        /// <param name="name">Name of the enum value to set</param>
+        /// <param name="value">Value to set in the enum</param>
+        public void SetEnumerationJSONValue(UInt32 enumID, string name, string value)
+        {
+            CorePackage.Entity.Type.EnumType to_find = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.EnumType>(enumID);
+
+            SetEnumerationValue(enumID, name, to_find.CreateFromJSON(value));
         }
 
         /// <summary>
@@ -315,8 +363,9 @@ namespace CoreControl
         public UInt32 SetClassFunctionAsMember(UInt32 classID, string funcname)
         {
             CorePackage.Entity.Type.ObjectType objtype = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.ObjectType>(classID);
+            CorePackage.Entity.Variable thisParam = objtype.SetFunctionAsMember(funcname);
 
-            entity_factory.AddEntity(objtype.SetFunctionAsMember(funcname));
+            entity_factory.AddEntity(thisParam);
 
             return entity_factory.LastID;
         }
@@ -504,6 +553,15 @@ namespace CoreControl
             func.findInstruction<CorePackage.Execution.Instruction>(instruction).SetInputValue(inputname, inputValue);
         }
 
+        public void SetInstructionInputJSONValue(UInt32 functionID, UInt32 instruction, string inputname, string inputValue)
+        {
+            var func = entity_factory.FindDefinitionOfType<CorePackage.Entity.Function>(functionID);
+            var inst =  func.findInstruction<CorePackage.Execution.Instruction>(instruction);
+            var val = inst.GetInput(inputname).Definition.Type.CreateFromJSON(inputValue);
+
+            inst.SetInputValue(inputname, val);
+        }
+
         /// <summary>
         /// Unlink an execution pin of an instruction in a specific function
         /// </summary>
@@ -571,6 +629,16 @@ namespace CoreControl
                 ret.Add(new EntityFactory.Entity { Id = id, Name = def.Name, Type = GetEntityType(id) });
             }
             return ret;
+        }
+
+        /// <summary>
+        /// Set the base directory for the ressources
+        /// </summary>
+        /// <param name="value">Path to the directory</param>
+        public void SetRessourceDirectory(string value)
+        {
+            //if (Path.Fil)
+            CorePackage.Entity.Type.Resource.Instance.Directory = value;
         }
 
         public void merge(Controller controller)

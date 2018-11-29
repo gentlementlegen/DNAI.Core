@@ -19,6 +19,8 @@ namespace CorePackage.Global
 
         string Name { get; set; }
 
+        String FullName { get; }
+
         IDeclarator Parent { get; set; }
     }
 }

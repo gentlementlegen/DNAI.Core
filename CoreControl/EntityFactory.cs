@@ -1,5 +1,9 @@
-﻿using System;
+﻿using CoreControl.SerializationModel;
+using CorePackage.Entity.Type;
+using CorePackage.Global;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CoreControl
 {
@@ -8,17 +12,23 @@ namespace CoreControl
     /// </summary>
     public class EntityFactory
     {
+        public static UInt32 MagicNumber = 0xFA7BEA57; //FATBEAST
+
         /// <summary>
         /// Ids of entities created by default
         /// </summary>
         public enum BASE_ID : uint
         {
             GLOBAL_CTX = 0,
-            BOOLEAN_TYPE = 1,
-            INTEGER_TYPE = 2,
-            FLOATING_TYPE = 3,
-            CHARACTER_TYPE = 4,
-            STRING_TYPE = 5
+            BOOLEAN_TYPE,
+            INTEGER_TYPE,
+            FLOATING_TYPE,
+            CHARACTER_TYPE,
+            STRING_TYPE,
+            DICT_TYPE,
+            ANY_TYPE,
+            MATRIX_TYPE,
+            RESSOURCE_TYPE
         }
 
         /// <summary>
@@ -27,8 +37,8 @@ namespace CoreControl
         /// <remarks>Makes a transition in order to hide CorePackage.Global.AccessMode enum</remarks>
         public enum VISIBILITY
         {
-            PUBLIC = CorePackage.Global.AccessMode.EXTERNAL,
-            PRIVATE = CorePackage.Global.AccessMode.INTERNAL
+            PUBLIC = AccessMode.EXTERNAL,
+            PRIVATE = AccessMode.INTERNAL
         }
 
         /// <summary>
@@ -57,7 +67,7 @@ namespace CoreControl
 
         public class Entity
         {
-            public EntityFactory.ENTITY Type { get; set; }
+            public ENTITY Type { get; set; }
 
             public string Name { get; set; }
 
@@ -65,15 +75,12 @@ namespace CoreControl
 
         }
 
-        /// <summary>
-        /// Associates an id to its entity definition
-        /// </summary>
-        private Dictionary<UInt32, CorePackage.Global.IDefinition> definitions = new Dictionary<uint, CorePackage.Global.IDefinition>();
+        public Dictionary<uint, IDefinition> Definitions { get; } = new Dictionary<uint, IDefinition>();
 
         /// <summary>
         /// Associates an entity definition to its id
         /// </summary>
-        private Dictionary<CorePackage.Global.IDefinition, UInt32> ids = new Dictionary<CorePackage.Global.IDefinition, uint>();
+        private Dictionary<IDefinition, uint> ids = new Dictionary<IDefinition, uint>();
 
         /// <summary>
         /// Represents the id of the next entity that will be declared
@@ -87,37 +94,62 @@ namespace CoreControl
         {
             //global context is in 0
             AddEntity(new CorePackage.Entity.Context());
-            CorePackage.Global.IDeclarator root = GetDeclaratorOf(0);
+            IDeclarator root = GetDeclaratorOf(0);
+            (root as IDefinition).Name = "";
 
             //boolean type is in 1
-            AddEntity(CorePackage.Entity.Type.Scalar.Boolean);
-            CorePackage.Entity.Type.Scalar.Boolean.Parent = root;
-            CorePackage.Entity.Type.Scalar.Boolean.Name = "Bool";
-            root.Declare(CorePackage.Entity.Type.Scalar.Boolean, "Bool", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(Builtins.Boolean);
+            Builtins.Boolean.Parent = root;
+            Builtins.Boolean.Name = "Bool";
+            root.Declare(Builtins.Boolean, "Bool", AccessMode.EXTERNAL);
 
             //integer type is in 2
-            AddEntity(CorePackage.Entity.Type.Scalar.Integer);
-            CorePackage.Entity.Type.Scalar.Integer.Parent = root;
-            CorePackage.Entity.Type.Scalar.Integer.Name = "Integer";
-            root.Declare(CorePackage.Entity.Type.Scalar.Integer, "Integer", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(Builtins.Integer);
+            Builtins.Integer.Parent = root;
+            Builtins.Integer.Name = "Integer";
+            root.Declare(Builtins.Integer, "Integer", AccessMode.EXTERNAL);
 
             //floating type is in 3
-            AddEntity(CorePackage.Entity.Type.Scalar.Floating);
-            CorePackage.Entity.Type.Scalar.Floating.Parent = root;
-            CorePackage.Entity.Type.Scalar.Floating.Name = "Floating";
-            root.Declare(CorePackage.Entity.Type.Scalar.Floating, "Floating", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(Builtins.Floating);
+            Builtins.Floating.Parent = root;
+            Builtins.Floating.Name = "Floating";
+            root.Declare(Builtins.Floating, "Floating", AccessMode.EXTERNAL);
 
             //character type is in 4
-            AddEntity(CorePackage.Entity.Type.Scalar.Character);
-            CorePackage.Entity.Type.Scalar.Character.Parent = root;
-            CorePackage.Entity.Type.Scalar.Character.Name = "Character";
-            root.Declare(CorePackage.Entity.Type.Scalar.Character, "Character", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(Builtins.Character);
+            Builtins.Character.Parent = root;
+            Builtins.Character.Name = "Character";
+            root.Declare(Builtins.Character, "Character", AccessMode.EXTERNAL);
 
             //string type is in 5
-            AddEntity(CorePackage.Entity.Type.Scalar.String);
-            CorePackage.Entity.Type.Scalar.String.Parent = root;
-            CorePackage.Entity.Type.Scalar.String.Name = "String";
-            root.Declare(CorePackage.Entity.Type.Scalar.String, "String", CorePackage.Global.AccessMode.EXTERNAL);
+            AddEntity(Builtins.String);
+            Builtins.String.Parent = root;
+            Builtins.String.Name = "String";
+            root.Declare(Builtins.String, "String", AccessMode.EXTERNAL);
+
+            //dict type is in 6
+            AddEntity(Builtins.Dictionnary);
+            Builtins.Dictionnary.Parent = root;
+            Builtins.Dictionnary.Name = "Dict";
+            root.Declare(Builtins.Dictionnary, "Dict", AccessMode.EXTERNAL);
+
+            //any type is in 7
+            AddEntity(Builtins.Any);
+            Builtins.Any.Parent = root;
+            Builtins.Any.Name = "Any";
+            root.Declare(Builtins.Any, "Any", AccessMode.EXTERNAL);
+
+            //matrix type is in 8
+            AddEntity(Builtins.Matrix);
+            Builtins.Matrix.Parent = root;
+            Builtins.Matrix.Name = "Matrix";
+            root.Declare(Builtins.Matrix, "Matrix", AccessMode.EXTERNAL);
+
+            //ressource type is in 9
+            AddEntity(Builtins.Resource);
+            Builtins.Resource.Parent = root;
+            Builtins.Resource.Name = "Ressource";
+            root.Declare(Builtins.Resource, "Ressource", AccessMode.EXTERNAL);
         }
 
         /// <summary>
@@ -141,7 +173,7 @@ namespace CoreControl
         /// </summary>
         /// <typeparam name="T">Type of the entity to declare</typeparam>
         /// <returns>Freshly instanciated entity</returns>
-        public T Create<T>() where T : CorePackage.Global.IDefinition
+        public T Create<T>() where T : IDefinition
         {
             T toadd = (T)Activator.CreateInstance(typeof(T));
 
@@ -155,7 +187,7 @@ namespace CoreControl
         /// <param name="entity">Entity to add</param>
         public void AddEntity(CorePackage.Global.IDefinition entity)
         {
-            definitions[current_uid] = entity;
+            Definitions[current_uid] = entity;
             ids[entity] = current_uid++;
         }
 
@@ -172,11 +204,11 @@ namespace CoreControl
             if (definition_uid <= 5)
                 throw new InvalidOperationException("EntityFactory.remove : cannot remove base entities");
 
-            if (!definitions.ContainsKey(definition_uid))
+            if (!Definitions.ContainsKey(definition_uid))
                 throw new KeyNotFoundException("EntityFactory.remove : given definition uid hasn't been found");
 
-            ids.Remove(definitions[definition_uid]);
-            definitions.Remove(definition_uid);
+            ids.Remove(Definitions[definition_uid]);
+            Definitions.Remove(definition_uid);
         }
 
         /// <summary>
@@ -197,7 +229,7 @@ namespace CoreControl
             if (entity_id <= 5)
                 throw new InvalidOperationException("EntityFactory.remove : cannot remove base entities");
 
-            definitions.Remove(entity_id);
+            Definitions.Remove(entity_id);
             ids.Remove(entity);
         }
 
@@ -207,12 +239,12 @@ namespace CoreControl
         /// <remarks>Throws a KeyNotFoundException if entity hasn't been found</remarks>
         /// <param name="definition_uid">Identifier of an entity</param>
         /// <returns>The entity to find</returns>
-        public CorePackage.Global.IDefinition Find(UInt32 definition_uid)
+        public IDefinition Find(UInt32 definition_uid)
         {
-            if (!definitions.ContainsKey(definition_uid))
+            if (!Definitions.ContainsKey(definition_uid))
                 throw new KeyNotFoundException("EntityFactory.find : given definition of id " + definition_uid.ToString() + " hasn't been found");
 
-            return definitions[definition_uid];
+            return Definitions[definition_uid];
         }
 
         /// <summary>
@@ -220,7 +252,7 @@ namespace CoreControl
         /// </summary>
         /// <param name="definition_uid">Identifier of the basic entity</param>
         /// <returns>Basic entity to find</returns>
-        public CorePackage.Global.IDefinition Find(BASE_ID definition_uid)
+        public IDefinition Find(BASE_ID definition_uid)
         {
             return Find((uint)definition_uid);
         }
@@ -246,7 +278,7 @@ namespace CoreControl
         /// <returns>The entity to find</returns>
         public T FindDefinitionOfType<T>(UInt32 id) where T : class
         {
-            CorePackage.Global.IDefinition to_find = Find(id);
+            IDefinition to_find = Find(id);
             T to_ret = to_find as T;
 
             if (to_ret == null)
@@ -275,7 +307,7 @@ namespace CoreControl
         /// <param name="visibility">Visibility of the entity to declare</param>
         /// <returns>The identifier of the freshly declared entity</returns>
         public UInt32 Declare<Entity>(UInt32 containerID, string name, CorePackage.Global.AccessMode visibility)
-            where Entity : CorePackage.Global.IDefinition
+            where Entity : IDefinition
         {
             Entity todecl = Create<Entity>();
 
@@ -533,18 +565,49 @@ namespace CoreControl
             Rename(containerID, lastName, newName);
         }
 
+        /// <summary>
+        /// Find the type of the entity given
+        /// </summary>
+        /// <param name="entityId">Id of the entity</param>
+        /// <returns>Type of the entity</returns>
+        public ENTITY GetEntityType(UInt32 entityId)
+        {
+            Definition entity = FindDefinitionOfType<Definition>(entityId);
+
+            if (entity.GetType() == typeof(CorePackage.Entity.Type.EnumType))
+                return ENTITY.ENUM_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ObjectType))
+                return ENTITY.OBJECT_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Type.ListType))
+                return ENTITY.LIST_TYPE;
+            else if (typeof(CorePackage.Entity.DataType).IsAssignableFrom(entity.GetType()))
+                return ENTITY.DATA_TYPE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Function))
+                return ENTITY.FUNCTION;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Variable))
+                return ENTITY.VARIABLE;
+            else if (entity.GetType() == typeof(CorePackage.Entity.Context))
+                return ENTITY.CONTEXT;
+            throw new InvalidOperationException("Controller.GetEntityType : Entity " + entity.FullName + " as invalid entity type " + entity.GetType().ToString());
+        }
+
         public void merge(EntityFactory factory)
         {
-            foreach (KeyValuePair<uint, CorePackage.Global.IDefinition> curr in factory.definitions)
+            var values = typeof(BASE_ID).GetEnumValues();
+            uint maxBaseId = (uint)values.GetValue(values.Length - 1);
+
+            foreach (KeyValuePair<uint, IDefinition> curr in factory.Definitions)
             {
-                if (curr.Key > 5)
+                if (curr.Key > maxBaseId)
+                {
                     AddEntity(curr.Value);
+                }
             }
 
-            CorePackage.Entity.Context globalContext = (CorePackage.Entity.Context)definitions[0];
-            CorePackage.Entity.Context factoryContext = (CorePackage.Entity.Context)factory.definitions[0];
+            CorePackage.Entity.Context globalContext = (CorePackage.Entity.Context)Definitions[0];
+            CorePackage.Entity.Context factoryContext = (CorePackage.Entity.Context)factory.Definitions[0];
 
-            foreach (KeyValuePair<string, CorePackage.Global.IDefinition> curr in factoryContext.GetEntities())
+            foreach (KeyValuePair<string, IDefinition> curr in factoryContext.GetEntities())
             {
                 string key = curr.Key;
                 while (globalContext.Contains(key)) key += "_copy"; //handles circular references
@@ -552,5 +615,6 @@ namespace CoreControl
                 globalContext.Declare(curr.Value, key, factoryContext.GetVisibilityOf(curr.Key));
             }
         }
+
     }
 }

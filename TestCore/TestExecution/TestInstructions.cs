@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using CorePackage.Entity;
+using CorePackage.Entity.Type;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -486,6 +488,122 @@ namespace CoreTest
             whileTester.setEntryPoint(whileTester.addInstruction(remove));
             whileTester.Call();
             Assert.IsTrue(remove.GetOutputValue("removed"));
+        }
+
+        [TestMethod]
+        public void TestRandomNode()
+        {
+            var randIns = new CorePackage.Execution.Random();
+
+            Assert.IsTrue(randIns.GetOutputValue("value") == randIns.GetOutputValue("value"));
+        }
+
+        [TestMethod]
+        public void TestCastNode()
+        {
+            var castToFloat = new CorePackage.Execution.Cast(Scalar.Floating);
+
+            castToFloat.SetInputValue("reference", 4);
+            Assert.IsTrue(castToFloat.GetOutputValue("succeed"));
+            Assert.IsTrue(castToFloat.GetOutputValue("value") == 4.0);
+
+            castToFloat.SetInputValue("reference", "coucou");
+            Assert.IsFalse(castToFloat.GetOutputValue("succeed"));
+
+            castToFloat.SetInputValue("reference", 4f);
+            Assert.IsTrue(castToFloat.GetOutputValue("succeed"));
+            Assert.IsTrue(castToFloat.GetOutputValue("value") == 4f);
+
+            castToFloat.SetInputValue("reference", 'o');
+            Assert.IsFalse(castToFloat.GetOutputValue("succeed"));
+
+            var castToInt = new CorePackage.Execution.Cast(Scalar.Integer);
+
+            castToInt.SetInputValue("reference", 4.3);
+            Assert.IsTrue(castToInt.GetOutputValue("succeed"));
+            Assert.IsTrue(castToInt.GetOutputValue("value") == 4);
+
+            castToInt.SetInputValue("reference", "coucou");
+            Assert.IsFalse(castToFloat.GetOutputValue("succeed"));
+        }
+
+        [TestMethod]
+        public void TestPredictNode()
+        {
+            var predictNode = new CorePackage.Execution.Predict();
+
+            var data = CorePackage.Entity.Type.Matrix.Instance.fromCSV(System.IO.File.ReadAllText("input2.data"));
+
+            predictNode.SetInputValue("model", "model.json");
+            predictNode.SetInputValue("weights", "model.h5");
+            predictNode.SetInputValue("shape", "(28,28)");
+            predictNode.SetInputValue("inputs", data);
+
+            predictNode.Execute();
+
+            List<double> predictions = new List<double> { 0.09620169, 0.10115829, 0.040401924, 0.035338867, 0.0020403452, 0.1024301, 0.22896671, 0.014211091, 0.3776973, 0.0015536636 };
+
+            var outputs = predictNode.GetOutputValue("outputs");
+
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(predictions[i] == outputs[0, i]);
+            }
+
+            Assert.IsTrue(outputs.Row(0).MaximumIndex() == 8);
+
+            data = CorePackage.Entity.Type.Matrix.Instance.fromCSV(System.IO.File.ReadAllText("5.txt"));
+
+            predictNode.SetInputValue("inputs", data);
+
+            predictNode.Execute();
+
+            outputs = predictNode.GetOutputValue("outputs");
+
+            var row = outputs.Row(0);
+            var index = row.MaximumIndex();
+
+            Assert.IsTrue(index == 5);
+        }
+
+        [TestMethod]
+        public void TestClassifyNode()
+        {
+            var classifyNode = new CorePackage.Execution.Classify();
+
+            var data = CorePackage.Entity.Type.Matrix.Instance.fromCSV(System.IO.File.ReadAllText("input2.data"));
+
+            classifyNode.SetInputValue("model", "model.json");
+            classifyNode.SetInputValue("weights", "model.h5");
+            classifyNode.SetInputValue("shape", "(28,28)");
+            classifyNode.SetInputValue("inputs", data);
+
+            classifyNode.Execute();
+
+            List<double> predictions = new List<double> { 0.09620169, 0.10115829, 0.040401924, 0.035338867, 0.0020403452, 0.1024301, 0.22896671, 0.014211091, 0.3776973, 0.0015536636 };
+
+            var outputs = classifyNode.GetOutputValue("outputs");
+
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.IsTrue(predictions[i] == outputs[0, i]);
+            }
+
+            var maxIndex = classifyNode.GetOutputValue("maxIndex");
+            Assert.IsTrue(maxIndex == 8);
+
+            var maxValue = classifyNode.GetOutputValue("maxOutput");
+            Assert.IsTrue(maxValue == 0.3776973);
+
+            data = CorePackage.Entity.Type.Matrix.Instance.fromCSV(System.IO.File.ReadAllText("5.txt"));
+
+            classifyNode.SetInputValue("inputs", data);
+
+            classifyNode.Execute();
+
+            Assert.IsTrue(classifyNode.GetOutputValue("maxIndex") == 5);
+
+            CorePackage.Global.KerasService.Quit();
         }
     }
 }

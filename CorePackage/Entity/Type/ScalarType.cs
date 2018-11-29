@@ -65,10 +65,26 @@ namespace CorePackage.Entity.Type
         {
             foreach (System.Type curr in handledTypes)
             {
-                if (curr.IsAssignableFrom(value.GetType()))
+                try
+                {
+                    Convert.ChangeType(value, curr);
                     return true;
+                }
+                catch (Exception) { }
             }
             return false;
+        }
+
+        private void NormalizeType(ref dynamic left, ref dynamic right)
+        {
+            try
+            {
+                right = Convert.ChangeType(right, left.GetType());
+            }
+            catch (InvalidCastException)
+            {
+                left = Convert.ChangeType(left, right.GetType());
+            }
         }
 
         /// <see cref="DataType.OperatorAccess(dynamic, dynamic)"/>
@@ -80,12 +96,14 @@ namespace CorePackage.Entity.Type
         /// <see cref="DataType.OperatorAdd(dynamic, dynamic)"/>
         public override dynamic OperatorAdd(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp + rOp;
         }
 
         /// <see cref="DataType.OperatorBAnd(dynamic, dynamic)"/>
         public override dynamic OperatorBAnd(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp & rOp;
         }
 
@@ -98,79 +116,97 @@ namespace CorePackage.Entity.Type
         /// <see cref="DataType.OperatorBOr(dynamic, dynamic)"/>
         public override dynamic OperatorBOr(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp | rOp;
         }
 
         /// <see cref="DataType.OperatorDiv(dynamic, dynamic)"/>
         public override dynamic OperatorDiv(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp / rOp;
         }
 
         /// <see cref="DataType.OperatorEqual(dynamic, dynamic)"/>
         public override bool OperatorEqual(dynamic lOp, dynamic rOp)
         {
-            return lOp.Equals(Convert.ChangeType(rOp, lOp.GetType()));
+            NormalizeType(ref lOp, ref rOp);
+            return lOp.Equals(rOp);
         }
 
         /// <see cref="DataType.OperatorGt(dynamic, dynamic)"/>
         public override bool OperatorGt(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp > rOp;
         }
 
         /// <see cref="DataType.OperatorGtEq(dynamic, dynamic)"/>
         public override bool OperatorGtEq(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp >= rOp;
         }
 
         /// <see cref="DataType.OperatorLeftShift(dynamic, dynamic)"/>
         public override dynamic OperatorLeftShift(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp << rOp;
         }
 
         /// <see cref="DataType.OperatorLt(dynamic, dynamic)"/>
         public override bool OperatorLt(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp < rOp;
         }
 
         /// <see cref="DataType.OperatorLtEq(dynamic, dynamic)"/>
         public override bool OperatorLtEq(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp <= rOp;
         }
 
         /// <see cref="DataType.OperatorMod(dynamic, dynamic)"/>
         public override dynamic OperatorMod(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp % rOp;
         }
 
         /// <see cref="DataType.OperatorMul(dynamic, dynamic)"/>
         public override dynamic OperatorMul(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp * rOp;
         }
 
         /// <see cref="DataType.OperatorRightShift(dynamic, dynamic)"/>
         public override dynamic OperatorRightShift(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp >> rOp;
         }
 
         /// <see cref="DataType.OperatorSub(dynamic, dynamic)"/>
         public override dynamic OperatorSub(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp - rOp;
         }
 
         /// <see cref="DataType.OperatorXor(dynamic, dynamic)"/>
         public override dynamic OperatorXor(dynamic lOp, dynamic rOp)
         {
+            NormalizeType(ref lOp, ref rOp);
             return lOp ^ rOp;
+        }
+
+        public override dynamic CreateFromJSON(string value)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject(value);
         }
     }
 

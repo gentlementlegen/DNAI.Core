@@ -3,6 +3,8 @@ using CoreCommand;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Core.Plugin.Unity.Editor
@@ -79,6 +81,35 @@ namespace Core.Plugin.Unity.Editor
         //    LoadScript();
         //}
 
+        public static string UnpackScript(string packagePath)
+        {
+            var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "Scripts");
+
+            using (ZipArchive archive = ZipFile.OpenRead(packagePath))
+            {
+                foreach (ZipArchiveEntry entry in archive.Entries)
+                {
+                    if (entry.FullName.EndsWith(".dnaisolution") || entry.FullName.EndsWith(".dnaiproject"))
+                    {
+                        continue;
+                    }
+
+                    string destPath = $"{fileCopyPath}/{entry.FullName}";
+
+                    if (entry.FullName.EndsWith(".dnai"))
+                    {
+                        packagePath = destPath;
+                    }
+
+                    entry.ExtractToFile(destPath, true);
+                }
+            }
+
+            Thread.Sleep(1000);
+
+            return packagePath;
+        }
+
         /// <summary>
         /// Loads the script using <paramref name="FilePath"/> path.
         /// </summary>
@@ -99,9 +130,20 @@ namespace Core.Plugin.Unity.Editor
             try
             {
                 // TODO : maybe check if the file is already there and ask for overwrite
+                _manager.Controller.SetRessourceDirectory(fileCopyPath);
                 CloudFileWatcher.Watch(false);
+                
                 Directory.CreateDirectory(fileCopyPath);
-                File.Copy(path, fileFullPath, true);
+
+                if (path.EndsWith(".dnaipackage"))
+                {
+                    path = fileFullPath = UnpackScript(path);
+                }
+                else
+                {
+                    File.Copy(path, fileFullPath, true);
+                }
+
                 CloudFileWatcher.Watch(true);
             }
             catch (IOException e)

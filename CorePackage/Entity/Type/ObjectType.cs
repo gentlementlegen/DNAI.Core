@@ -1,5 +1,7 @@
 ﻿using CorePackage.Error;
 using CorePackage.Global;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -120,6 +122,7 @@ namespace CorePackage.Entity.Type
             
             Variable toret = (Variable)func.Declare(new Variable(this), "this", AccessMode.EXTERNAL);
             func.SetVariableAs("this", Function.VariableRole.PARAMETER);
+            toret.Name = "this";
             return toret;
         }
 
@@ -150,11 +153,8 @@ namespace CorePackage.Entity.Type
 
             if (typeof(System.Collections.IEnumerable).IsAssignableFrom(obj.GetType()))
             {
-                if (obj.ContainsKey(attribute))
-                {
-                    obj[attribute] = value;
-                    found = true;
-                }
+                obj[attribute] = value;
+                found = true;
             }
             else
             {
@@ -456,6 +456,23 @@ namespace CorePackage.Entity.Type
                 SetAttributeValue(val, attr.Key, ((DataType)attr.Value).GetDeepCopyOf(GetAttributeValue(value, attr.Key)));
             }
             return val;
+        }
+
+        public Dictionary<string, IDefinition> GetEntities()
+        {
+            return context.GetEntities();
+        }
+
+        public override dynamic CreateFromJSON(string value)
+        {
+            var obj = (JObject)JsonConvert.DeserializeObject(value);
+            var toret = Instantiate();
+
+            foreach (var val in obj)
+            {
+                SetAttributeValue(toret, val.Key, GetAttribute(val.Key).CreateFromJSON(JsonConvert.SerializeObject(val.Value)));
+            }
+            return toret;
         }
     }
 }

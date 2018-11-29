@@ -60,7 +60,17 @@ namespace CoreControl
             CLEAR,
             FILL,
             SET_VALUE_AT,
-            RETURN
+            RETURN,
+            HAS_KEY,
+            SET_VALUE_AT_KEY,
+            REMOVE_VALUE_AT_KEY,
+            PREDICT,
+            RANDOM,
+            CAST,
+            GET_SHAPE,
+            GET_INDEX_VALUE,
+            RESIZE,
+            CLASSIFY
         };
 
         /// <summary>
@@ -109,7 +119,17 @@ namespace CoreControl
             { INSTRUCTION_ID.CLEAR, 1 },
             { INSTRUCTION_ID.FILL, 1 },
             { INSTRUCTION_ID.SET_VALUE_AT, 1 },
-            { INSTRUCTION_ID.RETURN, 0 }
+            { INSTRUCTION_ID.RETURN, 0 },
+            { INSTRUCTION_ID.HAS_KEY, 0 },
+            { INSTRUCTION_ID.SET_VALUE_AT_KEY, 0 },
+            { INSTRUCTION_ID.REMOVE_VALUE_AT_KEY, 0 },
+            { INSTRUCTION_ID.PREDICT, 0 },
+            { INSTRUCTION_ID.RANDOM, 0 },
+            { INSTRUCTION_ID.CAST, 1 },
+            { INSTRUCTION_ID.GET_SHAPE, 0 },
+            { INSTRUCTION_ID.GET_INDEX_VALUE, 0 },
+            { INSTRUCTION_ID.RESIZE, 0 },
+            { INSTRUCTION_ID.CLASSIFY, 0 }
         };
 
         /// <summary>
@@ -117,48 +137,117 @@ namespace CoreControl
         /// </summary>
         private static readonly Dictionary<INSTRUCTION_ID, Func<List<IDefinition>, Instruction>> creators = new Dictionary<INSTRUCTION_ID, Func<List<IDefinition>, Instruction>>
         {
-            { INSTRUCTION_ID.AND,               (List<IDefinition> args) => new And() },
-            { INSTRUCTION_ID.OR,                (List<IDefinition> args) => new Or() },
-            { INSTRUCTION_ID.DIFFERENT,         (List<IDefinition> args) => new Different((DataType)args[0], (DataType)args[1]) },
-            { INSTRUCTION_ID.EQUAL,             (List<IDefinition> args) => new Equal((DataType)args[0], (DataType)args[1]) },
-            { INSTRUCTION_ID.GREATER,           (List<IDefinition> args) => new Greater((DataType)args[0], (DataType)args[1]) },
-            { INSTRUCTION_ID.GREATER_EQUAL,     (List<IDefinition> args) => new GreaterEqual((DataType)args[0], (DataType)args[1]) },
-            { INSTRUCTION_ID.LOWER,             (List<IDefinition> args) => new Less((DataType)args[0], (DataType)args[1]) },
-            { INSTRUCTION_ID.LOWER_EQUAL,       (List<IDefinition> args) => new LessEqual((DataType)args[0], (DataType)args[1]) },
-            { INSTRUCTION_ID.ACCESS,            (List<IDefinition> args) => new Access((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
-            { INSTRUCTION_ID.BINARY_AND,        (List<IDefinition> args) => new BinaryAnd((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
-            { INSTRUCTION_ID.BINARY_OR,         (List<IDefinition> args) => new BinaryOr((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
-            { INSTRUCTION_ID.XOR,               (List<IDefinition> args) => new Xor((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
-            { INSTRUCTION_ID.ADD,               (List<IDefinition> args) => new Add((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
-            { INSTRUCTION_ID.SUB,               (List<IDefinition> args) => new Substract((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
-            { INSTRUCTION_ID.DIV,               (List<IDefinition> args) => new Divide((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
-            { INSTRUCTION_ID.MUL,               (List<IDefinition> args) => new Multiplicate((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
-            { INSTRUCTION_ID.MOD,               (List<IDefinition> args) => new Modulo((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
-            { INSTRUCTION_ID.LEFT_SHIFT,        (List<IDefinition> args) => new LeftShift((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
-            { INSTRUCTION_ID.RIGHT_SHIFT,       (List<IDefinition> args) => new RightShift((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
-            { INSTRUCTION_ID.BINARY_NOT,        (List<IDefinition> args) => new BinaryNot((DataType)args[0], (DataType)args[1]) },
-            { INSTRUCTION_ID.NOT,               (List<IDefinition> args) => new Not((DataType)args[0]) },
-            { INSTRUCTION_ID.INVERSE,           (List<IDefinition> args) => new Inverse((DataType)args[0], (DataType)args[1]) },
-            { INSTRUCTION_ID.ENUM_SPLITTER,     (List<IDefinition> args) => new EnumSplitter((EnumType)args[0]) },
-            { INSTRUCTION_ID.GETTER,            (List<IDefinition> args) => new Getter((Variable)args[0]) },
-            { INSTRUCTION_ID.SETTER,            (List<IDefinition> args) => new Setter((Variable)args[0]) },
-            { INSTRUCTION_ID.FUNCTION_CALL,     (List<IDefinition> args) => new FunctionCall((Function)args[0]) },
-            { INSTRUCTION_ID.IF,                (List<IDefinition> args) => new If() },
-            { INSTRUCTION_ID.WHILE,             (List<IDefinition> args) => new While() },
-            { INSTRUCTION_ID.APPEND,            (List<IDefinition> args) => new Append((DataType)args[0]) },
-            { INSTRUCTION_ID.INSERT,            (List<IDefinition> args) => new Insert((DataType)args[0]) },
-            { INSTRUCTION_ID.REMOVE,            (List<IDefinition> args) => new Remove((DataType)args[0]) },
-            { INSTRUCTION_ID.REMOVE_INDEX,      (List<IDefinition> args) => new RemoveIndex((DataType)args[0]) },
-            { INSTRUCTION_ID.SIZE,              (List<IDefinition> args) => new Size((DataType)args[0]) },
-            { INSTRUCTION_ID.FOREACH,           (List<IDefinition> args) => new Foreach((DataType)args[0]) },
-            { INSTRUCTION_ID.GET_ATTRIBUTES,    (List<IDefinition> args) => new GetAttributes((ObjectType)(args[0])) },
-            { INSTRUCTION_ID.SET_ATTRIBUTES,    (List<IDefinition> args) => new SetAttribute((ObjectType)args[0]) },
-            { INSTRUCTION_ID.BREAK,             (List<IDefinition> args) => new Break() },
-            { INSTRUCTION_ID.CONTINUE,          (List<IDefinition> args) => new Continue() },
-            { INSTRUCTION_ID.CLEAR,             (List<IDefinition> args) => new Clear((DataType)args[0]) },
-            { INSTRUCTION_ID.FILL,              (List<IDefinition> args) => new Fill((DataType)args[0]) },
-            { INSTRUCTION_ID.SET_VALUE_AT,      (List<IDefinition> args) => new SetValueAt((DataType)args[0]) },
-            { INSTRUCTION_ID.RETURN,            (List<IDefinition> args) => new Return() }
+            { INSTRUCTION_ID.AND,                   args => new And() },
+            { INSTRUCTION_ID.OR,                    args => new Or() },
+            { INSTRUCTION_ID.DIFFERENT,             args => new Different((DataType)args[0], (DataType)args[1]) },
+            { INSTRUCTION_ID.EQUAL,                 args => new Equal((DataType)args[0], (DataType)args[1]) },
+            { INSTRUCTION_ID.GREATER,               args => new Greater((DataType)args[0], (DataType)args[1]) },
+            { INSTRUCTION_ID.GREATER_EQUAL,         args => new GreaterEqual((DataType)args[0], (DataType)args[1]) },
+            { INSTRUCTION_ID.LOWER,                 args => new Less((DataType)args[0], (DataType)args[1]) },
+            { INSTRUCTION_ID.LOWER_EQUAL,           args => new LessEqual((DataType)args[0], (DataType)args[1]) },
+            { INSTRUCTION_ID.ACCESS,                args => new Access((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
+            { INSTRUCTION_ID.BINARY_AND,            args => new BinaryAnd((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
+            { INSTRUCTION_ID.BINARY_OR,             args => new BinaryOr((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
+            { INSTRUCTION_ID.XOR,                   args => new Xor((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
+            { INSTRUCTION_ID.ADD,                   args => new Add((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
+            { INSTRUCTION_ID.SUB,                   args => new Substract((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
+            { INSTRUCTION_ID.DIV,                   args => new Divide((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
+            { INSTRUCTION_ID.MUL,                   args => new Multiplicate((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
+            { INSTRUCTION_ID.MOD,                   args => new Modulo((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
+            { INSTRUCTION_ID.LEFT_SHIFT,            args => new LeftShift((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
+            { INSTRUCTION_ID.RIGHT_SHIFT,           args => new RightShift((DataType)args[0], (DataType)args[1], (DataType)args[2]) },
+            { INSTRUCTION_ID.BINARY_NOT,            args => new BinaryNot((DataType)args[0], (DataType)args[1]) },
+            { INSTRUCTION_ID.NOT,                   args => new Not((DataType)args[0]) },
+            { INSTRUCTION_ID.INVERSE,               args => new Inverse((DataType)args[0], (DataType)args[1]) },
+            { INSTRUCTION_ID.ENUM_SPLITTER,         args => new EnumSplitter((EnumType)args[0]) },
+            { INSTRUCTION_ID.GETTER,                args => new Getter((Variable)args[0]) },
+            { INSTRUCTION_ID.SETTER,                args => new Setter((Variable)args[0]) },
+            { INSTRUCTION_ID.FUNCTION_CALL,         args => new FunctionCall((Function)args[0]) },
+            { INSTRUCTION_ID.IF,                    args => new If() },
+            { INSTRUCTION_ID.WHILE,                 args => new While() },
+            { INSTRUCTION_ID.APPEND,                args => new Append((DataType)args[0]) },
+            { INSTRUCTION_ID.INSERT,                args => new Insert((DataType)args[0]) },
+            { INSTRUCTION_ID.REMOVE,                args => new Remove((DataType)args[0]) },
+            { INSTRUCTION_ID.REMOVE_INDEX,          args => new RemoveIndex((DataType)args[0]) },
+            { INSTRUCTION_ID.SIZE,                  args => new Size((DataType)args[0]) },
+            { INSTRUCTION_ID.FOREACH,               args => new Foreach((DataType)args[0]) },
+            { INSTRUCTION_ID.GET_ATTRIBUTES,        args => new GetAttributes((ObjectType)(args[0])) },
+            { INSTRUCTION_ID.SET_ATTRIBUTES,        args => new SetAttribute((ObjectType)args[0]) },
+            { INSTRUCTION_ID.BREAK,                 args => new Break() },
+            { INSTRUCTION_ID.CONTINUE,              args => new Continue() },
+            { INSTRUCTION_ID.CLEAR,                 args => new Clear((DataType)args[0]) },
+            { INSTRUCTION_ID.FILL,                  args => new Fill((DataType)args[0]) },
+            { INSTRUCTION_ID.SET_VALUE_AT,          args => new SetValueAt((DataType)args[0]) },
+            { INSTRUCTION_ID.RETURN,                args => new Return() },
+            { INSTRUCTION_ID.HAS_KEY,               args => new HasKey() },
+            { INSTRUCTION_ID.SET_VALUE_AT_KEY,      args => new SetValueAtKey() },
+            { INSTRUCTION_ID.REMOVE_VALUE_AT_KEY,   args => new RemoveValueAtKey() },
+            { INSTRUCTION_ID.PREDICT,               args => new Predict() },
+            { INSTRUCTION_ID.RANDOM,                args => new CorePackage.Execution.Random() },
+            { INSTRUCTION_ID.CAST,                  args => new Cast((DataType)args[0]) },
+            { INSTRUCTION_ID.GET_SHAPE,             args => new GetShape() },
+            { INSTRUCTION_ID.GET_INDEX_VALUE,       args => new GetIndexValue() },
+            { INSTRUCTION_ID.RESIZE,                args => new Resize() },
+            { INSTRUCTION_ID.CLASSIFY,              args => new Classify() }
+        };
+
+        /// <summary>
+        /// Dictionnary that associates the type of the instruction to its identifier
+        /// </summary>
+        private static readonly Dictionary<System.Type, INSTRUCTION_ID> types = new Dictionary<Type, INSTRUCTION_ID>
+        {
+            { typeof(And), INSTRUCTION_ID.AND },
+            { typeof(Or), INSTRUCTION_ID.OR },
+            { typeof(Different), INSTRUCTION_ID.DIFFERENT },
+            { typeof(Equal), INSTRUCTION_ID.EQUAL },
+            { typeof(Greater), INSTRUCTION_ID.GREATER },
+            { typeof(GreaterEqual), INSTRUCTION_ID.GREATER_EQUAL },
+            { typeof(Less), INSTRUCTION_ID.LOWER },
+            { typeof(LessEqual), INSTRUCTION_ID.LOWER_EQUAL },
+            { typeof(Access), INSTRUCTION_ID.ACCESS },
+            { typeof(BinaryAnd), INSTRUCTION_ID.BINARY_AND },
+            { typeof(BinaryOr), INSTRUCTION_ID.BINARY_OR },
+            { typeof(Xor), INSTRUCTION_ID.XOR },
+            { typeof(Add), INSTRUCTION_ID.ADD },
+            { typeof(Substract), INSTRUCTION_ID.SUB },
+            { typeof(Divide), INSTRUCTION_ID.DIV },
+            { typeof(Multiplicate), INSTRUCTION_ID.MUL },
+            { typeof(Modulo), INSTRUCTION_ID.MOD },
+            { typeof(LeftShift), INSTRUCTION_ID.LEFT_SHIFT },
+            { typeof(RightShift), INSTRUCTION_ID.RIGHT_SHIFT },
+            { typeof(BinaryNot), INSTRUCTION_ID.BINARY_NOT },
+            { typeof(Not), INSTRUCTION_ID.NOT },
+            { typeof(Inverse), INSTRUCTION_ID.INVERSE },
+            { typeof(EnumSplitter), INSTRUCTION_ID.ENUM_SPLITTER },
+            { typeof(Getter), INSTRUCTION_ID.GETTER },
+            { typeof(Setter), INSTRUCTION_ID.SETTER },
+            { typeof(FunctionCall), INSTRUCTION_ID.FUNCTION_CALL },
+            { typeof(If), INSTRUCTION_ID.IF },
+            { typeof(While), INSTRUCTION_ID.WHILE },
+            { typeof(Append), INSTRUCTION_ID.APPEND },
+            { typeof(Insert), INSTRUCTION_ID.INSERT },
+            { typeof(Remove), INSTRUCTION_ID.REMOVE },
+            { typeof(RemoveIndex), INSTRUCTION_ID.REMOVE_INDEX },
+            { typeof(Size), INSTRUCTION_ID.SIZE },
+            { typeof(Foreach), INSTRUCTION_ID.FOREACH },
+            { typeof(GetAttributes), INSTRUCTION_ID.GET_ATTRIBUTES },
+            { typeof(SetAttribute), INSTRUCTION_ID.SET_ATTRIBUTES },
+            { typeof(Break), INSTRUCTION_ID.BREAK },
+            { typeof(Continue), INSTRUCTION_ID.CONTINUE },
+            { typeof(Clear), INSTRUCTION_ID.CLEAR },
+            { typeof(Fill), INSTRUCTION_ID.FILL },
+            { typeof(SetValueAt), INSTRUCTION_ID.SET_VALUE_AT },
+            { typeof(Return), INSTRUCTION_ID.RETURN },
+            { typeof(HasKey), INSTRUCTION_ID.HAS_KEY },
+            { typeof(SetValueAtKey), INSTRUCTION_ID.SET_VALUE_AT_KEY },
+            { typeof(RemoveValueAtKey), INSTRUCTION_ID.REMOVE_VALUE_AT_KEY },
+            { typeof(Predict), INSTRUCTION_ID.PREDICT },
+            { typeof(CorePackage.Execution.Random), INSTRUCTION_ID.RANDOM },
+            { typeof(Cast), INSTRUCTION_ID.CAST },
+            { typeof(GetShape), INSTRUCTION_ID.GET_SHAPE },
+            { typeof(GetIndexValue), INSTRUCTION_ID.GET_INDEX_VALUE },
+            { typeof(Resize), INSTRUCTION_ID.RESIZE },
+            { typeof(Classify), INSTRUCTION_ID.CLASSIFY }
         };
 
         /// <summary>
@@ -173,7 +262,22 @@ namespace CoreControl
                 throw new KeyNotFoundException("Given instruction isn't referenced in factory");
             if (arguments.Count < number_of_arguments[to_create])
                 throw new InvalidProgramException("Not enought arguments to construct intruction");
-            return creators[to_create](arguments);
+
+            Instruction created = creators[to_create](arguments);
+
+            created.ConstructionList = arguments;
+
+            return created;
+        }
+
+        /// <summary>
+        /// Returns the instruction id of a given instruction
+        /// </summary>
+        /// <param name="instruction">Instruction to which find the type</param>
+        /// <returns>Type of the instruction</returns>
+        public static INSTRUCTION_ID GetInstructionType(Instruction instruction)
+        {
+            return types[instruction.GetType()];
         }
     }
 }

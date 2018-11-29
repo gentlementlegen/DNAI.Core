@@ -14,6 +14,7 @@ MonoBehaviour:
   listIA:
   - scriptManager:
       _fileName: 
+<<<<<<< HEAD:PluginUnity/PluginTestProject/Assets/DNAI/DNAIEditor.asset
       _filePath: Assets/DNAI/Scripts/CarsPGW.dnai
       _filePathAbsolute: D:\Documents\VisualStudio\DNAI\PluginUnity\PluginTestProject\Assets\DNAI\Scripts\CarsPGW.dnai
       _scriptName: Cars2
@@ -36,3 +37,30 @@ MonoBehaviour:
       _scriptName: Astar2
     AIName: 
     _scriptList: []
+=======
+      _filePath: Assets/Standard Assets/DNAI/Scripts/Astar.dnai
+      _filePathAbsolute: D:\EIP\Core\PluginUnity\PluginTestProject\Assets\Standard
+        Assets\DNAI\Scripts\Astar.dnai
+      _scriptName: Astar2
+    AIName: 
+    _scriptList: []
+  - scriptManager:
+      _fileName: 
+      _filePath: Assets/Standard Assets/DNAI/Scripts/DigitRecognizer.dnai
+      _filePathAbsolute: D:\EIP\Core\PluginUnity\PluginTestProject\Assets\Standard
+        Assets\DNAI\Scripts\DigitRecognizer.dnai
+      _scriptName: DigitRecognizer
+    AIName: 
+    _scriptList:
+    - recognize Digit
+  - scriptManager:
+      _fileName: 
+      _filePath: Assets/Standard Assets/DNAI/Scripts/MoreOrLess3.0.dnai
+      _filePathAbsolute: D:\EIP\Core\PluginUnity\PluginTestProject\Assets\Standard
+        Assets\DNAI\Scripts\MoreOrLess3.0.dnai
+      _scriptName: MoreOrLess
+    AIName: 
+    _scriptList:
+    - Play
+    - Reset
+>>>>>>> machine_learning:PluginUnity/PluginTestProject/Assets/Standard Assets/DNAI/DNAIEditor.asset

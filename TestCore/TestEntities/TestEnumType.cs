@@ -18,6 +18,21 @@ namespace TestCore.TestEntities
         }
 
         [TestMethod]
+        public void TestJsonValues()
+        {
+            var enumType = new CorePackage.Entity.Type.EnumType();
+
+            enumType.Name = "MoreOrLess";
+            enumType.SetValue("NONE", new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 0));
+            enumType.SetValue("MORE", new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 1));
+            enumType.SetValue("LESS", new CorePackage.Entity.Variable(CorePackage.Entity.Type.Scalar.Integer, 2));
+            
+            Assert.IsTrue(enumType.CreateFromJSON("MoreOrLess.NONE") == 0);
+
+            Assert.IsTrue(enumType.CreateFromJSON("2") == 2);
+        }
+
+        [TestMethod]
         public void TestTypeCompatibility()
         {
             var enumType = new CorePackage.Entity.Type.EnumType();

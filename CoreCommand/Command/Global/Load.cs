@@ -20,7 +20,20 @@ namespace CoreCommand.Command.Global
         
         public Reply Resolve(Controller controller)
         {
-            return null;
+            controller.LoadFrom(Filename);
+
+            var projs = new List<UInt32>();
+            List<EntityFactory.Entity> entities = controller.GetEntitiesOfType(EntityFactory.ENTITY.CONTEXT, 0);
+
+            foreach (EntityFactory.Entity entity in entities)
+            {
+                projs.Add(entity.Id);
+            }
+
+            return new Reply
+            {
+                Projects = projs
+            };
         }
     }
 }

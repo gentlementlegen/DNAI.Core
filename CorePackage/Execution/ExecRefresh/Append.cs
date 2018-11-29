@@ -47,7 +47,14 @@ namespace CorePackage.Execution
             System.Type valType = val.GetType();
 
             Input input = GetInput("element");
-            dynamic item = input.Definition.Type.GetDeepCopyOf(input.Value, valType.GenericTypeArguments[0]);
+            System.Type copyType = null;
+
+            if (valType.GenericTypeArguments.Length > 0)
+            {
+                copyType = valType.GenericTypeArguments[0];
+            }
+
+            dynamic item = input.Definition.Type.GetDeepCopyOf(input.Value, copyType);
 
             val?.Add(item);
             SetOutputValue("count", val?.Count);

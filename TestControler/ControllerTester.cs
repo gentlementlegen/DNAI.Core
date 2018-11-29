@@ -14,6 +14,48 @@ namespace TestControler
     [TestClass]
     public class ControllerTester
     {
+        private void testMoreOrLess(CoreControl.Controller controller, uint play, uint COMPARISON)
+        {
+            int mystery_number = 47;
+
+            int i = 0;
+
+            Dictionary<string, dynamic> args = new Dictionary<string, dynamic>
+            {
+                { "lastResult", (System.Int64)controller.GetEnumerationValue(COMPARISON, "NONE") }
+            };
+
+            Dictionary<string, dynamic> returns;
+
+            do
+            {
+                returns = controller.CallFunction(play, args);
+
+                string toprint = "IA give: " + returns["result"].ToString();
+
+                System.Diagnostics.Debug.WriteLine(toprint);
+
+                if (returns["result"] > mystery_number)
+                {
+                    args["lastResult"] = (System.Int64)controller.GetEnumerationValue(COMPARISON, "LESS");
+                    System.Diagnostics.Debug.WriteLine("==> It's less");
+                }
+                else if (returns["result"] < mystery_number)
+                {
+                    args["lastResult"] = (System.Int64)controller.GetEnumerationValue(COMPARISON, "MORE");
+                    System.Diagnostics.Debug.WriteLine("==> It's more");
+                }
+                else
+                    break;
+                ++i;
+            } while (returns["result"] != mystery_number && i < 10);
+
+            if (i == 10)
+                throw new Exception("Failed to reach mystery number in less that 10 times");
+            else
+                System.Diagnostics.Debug.Write("AI found the mystery number: " + mystery_number.ToString());
+        }
+
         /// <summary>
         /// Test of the moreOrLess game built with a controller
         /// </summary>
@@ -198,44 +240,22 @@ namespace TestControler
 
             controller.SetFunctionEntryPoint(play, if_lr_eq_more);
 
-            int mystery_number = 47;
+            testMoreOrLess(controller, play, COMPARISON);
 
-            int i = 0;
+            controller.SaveTo("toto.dnai");
 
-            Dictionary<string, dynamic> args = new Dictionary<string, dynamic>
-            {
-                { "lastResult", (System.Int64)controller.GetEnumerationValue(COMPARISON, "NONE") }
-            };
+            controller.Reset();
+            controller.Declare(ENTITY.CONTEXT, 0, "Coucou", VISIBILITY.PUBLIC);
+            controller.Declare(ENTITY.CONTEXT, 0, "Coucou1", VISIBILITY.PUBLIC);
+            controller.Declare(ENTITY.CONTEXT, 0, "Coucou2", VISIBILITY.PUBLIC);
+            controller.Declare(ENTITY.CONTEXT, 0, "Coucou3", VISIBILITY.PUBLIC);
 
-            Dictionary<string, dynamic> returns;
+            controller.LoadFrom("toto.dnai");
 
-            do
-            {
-                returns = controller.CallFunction(play, args);
+            play = controller.FindEntity("/moreOrLess/Play");
+            COMPARISON = controller.FindEntity("/moreOrLess/COMPARISON");
 
-                string toprint = "IA give: " + returns["result"].ToString();
-
-                System.Diagnostics.Debug.WriteLine(toprint);
-
-                if (returns["result"] > mystery_number)
-                {
-                    args["lastResult"] = (System.Int64)controller.GetEnumerationValue(COMPARISON, "LESS");
-                    System.Diagnostics.Debug.WriteLine("==> It's less");
-                }
-                else if (returns["result"] < mystery_number)
-                {
-                    args["lastResult"] = (System.Int64)controller.GetEnumerationValue(COMPARISON, "MORE");
-                    System.Diagnostics.Debug.WriteLine("==> It's more");
-                }
-                else
-                    break;
-                ++i;
-            } while (returns["result"] != mystery_number && i < 10);
-
-            if (i == 10)
-                throw new Exception("Failed to reach mystery number in less that 10 times");
-            else
-                System.Diagnostics.Debug.Write("AI found the mystery number: " + mystery_number.ToString());
+            testMoreOrLess(controller, play, COMPARISON);
         }
 
         /// <summary>

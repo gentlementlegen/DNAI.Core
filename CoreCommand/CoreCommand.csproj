@@ -52,6 +52,7 @@
     <Compile Include="Command\Enum\GetValue.cs" />
     <Compile Include="Command\Global\GetProjectEntities.cs" />
     <Compile Include="Command\Global\RemoveProject.cs" />
+    <Compile Include="Command\Ressource\SetDirectory.cs" />
     <Compile Include="Command\Variable\GetType.cs" />
     <Compile Include="Command\Variable\GetValue.cs" />
     <Compile Include="Command\Function\Instruction\LinkData.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="Command\Declarator\Move.cs" />
     <Compile Include="Command\Declarator\Remove.cs" />
     <Compile Include="Command\Declarator\Rename.cs" />
-    <Compile Include="Command\Variable\SetVariableValue.cs" />
+    <Compile Include="Command\Variable\SetValue.cs" />
     <Compile Include="IManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolver\V1_0_0.cs" />

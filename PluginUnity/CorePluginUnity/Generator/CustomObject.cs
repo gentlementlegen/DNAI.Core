@@ -150,23 +150,35 @@ namespace Core.Plugin.Unity.Generator
             return GetObjectType((BASE_ID)fieldId);
         }
 
-        private string GetObjectType(EntityFactory.BASE_ID typeId)
+        private string GetObjectType(BASE_ID typeId)
         {
             switch (typeId)
             {
-                case EntityFactory.BASE_ID.BOOLEAN_TYPE:
+                case BASE_ID.BOOLEAN_TYPE:
                     return ObjectType = "bool";
 
-                case EntityFactory.BASE_ID.INTEGER_TYPE:
+                case BASE_ID.INTEGER_TYPE:
                     return ObjectType = "int";
 
-                case EntityFactory.BASE_ID.FLOATING_TYPE:
+                case BASE_ID.FLOATING_TYPE:
                     return ObjectType = "float";
 
-                case EntityFactory.BASE_ID.CHARACTER_TYPE:
+                case BASE_ID.CHARACTER_TYPE:
                     return ObjectType = "char";
 
-                case EntityFactory.BASE_ID.STRING_TYPE:
+                case BASE_ID.STRING_TYPE:
+                    return ObjectType = "string";
+
+                case BASE_ID.DICT_TYPE:
+                    return ObjectType = "System.Collections.Generic.Dictionnary<string, dynamic>";
+
+                case BASE_ID.ANY_TYPE:
+                    return ObjectType = "dynamic";
+
+                case BASE_ID.MATRIX_TYPE:
+                    return ObjectType = "MathNet.Numerics.LinearAlgebra.Matrix<double>";
+
+                case BASE_ID.RESSOURCE_TYPE:
                     return ObjectType = "string";
 
                 default:

@@ -64,7 +64,7 @@ namespace CorePackage.Execution
             {
                 if (!IsValueSet)
                 {
-                    throw new InvalidOperationException("Trying to access to the input " + Name + " value which is unknown");
+                    throw new InvalidOperationException($"Cannot access the value of an input({Name}) that is not set");
                 }
 
                 if (IsLinked)

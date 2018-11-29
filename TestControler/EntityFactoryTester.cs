@@ -30,37 +30,50 @@ namespace TestControler
         public void TestCreateFindRemove()
         {
             CoreControl.EntityFactory factory = new CoreControl.EntityFactory();
-            
+            uint expectedID, expectedSize;
+
+            expectedID = factory.LastID + 1;
+            expectedSize = factory.Size + 1;
             factory.Create<Context>();
             uint ctx = factory.LastID;
-            Assert.IsTrue(ctx == 6 && factory.Size == 7);
+            Assert.IsTrue(ctx == expectedID && factory.Size == expectedSize);
 
+            expectedID = factory.LastID + 1;
+            expectedSize = factory.Size + 1;
             factory.Create<Function>();
             uint fnt = factory.LastID;
-            Assert.IsTrue(fnt == 7 && factory.Size == 8);
+            Assert.IsTrue(fnt == expectedID && factory.Size == expectedSize);
 
+            expectedID = factory.LastID + 1;
+            expectedSize = factory.Size + 1;
             factory.Create<Variable>();
             uint var = factory.LastID;
-            Assert.IsTrue(var == 8 && factory.Size == 9);
+            Assert.IsTrue(var == expectedID && factory.Size == expectedSize);
 
+            expectedID = factory.LastID + 1;
+            expectedSize = factory.Size + 1;
             factory.Create<EnumType>();
             uint enu = factory.LastID;
-            Assert.IsTrue(enu == 9 && factory.Size == 10);
+            Assert.IsTrue(enu == expectedID && factory.Size == expectedSize);
 
+            expectedID = factory.LastID + 1;
+            expectedSize = factory.Size + 1;
             factory.Create<ListType>();
             uint lst = factory.LastID;
-            Assert.IsTrue(lst == 10 && factory.Size == 11);
+            Assert.IsTrue(lst == expectedID && factory.Size == expectedSize);
 
+            expectedID = factory.LastID + 1;
+            expectedSize = factory.Size + 1;
             factory.Create<ObjectType>();
             uint obj = factory.LastID;
-            Assert.IsTrue(obj == 11 && factory.Size == 12);
+            Assert.IsTrue(obj == expectedID && factory.Size == expectedSize);
 
-            Assert.IsTrue(factory.Find(CoreControl.EntityFactory.BASE_ID.GLOBAL_CTX).GetType() == typeof(Context));
-            Assert.IsTrue(factory.Find(CoreControl.EntityFactory.BASE_ID.BOOLEAN_TYPE) == Scalar.Boolean);
-            Assert.IsTrue(factory.Find(CoreControl.EntityFactory.BASE_ID.INTEGER_TYPE) == Scalar.Integer);
-            Assert.IsTrue(factory.Find(CoreControl.EntityFactory.BASE_ID.FLOATING_TYPE) == Scalar.Floating);
-            Assert.IsTrue(factory.Find(CoreControl.EntityFactory.BASE_ID.CHARACTER_TYPE) == Scalar.Character);
-            Assert.IsTrue(factory.Find(CoreControl.EntityFactory.BASE_ID.STRING_TYPE) == Scalar.String);
+            Assert.IsTrue(factory.Find(BASE_ID.GLOBAL_CTX).GetType() == typeof(Context));
+            Assert.IsTrue(factory.Find(BASE_ID.BOOLEAN_TYPE) == Scalar.Boolean);
+            Assert.IsTrue(factory.Find(BASE_ID.INTEGER_TYPE) == Scalar.Integer);
+            Assert.IsTrue(factory.Find(BASE_ID.FLOATING_TYPE) == Scalar.Floating);
+            Assert.IsTrue(factory.Find(BASE_ID.CHARACTER_TYPE) == Scalar.Character);
+            Assert.IsTrue(factory.Find(BASE_ID.STRING_TYPE) == Scalar.String);
 
             Assert.IsTrue(factory.Find(ctx).GetType() == typeof(Context));
             Assert.IsTrue(factory.Find(fnt).GetType() == typeof(Function));

@@ -262,3 +262,17 @@ paket-files/
 __pycache__/
 *.pyc
 core\.proto
+
+PluginUnity/PluginTestProject/Assets/Standard Assets/DNAI/Plugins/\.Keras_loaded_model/
+
+PluginUnity/PluginTestProject/Assets/Standard Assets/DNAI/Scripts/\.Keras_loaded_model/
+
+PluginUnity/PluginTestProject/Assets/Standard Assets/DNAI/Plugins/
+
+PluginUnity/PluginTestProject/Assets/Standard Assets/DNAI/Compiled/
+
+*.meta
+
+PluginUnity/PluginTestProject/Assets/Resources/mnist/
+
+PluginUnity/PluginTestProject/DigitRecognizer_Data/

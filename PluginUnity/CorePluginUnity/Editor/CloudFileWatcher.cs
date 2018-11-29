@@ -3,6 +3,7 @@ using Core.Plugin.Unity.Context;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
 using UnityEditor;
@@ -83,10 +84,31 @@ namespace Core.Plugin.Unity.Editor
             var fileContent = await Access.GetFileContent(userID, file._id);
             if (fileContent == null)
                 return false;
-            var stream = System.IO.File.Create(Constants.ScriptPath + file.Title + "." + Constants.iaFileExtension);
-            stream.Write(fileContent, 0, fileContent.Length);
-            stream.Dispose();
-            AssetDatabase.ImportAsset(Constants.ScriptPath + file.Title + "." + Constants.iaFileExtension);
+            
+            string filePath = $"{Constants.RootPath}{file.Title}";
+            string newpath = $"{Constants.ScriptPath}{file.Title}.{Constants.iaFileExtension}";
+
+            using (FileStream stream = System.IO.File.Create(filePath))
+            {
+                stream.Write(fileContent, 0, fileContent.Length);
+            }
+
+            try
+            {
+                ScriptManager.UnpackScript(filePath);
+                System.IO.File.Delete(filePath);
+            }
+            catch (Exception)
+            {
+                if (System.IO.File.Exists(newpath))
+                {
+                    System.IO.File.Delete(newpath);
+                }
+
+                System.IO.File.Move(filePath, newpath);
+            }
+
+            AssetDatabase.ImportAsset(newpath);
             return true;
         }
 

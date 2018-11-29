@@ -21,6 +21,11 @@ namespace CorePackage.Execution
         private Dictionary<string, Output> outputs = new Dictionary<string, Output>();
 
         /// <summary>
+        /// List of entities pass at construction
+        /// </summary>
+        public List<Global.IDefinition> ConstructionList { get; set; }
+
+        /// <summary>
         /// Getter for inputs attribute
         /// </summary>
         public Dictionary<string, Input> Inputs

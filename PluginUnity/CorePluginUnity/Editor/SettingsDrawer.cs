@@ -62,7 +62,7 @@ namespace Core.Plugin.Unity.Editor
             }
             catch (Exception ex)
             {
-                Debug.LogError(ex.InnerException.Message);
+                UnityEngine.Debug.LogError(ex.InnerException.Message);
             }
             //Debug.Log("Tried to login with id => " + _settings.Username + " token " + _settings.Token.user_id + " list is " + list);
             if (list != null)
