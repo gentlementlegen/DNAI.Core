@@ -317,6 +317,12 @@ namespace BinarySerializer
                 (Stream input) =>
                 {
                     UInt32 size = Deserialize<UInt32>(input);
+
+                    if (size > 100000000)
+                    {
+                        throw new InvalidDataException("Trying to deserialize a 100 Mo length string");
+                    }
+
                     byte[] dat = new byte[size];
                     input.Read(dat, 0, (int)size);
                     return Encoding.UTF8.GetString(dat);
