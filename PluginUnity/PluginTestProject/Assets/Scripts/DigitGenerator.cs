@@ -84,7 +84,7 @@ public class DigitGenerator : DigitRecognizer {
                     send.SetPixel(x, y, new Color(inv_val, inv_val, inv_val));
                 }
             }
-
+            
             send.Apply();
             displayedTextUI.text = "";
             loadImage.enabled = true;
@@ -94,6 +94,9 @@ public class DigitGenerator : DigitRecognizer {
                 ExecuterecognizeDigit();
 
                 OnResultChanged = () => OnImageRecognized();
+            }).ContinueWith(t =>
+            {
+                Debug.Log($"Task status = {t.Status} : {t.Exception.InnerException.Message}");
             });
         }
     }

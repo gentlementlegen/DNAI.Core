@@ -394,9 +394,12 @@ namespace Core.Plugin.Unity.Drawing
             // Button for loading a script from the disk
             if (GUI.Button(dropdownRect, dotButton))
             {
-                var newPath = EditorUtility.OpenFilePanel("Select a script to load", "Documents", Constants.iaFileExtension);
+                var newPath = EditorUtility.OpenFilePanelWithFilters("Select a script to load", "Documents", new string[] {
+                    "DNAI files", $"{Constants.iaFileExtension},{Constants.iaPackageExtension}",
+                });
                 if (!string.IsNullOrEmpty(newPath))
                 {
+                    //newPath = ScriptManager.UnpackScript(newPath);
                     //listIA[index].scriptManager.FilePath = newPath;
                     listIA[index].scriptManager.FilePathRelative = listIA[index].scriptManager.LoadScript(newPath);
                     ListAI[index].AIName = ListAI[index].scriptManager.GetLoadedScriptName();
