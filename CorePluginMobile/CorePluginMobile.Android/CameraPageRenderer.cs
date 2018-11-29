@@ -5,6 +5,7 @@ using Android.Graphics;
 using Android.Hardware;
 using Android.Views;
 using Android.Widget;
+using CorePluginMobile.Services;
 using CorePluginMobile.Views;
 using CustomRenderer.Droid;
 using System;
@@ -91,6 +92,9 @@ namespace CustomRenderer.Droid
 
         public void OnSurfaceTextureUpdated(SurfaceTexture surface)
         {
+            //var bitmap = textureView.Bitmap
+            //var pixel = bitmap.GetPixel(0, 0);
+            //Android.Util.Log.Debug("Camera", pixel.ToString());
         }
 
         public void OnSurfaceTextureAvailable(SurfaceTexture surface, int width, int height)
@@ -195,32 +199,56 @@ namespace CustomRenderer.Droid
         private async void TakePhotoButtonTapped(object sender, EventArgs e)
         {
             camera.StopPreview();
+            FetchPixels();
 
             var image = textureView.Bitmap;
 
-            try
-            {
-                var absolutePath = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDcim).AbsolutePath;
-                var folderPath = absolutePath + "/Camera";
-                var filePath = System.IO.Path.Combine(folderPath, string.Format("photo_{0}.jpg", Guid.NewGuid()));
+            //try
+            //{
+            //    var absolutePath = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDcim).AbsolutePath;
+            //    var folderPath = absolutePath + "/Camera";
+            //    var filePath = System.IO.Path.Combine(folderPath, string.Format("photo_{0}.jpg", Guid.NewGuid()));
 
-                var fileStream = new FileStream(filePath, FileMode.Create);
-                await image.CompressAsync(Bitmap.CompressFormat.Jpeg, 50, fileStream);
-                fileStream.Close();
-                image.Recycle();
+            //    var fileStream = new FileStream(filePath, FileMode.Create);
+            //    await image.CompressAsync(Bitmap.CompressFormat.Jpeg, 50, fileStream);
+            //    fileStream.Close();
+            //    image.Recycle();
 
-                var intent = new Android.Content.Intent(Android.Content.Intent.ActionMediaScannerScanFile);
-                var file = new Java.IO.File(filePath);
-                var uri = Android.Net.Uri.FromFile(file);
-                intent.SetData(uri);
-                CorePluginMobile.Droid.MainActivity.Instance.SendBroadcast(intent);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(@"				", ex.Message);
-            }
+            //    var intent = new Android.Content.Intent(Android.Content.Intent.ActionMediaScannerScanFile);
+            //    var file = new Java.IO.File(filePath);
+            //    var uri = Android.Net.Uri.FromFile(file);
+            //    intent.SetData(uri);
+            //    CorePluginMobile.Droid.MainActivity.Instance.SendBroadcast(intent);
+
+            //    FetchPixels();
+            //}
+            //catch (Exception ex)
+            //{
+            //    System.Diagnostics.Debug.WriteLine(@"				", ex.Message);
+            //}
 
             camera.StartPreview();
+        }
+
+        private void FetchPixels()
+        {
+            var bitmapScalled = Bitmap.CreateScaledBitmap(textureView.Bitmap, 28, 28, true);
+            //MemoryStream stream = new MemoryStream();
+            //bitmapScalled.Compress(Bitmap.CompressFormat.Jpeg, 0, stream);
+            //byte[] bitmapData = stream.ToArray();
+            var mat = MathNet.Numerics.LinearAlgebra.Matrix<double>.Build.Dense(28, 28);
+            for (int y = 0; y < bitmapScalled.Height; ++y)
+            {
+                for (int x = 0; x < bitmapScalled.Width; ++x)
+                {
+                    var pixel = bitmapScalled.GetPixel(x, y);
+                    byte[] values = BitConverter.GetBytes(pixel);
+                    if (!BitConverter.IsLittleEndian) Array.Reverse(values);
+                    var med = (values[0] + values[1] + values[2]) / 3.0;
+                    mat[y, x] = med / 255.0;
+                }
+            }
+            (DependencyService.Get<ICamera>() as CorePluginMobile.Droid.Camera)?.SetImage(mat);
         }
     }
 }
