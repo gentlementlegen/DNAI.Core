@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using CorePackage.Execution;
 using static CoreControl.Controller;
 using static CoreControl.EntityFactory;
+using System.IO;
 
 namespace TestControler
 {
@@ -406,6 +407,21 @@ namespace TestControler
             controller.Remove(cnt, "Etiti");
             controller.Remove(cnt, "toto");
             controller.Remove(cnt, "tata");
+        }
+
+        [TestMethod]
+        public void TestInvalidFile()
+        {
+            var ctrl = new CoreControl.Controller();
+
+            try
+            {
+                ctrl.LoadFrom("astar.dnai");
+            }
+            catch (InvalidDataException)
+            {
+                /* succed */
+            }
         }
     }
 }
