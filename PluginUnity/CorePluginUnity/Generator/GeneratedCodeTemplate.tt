@@ -97,7 +97,7 @@ namespace DNAI.<#=Namespace#>
 				//UnityEngine.Debug.Log($"Manager: {_manager}");
 				//UnityEngine.Debug.Log($"Controller: {_manager.Controller}");
 				string cwd = Directory.GetCurrentDirectory();
-				_manager.Controller.SetRessourceDirectory(cwd + @"/Assets/Standard Assets/DNAI/Scripts");
+				_manager.Controller.SetRessourceDirectory(cwd + @"/Assets/DNAI/Scripts/");
 				_manager.LoadCommandsFrom(@"Assets/DNAI/Scripts/" + "<#=FilePath#>");
 			}
 

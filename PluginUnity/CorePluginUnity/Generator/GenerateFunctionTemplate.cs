@@ -18,7 +18,7 @@ namespace Core.Plugin.Unity.Generator
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
+    #line 1 "D:\Documents\VisualStudio\DNAI\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "15.0.0.0")]
     public partial class GenerateFunctionTemplate : GenerateFunctionTemplateBase
     {
@@ -30,21 +30,21 @@ namespace Core.Plugin.Unity.Generator
         {
             this.Write("_manager.Controller.CallFunction(");
             
-            #line 6 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
+            #line 6 "D:\Documents\VisualStudio\DNAI\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FunctionId));
             
             #line default
             #line hidden
             this.Write(", new Dictionary<string, dynamic>{ ");
             
-            #line 6 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
+            #line 6 "D:\Documents\VisualStudio\DNAI\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FunctionArguments));
             
             #line default
             #line hidden
             this.Write(" });\r\n");
             
-            #line 7 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
+            #line 7 "D:\Documents\VisualStudio\DNAI\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
  if (Outputs.Count > 0)
 {
 	foreach (var output in Outputs)
@@ -55,21 +55,21 @@ namespace Core.Plugin.Unity.Generator
             #line hidden
             this.Write("\t\t");
             
-            #line 12 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
+            #line 12 "D:\Documents\VisualStudio\DNAI\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write(" = results[\"");
             
-            #line 12 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
+            #line 12 "D:\Documents\VisualStudio\DNAI\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write("\"];\r\n\t");
             
-            #line 13 "D:\Folders\VisualStudio\Duly\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
+            #line 13 "D:\Documents\VisualStudio\DNAI\PluginUnity\CorePluginUnity\Generator\GenerateFunctionTemplate.tt"
  }
 } 
             

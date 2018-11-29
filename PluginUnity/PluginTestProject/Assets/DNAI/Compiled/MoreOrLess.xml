@@ -9,7 +9,7 @@
              Base behaviour for DNAI IA.
             </summary>
             </member>
-        <member name="F:DNAI.MoreOrLess.MoreOrLess.lastResult">
+        <member name="F:DNAI.MoreOrLess.MoreOrLess.min">
             <summary>
              Called when output values of the DNAI script change.
             </summary>
