@@ -57,10 +57,6 @@ namespace CorePluginMobile.ViewModels
                 var file = await Accessor.GetFileContent(_token.user_id, SelectedItem._id);
                 System.IO.File.WriteAllBytes(fileName, file);
                 _binaryManager.LoadCommandsFrom(fileName);
-                AI ai = new AI();
-                ai.minDistance = 15;
-                ai.speed = 100;
-                ai.UpdateDirection(ai, 45, 45);
                 MessagingCenter.Send(this, "SwitchPage", 1);
             });
 
@@ -89,20 +85,6 @@ namespace CorePluginMobile.ViewModels
                 }
                 IsBusy = false;
             });
-        }
-
-        public class AI
-        {
-            public float X;
-            public float Y;
-            public float Z;
-            public float minDistance;
-            public float speed;
-
-            public void UpdateDirection(AI @this, float @leftDistance, float @rightDistance)
-            {
-                _binaryManager.Controller.CallFunction(8, new Dictionary<string, dynamic> { { "this", (AI)@this }, { "leftDistance", (float)@leftDistance }, { "rightDistance", (float)@rightDistance }, });
-            }
         }
     }
 }
