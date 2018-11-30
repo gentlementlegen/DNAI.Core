@@ -7,6 +7,7 @@ using DNAI.DigitRecognizer;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using System.Threading.Tasks;
+using System.Threading;
 
 public class DigitGenerator : DigitRecognizer
 {
@@ -29,9 +30,11 @@ public class DigitGenerator : DigitRecognizer
 
     private System.Random random = new System.Random((int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds);
 
-    private Task RecognitionTask { get; set; }
+    private Action RecognitionAction { get; set; }
 
     private Action OnResultChanged = null;
+
+    private Task Recognizer { get; set; }
 
     public void Start()
     {
@@ -43,6 +46,7 @@ public class DigitGenerator : DigitRecognizer
             digitImages[i] = Resources.Load($"mnist/{i % 10}/img_ ({i / NB_SAMPLE + 1})", typeof(Texture2D)) as Texture2D;
         }
         loadImage.enabled = false;
+        Recognizer = Task.Run(() => RecognitionThread());
     }
 
     public void Update()
@@ -67,9 +71,22 @@ public class DigitGenerator : DigitRecognizer
         loadImage.enabled = false;
     }
 
+    private void RecognitionThread()
+    {
+        while (true)
+        {
+            if (RecognitionAction != null)
+            {
+                RecognitionAction();
+                RecognitionAction = null;
+            }
+            Thread.Sleep(100);
+        }
+    }
+
     private void RecognizeImage(Texture2D image)
     {
-        if (RecognitionTask == null || RecognitionTask.IsCompleted)
+        if (RecognitionAction == null)
         {
             pixels = (DenseMatrix)Matrix<double>.Build.Dense(28, 28);
 
@@ -90,15 +107,14 @@ public class DigitGenerator : DigitRecognizer
             displayedTextUI.text = "";
             loadImage.enabled = true;
 
-            RecognitionTask = Task.Run(() =>
+            //ExecuterecognizeDigit();
+            //OnImageRecognized();
+
+            RecognitionAction = () =>
             {
                 ExecuterecognizeDigit();
-
                 OnResultChanged = () => OnImageRecognized();
-            }).ContinueWith(t =>
-            {
-                Debug.Log($"Task status = {t.Status} : {t.Exception.InnerException.Message}");
-            });
+            };
         }
     }
 }
