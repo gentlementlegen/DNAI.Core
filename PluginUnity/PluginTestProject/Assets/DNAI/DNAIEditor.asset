@@ -11,4 +11,12 @@ MonoBehaviour:
   m_Script: {fileID: -2066551659, guid: 428b0ae85a99ff3429c93ae485c64c81, type: 3}
   m_Name: DNAIEditor
   m_EditorClassIdentifier: 
-  listIA: []
+  listIA:
+  - scriptManager:
+      _fileName: 
+      _filePath: Assets/DNAI/Scripts/DigitRecognizer.dnai
+      _filePathAbsolute: D:\Documents\VisualStudio\DNAI\PluginUnity\PluginTestProject\Assets\DNAI\Scripts\DigitRecognizer.dnai
+      _scriptName: DigitRecognizer
+    AIName: 
+    _scriptList:
+    - recognize Digit

@@ -67,13 +67,14 @@ namespace CorePackage.Global
                 PythonProcess.StartInfo.Arguments = $"\"{kerasPath}\" -p {port}";
                 PythonProcess.Start();
 
-                Client = Server.AcceptTcpClient();
-                Input = new StreamWriter(Client.GetStream()) { AutoFlush = false };
-                Output = new StreamReader(Client.GetStream());
-
                 ProcessThread = Task
-                    .Run(() =>
+                    .Run(async () =>
                     {
+                        Client = await Server.AcceptTcpClientAsync();
+
+                        Input = new StreamWriter(Client.GetStream()) { AutoFlush = false };
+                        Output = new StreamReader(Client.GetStream());
+
                         PythonProcess.WaitForExit();
                         Server.Stop();
                     })
