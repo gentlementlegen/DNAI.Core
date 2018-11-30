@@ -17,9 +17,11 @@ namespace CorePackage.Global
     {
         private static bool IsProcessRunning { get; set; } = false;
 
-        private static string PythonProgram { get; } = $".Keras_loaded_model/python/Scripts/python";
+        private static string PythonProgram { get; } = ".Keras_loaded_model/python/Scripts/python";
 
-        private static string KerasScript { get; } = $".Keras_loaded_model/keras_restore_machine_learning.py";
+        private static string PythonEmbedded { get; } = ".Keras_loaded_model/python/Embedded";
+
+        private static string KerasScript { get; } = ".Keras_loaded_model/keras_restore_machine_learning.py";
 
         private static Process PythonProcess { get; } = new Process
         {
@@ -65,14 +67,29 @@ namespace CorePackage.Global
 
                 PythonProcess.StartInfo.FileName = pythonPath;
                 PythonProcess.StartInfo.Arguments = $"\"{kerasPath}\" -p {port}";
-                PythonProcess.StartInfo.EnvironmentVariables["PATH"] += $";{Entity.Type.Resource.Instance.Directory}";
+                PythonProcess.StartInfo.EnvironmentVariables["PATH"] = $"{Entity.Type.Resource.Instance.Directory}/{PythonEmbedded}";
                 PythonProcess.Start();
 
-                ProcessThread = Task
-                    .Run(async () =>
+                DateTime startTime = DateTime.Now;
+                
+                while ((DateTime.Now - startTime).Seconds < 10)
+                {
+                    if (Server.Pending())
                     {
-                        Client = await Server.AcceptTcpClientAsync();
+                        Client = Server.AcceptTcpClient();
+                        break;
+                    }
+                    Thread.Sleep(100);
+                }
 
+                if (Client == null)
+                {
+                    throw new SocketException((int)SocketError.TimedOut);
+                }
+
+                ProcessThread = Task
+                    .Run(() =>
+                    {
                         Input = new StreamWriter(Client.GetStream()) { AutoFlush = false };
                         Output = new StreamReader(Client.GetStream());
 
