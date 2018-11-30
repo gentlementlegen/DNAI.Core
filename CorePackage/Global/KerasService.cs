@@ -65,6 +65,7 @@ namespace CorePackage.Global
 
                 PythonProcess.StartInfo.FileName = pythonPath;
                 PythonProcess.StartInfo.Arguments = $"\"{kerasPath}\" -p {port}";
+                PythonProcess.StartInfo.EnvironmentVariables["PATH"] += $";{Entity.Type.Resource.Instance.Directory}";
                 PythonProcess.Start();
 
                 ProcessThread = Task
