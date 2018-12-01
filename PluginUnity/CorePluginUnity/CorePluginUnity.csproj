@@ -193,7 +193,27 @@
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)BinarySerializer.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CorePluginUnityRuntime.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)MathNet.Numerics.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
-"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Cntk.Core.Managed-2.6.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins"
-</PostBuildEvent>
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Cntk.Core.Managed-2.6.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Cntk.Composite-2.6.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Cntk.Core.CSBinding-2.6.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Cntk.Core-2.6.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Cntk.Deserializers.Binary-2.6.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Cntk.Deserializers.HTK-2.6.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Cntk.Deserializers.Image-2.6.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Cntk.Deserializers.TextFormat-2.6.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Cntk.Math-2.6.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Cntk.PerformanceProfiler-2.6.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)cublas64_90.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)cudart64_90.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)cudnn64_7.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)curand64_90.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)cusparse64_90.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)libiomp5md.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)mkldnn.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)mklml.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)nvml.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)opencv_world310.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)zip.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)zlib.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\"</PostBuildEvent>
   </PropertyGroup>
 </Project>
