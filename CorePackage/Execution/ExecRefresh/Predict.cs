@@ -18,7 +18,7 @@ namespace CorePackage.Execution
             AddInput("shape", new Entity.Variable(Entity.Type.Scalar.String));
             AddOutput("outputs", new Entity.Variable(Entity.Type.Matrix.Instance));
 
-            Global.KerasService.Init();
+            //Global.KerasService.Init();
             SetInputValue("shape", "");
         }
 
@@ -34,9 +34,12 @@ namespace CorePackage.Execution
                 shape = $"({inputs.RowCount},{inputs.ColumnCount})";
             }
 
-            Global.KerasService.LoadModel(model);
-            Global.KerasService.LoadWeights(weights);
-            SetOutputValue("outputs", Global.KerasService.Predict(inputs, shape));
+            Global.CNTKPredict.LoadModel(model);
+            SetOutputValue("outputs", Global.CNTKPredict.Predict(inputs, shape));
+
+            //Global.KerasService.LoadModel(model);
+            //Global.KerasService.LoadWeights(weights);
+            //SetOutputValue("outputs", Global.KerasService.Predict(inputs, shape));
         }
     }
 }

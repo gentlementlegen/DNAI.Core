@@ -1039,7 +1039,7 @@ namespace TestCommand
 
             ctrl.LoadFrom("DigitRecognizer.dnai");
 
-            var data = File.ReadAllText("5.txt");
+            var data = File.ReadAllText("digit5.data");
 
             var func = ctrl.FindEntity("/DigitRecognizer/recognizeDigit");
 

@@ -16,7 +16,7 @@ namespace TestNetwork
         {
             Exception err = null;
             Process server = null;
-            String serverDirectory = Directory.GetCurrentDirectory() + "\\..\\..\\Server";
+            String serverDirectory = Directory.GetCurrentDirectory() + "\\..\\..\\..\\Server";
             String serverZip = serverDirectory + ".zip";
 
             try
@@ -90,7 +90,7 @@ namespace TestNetwork
                 err = error;
                 Console.Error.WriteLine(error.Message);
             }
-            
+
             if (server != null)
             {
                 server.Kill();

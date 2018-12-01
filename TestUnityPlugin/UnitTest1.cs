@@ -136,7 +136,7 @@ namespace TestUnityPlugin
             var api = new ApiAccess();
 
             // Connection
-            var token = api.GetToken("admin", "dnai").Result;
+            var token = api.GetToken("admin", "DN41SalmonToast2019").Result;
             api.SetAuthorization(token);
 
             // Get all files for a user

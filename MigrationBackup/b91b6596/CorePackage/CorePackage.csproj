@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DC0C6FC8-7D9D-4AC6-9B64-C8E3C39CA105}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CorePackage</RootNamespace>
+    <AssemblyName>CorePackage</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Cntk.Core.Managed-2.6, Version=2.6.0.0, Culture=neutral, PublicKeyToken=a82c1f3f67b62253, processorArchitecture=AMD64">
+      <HintPath>..\packages\CNTK.GPU.2.6.0\lib\netstandard2.0\Cntk.Core.Managed-2.6.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MathNet.Numerics.4.6.0\lib\net461\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Dynamic" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Global\CNTKPredict.cs" />
+    <Compile Include="Entity\Context.cs" />
+    <Compile Include="Entity\DataType.cs" />
+    <Compile Include="Entity\Function.cs" />
+    <Compile Include="Entity\Type\AnyType.cs" />
+    <Compile Include="Entity\Type\Builtins.cs" />
+    <Compile Include="Entity\Type\DictType.cs" />
+    <Compile Include="Entity\Type\EnumType.cs" />
+    <Compile Include="Entity\Type\ListType.cs" />
+    <Compile Include="Entity\Type\Matrix.cs" />
+    <Compile Include="Entity\Type\ObjectType.cs" />
+    <Compile Include="Entity\Type\Resource.cs" />
+    <Compile Include="Entity\Type\ScalarType.cs" />
+    <Compile Include="Entity\Variable.cs" />
+    <Compile Include="Error\InvalidOperatorSignature.cs" />
+    <Compile Include="Error\NotFoundException.cs" />
+    <Compile Include="Error\OperatorNotOverloaded.cs" />
+    <Compile Include="Error\OperatorNotPermitted.cs" />
+    <Compile Include="Execution\AccessRefreshInstruction.cs" />
+    <Compile Include="Execution\AccessRefresh\Cast.cs" />
+    <Compile Include="Execution\AccessRefresh\EnumSplitter.cs" />
+    <Compile Include="Execution\AccessRefresh\GetShape.cs" />
+    <Compile Include="Execution\AccessRefresh\Getter.cs" />
+    <Compile Include="Execution\AccessRefresh\GetAttributes.cs" />
+    <Compile Include="Execution\AccessRefresh\HasKey.cs" />
+    <Compile Include="Execution\AccessRefresh\Operator.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\BinaryOperator.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\LogicalOperator.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\And.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\Different.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\Equal.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\Greater.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\GreaterEqual.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\Less.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\LessEqual.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Logical\Or.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Access.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Add.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\BinaryAnd.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\BinaryOr.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Divide.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\LeftShift.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Modulo.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Multiplicate.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\RightShift.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Substract.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Binary\Operation\Xor.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\UnaryOperator.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Unary\BinaryNot.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Unary\Decrement.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Unary\Increment.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Unary\Inverse.cs" />
+    <Compile Include="Execution\AccessRefresh\Operators\Unary\Not.cs" />
+    <Compile Include="Execution\ExecRefresh\Append.cs" />
+    <Compile Include="Execution\ExecRefresh\ARemove.cs" />
+    <Compile Include="Execution\ExecRefresh\Classify.cs" />
+    <Compile Include="Execution\ExecRefresh\Clear.cs" />
+    <Compile Include="Execution\ExecRefresh\Debug.cs" />
+    <Compile Include="Execution\ExecRefresh\Fill.cs" />
+    <Compile Include="Execution\ExecRefresh\Formula.cs" />
+    <Compile Include="Execution\ExecRefresh\FunctionCall.cs" />
+    <Compile Include="Execution\ExecRefresh\Insert.cs" />
+    <Compile Include="Execution\ExecRefresh\Predict.cs" />
+    <Compile Include="Execution\AccessRefresh\Random.cs" />
+    <Compile Include="Execution\ExecRefresh\Remove.cs" />
+    <Compile Include="Execution\ExecRefresh\RemoveIndex.cs" />
+    <Compile Include="Execution\ExecRefresh\RemoveValueAtKey.cs" />
+    <Compile Include="Execution\ExecRefresh\Resize.cs" />
+    <Compile Include="Execution\ExecRefresh\SetAttribute.cs" />
+    <Compile Include="Execution\ExecRefresh\Setter.cs" />
+    <Compile Include="Execution\AccessRefresh\Size.cs" />
+    <Compile Include="Execution\ExecRefresh\SetValueAt.cs" />
+    <Compile Include="Execution\ExecRefresh\SetValueAtKey.cs" />
+    <Compile Include="Execution\ExecRefresh\Statement.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\Break.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\Continue.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\If.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\Foreach.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\Loop.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\Return.cs" />
+    <Compile Include="Execution\ExecRefresh\Statements\While.cs" />
+    <Compile Include="Execution\ExecutionRefreshInstruction.cs" />
+    <Compile Include="Execution\AccessRefresh\GetIndexValue.cs" />
+    <Compile Include="Execution\Instruction.cs" />
+    <Compile Include="Execution\Pins\Input.cs" />
+    <Compile Include="Execution\Pins\Link.cs" />
+    <Compile Include="Execution\Pins\Output.cs" />
+    <Compile Include="Global\Declarator.cs" />
+    <Compile Include="Global\Definition.cs" />
+    <Compile Include="Global\IDefinition.cs" />
+    <Compile Include="Global\IDeclarator.cs" />
+    <Compile Include="Global\IOperable.cs" />
+    <Compile Include="Global\KerasService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\CNTK.Deps.Cuda.2.6.0\build\netstandard2.0\CNTK.Deps.Cuda.targets" Condition="Exists('..\packages\CNTK.Deps.Cuda.2.6.0\build\netstandard2.0\CNTK.Deps.Cuda.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\CNTK.Deps.Cuda.2.6.0\build\netstandard2.0\CNTK.Deps.Cuda.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.Cuda.2.6.0\build\netstandard2.0\CNTK.Deps.Cuda.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.Deps.cuDNN.2.6.0\build\netstandard2.0\CNTK.Deps.cuDNN.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.cuDNN.2.6.0\build\netstandard2.0\CNTK.Deps.cuDNN.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets'))" />
+    <Error Condition="!Exists('..\packages\CNTK.GPU.2.6.0\build\netstandard2.0\CNTK.GPU.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.GPU.2.6.0\build\netstandard2.0\CNTK.GPU.targets'))" />
+  </Target>
+  <Import Project="..\packages\CNTK.Deps.cuDNN.2.6.0\build\netstandard2.0\CNTK.Deps.cuDNN.targets" Condition="Exists('..\packages\CNTK.Deps.cuDNN.2.6.0\build\netstandard2.0\CNTK.Deps.cuDNN.targets')" />
+  <Import Project="..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets" Condition="Exists('..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets')" />
+  <Import Project="..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets" Condition="Exists('..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets')" />
+  <Import Project="..\packages\CNTK.GPU.2.6.0\build\netstandard2.0\CNTK.GPU.targets" Condition="Exists('..\packages\CNTK.GPU.2.6.0\build\netstandard2.0\CNTK.GPU.targets')" />
+</Project>

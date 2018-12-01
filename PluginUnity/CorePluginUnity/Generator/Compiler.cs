@@ -1,4 +1,4 @@
-﻿#define UNITY_ENGINE
+﻿//#define UNITY_ENGINE
 
 using Core.Plugin.Unity.Editor;
 using Core.Plugin.Unity.Extensions;
@@ -182,6 +182,7 @@ namespace Core.Plugin.Unity.Generator
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CorePluginUnityRuntime.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "MathNet.Numerics.dll");
+                _parameters.ReferencedAssemblies.Add(assemblyPath + "Cntk.Core.Managed-2.6.dll");
 
                 _parameters.ReferencedAssemblies.Add("System.Core.dll");
                 _parameters.ReferencedAssemblies.Add("Microsoft.CSharp.dll");

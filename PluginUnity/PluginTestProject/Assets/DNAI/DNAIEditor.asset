@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -15,7 +15,7 @@ MonoBehaviour:
   - scriptManager:
       _fileName: 
       _filePath: Assets/DNAI/Scripts/DigitRecognizer.dnai
-      _filePathAbsolute: D:\Documents\VisualStudio\DNAI\PluginUnity\PluginTestProject\Assets\DNAI\Scripts\DigitRecognizer.dnai
+      _filePathAbsolute: C:\Users\nicol\source\repos\Duly\PluginUnity\PluginTestProject\Assets\DNAI\Scripts\DigitRecognizer.dnai
       _scriptName: DigitRecognizer
     AIName: 
     _scriptList:
