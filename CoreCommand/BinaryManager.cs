@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace CoreCommand
 {   
@@ -45,7 +46,23 @@ namespace CoreCommand
         /// Dictionarry that associates commands name to replies name
         /// </summary>
         private Dictionary<String, String> _commandsReply = new Dictionary<string, string>();
-        
+
+        private readonly static Dictionary<Command.Global.SetProtocol.ProtocolValues, Action<dynamic, Stream>> Writers = new Dictionary<Command.Global.SetProtocol.ProtocolValues, Action<dynamic, Stream>>
+        {
+            { Command.Global.SetProtocol.ProtocolValues.BINARY, new Action<dynamic, Stream>(WriteBinaryValue) },
+            { Command.Global.SetProtocol.ProtocolValues.JSON, new Action<dynamic, Stream>(WriteJsonValue) }
+        };
+
+        private readonly static Dictionary<Command.Global.SetProtocol.ProtocolValues, Func<Stream, Type, dynamic>> Readers = new Dictionary<Command.Global.SetProtocol.ProtocolValues, Func<Stream, Type, dynamic>>
+        {
+            { Command.Global.SetProtocol.ProtocolValues.BINARY, new Func<Stream, Type, dynamic>(ReadBinaryValue) },
+            { Command.Global.SetProtocol.ProtocolValues.JSON, new Func<Stream, Type, dynamic>(ReadJsonValue) }
+        };
+
+        private Action<dynamic, Stream> SerializeAction { get; set; } = Writers[Command.Global.SetProtocol.ProtocolValues.BINARY];
+
+        private Func<Stream, Type, dynamic> DeserializeAction { get; set; } = Readers[Command.Global.SetProtocol.ProtocolValues.BINARY];
+
         /// <summary>
         /// Constructor that register the core commands with the right version
         /// </summary>
@@ -58,6 +75,7 @@ namespace CoreCommand
             RegisterCommand<Command.Declarator.Remove, Command.Declarator.Remove.Reply>                 (Resolver.V1_0_0.Code, "DECLARATOR.REMOVE", "DECLARATOR.REMOVED");
             RegisterCommand<Command.Declarator.Rename, EmptyReply>                                      (Resolver.V1_0_0.Code, "DECLARATOR.RENAME", "DECLARATOR.RENAMED");
             RegisterCommand<Command.Declarator.SetVisibility, EmptyReply>                               (Resolver.V1_0_0.Code, "DECLARATOR.SET_VISIBILITY", "DECLARATOR.VISIBILITY_SET");
+            RegisterCommand<Command.Declarator.GetChildren, Command.Declarator.GetChildren.Reply>       (Resolver.V1_0_0.Code, "DECLARATOR.GET_CHILDREN", "DECLARATOR.CHILDREN_GET", false);
             
             //FUNCTION
             
@@ -67,6 +85,8 @@ namespace CoreCommand
             RegisterCommand<Command.Function.SetEntryPoint, EmptyReply>                                 (Resolver.V1_0_0.Code, "FUNCTION.SET_ENTRY_POINT", "FUNCTION.ENTRY_POINT_SET");
             RegisterCommand<Command.Function.SetParameter, EmptyReply>                                  (Resolver.V1_0_0.Code, "FUNCTION.SET_PARAMETER", "FUNCTION.PARAMETER_SET");
             RegisterCommand<Command.Function.SetReturn, EmptyReply>                                     (Resolver.V1_0_0.Code, "FUNCTION.SET_RETURN", "FUNCTION.RETURN_SET");
+            RegisterCommand<Command.Function.GetParams, Command.Function.GetParams.Reply>               (Resolver.V1_0_0.Code, "FUNCTION.GET_PARAMS", "FUNCTION.PARAMS_GET", false);
+            RegisterCommand<Command.Function.GetReturns, Command.Function.GetReturns.Reply>             (Resolver.V1_0_0.Code, "FUNCTION.GET_RETURNS", "FUNCTION.RETURNS_GET", false);
 
             //FUNCTION.INSTRUCTION
 
@@ -97,6 +117,7 @@ namespace CoreCommand
             RegisterCommand<Command.Enum.RemoveValue, EmptyReply>                                       (Resolver.V1_0_0.Code, "ENUM.REMOVE_VALUE", "ENUM.VALUE_REMOVED");
             RegisterCommand<Command.Enum.SetType, EmptyReply>                                           (Resolver.V1_0_0.Code, "ENUM.SET_TYPE", "ENUM.TYPE_SET");
             RegisterCommand<Command.Enum.SetValue, EmptyReply >                                         (Resolver.V1_0_0.Code, "ENUM.SET_VALUE", "ENUM.VALUE_SET");
+            RegisterCommand<Command.Enum.GetValues, Command.Enum.GetValues.Reply>                       (Resolver.V1_0_0.Code, "ENUM.GET_VALUES", "ENUM.VALUES_GET", false);
 
             //LIST
 
@@ -107,23 +128,6 @@ namespace CoreCommand
             RegisterCommand<Command.Global.CreateProject, Command.Global.CreateProject.Reply>           (Resolver.V1_0_0.Code, "GLOBAL.CREATE_PROJECT", "GLOBAL.PROJECT_CREATED", true);
             RegisterCommand<Command.Global.RemoveProject, Command.Global.RemoveProject.Reply>           (Resolver.V1_0_0.Code, "GLOBAL.REMOVE_PROJECT", "GLOBAL.PROJECT_REMOVED", true);
             RegisterCommand<Command.Global.GetProjectEntities, Command.Global.GetProjectEntities.Reply> (Resolver.V1_0_0.Code, "GLOBAL.GET_PROJECT_ENTITIES", "GLOBAL.PROJECT_ENTITIES_GET", false);
-            //RegisterCommand(Resolver.V1_0_0.Code, "GLOBAL.SAVE", "GLOBAL.SAVED", false, (Command.Global.Save cmd) =>
-            //{
-            //    SaveCommandsTo(cmd.Filename);
-            //    return cmd.Resolve(null);
-            //});
-            //RegisterCommand(Resolver.V1_0_0.Code, "GLOBAL.LOAD", "GLOBAL.LOADED", true, (Command.Global.Load cmd) =>
-            //{
-            //    Command.Global.Load.Reply toret = new Command.Global.Load.Reply
-            //    {
-            //        Projects = new List<uint>()
-            //    };
-
-            //    //make LoadCommandsFrom return project list in order to return it
-            //    LoadCommandsFrom(cmd.Filename);
-
-            //    return toret;
-            //});
             RegisterCommand<Command.Global.Save, EmptyReply>                                            (Resolver.V1_0_0.Code, "GLOBAL.SAVE_TO", "GLOBAL.SAVED", false);
             RegisterCommand<Command.Global.Load, Command.Global.Load.Reply>                             (Resolver.V1_0_0.Code, "GLOBAL.LOAD_FROM", "GLOBAL.LOADED", true);
             RegisterCommand                                                                             (Resolver.V1_0_0.Code, "GLOBAL.RESET", "GLOBAL.RESET_DONE", false, (EmptyCommand cmd) =>
@@ -131,9 +135,53 @@ namespace CoreCommand
                 Reset();
                 return new EmptyReply();
             });
+            RegisterCommand<Command.Global.SetProtocol, EmptyReply>                                     (Resolver.V1_0_0.Code, "GLOBAL.SET_PROTOCOL", "GLOBAL.PROTOCOL_SET", false, (Command.Global.SetProtocol cmd) =>
+            {
+                SerializeAction = Writers[cmd.Protocol];
+                DeserializeAction = Readers[cmd.Protocol];
+                return null;
+            });
+            RegisterCommand<Command.Global.GetEntity, Command.Global.GetEntity.Reply>                   (Resolver.V1_0_0.Code, "GLOBAL.GET_ENTITY", "GLOBAL.ENTITY_GET", false);
 
             //RESSOURCE
             RegisterCommand<Command.Ressource.SetDirectory, EmptyReply>(Resolver.V1_0_0.Code, "RESSOURCE.SET_DIRECTORY", "RESSOURCE.DIRECTORY_SET", false);
+        }
+
+        private static dynamic ReadBinaryValue(Stream stream, Type type)
+        {
+            return BinarySerializer.Serializer.Deserialize(type, stream);
+        }
+
+        private static void WriteBinaryValue(dynamic value, Stream stream)
+        {
+            BinarySerializer.Serializer.Serialize(value, stream);
+        }
+
+        private static dynamic ReadJsonValue(Stream stream, Type type)
+        {
+            byte[] data = new byte[4096];
+            StringBuilder builder = new StringBuilder();
+            int read = 0;
+
+            do
+            {
+                read = stream.Read(data, 0, 4096);
+
+                if (read > 0)
+                {
+                    builder.Append(Encoding.UTF8.GetString(data));
+                }
+            } while (read == 4096);
+
+            return JsonConvert.DeserializeObject(builder.ToString(), type);
+        }
+
+        private static void WriteJsonValue(dynamic value, Stream stream)
+        {
+            string val = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+            byte[] bdata = Encoding.UTF8.GetBytes(val);
+
+            stream.Write(bdata, 0, bdata.Length);
         }
 
         /// <summary>
@@ -164,11 +212,11 @@ namespace CoreCommand
         /// <returns>The deserialized message</returns>
         private T GetMessage<T>(Stream inStream, bool save)
         {
-            T message = BinarySerializer.Serializer.Deserialize<T>(inStream);//ProtoBuf.Serializer.DeserializeWithLengthPrefix<T>(inStream, _prefix);
+            T message = DeserializeAction(inStream, typeof(T));// BinarySerializer.Serializer.Deserialize<T>(inStream);//ProtoBuf.Serializer.DeserializeWithLengthPrefix<T>(inStream, _prefix);
 
             if (message == null)
             {
-                throw new InvalidDataException("ProtobufDispatcher.GetMessage<" + typeof(T) + ">: Unable to deserialize data");
+                throw new InvalidDataException($"Manager.GetMessage: Unable to deserialize data of type {typeof(T)}");
             }
             if (save)
                 _commands.Add(message);
@@ -190,7 +238,10 @@ namespace CoreCommand
             Console.WriteLine("==Manager.Command== : " + JsonConvert.SerializeObject(message, Formatting.Indented));
 
             if (outStream != null)
-                BinarySerializer.Serializer.Serialize(message, outStream);
+            {
+                SerializeAction(message, outStream);
+                //BinarySerializer.Serializer.Serialize(message, outStream);
+            }
 
             try
             {
@@ -200,7 +251,8 @@ namespace CoreCommand
 
                 if (outStream != null && reply != null)
                 {
-                    BinarySerializer.Serializer.Serialize(reply, outStream);
+                    SerializeAction(reply, outStream);
+                    //BinarySerializer.Serializer.Serialize(reply, outStream);
                 }
                 return true;
             }
@@ -210,7 +262,11 @@ namespace CoreCommand
                 Console.Error.Write(error.StackTrace);
 
                 if (outStream != null)
-                    BinarySerializer.Serializer.Serialize(error.Message, outStream);
+                {
+                    SerializeAction(error.Message, outStream);
+                    //BinarySerializer.Serializer.Serialize(error.Message, outStream);
+                }
+
                 if (save)
                 {
                     Console.Error.WriteLine("Removing command from file");
@@ -252,27 +308,6 @@ namespace CoreCommand
             {
                 throw new InvalidOperationException($"Couldn't save the project into {filename}");
             }
-
-            //var types = new List<string>();
-
-            //using (var stream = File.Create(filename))
-            //{
-            //    BinarySerializer.Serializer.Serialize(MagicNumber, stream);
-
-            //    foreach (var command in _commands)
-            //    {
-            //        if (!_commandsType.ContainsKey(command.GetType()))
-            //            throw new InvalidDataException("BinaryManager.SaveCommandsTo : Given command \"" + command.GetType().ToString() + "\" is not registered");
-            //        types.Add(_commandsType[command.GetType()]);
-            //    }
-
-            //    BinarySerializer.Serializer.Serialize(types, stream);
-
-            //    foreach (var command in _commands)
-            //    {
-            //        BinarySerializer.Serializer.Serialize(command, stream);
-            //    }
-            //}
         }
 
         ///<see cref="IManager.LoadCommandsFrom(string)"/>
@@ -329,13 +364,18 @@ namespace CoreCommand
             if (CallCommand(tosend, input, output))
             {
                 output.Position = 0;
-                BinarySerializer.Serializer.Deserialize<Command>(output);
-                reply = BinarySerializer.Serializer.Deserialize<Reply>(output);
+                DeserializeAction(output, typeof(Command));
+                //BinarySerializer.Serializer.Deserialize<Command>(output);
+                reply = DeserializeAction(output, typeof(Reply));
+                //reply = BinarySerializer.Serializer.Deserialize<Reply>(output);
                 return true;
             }
             output.Position = 0;
-            BinarySerializer.Serializer.Deserialize<Command>(output);
-            Console.Error.WriteLine(BinarySerializer.Serializer.Deserialize<String>(output));
+            DeserializeAction(output, typeof(Command));
+            //BinarySerializer.Serializer.Deserialize<Command>(output);
+            string error = DeserializeAction(output, typeof(string));
+            //BinarySerializer.Serializer.Deserialize<String>(output)
+            Console.Error.WriteLine(error);
             reply = default(Reply);
             return false;
         }
@@ -347,7 +387,8 @@ namespace CoreCommand
             if (output == null)
                 output = new MemoryStream();
 
-            BinarySerializer.Serializer.Serialize(tosend, input);
+            //BinarySerializer.Serializer.Serialize(tosend, input);
+            SerializeAction(tosend, input);
             input.Position = 0;
             if (!CallCommand(GetCommandName(tosend.GetType()), input, output))
             {

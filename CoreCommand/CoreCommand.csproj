@@ -63,12 +63,18 @@
   <ItemGroup>
     <Compile Include="Command\Class\AddAttribute.cs" />
     <Compile Include="Command\Class\GetAttributes.cs" />
+    <Compile Include="Command\Declarator\GetChildren.cs" />
+    <Compile Include="Command\Enum\GetValues.cs" />
+    <Compile Include="Command\Function\GetParams.cs" />
+    <Compile Include="Command\Function\GetReturns.cs" />
     <Compile Include="Command\Global\CreateProject.cs" />
     <Compile Include="Command\Class\SetFunctionAsMember.cs" />
     <Compile Include="Command\Function\Call.cs" />
     <Compile Include="Command\Enum\GetValue.cs" />
+    <Compile Include="Command\Global\GetEntity.cs" />
     <Compile Include="Command\Global\GetProjectEntities.cs" />
     <Compile Include="Command\Global\RemoveProject.cs" />
+    <Compile Include="Command\Global\SetProtocol.cs" />
     <Compile Include="Command\Ressource\SetDirectory.cs" />
     <Compile Include="Command\Variable\GetType.cs" />
     <Compile Include="Command\Variable\GetValue.cs" />

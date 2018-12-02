@@ -71,8 +71,9 @@ namespace CoreControl
 
             public string Name { get; set; }
 
-            public UInt32 Id { get; set; }
+            public uint Id { get; set; }
 
+            public VISIBILITY Visibility { get; set; }
         }
 
         public Dictionary<uint, IDefinition> Definitions { get; } = new Dictionary<uint, IDefinition>();
@@ -94,7 +95,7 @@ namespace CoreControl
         {
             //global context is in 0
             AddEntity(new CorePackage.Entity.Context());
-            IDeclarator root = GetDeclaratorOf(0);
+            IDeclarator root = GetDeclarator(0);
             (root as IDefinition).Name = "";
 
             //boolean type is in 1
@@ -292,7 +293,7 @@ namespace CoreControl
         /// <typeparam name="T">Type of the entity used in the declarators</typeparam>
         /// <param name="id">Identifier of the declarator to find</param>
         /// <returns>The declarator to find</returns>
-        public CorePackage.Global.IDeclarator GetDeclaratorOf(UInt32 id)
+        public CorePackage.Global.IDeclarator GetDeclarator(UInt32 id)
         {
             return FindDefinitionOfType<CorePackage.Global.IDeclarator>(id);
         }
@@ -312,7 +313,7 @@ namespace CoreControl
             Entity todecl = Create<Entity>();
 
             todecl.Name = name;
-            todecl.Parent = GetDeclaratorOf(containerID);
+            todecl.Parent = GetDeclarator(containerID);
             todecl.Parent.Declare(todecl, name, visibility);
             return LastID;
         }
@@ -326,7 +327,7 @@ namespace CoreControl
         /// <returns>List of all removed entities' id</returns>
         public List<UInt32> Remove(UInt32 containerID, string name)
         {
-            CorePackage.Global.IDefinition entity = GetDeclaratorOf(containerID).Pop(name);
+            CorePackage.Global.IDefinition entity = GetDeclarator(containerID).Pop(name);
             List<UInt32> removed = new List<uint> { GetEntityID(entity) };
 
             RemoveEntity(entity);
@@ -364,7 +365,7 @@ namespace CoreControl
         /// <param name="newName">Name to set to the entity</param>
         public void Rename(UInt32 containerID, string lastName, string newName)
         {
-            CorePackage.Global.IDeclarator decl = GetDeclaratorOf(containerID);
+            CorePackage.Global.IDeclarator decl = GetDeclarator(containerID);
             CorePackage.Global.IDefinition def = decl.Find(lastName);
 
             decl.Rename(lastName, newName);
@@ -380,8 +381,8 @@ namespace CoreControl
         /// <param name="name">Name of the entity to move</param>
         public void Move(UInt32 fromID, UInt32 toID, string name)
         {
-            CorePackage.Global.IDeclarator from = GetDeclaratorOf(fromID);
-            CorePackage.Global.IDeclarator to = GetDeclaratorOf(toID);
+            CorePackage.Global.IDeclarator from = GetDeclarator(fromID);
+            CorePackage.Global.IDeclarator to = GetDeclarator(toID);
 
             CorePackage.Global.AccessMode visibility = from.GetVisibilityOf(name);
             CorePackage.Global.IDefinition definition = from.Pop(name);
@@ -397,7 +398,7 @@ namespace CoreControl
         /// <param name="newVisi">New visibility to set</param>
         public void ChangeVisibility(UInt32 containerID, string name, VISIBILITY newVisi)
         {
-            GetDeclaratorOf(containerID).ChangeVisibility(name, (CorePackage.Global.AccessMode)newVisi);
+            GetDeclarator(containerID).ChangeVisibility(name, (CorePackage.Global.AccessMode)newVisi);
         }
         
         /// <summary>
@@ -408,7 +409,7 @@ namespace CoreControl
         /// <returns>List of declared entities</returns>
         public Dictionary<string, dynamic> GetEntitiesOfType(UInt32 containerID)
         {
-            Dictionary<string, CorePackage.Global.IDefinition> real = GetDeclaratorOf(containerID).GetEntities(CorePackage.Global.AccessMode.EXTERNAL);
+            Dictionary<string, CorePackage.Global.IDefinition> real = GetDeclarator(containerID).GetEntities(CorePackage.Global.AccessMode.EXTERNAL);
             Dictionary<string, dynamic> to_ret = new Dictionary<string, dynamic>();
 
             foreach (KeyValuePair<string, CorePackage.Global.IDefinition> curr in real)
@@ -535,7 +536,7 @@ namespace CoreControl
                     {
                         if (id.Key.GetType() == typeof(CorePackage.Entity.Context))
                         {
-                            var dec = GetDeclaratorOf(id.Value);
+                            var dec = GetDeclarator(id.Value);
                             // TODO : check acessibility
                             //if ((flags & EntityType.PUBLIC) != 0)
                                 ret.Add(id.Value);

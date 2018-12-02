@@ -139,7 +139,10 @@ namespace DNAIPluginPublisher.Model
 
         public void Dispose()
         {
-            File.Delete(_packageName);
+            if (_packageName != null)
+            {
+                File.Delete(_packageName);
+            }
         }
     }
 }

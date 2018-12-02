@@ -130,11 +130,23 @@ namespace CoreControl
             entity_factory.ChangeVisibility(containerID, name, newVisi);
         }
 
+        /// <summary>
+        /// Return the list of children ids
+        /// </summary>
+        /// <param name="container">Identifier of the container entity</param>
+        /// <returns>List of children id</returns>
+        public List<uint> GetChildren(uint container)
+        {
+            var decl = entity_factory.GetDeclarator(container);
+
+            return new List<uint>(decl.GetEntities().Values.Select(entity => entity_factory.GetEntityID(entity)));
+        }
+
         public List<EntityFactory.Entity> GetEntities(UInt32 containerID)
         {
             List<EntityFactory.Entity> toret = new List<EntityFactory.Entity>();
 
-            CorePackage.Global.IDeclarator decl = entity_factory.GetDeclaratorOf(containerID);
+            CorePackage.Global.IDeclarator decl = entity_factory.GetDeclarator(containerID);
 
             foreach (KeyValuePair<string, CorePackage.Global.IDefinition> curr in decl.GetEntities(CorePackage.Global.AccessMode.EXTERNAL))
             {
@@ -144,7 +156,8 @@ namespace CoreControl
                 {
                     Id = id,
                     Name = curr.Value.Name,
-                    Type = GetEntityType(id)
+                    Type = GetEntityType(id),
+                    Visibility = EntityFactory.VISIBILITY.PUBLIC
                 });
             }
             return toret;
@@ -228,6 +241,7 @@ namespace CoreControl
             //entity_factory.FindDefinitionOfType<CorePackage.Entity.Context>(contextID).SetParent(entity_factory.FindDefinitionOfType<CorePackage.Entity.Context>(parentID));
         }
 
+
         public dynamic InstantiateType(UInt32 dataTypeID)
         {
             return entity_factory.FindDefinitionOfType<CorePackage.Entity.DataType>(dataTypeID).Instantiate();
@@ -297,6 +311,18 @@ namespace CoreControl
         public List<String> GetEnumerationValues(UInt32 enumID)
         {
             return new List<String>(entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.EnumType>(enumID).Values.Keys);
+        }
+
+        public Dictionary<string, dynamic> GetFullEnumerationValues(uint enumId)
+        {
+            var entity = entity_factory.FindDefinitionOfType<CorePackage.Entity.Type.EnumType>(enumId);
+            var values = new Dictionary<string, dynamic>();
+
+            foreach (var valPair in entity.Values)
+            {
+                values[valPair.Key] = valPair.Value.Value;
+            }
+            return values;
         }
 
         /// <summary>
@@ -609,7 +635,8 @@ namespace CoreControl
             {
                 Id = id,
                 Name = def.Name,
-                Type = GetEntityType(id)
+                Type = GetEntityType(id),
+                Visibility = (EntityFactory.VISIBILITY)def.Parent.GetVisibilityOf(def.Name)
             };
         }
 

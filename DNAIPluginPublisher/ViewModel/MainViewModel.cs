@@ -105,6 +105,18 @@ namespace DNAIPluginPublisher.ViewModel
             Properties.Settings.Default.Save();
         }
 
+        public Task CreateUnityPackage(Packer packer, string directory, string path)
+        {
+            return Task.Run(() =>
+            {
+                if (!_cancelToken.IsCancellationRequested)
+                {
+                    packer.Pack(_provider.Items, directory, path);
+                    //System.Diagnostics.Process.Start("explorer.exe", "/select, \"" + Path.GetTempPath() + "\"");
+                }
+            });
+        }
+
         private RelayCommand<PasswordBox> _sendCommand;
 
         /// <summary>
@@ -124,13 +136,9 @@ namespace DNAIPluginPublisher.ViewModel
                         var path = Path.GetTempPath() + "DNAI.unityPackage";
                         var zipPath = Path.GetTempPath() + "DNAI.zip";
 
-                        Task.Run(() =>
+                        Task.Run(async () =>
                         {
-                            if (!_cancelToken.IsCancellationRequested)
-                            {
-                                packer.Pack(_provider.Items, Properties.Settings.Default.DirectoryPath, path);
-                                //System.Diagnostics.Process.Start("explorer.exe", "/select, \"" + Path.GetTempPath() + "\"");
-                            }
+                            await CreateUnityPackage(packer, Properties.Settings.Default.DirectoryPath, path);
 
                             if (!_cancelToken.IsCancellationRequested)
                             {
@@ -207,6 +215,33 @@ namespace DNAIPluginPublisher.ViewModel
                         var res = dialog.ShowDialog();
                         if (res == CommonFileDialogResult.Ok)
                             Properties.Settings.Default.DirectoryPath = dialog.FileName + "\\";
+                    }));
+            }
+        }
+
+        private RelayCommand _buildCommand;
+
+        public RelayCommand BuildCommand
+        {
+            get
+            {
+                return _buildCommand
+                    ?? (_buildCommand = new RelayCommand(
+                    () =>
+                    {
+                        var dialog = new CommonSaveFileDialog();
+
+                        dialog.Filters.Add(new CommonFileDialogFilter("Unity package", "*.unitypackage"));
+
+                        if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                        {
+                            var packer = new Packer();
+                            string path = dialog.FileName;
+
+                            CreateUnityPackage(
+                                packer, Path.GetDirectoryName(path),
+                                $"{Path.GetTempPath()}/{Path.GetFileName(path)}").ContinueWith(t => packer.Dispose());
+                        }
                     }));
             }
         }

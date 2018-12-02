@@ -129,8 +129,8 @@ namespace DNAIPluginPublisher.Model
                         Path = file.FullName,
                         Parent = parent
                     };
-                    if (!GalaSoft.MvvmLight.ViewModelBase.IsInDesignModeStatic)
-                        item.Icon = ToImageSource(Icon.ExtractAssociatedIcon(file.FullName));
+                    //if (!GalaSoft.MvvmLight.ViewModelBase.IsInDesignModeStatic)
+                        //item.Icon = ToImageSource(Icon.ExtractAssociatedIcon(file.FullName));
 
                     items.Add(item);
                 }

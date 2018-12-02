@@ -15,7 +15,19 @@ namespace CorePackage.Global
     {
         private static string LastModelLoaded { get; set; }
         private static Function Model { get; set; }
-        private static DeviceDescriptor _device = DeviceDescriptor.GPUDevice(0);
+        private static DeviceDescriptor _device;
+
+        static CNTKPredict()
+        {
+            try
+            {
+                _device = DeviceDescriptor.GPUDevice(0);
+            }
+            catch (Exception)
+            {
+                _device = DeviceDescriptor.CPUDevice;
+            }
+        }
 
         public static void LoadModel(string model)
         {
