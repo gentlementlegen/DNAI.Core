@@ -45,6 +45,9 @@ namespace Core.Plugin.Unity.Editor
         private static Texture _settingsTexture;
         private static Texture _logoTexture;
         private static GUIContent _settingsContent;
+        private Texture _mlTexture;
+        [SerializeField]
+        private bool _isMlEnabled;
 
         private Vector2 scrollPos;
         private bool _isCompiling;
@@ -137,6 +140,7 @@ namespace Core.Plugin.Unity.Editor
                 //_scriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
                 _scriptDrawer = new ScriptDrawer();
                 _scriptDrawer.OnEnable();
+                _isMlEnabled = _scriptDrawer.EditorSettings.IsMlEnabled;
             }
             if (_settingsDrawer == null)
             {
@@ -156,6 +160,7 @@ namespace Core.Plugin.Unity.Editor
         private void OnDisable()
         {
             //Debug.Log("[DulyEditor] On disable");
+            _scriptDrawer.EditorSettings.IsMlEnabled = _isMlEnabled;
             _scriptDrawer?.OnDisable();
             AssetDatabase.SaveAssets();
         }
@@ -240,15 +245,9 @@ namespace Core.Plugin.Unity.Editor
             }
 
             // Settings button
-            if (_settingsTexture == null)
-                _settingsTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "settings.png");
-            ct = new GUIContent(_settingsTexture, "Settings");
-            if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)))
-            {
-                //if (_settingsDrawer == null)
-                //_settingsDrawer = CreateInstance<SettingsDrawer>();
-                _settingsDrawer?.ShowAuxWindow();
-            }
+            DrawSettingsButton();
+
+            DrawMachineLearningButton();
 
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
@@ -266,6 +265,39 @@ namespace Core.Plugin.Unity.Editor
             //    EditorUtility.ClearProgressBar();
             //    //EditorGUIUtility.ExitGUI();
             //}
+        }
+
+        private void DrawSettingsButton()
+        {
+            // Settings button
+            if (_settingsTexture == null)
+                _settingsTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "settings.png");
+            var ct = new GUIContent(_settingsTexture, "Settings");
+            if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)))
+            {
+                //if (_settingsDrawer == null)
+                //_settingsDrawer = CreateInstance<SettingsDrawer>();
+                _settingsDrawer?.ShowAuxWindow();
+            }
+        }
+
+        private void DrawMachineLearningButton()
+        {
+            var oldBgColor = GUI.contentColor;
+
+            if (_mlTexture == null)
+                _mlTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "machine_learning.png");
+            var ct = new GUIContent(_mlTexture, "Machine Learning - " + (_isMlEnabled ? "Enabled" : "Disabled"));
+            GUI.contentColor = (_isMlEnabled ? new Color(0.24f, 0.69f, 0.42f) : new Color(1, 0.28f, 0.28f));
+            if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)))
+            {
+                _isMlEnabled = !_isMlEnabled;
+                if (_isMlEnabled)
+                {
+                    // TODO : Download the files
+                }
+            }
+            GUI.contentColor = oldBgColor;
         }
 
         #endregion Editor Drawing

@@ -20,6 +20,9 @@ namespace Core.Plugin.Unity.Drawing
         [SerializeField]
         [HideInInspector]
         public List<ScriptDrawer.ListAIHandler> listIA = new List<ScriptDrawer.ListAIHandler>();
+        [SerializeField]
+        [HideInInspector]
+        public bool IsMlEnabled;
     }
 
     /// <summary>
@@ -33,6 +36,8 @@ namespace Core.Plugin.Unity.Drawing
 
         public static GUIStyle preButton;
         public static GUIStyle miniButton;
+
+        internal EditorSettings EditorSettings { get => _editorSettings ?? LoadSettings(); private set => _editorSettings = value; }
 
         private ReorderableList rList;
 
@@ -299,7 +304,7 @@ namespace Core.Plugin.Unity.Drawing
         /// <summary>
         /// Retrieves the saved setting of the workspace.
         /// </summary>
-        private void LoadSettings()
+        private EditorSettings LoadSettings()
         {
             Directory.CreateDirectory(Constants.RootPath);
             _editorSettings = (EditorSettings)AssetDatabase.LoadAssetAtPath<EditorSettings>(Constants.RootPath + "DNAIEditor.asset");
@@ -315,6 +320,7 @@ namespace Core.Plugin.Unity.Drawing
             //Debug.Log("[Settings] list => " + _editorSettings.listIA.Count);
             AssetDatabase.SaveAssets();
             EditorUtility.SetDirty(_editorSettings);
+            return _editorSettings;
         }
 
         /// <summary>
