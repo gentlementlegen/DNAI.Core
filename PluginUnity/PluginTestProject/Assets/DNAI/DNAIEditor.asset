@@ -15,8 +15,9 @@ MonoBehaviour:
   - scriptManager:
       _fileName: 
       _filePath: Assets/DNAI/Scripts/DigitRecognizer.dnai
-      _filePathAbsolute: C:\Users\nicol\source\repos\Duly\PluginUnity\PluginTestProject\Assets\DNAI\Scripts\DigitRecognizer.dnai
+      _filePathAbsolute: D:\Documents\VisualStudio\DNAI\PluginUnity\PluginTestProject\Assets\DNAI\Scripts\DigitRecognizer.dnai
       _scriptName: DigitRecognizer
     AIName: 
     _scriptList:
     - recognize Digit
+  IsMlEnabled: 1
