@@ -62,6 +62,7 @@ namespace Core.Plugin.Unity.Editor
         public static DulyEditor Instance { get { return _window; } }
 
         private WebClient wc;
+        private string downloadStatus;
 
         public DulyEditor()
         {
@@ -358,9 +359,14 @@ namespace Core.Plugin.Unity.Editor
                         break;
                     case ML_STATUS.DOWNLOADING:
                         if (EditorUtility.DisplayCancelableProgressBar("Downloading Machine Learning Package",
-                            $"Downloading content {bytesReceived}/{bytesToreceive}MB ({percentage}%)", progress))
+                            downloadStatus, progress))
                         {
+                            downloadStatus = "Cancelling...";
                             wc?.CancelAsync();
+                        }
+                        else
+                        {
+                            downloadStatus = $"Downloading content {bytesReceived}/{bytesToreceive}MB ({percentage}%)";
                         }
                         break;
                     case ML_STATUS.INSTALLED:
@@ -413,8 +419,15 @@ namespace Core.Plugin.Unity.Editor
                 shouldCleanDependencies = true;
                 return;
             }
-            ZipFile.ExtractToDirectory(archivePath, Application.dataPath + "/../");
-            System.IO.File.Delete(archivePath);
+            try
+            {
+                ZipFile.ExtractToDirectory(archivePath, Application.dataPath + "/../");
+                System.IO.File.Delete(archivePath);
+            }
+            catch (IOException ioe)
+            {
+                Debug.LogWarning("On Machine Learning download: " + ioe.Message);
+            }
             shouldCloseProgress = true;
             ValidateDependencies();
             if (_mlStatus == ML_STATUS.NOT_INSTALLED)
