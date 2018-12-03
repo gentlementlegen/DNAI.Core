@@ -1,4 +1,8 @@
 ﻿using System;
+using System.IO.Compression;
+using System.Net;
+using System.Threading.Tasks;
+using Core.Plugin.Unity.API;
 using Core.Plugin.Unity.Drawing;
 using UnityEditor;
 using UnityEngine;
@@ -53,6 +57,8 @@ namespace Core.Plugin.Unity.Editor
         private bool _isCompiling;
 
         public static DulyEditor Instance { get { return _window; } }
+
+        private WebClient wc;
 
         public DulyEditor()
         {
@@ -134,6 +140,7 @@ namespace Core.Plugin.Unity.Editor
         private void OnEnable()
         {
             hideFlags = HideFlags.HideAndDontSave;
+
             //Debug.Log("[DulyEditor] On enable");
             if (_scriptDrawer == null)
             {
@@ -186,6 +193,7 @@ namespace Core.Plugin.Unity.Editor
 
         private int _currentScriptCount;
         private int _maxScriptCount;
+        private bool _isDownloading = false;
 
         /// <summary>
         /// Draws the build button to the window.
@@ -281,12 +289,20 @@ namespace Core.Plugin.Unity.Editor
             }
         }
 
+
         private void DrawMachineLearningButton()
         {
             var oldBgColor = GUI.contentColor;
 
             if (_mlTexture == null)
                 _mlTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "machine_learning.png");
+
+            if (wc == null)
+            {
+                wc = new WebClient();
+                wc.DownloadProgressChanged += Wc_DownloadProgressChanged;
+                wc.DownloadFileCompleted += Wc_DownloadFileCompleted;
+            }
             var ct = new GUIContent(_mlTexture, "Machine Learning - " + (_isMlEnabled ? "Enabled" : "Disabled"));
             GUI.contentColor = (_isMlEnabled ? new Color(0.24f, 0.69f, 0.42f) : new Color(1, 0.28f, 0.28f));
             if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)))
@@ -294,10 +310,66 @@ namespace Core.Plugin.Unity.Editor
                 _isMlEnabled = !_isMlEnabled;
                 if (_isMlEnabled)
                 {
-                    // TODO : Download the files
+                    try
+                    {
+                        wc.DownloadFileAsync(new Uri(Constants.MlUrl), Application.dataPath + "/../Dnai.ML.PluginDependencies.zip");
+                        _isDownloading = true;
+                    }
+                    catch (Exception e)
+                    {
+                        _isDownloading = false;
+                        EditorUtility.ClearProgressBar();
+                    }
+                    //finally
+                    //{
+                    //    _isDownloading = false;
+                    //    EditorUtility.ClearProgressBar();
+                    //}
+                }
+            }
+            if (_isDownloading)
+            {
+                if (EditorUtility.DisplayCancelableProgressBar("Downloading Machine Learning Package",
+                    $"Downloading content {bytesReceived}/{bytesToreceive}MB ({percentage}%)", progress))
+                {
+                    wc?.CancelAsync();
+                    _isDownloading = false;
+                    EditorUtility.ClearProgressBar();
                 }
             }
             GUI.contentColor = oldBgColor;
+        }
+
+        private float progress = 0;
+        private long bytesReceived;
+        private long bytesToreceive;
+        private int percentage;
+
+        private void Wc_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+            {
+                wc.Dispose();
+                wc = null;
+                return;
+            }
+            _isDownloading = false;
+            ZipFile.ExtractToDirectory(Application.dataPath + "/../Dnai.ML.PluginDependencies.zip", Application.dataPath + "../");
+            EditorUtility.ClearProgressBar();
+            // TODO : delete zip
+        }
+
+        private void Wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            progress = e.ProgressPercentage / 100f;
+            bytesReceived = ConvertBytesToMegabytes(e.BytesReceived);
+            bytesToreceive = ConvertBytesToMegabytes(e.TotalBytesToReceive);
+            percentage = e.ProgressPercentage;
+        }
+
+        static long ConvertBytesToMegabytes(long bytes)
+        {
+            return (long)((bytes / 1024f) / 1024f);
         }
 
         #endregion Editor Drawing

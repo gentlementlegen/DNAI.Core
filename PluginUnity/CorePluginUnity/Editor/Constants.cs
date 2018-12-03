@@ -9,5 +9,7 @@
         public const string ResourcesPath = RootPath + "Resources/";
         public const string CompiledPath = RootPath + "Compiled/";
         public const string PluginsPath = RootPath + "Plugins/";
+        public const string UnityProjectRootPath = "./";
+        public const string MlUrl = "http://github.com/Nicolas-Constanty/Dnai.ML.PluginDependencies/releases/download/v1.0/Dnai.ML.PluginDependencies.zip";
     }
 }

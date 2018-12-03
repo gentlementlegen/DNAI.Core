@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="API\Accessor.cs" />
     <Compile Include="API\ApiAcces.cs" />
+    <Compile Include="API\HttpDownloadFileWithProgress.cs" />
     <Compile Include="API\Objects.cs" />
     <Compile Include="Context\UnitySynchronizationContext.cs" />
     <Compile Include="Context\UnityTask.cs" />
