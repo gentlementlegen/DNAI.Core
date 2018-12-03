@@ -51,7 +51,7 @@ namespace CorePackage.Global
             }
         }
 
-        public static Matrix<double> Predict(Matrix<double> inputs, string shape)
+        public static Matrix<double> Predict(Matrix<double> inputs)
         {
             if (Model == null) return new DenseMatrix(0, 0);
 
