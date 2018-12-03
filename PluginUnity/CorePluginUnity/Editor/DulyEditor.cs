@@ -1,11 +1,14 @@
 ﻿using System;
 using System.IO.Compression;
 using System.Net;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
-using Core.Plugin.Unity.API;
 using Core.Plugin.Unity.Drawing;
 using UnityEditor;
 using UnityEngine;
+using File = Core.Plugin.Unity.API.File;
+using System.IO;
+using System.Linq;
 
 /// <summary>
 /// Duly editor.
@@ -51,7 +54,7 @@ namespace Core.Plugin.Unity.Editor
         private static GUIContent _settingsContent;
         private Texture _mlTexture;
         [SerializeField]
-        private bool _isMlEnabled;
+        private bool _isMlDownloading;
 
         private Vector2 scrollPos;
         private bool _isCompiling;
@@ -147,7 +150,7 @@ namespace Core.Plugin.Unity.Editor
                 //_scriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
                 _scriptDrawer = new ScriptDrawer();
                 _scriptDrawer.OnEnable();
-                _isMlEnabled = _scriptDrawer.EditorSettings.IsMlEnabled;
+                _isMlDownloading = _scriptDrawer.EditorSettings.IsMlEnabled;
             }
             if (_settingsDrawer == null)
             {
@@ -167,7 +170,7 @@ namespace Core.Plugin.Unity.Editor
         private void OnDisable()
         {
             //Debug.Log("[DulyEditor] On disable");
-            _scriptDrawer.EditorSettings.IsMlEnabled = _isMlEnabled;
+            _scriptDrawer.EditorSettings.IsMlEnabled = _isMlDownloading;
             _scriptDrawer?.OnDisable();
             AssetDatabase.SaveAssets();
         }
@@ -193,7 +196,6 @@ namespace Core.Plugin.Unity.Editor
 
         private int _currentScriptCount;
         private int _maxScriptCount;
-        private bool _isDownloading = false;
 
         /// <summary>
         /// Draws the build button to the window.
@@ -292,8 +294,7 @@ namespace Core.Plugin.Unity.Editor
 
         private void DrawMachineLearningButton()
         {
-            var oldBgColor = GUI.contentColor;
-
+            var old = GUI.contentColor;
             if (_mlTexture == null)
                 _mlTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "machine_learning.png");
 
@@ -302,61 +303,193 @@ namespace Core.Plugin.Unity.Editor
                 wc = new WebClient();
                 wc.DownloadProgressChanged += Wc_DownloadProgressChanged;
                 wc.DownloadFileCompleted += Wc_DownloadFileCompleted;
+                dependenciesPath = Application.dataPath;
+                mlStatusInit = false;
+                Task.Run(() => ValidateDependencies());
             }
-            var ct = new GUIContent(_mlTexture, "Machine Learning - " + (_isMlEnabled ? "Enabled" : "Disabled"));
-            GUI.contentColor = (_isMlEnabled ? new Color(0.24f, 0.69f, 0.42f) : new Color(1, 0.28f, 0.28f));
-            if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)))
+            var ct = new GUIContent(_mlTexture, "Machine Learning - " + (_mlStatus == ML_STATUS.INSTALLED ? "Enabled" : "Disabled"));
+            GUI.contentColor = _mlStatusColor[(int) _mlStatus];
+            if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)) && mlStatusInit)
             {
-                _isMlEnabled = !_isMlEnabled;
-                if (_isMlEnabled)
+                switch (_mlStatus)
                 {
-                    try
-                    {
-                        wc.DownloadFileAsync(new Uri(Constants.MlUrl), Application.dataPath + "/../Dnai.ML.PluginDependencies.zip");
-                        _isDownloading = true;
-                    }
-                    catch (Exception e)
-                    {
-                        _isDownloading = false;
-                        EditorUtility.ClearProgressBar();
-                    }
-                    //finally
-                    //{
-                    //    _isDownloading = false;
-                    //    EditorUtility.ClearProgressBar();
-                    //}
+                    case ML_STATUS.NOT_INSTALLED:
+                        try
+                        {
+                            wc.DownloadFileAsync(new Uri(Constants.MlUrl), Application.dataPath + "/../Dnai.ML.PluginDependencies.zip");
+                            _mlStatus = ML_STATUS.DOWNLOADING;
+                        }
+                        catch (Exception e)
+                        {
+                            _mlStatus = ML_STATUS.NOT_INSTALLED;
+                            shouldCloseProgress = true;
+                            Debug.Log(e.Message);
+                        }
+                        break;
+                    case ML_STATUS.DOWNLOADING:
+                        break;
+                    case ML_STATUS.INSTALLED:
+                        shouldCleanDependencies = true;
+                        break;
+                    case ML_STATUS.UNINSTALLING:
+                        break;
+                    default:
+                        break;
                 }
             }
-            if (_isDownloading)
+
+
+            Debug.Log(_mlStatus.ToString());
+            if (shouldCloseProgress)
             {
-                if (EditorUtility.DisplayCancelableProgressBar("Downloading Machine Learning Package",
-                    $"Downloading content {bytesReceived}/{bytesToreceive}MB ({percentage}%)", progress))
+                shouldCloseProgress = false;
+                EditorUtility.ClearProgressBar();
+            }
+            else if (shouldCleanDependencies)
+            {
+                shouldCleanDependencies = false;
+                Task.Run(() => CleanDependencies());
+            }
+            else
+            {
+                switch (_mlStatus)
                 {
-                    wc?.CancelAsync();
-                    _isDownloading = false;
-                    EditorUtility.ClearProgressBar();
+                    case ML_STATUS.NOT_INSTALLED:
+                        break;
+                    case ML_STATUS.DOWNLOADING:
+                        if (EditorUtility.DisplayCancelableProgressBar("Downloading Machine Learning Package",
+                            $"Downloading content {bytesReceived}/{bytesToreceive}MB ({percentage}%)", progress))
+                        {
+                            wc?.CancelAsync();
+                        }
+                        break;
+                    case ML_STATUS.INSTALLED:
+                        break;
+                    case ML_STATUS.UNINSTALLING:
+                        EditorUtility.DisplayProgressBar("Uninstalling Machine Learning Package",
+                            $"Uninstalling content {bytesReceived}/{bytesToreceive} Files ({percentage}%)", progress);
+                        break;
+                    default:
+                        break;
                 }
             }
-            GUI.contentColor = oldBgColor;
+
+            GUI.contentColor = old;
         }
 
         private float progress = 0;
         private long bytesReceived;
         private long bytesToreceive;
         private int percentage;
+        private bool mlStatusInit = false;
+        private string dependenciesPath;
+        private bool shouldCloseProgress = false;
+        private bool shouldCleanDependencies = false;
+
+        private enum ML_STATUS
+        {
+            NOT_INSTALLED = 0,
+            DOWNLOADING,
+            INSTALLED,
+            UNINSTALLING
+        };
+
+        private ML_STATUS _mlStatus = ML_STATUS.NOT_INSTALLED;
+
+        private readonly Color[] _mlStatusColor = {
+            new Color(1, 0.28f, 0.28f), //RED
+            new Color(1f, 0.76f, 0.28f), //ORANGE
+            new Color(0.24f, 0.69f, 0.42f), //GREEN
+            new Color(1, 1f, 0.28f) //YELLOW
+        };
 
         private void Wc_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
+            var archivePath = Application.dataPath + "/../Dnai.ML.PluginDependencies.zip";
             if (e.Cancelled)
             {
                 wc.Dispose();
                 wc = null;
+                shouldCleanDependencies = true;
                 return;
             }
-            _isDownloading = false;
-            ZipFile.ExtractToDirectory(Application.dataPath + "/../Dnai.ML.PluginDependencies.zip", Application.dataPath + "../");
-            EditorUtility.ClearProgressBar();
-            // TODO : delete zip
+            ZipFile.ExtractToDirectory(archivePath, Application.dataPath + "/../");
+            System.IO.File.Delete(archivePath);
+            shouldCloseProgress = true;
+            ValidateDependencies();
+            if (_mlStatus == ML_STATUS.NOT_INSTALLED)
+                shouldCleanDependencies = true;
+        }
+
+        private void CleanDependencies()
+        {
+            _mlStatus = ML_STATUS.UNINSTALLING;
+            var archivePath = dependenciesPath + "/../Dnai.ML.PluginDependencies.zip";
+            if (System.IO.File.Exists(archivePath))
+                System.IO.File.Delete(archivePath);
+            var dependencies = System.IO.File.ReadAllLines(Constants.PluginsPath + "/dependencies.txt");
+            var depPath = dependenciesPath + "/../";
+            int count = 0;
+            bytesToreceive = dependencies.Count();
+            foreach (var depName in dependencies)
+            {
+                bytesReceived = count;
+                progress = (float)count++ / dependencies.Count();
+                percentage = (int)(progress * 100f);
+                var md5 = depPath + "checksum_" + depName + ".md5";
+                var dll = depPath + depName + ".dll";
+                if (System.IO.File.Exists(dll))
+                    System.IO.File.Delete(dll);
+                if (System.IO.File.Exists(md5))
+                    System.IO.File.Delete(md5);
+            }
+            bytesReceived = count;
+            progress = 1f;
+            percentage = 100;
+            _mlStatus = ML_STATUS.NOT_INSTALLED;
+            shouldCloseProgress = true;
+        }
+
+        private void ValidateDependencies()
+        {
+            try
+            {
+                using (var md5 = MD5.Create())
+                {
+                    var dependencies = System.IO.File.ReadAllLines(Constants.PluginsPath + "/dependencies.txt");
+                    var depPath = dependenciesPath + "/../";
+                    foreach (var depName in dependencies)
+                    {
+                        var dll = depPath + depName + ".dll";
+                        var md5Name = depPath + "checksum_" + depName + ".md5";
+                        if (!System.IO.File.Exists(dll) || !System.IO.File.Exists(md5Name))
+                        {
+                            _mlStatus = ML_STATUS.NOT_INSTALLED;
+                            mlStatusInit = true;
+                            return;
+                        }
+
+                        using (var streamDll = System.IO.File.OpenRead(dll))
+                        {
+                            var bytes = System.IO.File.ReadAllBytes(md5Name);
+                            var dllBytes = md5.ComputeHash(streamDll);
+                            if (bytes.SequenceEqual(dllBytes)) continue;
+                            _mlStatus = ML_STATUS.NOT_INSTALLED;
+                            mlStatusInit = true;
+                            return;
+                        }
+
+                    }
+                }
+                _mlStatus = ML_STATUS.INSTALLED;
+                mlStatusInit = true;
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+                _mlStatus = ML_STATUS.NOT_INSTALLED;
+                mlStatusInit = true;
+            }
         }
 
         private void Wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)

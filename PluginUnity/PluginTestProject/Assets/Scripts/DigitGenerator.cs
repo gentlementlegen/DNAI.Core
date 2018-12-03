@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using DNAI.DigitRecognizer;
@@ -60,6 +64,7 @@ public class DigitGenerator : DigitRecognizer
 
     public void NewImage()
     {
+
         int id = random.Next(0, SAMPLE_SIZE);
 
         RecognizeImage(digitImages[id]);
@@ -107,14 +112,14 @@ public class DigitGenerator : DigitRecognizer
             displayedTextUI.text = "";
             loadImage.enabled = true;
 
-            ExecuterecognizeDigit();
-            OnImageRecognized();
+            //ExecuterecognizeDigit();
+            //OnImageRecognized();
 
-            //RecognitionAction = () =>
-            //{
-            //    ExecuterecognizeDigit();
-            //    OnResultChanged = () => OnImageRecognized();
-            //};
+            RecognitionAction = () =>
+            {
+                ExecuterecognizeDigit();
+                OnResultChanged = () => OnImageRecognized();
+            };
         }
     }
 }
