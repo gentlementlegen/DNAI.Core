@@ -339,7 +339,7 @@ namespace Core.Plugin.Unity.Editor
             }
 
 
-            Debug.Log(_mlStatus.ToString());
+            //Debug.Log(_mlStatus.ToString());
             if (shouldCloseProgress)
             {
                 shouldCloseProgress = false;
