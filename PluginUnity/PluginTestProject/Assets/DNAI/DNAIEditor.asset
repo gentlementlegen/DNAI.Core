@@ -20,4 +20,3 @@ MonoBehaviour:
     AIName: 
     _scriptList:
     - recognize Digit
-  IsMlEnabled: 1
