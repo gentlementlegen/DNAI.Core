@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
@@ -20,6 +21,7 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
         private bool shouldCloseProgress = false;
         private bool shouldCleanDependencies = false;
         private WebClient wc;
+        private string downloadStatus;
 
         private DulyEditor.ML_STATUS _mlStatus = DulyEditor.ML_STATUS.NOT_INSTALLED;
 
@@ -101,9 +103,14 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
                         break;
                     case DulyEditor.ML_STATUS.DOWNLOADING:
                         if (EditorUtility.DisplayCancelableProgressBar("Downloading Machine Learning Package",
-                            $"Downloading content {bytesReceived}/{bytesToreceive}MB ({percentage}%)", progress))
+                            downloadStatus, progress))
                         {
+                            downloadStatus = "Cancelling...";
                             wc?.CancelAsync();
+                        }
+                        else
+                        {
+                            downloadStatus = $"Downloading content {bytesReceived}/{bytesToreceive}MB ({percentage}%)";
                         }
                         break;
                     case DulyEditor.ML_STATUS.INSTALLED:
@@ -131,8 +138,15 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
                 shouldCleanDependencies = true;
                 return;
             }
-            ZipFile.ExtractToDirectory(archivePath, Application.dataPath + "/../");
-            System.IO.File.Delete(archivePath);
+            try
+            {
+                ZipFile.ExtractToDirectory(archivePath, Application.dataPath + "/../");
+                System.IO.File.Delete(archivePath);
+            }
+            catch (IOException ioe)
+            {
+                Debug.LogWarning("On Machine Learning download: " + ioe.Message);
+            }
             shouldCloseProgress = true;
             ValidateDependencies();
             if (_mlStatus == DulyEditor.ML_STATUS.NOT_INSTALLED)

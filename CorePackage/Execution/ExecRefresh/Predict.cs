@@ -13,29 +13,17 @@ namespace CorePackage.Execution
         public Predict()
         {
             AddInput("model", new Entity.Variable(Entity.Type.Resource.Instance));
-            AddInput("weights", new Entity.Variable(Entity.Type.Resource.Instance));
             AddInput("inputs", new Entity.Variable(Entity.Type.Matrix.Instance));
-            AddInput("shape", new Entity.Variable(Entity.Type.Scalar.String));
             AddOutput("outputs", new Entity.Variable(Entity.Type.Matrix.Instance));
-
-            //Global.KerasService.Init();
-            SetInputValue("shape", "");
         }
 
         public override void Execute()
         {
             dynamic model = GetInputValue("model");
-            dynamic weights = GetInputValue("weights");
             dynamic inputs = GetInputValue("inputs");
-            dynamic shape = GetInputValue("shape");
-
-            if (String.IsNullOrEmpty(shape))
-            {
-                shape = $"({inputs.RowCount},{inputs.ColumnCount})";
-            }
 
             Global.CNTKPredict.LoadModel(model);
-            SetOutputValue("outputs", Global.CNTKPredict.Predict(inputs, shape));
+            SetOutputValue("outputs", Global.CNTKPredict.Predict(inputs));
 
             //Global.KerasService.LoadModel(model);
             //Global.KerasService.LoadWeights(weights);

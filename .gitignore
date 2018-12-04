@@ -279,3 +279,4 @@ PluginUnity/PluginTestProject/DigitRecognizer_Data/
 
 PluginUnity/PluginTestProject/DigitRecognizer\.exe
 /PluginUnity/PluginTestProject/Assets/DNAI/Scripts/.Keras_loaded_model
+/PluginUnity/PluginTestProject/*.md5
