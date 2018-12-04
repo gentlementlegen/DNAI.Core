@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Core.Plugin.Unity.Editor.Components.Buttons
 {
-    class SettingsButton : Button
+    class SettingsButton : ToolBarButton
     {
         public SettingsButton() : base("Settings", AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "settings.png"))
         {

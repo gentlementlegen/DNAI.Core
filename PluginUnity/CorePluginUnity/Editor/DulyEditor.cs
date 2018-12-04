@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using Core.Plugin.Unity.Editor.Components;
 using Core.Plugin.Unity.Editor.Components.Buttons;
+using Debug = UnityEngine.Debug;
 
 /// <summary>
 /// Duly editor.
@@ -61,6 +62,7 @@ namespace Core.Plugin.Unity.Editor
         public bool IsCompiling { get; set; }
 
         public static DulyEditor Instance { get { return _window; } }
+        public static GUISkin Skin;
 
 
         private Background _background;
@@ -106,6 +108,7 @@ namespace Core.Plugin.Unity.Editor
         [MenuItem("Window/DNAI &d")]
         public static void ShowWindow()
         {
+            Debug.Log("Show");
             if (_window == null)
             {
                 _window = (DulyEditor)EditorWindow.GetWindow(typeof(DulyEditor));
@@ -115,14 +118,19 @@ namespace Core.Plugin.Unity.Editor
             }
             else
             {
-                _window.Close();
-                //_window.Focus();
+                //_window.Close();
+                _window.Focus();
             }
         }
 
         private void OnGUI()
         {
+
             GUI.enabled = !EditorApplication.isPlaying;
+            if (Skin == null)
+                Skin = AssetDatabase.LoadAssetAtPath<GUISkin>(Constants.ResourcesPath + "DNAI_EditorSkin.guiskin");
+            var old = GUI.skin;
+            GUI.skin = DulyEditor.Skin;
 
             if (_settingsContent == null)
                 _settingsContent = EditorGUIUtility.IconContent("SettingsIcon", "|Settings");
@@ -145,6 +153,7 @@ namespace Core.Plugin.Unity.Editor
             DrawContent();
 
             GUILayout.EndScrollView();
+            GUI.skin = old;
         }
 
         private void OnEnable()
@@ -211,21 +220,10 @@ namespace Core.Plugin.Unity.Editor
 
             GUILayout.MaxWidth(400f);
 
-            var bc = GUI.backgroundColor;
-            var cc = GUI.contentColor;
-            var tc = GUI.skin.label.normal.textColor;
-            GUI.backgroundColor = BackgroundColor;
-            GUI.contentColor = FontColor;
-            GUI.skin.label.normal.textColor = FontColor;
-
             ScriptDrawer?.Draw();
             EditorGUILayout.Space();
             _onlineScriptDrawer?.Draw();
             EditorGUI.EndDisabledGroup();
-
-            GUI.backgroundColor = bc;
-            GUI.contentColor = cc;
-            GUI.skin.label.normal.textColor = tc;
         }
 
         /// <summary>

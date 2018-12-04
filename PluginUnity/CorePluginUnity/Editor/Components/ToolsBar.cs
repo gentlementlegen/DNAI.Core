@@ -9,7 +9,7 @@ namespace Core.Plugin.Unity.Editor.Components
 {
     class ToolsBar : IDrawable
     {
-        private readonly List<Button> _buttons = new List<Button>();
+        private readonly List<ToolBarButton> _buttons = new List<ToolBarButton>();
         private readonly int _spacing;
 
         public ToolsBar(int spacing = 0)
@@ -17,7 +17,7 @@ namespace Core.Plugin.Unity.Editor.Components
             _spacing = spacing;
         }
 
-        public void AppendButton(Button button)
+        public void AppendButton(ToolBarButton button)
         {
             if (button == null) return;
             _buttons.Add(button);

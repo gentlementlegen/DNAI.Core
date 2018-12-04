@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Core.Plugin.Unity.Editor.Components.Buttons
 {
-    class BuildButton : Button
+    class BuildButton : ToolBarButton
     {
         private readonly DulyEditor _editor;
         private int _maxScriptCount;

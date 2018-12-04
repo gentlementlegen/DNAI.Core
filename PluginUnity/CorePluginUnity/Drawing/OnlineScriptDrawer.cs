@@ -73,10 +73,9 @@ namespace Core.Plugin.Unity.Drawing
             Rect plusRect = new Rect(rect.xMax - 8f - 25f, rect.y, 25f, 13f);
 
             string str = _fileList[index].Title;
-            GUI.Label(labelRect, str, DulyEditor.Instance.ScriptDrawer.WhiteText);
+            GUI.Label(labelRect, str);
 
-            var cc = GUI.contentColor;
-            GUI.contentColor = DulyEditor.FontColor;
+
             if (GUI.Button(plusRect, iconToolbarPlus, preButton))
             {
                 UnityTask.Run(async () =>
@@ -94,28 +93,23 @@ namespace Core.Plugin.Unity.Drawing
                 });
             }
 
-            GUI.contentColor = cc;
-
             if (index + 1 < _list.count)
                 DrawingHelper.Separator(new Rect(labelRect.x, labelRect.y + EditorGUIUtility.singleLineHeight + 1.5f, rect.width, 1.2f));
         }
 
         private void DrawHeaderCallback(Rect rect)
         {
-            EditorGUI.LabelField(rect, "Online AIs", DulyEditor.Instance.ScriptDrawer.WhiteText);
+            EditorGUI.LabelField(rect, "Online AIs");
             if (_refreshTexture == null)
                 _refreshTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "refresh.png");
             GUIContent gc = new GUIContent(_refreshTexture, "Refresh");
             GUIStyle skin = new GUIStyle();
             skin.normal.textColor = DulyEditor.FontColor;
-            var cc = GUI.contentColor;
-            GUI.contentColor = DulyEditor.FontColor;
+
             if (GUI.Button(new Rect(rect.xMax - 15, rect.y + 1, 14, 14), gc, skin))
             {
                 FetchFiles();
             }
-
-            GUI.contentColor = cc;
         }
 
         /// <summary>
@@ -132,6 +126,7 @@ namespace Core.Plugin.Unity.Drawing
             GUILayout.FlexibleSpace();
 
             GUILayout.BeginVertical(GUILayout.MaxWidth(Mathf.Clamp(Screen.width - 10, 200f, 600f)));
+
             _list.DoLayoutList();
             GUILayout.EndVertical();
 

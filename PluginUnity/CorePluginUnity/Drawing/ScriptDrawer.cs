@@ -52,11 +52,6 @@ namespace Core.Plugin.Unity.Drawing
         public bool ShouldDraw
         { get; set; }
 
-        public GUIStyle WhiteText = new GUIStyle()
-        {
-            normal = { textColor = DulyEditor.FontColor }
-        };
-
         /// <summary>
         /// Nested class for the IA list.
         /// Contains a ScriptManager and a Reordarable list to draw.
@@ -155,7 +150,7 @@ namespace Core.Plugin.Unity.Drawing
             private void DrawHeaderInternal(Rect rect)
             {
                 Rect refreshRect = new Rect(rect.x + rect.xMax - 25f, rect.y, 15f, 15f);
-                EditorGUI.LabelField(rect, "IA List", DulyEditor.Instance.ScriptDrawer.WhiteText);
+                EditorGUI.LabelField(rect, "IA List");
 
                 //subScriptList.list = scriptManager.iaList;
                 SubScriptList.list = scriptManager.FunctionList;
@@ -354,7 +349,7 @@ namespace Core.Plugin.Unity.Drawing
         /// <param name="rect">Rect.</param>
         private void DrawHeaderInternal(Rect rect)
         {
-            EditorGUI.LabelField(rect, "Loaded Scripts", DulyEditor.Instance.ScriptDrawer.WhiteText);
+            EditorGUI.LabelField(rect, "Loaded Scripts");
         }
 
         readonly GUIStyle _titleStyle = new GUIStyle()

@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace Core.Plugin.Unity.Editor.Components.Buttons
 {
-    class MLButton : Button
+    class MLButton : ToolBarButton
     {
         private float progress = 0;
         private long bytesReceived;
@@ -51,8 +51,6 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
             }
             var ct = new GUIContent(texture, "Machine Learning - " + (_mlStatus == DulyEditor.ML_STATUS.INSTALLED ? "Enabled" : "Disabled"));
             GUI.contentColor = _mlStatusColor[(int)_mlStatus];
-            var bc = GUI.backgroundColor;
-            GUI.backgroundColor = _backgroundColor;
             if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)) && mlStatusInit)
             {
                 switch (_mlStatus)
@@ -81,8 +79,6 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
                         break;
                 }
             }
-
-            GUI.backgroundColor = bc;
 
             //Debug.Log(_mlStatus.ToString());
             if (shouldCloseProgress)
