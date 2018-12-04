@@ -127,6 +127,7 @@
       <DependentUpon>GenerateFunctionTemplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Generator\TemplateReader.cs" />
+    <Compile Include="PostProcessActions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

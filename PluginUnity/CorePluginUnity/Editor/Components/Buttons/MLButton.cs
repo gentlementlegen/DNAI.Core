@@ -16,14 +16,14 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
         private long bytesReceived;
         private long bytesToreceive;
         private int percentage;
-        private bool mlStatusInit = false;
-        private string dependenciesPath;
+        private static bool mlStatusInit = false;
+        private static string dependenciesPath;
         private bool shouldCloseProgress = false;
         private bool shouldCleanDependencies = false;
         private WebClient wc;
         private string downloadStatus;
 
-        private DulyEditor.ML_STATUS _mlStatus = DulyEditor.ML_STATUS.NOT_INSTALLED;
+        private static DulyEditor.ML_STATUS _mlStatus = DulyEditor.ML_STATUS.NOT_INSTALLED;
 
         private readonly Color[] _mlStatusColor = {
             new Color(1, 0.28f, 0.28f), //RED
@@ -182,13 +182,24 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
             shouldCloseProgress = true;
         }
 
-        private void ValidateDependencies()
+        public static string[] GetDependencyList()
+        {
+            return File.ReadAllLines(Constants.PluginsPath + "/dependencies.txt");
+        }
+
+        public static bool ValidateDependenciesStatus()
+        {
+            ValidateDependencies();
+            return _mlStatus == DulyEditor.ML_STATUS.INSTALLED;
+        }
+
+        private static void ValidateDependencies()
         {
             try
             {
                 using (var md5 = MD5.Create())
                 {
-                    var dependencies = System.IO.File.ReadAllLines(Constants.PluginsPath + "/dependencies.txt");
+                    var dependencies = GetDependencyList();
                     var depPath = dependenciesPath + "/../";
                     foreach (var depName in dependencies)
                     {
@@ -218,7 +229,7 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
             }
             catch (Exception e)
             {
-                Debug.Log(e.Message);
+                Debug.LogError(e.Message);
                 _mlStatus = DulyEditor.ML_STATUS.NOT_INSTALLED;
                 mlStatusInit = true;
             }
