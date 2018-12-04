@@ -20,9 +20,9 @@ namespace Core.Plugin.Unity.Drawing
         [SerializeField]
         [HideInInspector]
         public List<ScriptDrawer.ListAIHandler> listIA = new List<ScriptDrawer.ListAIHandler>();
-        [SerializeField]
-        [HideInInspector]
-        public bool IsMlEnabled;
+        //[SerializeField]
+        //[HideInInspector]
+        //public bool IsMlEnabled;
     }
 
     /// <summary>
@@ -51,6 +51,11 @@ namespace Core.Plugin.Unity.Drawing
         /// Should the ScriptDrawer be drawing ?
         public bool ShouldDraw
         { get; set; }
+
+        public GUIStyle WhiteText = new GUIStyle()
+        {
+            normal = { textColor = DulyEditor.FontColor }
+        };
 
         /// <summary>
         /// Nested class for the IA list.
@@ -150,7 +155,7 @@ namespace Core.Plugin.Unity.Drawing
             private void DrawHeaderInternal(Rect rect)
             {
                 Rect refreshRect = new Rect(rect.x + rect.xMax - 25f, rect.y, 15f, 15f);
-                EditorGUI.LabelField(rect, "IA List");
+                EditorGUI.LabelField(rect, "IA List", DulyEditor.Instance.ScriptDrawer.WhiteText);
 
                 //subScriptList.list = scriptManager.iaList;
                 SubScriptList.list = scriptManager.FunctionList;
@@ -195,6 +200,7 @@ namespace Core.Plugin.Unity.Drawing
 
                 //string str = scriptManager.iaList[index].Key;
                 string str = scriptManager.FunctionList[index];
+
                 GUI.Label(labelRect, str);
 
                 //_selectedScripts[index] = GUI.Toggle(plusRect, _selectedScripts[index], "");
@@ -333,7 +339,7 @@ namespace Core.Plugin.Unity.Drawing
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
 
-                GUILayout.BeginVertical(GUILayout.MaxWidth(Screen.width - 10));
+                GUILayout.BeginVertical(GUILayout.MaxWidth(Mathf.Clamp(Screen.width - 10, 200f, 600f)));
                 rList.DoLayoutList();
                 GUILayout.EndVertical();
 
@@ -348,13 +354,14 @@ namespace Core.Plugin.Unity.Drawing
         /// <param name="rect">Rect.</param>
         private void DrawHeaderInternal(Rect rect)
         {
-            EditorGUI.LabelField(rect, "Loaded Scripts");
+            EditorGUI.LabelField(rect, "Loaded Scripts", DulyEditor.Instance.ScriptDrawer.WhiteText);
         }
 
         readonly GUIStyle _titleStyle = new GUIStyle()
         {
             fontSize = 20,
-            fontStyle = FontStyle.BoldAndItalic
+            fontStyle = FontStyle.BoldAndItalic,
+            normal = { textColor = DulyEditor.FontColor }
         };
 
         /// <summary>

@@ -9,6 +9,8 @@ using UnityEngine;
 using File = Core.Plugin.Unity.API.File;
 using System.IO;
 using System.Linq;
+using Core.Plugin.Unity.Editor.Components;
+using Core.Plugin.Unity.Editor.Components.Buttons;
 
 /// <summary>
 /// Duly editor.
@@ -43,29 +45,42 @@ namespace Core.Plugin.Unity.Editor
     /// </summary>
     public class DulyEditor : EditorWindow
     {
-        private ScriptDrawer _scriptDrawer;
+        public ScriptDrawer ScriptDrawer { get; set; }
+        public static Color FontColor = new Color(0.95f, 0.95f, 0.95f);
+        public static Color BackgroundColor = new Color(0.259f, 0.259f, 0.259f);
+
         private OnlineScriptDrawer _onlineScriptDrawer;
-        private SettingsDrawer _settingsDrawer;
+        public SettingsDrawer SettingsDrawer { get; set; }
         private static DulyEditor _window;
         private static Texture _texture;
-        private static Texture _buildTexture;
-        private static Texture _settingsTexture;
-        private static Texture _logoTexture;
         private static GUIContent _settingsContent;
-        private Texture _mlTexture;
-        [SerializeField]
-        private bool _isMlDownloading;
+        //[SerializeField]
+        //private bool _isMlDownloading;
 
         private Vector2 scrollPos;
-        private bool _isCompiling;
+        public bool IsCompiling { get; set; }
 
         public static DulyEditor Instance { get { return _window; } }
 
-        private WebClient wc;
+
+        private Background _background;
+        private Header _header;
+        private Footer _footer;
+        private ToolsBar _toolsBar;
+
+        public enum ML_STATUS
+        {
+            NOT_INSTALLED = 0,
+            DOWNLOADING,
+            INSTALLED,
+            UNINSTALLING
+        };
 
         public DulyEditor()
         {
             _window = this;
+            _window.minSize = new Vector2(300f, 300f);
+            _window.maxSize = new Vector2(800f, 800f);
             //CloudFileWatcher.Watch(true);
         }
 
@@ -100,7 +115,8 @@ namespace Core.Plugin.Unity.Editor
             }
             else
             {
-                _window.Focus();
+                _window.Close();
+                //_window.Focus();
             }
         }
 
@@ -111,31 +127,22 @@ namespace Core.Plugin.Unity.Editor
             if (_settingsContent == null)
                 _settingsContent = EditorGUIUtility.IconContent("SettingsIcon", "|Settings");
 
+            if (SettingsDrawer == null)
+            {
+                SettingsDrawer = CreateInstance<SettingsDrawer>();
+            }
+
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
-            GUILayout.BeginHorizontal();
-            DrawWindowTitle();
-
-            if (_settingsDrawer == null)
-                _settingsDrawer = CreateInstance<SettingsDrawer>();
-            //if (GUILayout.Button(_settingsContent))
-            //{
-            //    //if (_settingsDrawer == null)
-            //        //_settingsDrawer = CreateInstance<SettingsDrawer>();
-            //    _settingsDrawer?.ShowAuxWindow();
-            //}
-            GUILayout.EndHorizontal();
+            DrawPage();
 
             EditorGUILayout.Space();
 
-            DrawBuildButton();
+            DrawToolsBar();
 
-            GUI.enabled = !_isCompiling;
-
-            _scriptDrawer?.Draw();
             EditorGUILayout.Space();
-            _onlineScriptDrawer?.Draw();
-            EditorGUI.EndDisabledGroup();
+
+            DrawContent();
 
             GUILayout.EndScrollView();
         }
@@ -145,21 +152,21 @@ namespace Core.Plugin.Unity.Editor
             hideFlags = HideFlags.HideAndDontSave;
 
             //Debug.Log("[DulyEditor] On enable");
-            if (_scriptDrawer == null)
+            if (ScriptDrawer == null)
             {
-                //_scriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
-                _scriptDrawer = new ScriptDrawer();
-                _scriptDrawer.OnEnable();
-                _isMlDownloading = _scriptDrawer.EditorSettings.IsMlEnabled;
+                //ScriptDrawer = ScriptableObject.CreateInstance<ScriptDrawer>();
+                ScriptDrawer = new ScriptDrawer();
+                ScriptDrawer.OnEnable();
+                //_isMlDownloading = ScriptDrawer.EditorSettings.IsMlEnabled;
             }
-            if (_settingsDrawer == null)
+            if (SettingsDrawer == null)
             {
-                _settingsDrawer = CreateInstance<SettingsDrawer>();
+                SettingsDrawer = CreateInstance<SettingsDrawer>();
             }
             if (_onlineScriptDrawer == null)
             {
                 _onlineScriptDrawer = new OnlineScriptDrawer();
-                _settingsDrawer.OnConnection += (t, e) =>
+                SettingsDrawer.OnConnection += (t, e) =>
                 {
                     if (e.IsSuccess)
                         _onlineScriptDrawer.FetchFiles();
@@ -170,339 +177,70 @@ namespace Core.Plugin.Unity.Editor
         private void OnDisable()
         {
             //Debug.Log("[DulyEditor] On disable");
-            _scriptDrawer.EditorSettings.IsMlEnabled = _isMlDownloading;
-            _scriptDrawer?.OnDisable();
+            ScriptDrawer?.OnDisable();
             AssetDatabase.SaveAssets();
         }
 
         private void OnDestroy()
         {
-            _scriptDrawer?.OnDestroy();
+            ScriptDrawer?.OnDestroy();
             AssetDatabase.SaveAssets();
         }
 
         #region Editor Drawing
-
-        private void DrawWindowTitle()
+        private void DrawPage()
         {
-            GUILayout.FlexibleSpace();
-            //GUILayout.Label("DNAI Editor", EditorStyles.largeLabel);
-            if (_logoTexture == null)
-                _logoTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "logo_color.png");
+            GUILayout.BeginHorizontal();
 
-            GUILayout.Label(_logoTexture);
-            GUILayout.FlexibleSpace();
+            if (_background == null)
+            {
+                _background = new Background(new Color(0.208f, 0.2f, 0.29f));
+                _header = new Header(AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "logo_color.png"));
+                _footer = new Footer();
+            }
+            _background.Draw();
+            _header.Draw();
+            _footer.Draw();
+
+            GUILayout.EndHorizontal();
         }
+        
+        private void DrawContent()
+        {
+            GUI.enabled = !IsCompiling;
 
-        private int _currentScriptCount;
-        private int _maxScriptCount;
+            GUILayout.MaxWidth(400f);
+
+            var bc = GUI.backgroundColor;
+            var cc = GUI.contentColor;
+            var tc = GUI.skin.label.normal.textColor;
+            GUI.backgroundColor = BackgroundColor;
+            GUI.contentColor = FontColor;
+            GUI.skin.label.normal.textColor = FontColor;
+
+            ScriptDrawer?.Draw();
+            EditorGUILayout.Space();
+            _onlineScriptDrawer?.Draw();
+            EditorGUI.EndDisabledGroup();
+
+            GUI.backgroundColor = bc;
+            GUI.contentColor = cc;
+            GUI.skin.label.normal.textColor = tc;
+        }
 
         /// <summary>
         /// Draws the build button to the window.
         /// </summary>
-        private void DrawBuildButton()
+        private void DrawToolsBar()
         {
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            if (_buildTexture == null)
-                _buildTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "build.png");
-            GUIContent ct = new GUIContent(_buildTexture, "Build");
-
-            // Build scripts button
-            if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)))
+            if (_toolsBar == null)
             {
-                Context.UnityTask.Run(async () =>
-                {
-                    //await scriptManager.CompileAsync(_selectedScripts.FindIndices(x => x));
-                    try
-                    {
-                        _isCompiling = true;
-                        _maxScriptCount = _scriptDrawer.ListAI.Count;
-                        for (int i = 0; i < _scriptDrawer.ListAI.Count; i++)
-                        {
-                            _currentScriptCount = i + 1;
-
-                            if (EditorUtility.DisplayCancelableProgressBar("Compiling DNAI scripts",
-                                    $"Processed {_currentScriptCount}/{_maxScriptCount} scripts", _currentScriptCount / (float)_maxScriptCount))
-                            {
-                                Debug.Log("Compilation canceled");
-                                i = _scriptDrawer.ListAI.Count;
-                                continue;
-                            }
-
-                            await _scriptDrawer.ListAI[i].scriptManager.CompileAsync();
-                            AssetDatabase.ImportAsset(Constants.CompiledPath + _scriptDrawer.ListAI[i].scriptManager.AssemblyName + ".dll");
-                        }
-                        EditorUtility.ClearProgressBar();
-                        _isCompiling = false;
-                    }
-                    catch (System.IO.FileNotFoundException ex)
-                    {
-                        Debug.LogError($"Could not find the DNAI file {ex.FileName}. Make sure it exists in the Scripts folder.");
-                    }
-                    finally
-                    {
-                        EditorUtility.ClearProgressBar();
-                    }
-                }).ContinueWith((e) =>
-                {
-                    if (e.IsFaulted)
-                    {
-                        Debug.LogError(e?.Exception.GetBaseException().Message + " " + e?.Exception.GetBaseException().StackTrace);
-                    }
-                    _isCompiling = false;
-                });
+                _toolsBar = new ToolsBar();
+                _toolsBar.AppendButton(new BuildButton());
+                _toolsBar.AppendButton(new SettingsButton());
+                _toolsBar.AppendButton(new MLButton());
             }
-
-            // Settings button
-            DrawSettingsButton();
-
-            DrawMachineLearningButton();
-
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-
-            //if (_isCompiling)
-            //{
-            //    if (EditorUtility.DisplayCancelableProgressBar("Compiling DNAI scripts",
-            //        $"Processed {_currentScriptCount}/{_maxScriptCount} scripts", _currentScriptCount / (float)_maxScriptCount))
-            //    {
-            //        Debug.Log("Compilation canceled");
-            //    }
-            //}
-            //else
-            //{
-            //    EditorUtility.ClearProgressBar();
-            //    //EditorGUIUtility.ExitGUI();
-            //}
-        }
-
-        private void DrawSettingsButton()
-        {
-            // Settings button
-            if (_settingsTexture == null)
-                _settingsTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "settings.png");
-            var ct = new GUIContent(_settingsTexture, "Settings");
-            if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)))
-            {
-                //if (_settingsDrawer == null)
-                //_settingsDrawer = CreateInstance<SettingsDrawer>();
-                _settingsDrawer?.ShowAuxWindow();
-            }
-        }
-
-
-        private void DrawMachineLearningButton()
-        {
-            var old = GUI.contentColor;
-            if (_mlTexture == null)
-                _mlTexture = AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "machine_learning.png");
-
-            if (wc == null)
-            {
-                wc = new WebClient();
-                wc.DownloadProgressChanged += Wc_DownloadProgressChanged;
-                wc.DownloadFileCompleted += Wc_DownloadFileCompleted;
-                dependenciesPath = Application.dataPath;
-                mlStatusInit = false;
-                Task.Run(() => ValidateDependencies());
-            }
-            var ct = new GUIContent(_mlTexture, "Machine Learning - " + (_mlStatus == ML_STATUS.INSTALLED ? "Enabled" : "Disabled"));
-            GUI.contentColor = _mlStatusColor[(int) _mlStatus];
-            if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)) && mlStatusInit)
-            {
-                switch (_mlStatus)
-                {
-                    case ML_STATUS.NOT_INSTALLED:
-                        try
-                        {
-                            wc.DownloadFileAsync(new Uri(Constants.MlUrl), Application.dataPath + "/../Dnai.ML.PluginDependencies.zip");
-                            _mlStatus = ML_STATUS.DOWNLOADING;
-                        }
-                        catch (Exception e)
-                        {
-                            _mlStatus = ML_STATUS.NOT_INSTALLED;
-                            shouldCloseProgress = true;
-                            Debug.Log(e.Message);
-                        }
-                        break;
-                    case ML_STATUS.DOWNLOADING:
-                        break;
-                    case ML_STATUS.INSTALLED:
-                        shouldCleanDependencies = true;
-                        break;
-                    case ML_STATUS.UNINSTALLING:
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-
-            //Debug.Log(_mlStatus.ToString());
-            if (shouldCloseProgress)
-            {
-                shouldCloseProgress = false;
-                EditorUtility.ClearProgressBar();
-            }
-            else if (shouldCleanDependencies)
-            {
-                shouldCleanDependencies = false;
-                Task.Run(() => CleanDependencies());
-            }
-            else
-            {
-                switch (_mlStatus)
-                {
-                    case ML_STATUS.NOT_INSTALLED:
-                        break;
-                    case ML_STATUS.DOWNLOADING:
-                        if (EditorUtility.DisplayCancelableProgressBar("Downloading Machine Learning Package",
-                            $"Downloading content {bytesReceived}/{bytesToreceive}MB ({percentage}%)", progress))
-                        {
-                            wc?.CancelAsync();
-                        }
-                        break;
-                    case ML_STATUS.INSTALLED:
-                        break;
-                    case ML_STATUS.UNINSTALLING:
-                        EditorUtility.DisplayProgressBar("Uninstalling Machine Learning Package",
-                            $"Uninstalling content {bytesReceived}/{bytesToreceive} Files ({percentage}%)", progress);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            GUI.contentColor = old;
-        }
-
-        private float progress = 0;
-        private long bytesReceived;
-        private long bytesToreceive;
-        private int percentage;
-        private bool mlStatusInit = false;
-        private string dependenciesPath;
-        private bool shouldCloseProgress = false;
-        private bool shouldCleanDependencies = false;
-
-        private enum ML_STATUS
-        {
-            NOT_INSTALLED = 0,
-            DOWNLOADING,
-            INSTALLED,
-            UNINSTALLING
-        };
-
-        private ML_STATUS _mlStatus = ML_STATUS.NOT_INSTALLED;
-
-        private readonly Color[] _mlStatusColor = {
-            new Color(1, 0.28f, 0.28f), //RED
-            new Color(1f, 0.76f, 0.28f), //ORANGE
-            new Color(0.24f, 0.69f, 0.42f), //GREEN
-            new Color(1, 1f, 0.28f) //YELLOW
-        };
-
-        private void Wc_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
-        {
-            var archivePath = Application.dataPath + "/../Dnai.ML.PluginDependencies.zip";
-            if (e.Cancelled)
-            {
-                wc.Dispose();
-                wc = null;
-                shouldCleanDependencies = true;
-                return;
-            }
-            ZipFile.ExtractToDirectory(archivePath, Application.dataPath + "/../");
-            System.IO.File.Delete(archivePath);
-            shouldCloseProgress = true;
-            ValidateDependencies();
-            if (_mlStatus == ML_STATUS.NOT_INSTALLED)
-                shouldCleanDependencies = true;
-        }
-
-        private void CleanDependencies()
-        {
-            _mlStatus = ML_STATUS.UNINSTALLING;
-            var archivePath = dependenciesPath + "/../Dnai.ML.PluginDependencies.zip";
-            if (System.IO.File.Exists(archivePath))
-                System.IO.File.Delete(archivePath);
-            var dependencies = System.IO.File.ReadAllLines(Constants.PluginsPath + "/dependencies.txt");
-            var depPath = dependenciesPath + "/../";
-            int count = 0;
-            bytesToreceive = dependencies.Count();
-            foreach (var depName in dependencies)
-            {
-                bytesReceived = count;
-                progress = (float)count++ / dependencies.Count();
-                percentage = (int)(progress * 100f);
-                var md5 = depPath + "checksum_" + depName + ".md5";
-                var dll = depPath + depName + ".dll";
-                if (System.IO.File.Exists(dll))
-                    System.IO.File.Delete(dll);
-                if (System.IO.File.Exists(md5))
-                    System.IO.File.Delete(md5);
-            }
-            bytesReceived = count;
-            progress = 1f;
-            percentage = 100;
-            _mlStatus = ML_STATUS.NOT_INSTALLED;
-            shouldCloseProgress = true;
-        }
-
-        private void ValidateDependencies()
-        {
-            try
-            {
-                using (var md5 = MD5.Create())
-                {
-                    var dependencies = System.IO.File.ReadAllLines(Constants.PluginsPath + "/dependencies.txt");
-                    var depPath = dependenciesPath + "/../";
-                    foreach (var depName in dependencies)
-                    {
-                        var dll = depPath + depName + ".dll";
-                        var md5Name = depPath + "checksum_" + depName + ".md5";
-                        if (!System.IO.File.Exists(dll) || !System.IO.File.Exists(md5Name))
-                        {
-                            _mlStatus = ML_STATUS.NOT_INSTALLED;
-                            mlStatusInit = true;
-                            return;
-                        }
-
-                        using (var streamDll = System.IO.File.OpenRead(dll))
-                        {
-                            var bytes = System.IO.File.ReadAllBytes(md5Name);
-                            var dllBytes = md5.ComputeHash(streamDll);
-                            if (bytes.SequenceEqual(dllBytes)) continue;
-                            _mlStatus = ML_STATUS.NOT_INSTALLED;
-                            mlStatusInit = true;
-                            return;
-                        }
-
-                    }
-                }
-                _mlStatus = ML_STATUS.INSTALLED;
-                mlStatusInit = true;
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e.Message);
-                _mlStatus = ML_STATUS.NOT_INSTALLED;
-                mlStatusInit = true;
-            }
-        }
-
-        private void Wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            progress = e.ProgressPercentage / 100f;
-            bytesReceived = ConvertBytesToMegabytes(e.BytesReceived);
-            bytesToreceive = ConvertBytesToMegabytes(e.TotalBytesToReceive);
-            percentage = e.ProgressPercentage;
-        }
-
-        static long ConvertBytesToMegabytes(long bytes)
-        {
-            return (long)((bytes / 1024f) / 1024f);
+            _toolsBar.Draw();
         }
 
         #endregion Editor Drawing
