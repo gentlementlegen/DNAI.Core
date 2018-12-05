@@ -7,7 +7,6 @@ using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
 using CorePackage.Execution;
-using UnityEngine;
 
 namespace Core.Plugin.Unity.Editor
 {
@@ -95,8 +94,7 @@ namespace Core.Plugin.Unity.Editor
                     {
                         continue;
                     }
-
-                    UnityEngine.Debug.Log(entry);
+                    
                     string destPath = $"{fileCopyPath}{entry.FullName}";
                     UnityEngine.Debug.Log(destPath);
                     entry.ExtractToFile(destPath, true);

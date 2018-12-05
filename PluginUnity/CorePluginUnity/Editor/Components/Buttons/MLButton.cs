@@ -17,7 +17,7 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
         private long bytesReceived;
         private long bytesToreceive;
         private int percentage;
-        private static bool mlStatusInit = false;
+        public static bool mlStatusInit = false;
         private static string dependenciesPath;
         private bool shouldCloseProgress = false;
         private bool shouldCleanDependencies = false;
@@ -51,8 +51,9 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
                 mlStatusInit = false;
                 Task.Run(() => ValidateDependencies());
             }
+
             var ct = new GUIContent(texture, "Machine Learning - " + (_mlStatus == DulyEditor.ML_STATUS.INSTALLED ? "Enabled" : "Disabled"));
-            GUI.contentColor = _mlStatusColor[(int)_mlStatus];
+            GUI.contentColor = mlStatusInit ? _mlStatusColor[(int)_mlStatus] : Color.gray;
             if (GUILayout.Button(ct, GUILayout.Width(50), GUILayout.Height(50)) && mlStatusInit)
             {
                 switch (_mlStatus)
@@ -143,7 +144,15 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
             }
             try
             {
-                ZipFile.ExtractToDirectory(archivePath, Application.dataPath + "/../");
+                using (ZipArchive archive = ZipFile.OpenRead(archivePath))
+                {
+                    foreach (ZipArchiveEntry file in archive.Entries)
+                    {
+                        string completeFileName = Path.Combine(Application.dataPath + "/../", file.FullName);
+                        Debug.Log(completeFileName);
+                        file.ExtractToFile(completeFileName, true);
+                    }
+                }
                 System.IO.File.Delete(archivePath);
             }
             catch (IOException ioe)

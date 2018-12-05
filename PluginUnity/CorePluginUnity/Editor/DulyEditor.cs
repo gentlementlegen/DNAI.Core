@@ -226,7 +226,7 @@ namespace Core.Plugin.Unity.Editor
             _onlineScriptDrawer?.Draw();
             EditorGUI.EndDisabledGroup();
             
-            if ( MLButton._mlStatus == ML_STATUS.NOT_INSTALLED )
+            if (MLButton.mlStatusInit && MLButton._mlStatus == ML_STATUS.NOT_INSTALLED )
                 EditorGUILayout.HelpBox(
                     "DNAI Machine learning package isn't install.\nClic on the brain icon if you need Machine Learning in your project.",
                     MessageType.Info);
