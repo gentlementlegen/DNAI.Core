@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NETStandard.Library.NETFramework.2.0.0-preview1-25305-02\build\net461\NETStandard.Library.NETFramework.props" Condition="Exists('..\packages\NETStandard.Library.NETFramework.2.0.0-preview1-25305-02\build\net461\NETStandard.Library.NETFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <ProjectGuid>{DC0C6FC8-7D9D-4AC6-9B64-C8E3C39CA105}</ProjectGuid>
@@ -182,10 +183,13 @@
     <Error Condition="!Exists('..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets'))" />
     <Error Condition="!Exists('..\packages\CNTK.GPU.2.6.0\build\netstandard2.0\CNTK.GPU.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CNTK.GPU.2.6.0\build\netstandard2.0\CNTK.GPU.targets'))" />
     <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets'))" />
+    <Error Condition="!Exists('..\packages\NETStandard.Library.NETFramework.2.0.0-preview1-25305-02\build\net461\NETStandard.Library.NETFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.NETFramework.2.0.0-preview1-25305-02\build\net461\NETStandard.Library.NETFramework.props'))" />
+    <Error Condition="!Exists('..\packages\NETStandard.Library.NETFramework.2.0.0-preview1-25305-02\build\net461\NETStandard.Library.NETFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.NETFramework.2.0.0-preview1-25305-02\build\net461\NETStandard.Library.NETFramework.targets'))" />
   </Target>
   <Import Project="..\packages\CNTK.Deps.cuDNN.2.6.0\build\netstandard2.0\CNTK.Deps.cuDNN.targets" Condition="Exists('..\packages\CNTK.Deps.cuDNN.2.6.0\build\netstandard2.0\CNTK.Deps.cuDNN.targets')" />
   <Import Project="..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets" Condition="Exists('..\packages\CNTK.Deps.MKL.2.6.0\build\netstandard2.0\CNTK.Deps.MKL.targets')" />
   <Import Project="..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets" Condition="Exists('..\packages\CNTK.Deps.OpenCV.Zip.2.6.0\build\netstandard2.0\CNTK.Deps.OpenCV.Zip.targets')" />
   <Import Project="..\packages\CNTK.GPU.2.6.0\build\netstandard2.0\CNTK.GPU.targets" Condition="Exists('..\packages\CNTK.GPU.2.6.0\build\netstandard2.0\CNTK.GPU.targets')" />
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
+  <Import Project="..\packages\NETStandard.Library.NETFramework.2.0.0-preview1-25305-02\build\net461\NETStandard.Library.NETFramework.targets" Condition="Exists('..\packages\NETStandard.Library.NETFramework.2.0.0-preview1-25305-02\build\net461\NETStandard.Library.NETFramework.targets')" />
 </Project>
