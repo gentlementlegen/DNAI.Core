@@ -95,7 +95,7 @@ namespace Core.Plugin.Unity.Editor
 
             try
             {
-                ScriptManager.UnpackScript(filePath);
+                newpath = ScriptManager.UnpackScript(filePath);
                 System.IO.File.Delete(filePath);
             }
             catch (Exception)
@@ -107,7 +107,6 @@ namespace Core.Plugin.Unity.Editor
 
                 System.IO.File.Move(filePath, newpath);
             }
-
             AssetDatabase.ImportAsset(newpath);
             return true;
         }

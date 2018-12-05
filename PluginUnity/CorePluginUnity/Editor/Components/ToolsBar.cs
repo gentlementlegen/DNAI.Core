@@ -23,6 +23,11 @@ namespace Core.Plugin.Unity.Editor.Components
             _buttons.Add(button);
         }
 
+        public ToolBarButton GetButton(int index)
+        {
+            return _buttons[index];
+        }
+
         public void Draw()
         {
             GUILayout.BeginHorizontal();

@@ -8,15 +8,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2066551659, guid: 2ac41270ac6b40a43bbb9269e7549599, type: 3}
+  m_Script: {fileID: -2066551659, guid: d258296e2e365174894c528646cfe1d9, type: 3}
   m_Name: DNAIEditor
   m_EditorClassIdentifier: 
   listIA:
   - scriptManager:
       _fileName: 
       _filePath: Assets/DNAI/Scripts/DigitRecognizer.dnai
-      _filePathAbsolute: D:\Documents\VisualStudio\DNAI\PluginUnity\PluginTestProject\Assets\DNAI\Scripts\DigitRecognizer.dnai
+      _filePathAbsolute: C:\Users\nicol\source\repos\Duly\PluginUnity\PluginTestProject\Assets\DNAI\Scripts\DigitRecognizer.dnai
       _scriptName: DigitRecognizer
     AIName: 
     _scriptList:
     - recognize Digit
+  - scriptManager:
+      _fileName: 
+      _filePath: Assets/DNAI/Scripts/MoreOrLess3.0.dnai
+      _filePathAbsolute: C:\Users\nicol\source\repos\Duly\PluginUnity\PluginTestProject\Assets\DNAI\Scripts\MoreOrLess3.0.dnai
+      _scriptName: MoreOrLess
+    AIName: 
+    _scriptList:
+    - Play
+    - Reset

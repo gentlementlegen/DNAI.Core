@@ -152,6 +152,8 @@ namespace Core.Plugin.Unity.Editor
 
             DrawContent();
 
+            _footer.Draw();
+
             GUILayout.EndScrollView();
             GUI.skin = old;
         }
@@ -209,7 +211,6 @@ namespace Core.Plugin.Unity.Editor
             }
             _background.Draw();
             _header.Draw();
-            _footer.Draw();
 
             GUILayout.EndHorizontal();
         }
@@ -224,6 +225,11 @@ namespace Core.Plugin.Unity.Editor
             EditorGUILayout.Space();
             _onlineScriptDrawer?.Draw();
             EditorGUI.EndDisabledGroup();
+            
+            if ( MLButton._mlStatus == ML_STATUS.NOT_INSTALLED )
+                EditorGUILayout.HelpBox(
+                    "DNAI Machine learning package isn't install.\nClic on the brain icon if you need Machine Learning in your project.",
+                    MessageType.Info);
         }
 
         /// <summary>

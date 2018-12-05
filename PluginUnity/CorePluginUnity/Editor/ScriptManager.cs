@@ -6,6 +6,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
+using CorePackage.Execution;
+using UnityEngine;
 
 namespace Core.Plugin.Unity.Editor
 {
@@ -83,7 +85,7 @@ namespace Core.Plugin.Unity.Editor
 
         public static string UnpackScript(string packagePath)
         {
-            var fileCopyPath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(ScriptManager)).Location), "..", "Scripts");
+            var fileCopyPath = Constants.RootPath;
 
             using (ZipArchive archive = ZipFile.OpenRead(packagePath))
             {
@@ -94,14 +96,21 @@ namespace Core.Plugin.Unity.Editor
                         continue;
                     }
 
-                    string destPath = $"{fileCopyPath}/{entry.FullName}";
+                    UnityEngine.Debug.Log(entry);
+                    string destPath = $"{fileCopyPath}{entry.FullName}";
+                    UnityEngine.Debug.Log(destPath);
+                    entry.ExtractToFile(destPath, true);
 
+                    string newPath = $"{Constants.ScriptPath}{entry.FullName}";
                     if (entry.FullName.EndsWith(".dnai"))
                     {
-                        packagePath = destPath;
+                        packagePath = newPath;
                     }
-
-                    entry.ExtractToFile(destPath, true);
+                    if (System.IO.File.Exists(newPath))
+                    {
+                        System.IO.File.Delete(newPath);
+                    }
+                    System.IO.File.Move(destPath, newPath);
                 }
             }
 

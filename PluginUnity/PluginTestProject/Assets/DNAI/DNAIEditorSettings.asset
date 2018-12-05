@@ -8,12 +8,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2021544108, guid: 2ac41270ac6b40a43bbb9269e7549599, type: 3}
+  m_Script: {fileID: -2021544108, guid: d258296e2e365174894c528646cfe1d9, type: 3}
   m_Name: DNAIEditorSettings
   m_EditorClassIdentifier: 
   Username: admin
   Token:
-    token: 
-    refreshToken: 
-    user_id: 
+    token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWIyODQ2YzE4Y2QwODUwMDNkODEyZDA1IiwiaWF0IjoxNTQzOTQ1NTA0LCJleHAiOjE1NDQwMzE5MDR9.ccGcSUWZWTJD1UzH0phV5ivpn99xUzK-XT3c9tUYVfUQfaZJKWVD6oQvp_nLodkljln7xnw0TePjOZTAG4eSJBMzzxz0DR3CsXqXA8xGAkTY9MQT1evntOyxtfXh6X066mh29LVDPwAUOAw5mpnUOlIuRvCrmxvjPlQBM-ek5VvSm-jn1221d9fHLSlcUbAvgKBe5WStINA5lnRPRPh9X2vm4xd3jGoaev73fCFNXKL2WjtTtudCt9CfIyXYDynJ3fNbFZSHoB8UFzz9VA8-k8iinJb4jtLhN86TUlDY5yzPHUJ_TRDiQ8yStLrfoO4_Dp5M5K-iHR93F_tRX5kepg
+    refreshToken: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWIyODQ2YzE4Y2QwODUwMDNkODEyZDA1IiwiaWF0IjoxNTQzOTQ1NTA0LCJleHAiOjE1NDQxMTgzMDR9.ZnIPZhiNTl9WqB-P7vVaZaImPG07bdtVUwO68HYxpAuG62R8CCf7Y9BTj8MUKluz-hVWcEaOFwBd_AcXx-nSPch7hWLXamt8aI-l-Vq_Vv6zQDWRzBoFLarzzPihs9obod6pnTCNgmsQkRojvr37K-uDdf9_6VDrAsc8i6REL1WT0wOcNY3O0-5IZu3PCBUVxFCNdKLKY1OdDTIKpNVIXevuC2Z2hvvduTBtzpOLLTNRG3rauOAcFFPeZUl2opCzTgYxid_xeoK3Hi_NVBVmaawqU6SqgJ0KgYL-x2eloOTDkDml9aTbKNwXooaw0VK40QWpDidtUyyn9TNvZ8GQmA
+    user_id: 5b2846c18cd085003d812d05
   AutoLogin: 1

@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
         private WebClient wc;
         private string downloadStatus;
 
-        private static DulyEditor.ML_STATUS _mlStatus = DulyEditor.ML_STATUS.NOT_INSTALLED;
+        public static DulyEditor.ML_STATUS _mlStatus = DulyEditor.ML_STATUS.NOT_INSTALLED;
 
         private readonly Color[] _mlStatusColor = {
             new Color(1, 0.28f, 0.28f), //RED
@@ -34,6 +35,7 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
 
         public MLButton() : base("Ml Package", AssetDatabase.LoadAssetAtPath<Texture>(Constants.ResourcesPath + "machine_learning.png"))
         {
+
         }
 
         public override void Draw()
@@ -80,7 +82,14 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
                 }
             }
 
-            //Debug.Log(_mlStatus.ToString());
+            GUI.contentColor = old;
+
+            if (_mlStatus == DulyEditor.ML_STATUS.DOWNLOADING ||
+                _mlStatus == DulyEditor.ML_STATUS.UNINSTALLING)
+            {
+                DulyEditor.Instance.Repaint();
+            }
+
             if (shouldCloseProgress)
             {
                 shouldCloseProgress = false;
@@ -119,8 +128,6 @@ namespace Core.Plugin.Unity.Editor.Components.Buttons
                         break;
                 }
             }
-
-            GUI.contentColor = old;
         }
 
 

@@ -1,0 +1,10 @@
+{
+    "name": "ProjectAI",
+    "references": [
+        "DNAIPlugins"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
