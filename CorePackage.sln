@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePackage", "CorePackage\CorePackage.csproj", "{DC0C6FC8-7D9D-4AC6-9B64-C8E3C39CA105}"
+	ProjectSection(ProjectDependencies) = postProject
+		{89733D6E-A3D3-46EB-801D-8C7302308E23} = {89733D6E-A3D3-46EB-801D-8C7302308E23}
+		{2C4DEE9A-8B97-449B-9839-0CBD35A5306E} = {2C4DEE9A-8B97-449B-9839-0CBD35A5306E}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCore", "TestCore\TestCore.csproj", "{DB004E7D-B2E6-4F7B-AE1C-189CD5963F9A}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -28,6 +32,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreNetwork", "CoreNetwork\CoreNetwork.csproj", "{4BDCAF42-5631-40F4-A497-6D8410085579}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDaemon", "CoreDaemon\CoreDaemon.csproj", "{17546F12-066E-4435-AFD1-22DC480FA744}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4BDCAF42-5631-40F4-A497-6D8410085579} = {4BDCAF42-5631-40F4-A497-6D8410085579}
+		{022FFC42-784D-4D25-8598-3E356DC7B7DB} = {022FFC42-784D-4D25-8598-3E356DC7B7DB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNetwork", "TestNetwork\TestNetwork.csproj", "{E8649199-6750-4863-8C2E-3C6B09F40A0D}"
 EndProject
