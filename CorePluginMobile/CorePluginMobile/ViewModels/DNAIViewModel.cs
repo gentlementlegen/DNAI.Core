@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.IO.Compression;
+using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -53,10 +55,22 @@ namespace CorePluginMobile.ViewModels
         {
             UrlCommand = new Command(async () =>
             {
-                string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), SelectedItem.Title);
+                var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/";
+                string fileName = Path.Combine(appDataPath, SelectedItem.Title);
                 var file = await Accessor.GetFileContent(_token.user_id, SelectedItem._id);
                 System.IO.File.WriteAllBytes(fileName, file);
-                _binaryManager.LoadCommandsFrom(fileName);
+                ZipArchive archive = ZipFile.OpenRead(fileName);
+                var dnaiFileName = "";
+                foreach (var entry in archive.Entries)
+                {
+                    entry.ExtractToFile(appDataPath + entry.Name, true);
+                    if (Path.GetExtension(entry.FullName) == ".dnai")
+                        dnaiFileName = entry.FullName;
+                }
+                archive.Dispose();
+                System.IO.File.Delete(fileName);
+                _binaryManager.Controller.SetRessourceDirectory(appDataPath);
+                _binaryManager.LoadCommandsFrom(appDataPath + dnaiFileName);
                 MessagingCenter.Send(this, "SwitchPage", 1);
             });
 
