@@ -14,6 +14,7 @@ using System.Text;
 using static CoreControl.EntityFactory;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using CorePackageCNTK;
 
 [assembly: InternalsVisibleTo("TestUnityPlugin")]
 
@@ -183,6 +184,9 @@ namespace Core.Plugin.Unity.Generator
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CorePluginUnityRuntime.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "MathNet.Numerics.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "Cntk.Core.Managed-2.6.dll");
+                _parameters.ReferencedAssemblies.Add(assemblyPath + "CorePackageCNTK.dll");
+
+                Predictor.InitPredictor();
 
                 _parameters.ReferencedAssemblies.Add("System.Core.dll");
                 _parameters.ReferencedAssemblies.Add("Microsoft.CSharp.dll");

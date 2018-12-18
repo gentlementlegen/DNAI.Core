@@ -25,7 +25,7 @@ namespace CorePluginMobile.ViewModels
             var result = generated_script_execution_results["result"];
             var maxOut = generated_script_execution_results["maxOut"];
             var results = generated_script_execution_results["results"];
-            DependencyService.Get<IToaster>().MakeText($"Number found: [{0}] ({0}%)");
+            DependencyService.Get<IToaster>().MakeText($"Number found: [{result}] ({maxOut}%)");
         }
     }
 }

@@ -2,11 +2,6 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CorePluginMobile.Views.CameraPage"
-             xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:androidWidget="clr-namespace:Android.Widget;assembly=Mono.Android;targetPlatform=Android"
-             xmlns:androidGraphics="clr-namespace:Android.Graphics;assembly=Mono.Android;targetPlatform=Android"
-             xmlns:androidView="clr-namespace:Android.Views;assembly=Mono.Android;targetPlatform=Android"
-             xmlns:androidLocal="clr-namespace:CorePluginMobile.Droid;assembly=CorePluginMobile.Droid;targetPlatform=Android"
 			 Title="Camera">
     <!--<ContentPage.Content>
         <StackLayout>

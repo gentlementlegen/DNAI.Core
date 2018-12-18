@@ -47,19 +47,76 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseCoreDaemon|AnyCPU' ">
+    <OutputPath>bin\ReleaseCoreDeamon\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseCoreDaemon|x64' ">
+    <OutputPath>bin\x64\ReleaseCoreDeamon\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleasePluginUnity|AnyCPU'">
+    <OutputPath>bin\ReleasePluginUnity\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleasePluginUnity|x64'">
+    <OutputPath>bin\x64\ReleasePluginUnity\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleasePluginAndroid|AnyCPU'">
+    <OutputPath>bin\ReleasePluginAndroid\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleasePluginAndroid|x64'">
+    <OutputPath>bin\x64\ReleasePluginAndroid\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.TextTemplating.15.0, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.VisualStudio.TextTemplating.15.0.15.4.27004\lib\net45\Microsoft.VisualStudio.TextTemplating.15.0.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.VisualStudio.TextTemplating.15.0.15.9.28307\lib\net45\Microsoft.VisualStudio.TextTemplating.15.0.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TextTemplating.Interfaces.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.VisualStudio.TextTemplating.Interfaces.10.0.10.0.30319\lib\net40\Microsoft.VisualStudio.TextTemplating.Interfaces.10.0.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.VisualStudio.TextTemplating.Interfaces.10.0.10.0.30320\lib\net40\Microsoft.VisualStudio.TextTemplating.Interfaces.10.0.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TextTemplating.Interfaces.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.VisualStudio.TextTemplating.Interfaces.11.0.11.0.50727\lib\net45\Microsoft.VisualStudio.TextTemplating.Interfaces.11.0.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.VisualStudio.TextTemplating.Interfaces.11.0.11.0.50728\lib\net45\Microsoft.VisualStudio.TextTemplating.Interfaces.11.0.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TextTemplating.VSHost.15.0, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -154,6 +211,10 @@
       <Project>{4bdcaf42-5631-40f4-a497-6d8410085579}</Project>
       <Name>CoreNetwork</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\CorePackageCNTK\CorePackageCNTK.csproj">
+      <Project>{9acb0652-a0db-42ee-bef6-f3dc22b76964}</Project>
+      <Name>CorePackageCNTK</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\CorePackage\CorePackage.csproj">
       <Project>{dc0c6fc8-7d9d-4ac6-9b64-c8e3c39ca105}</Project>
       <Name>CorePackage</Name>
@@ -196,6 +257,7 @@
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreCommand.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreControl.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CorePackage.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
+"%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CorePackageCNTK.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)CoreNetwork.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)EventServerClient.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;
 "%25systemroot%25\system32\xcopy.EXE" /y "$(TargetDir)Newtonsoft.Json.dll" "$(SolutionDir)\PluginUnity\PluginTestProject\Assets\DNAI\Plugins" &amp;

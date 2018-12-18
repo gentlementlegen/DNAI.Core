@@ -20,12 +20,3 @@ MonoBehaviour:
     AIName: 
     _scriptList:
     - recognize Digit
-  - scriptManager:
-      _fileName: 
-      _filePath: Assets/DNAI/Scripts/MoreOrLess3.0.dnai
-      _filePathAbsolute: C:\Users\nicol\source\repos\Duly\PluginUnity\PluginTestProject\Assets\DNAI\Scripts\MoreOrLess3.0.dnai
-      _scriptName: MoreOrLess
-    AIName: 
-    _scriptList:
-    - Play
-    - Reset
