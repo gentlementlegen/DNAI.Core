@@ -16,6 +16,7 @@ namespace CorePluginMobile.Views
             InitializeComponent();
 
             BindingContext = _cameraViewModel = new CameraViewModel();
+            _cameraViewModel.Navigation = Navigation;
         }
     }
 }

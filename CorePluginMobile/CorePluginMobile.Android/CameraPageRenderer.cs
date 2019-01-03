@@ -1,8 +1,10 @@
 ﻿using Android;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.Graphics;
 using Android.Hardware;
+using Android.Support.V4.App;
 using Android.Views;
 using Android.Widget;
 using CorePluginMobile.Services;
@@ -99,12 +101,22 @@ namespace CustomRenderer.Droid
 
         public void OnSurfaceTextureAvailable(SurfaceTexture surface, int width, int height)
         {
+            if (ActivityCompat.CheckSelfPermission(Context, Manifest.Permission.Camera) != (int)Permission.Granted)
+            {
+                // Camera permission has not been granted
+                RequestCameraPermission();
+            }
             camera = global::Android.Hardware.Camera.Open((int)cameraType);
             textureView.LayoutParameters = new FrameLayout.LayoutParams(width, height);
             surfaceTexture = surface;
 
             camera.SetPreviewTexture(surface);
             PrepareAndStartCamera();
+        }
+
+        void RequestCameraPermission()
+        {
+            ActivityCompat.RequestPermissions(activity, new String[] { Manifest.Permission.Camera }, 0);
         }
 
         public bool OnSurfaceTextureDestroyed(SurfaceTexture surface)
