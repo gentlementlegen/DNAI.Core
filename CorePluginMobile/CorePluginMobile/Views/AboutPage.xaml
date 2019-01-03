@@ -13,6 +13,7 @@
             <Color x:Key="Primary">#2196F3</Color>
             <Color x:Key="Accent">#96d1ff</Color>
             <Color x:Key="LightTextColor">#999999</Color>
+            <Color x:Key="White">#ffffff</Color>
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid>
@@ -20,10 +21,11 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
+        <StackLayout BackgroundColor="{StaticResource White}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
                 <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
-                    <Image Source="xamarin_logo.png" VerticalOptions="Center" HeightRequest="64" />
+                    <Image Source="DNAI.png" VerticalOptions="Fill" HeightRequest="90"
+						   HorizontalOptions="Fill"/>
                 </ContentView>
             </StackLayout>
         </StackLayout>
@@ -33,7 +35,7 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <FormattedString.Spans>
-                                <Span Text="AppName" FontAttributes="Bold" FontSize="22" />
+                                <Span Text="DNAI" FontAttributes="Bold" FontSize="22" />
                                 <Span Text=" " />
                                 <Span Text="1.0" ForegroundColor="{StaticResource LightTextColor}" />
                             </FormattedString.Spans>
@@ -44,10 +46,10 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <FormattedString.Spans>
-                                <Span Text="This app is written in C# and native APIs using the" />
+                                <Span Text="This app is powered by" />
                                 <Span Text=" " />
-                                <Span Text="Xamarin Platform" FontAttributes="Bold" />
-                                <Span Text="." />
+                                <Span Text="DNAI" FontAttributes="Bold" />
+                                <Span Text=", a cross-platform AI solution." />
                             </FormattedString.Spans>
                         </FormattedString>
                     </Label.FormattedText>
