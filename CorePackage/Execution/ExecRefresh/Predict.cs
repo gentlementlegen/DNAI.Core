@@ -19,12 +19,17 @@ namespace CorePackage.Execution
             AddOutput("outputs", new Entity.Variable(Entity.Type.Matrix.Instance));
         }
 
-        public override void Execute()
+        private void LoadModel()
         {
             dynamic model = GetInputValue("model");
+            PredictorInstance.LoadModel($"{Entity.Type.Resource.Instance.Directory}/{model}");
+        }
+
+        public override void Execute()
+        {
             dynamic inputs = GetInputValue("inputs");
 
-            PredictorInstance.LoadModel($"{Entity.Type.Resource.Instance.Directory}/{model}");
+            LoadModel();
             SetOutputValue("outputs", PredictorInstance.Predict(inputs));
 
             //Global.KerasService.LoadModel(model);

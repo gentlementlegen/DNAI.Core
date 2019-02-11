@@ -34,6 +34,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using CoreCommand;
 using System.Collections.Generic;
+using CorePackage;
+using CorePackageCNTK;
 //using UnityEditorInternal;
 //using UnityEditor;
 //using Core.Plugin.Unity.Editor.Conditions.Inspector;
@@ -42,14 +44,14 @@ using Core.Plugin.Unity.Runtime;
 
 namespace DNAI.");
             
-            #line 20 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 22 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n\t//namespace ");
             
-            #line 22 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 24 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -57,7 +59,7 @@ namespace DNAI.");
             this.Write("\r\n\t//{\r\n\t\t///<summary>\r\n\t\t/// Base behaviour for DNAI IA.\r\n\t\t///</summary>\r\n\t\tpub" +
                     "lic class ");
             
-            #line 27 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 29 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -66,7 +68,7 @@ namespace DNAI.");
                     "itionItem> _cdtList = new List<ConditionItem>();// { new ConditionItem() { cdt =" +
                     " new IntCondition() } };\r\n\r\n\t\t\t");
             
-            #line 32 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 34 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in DataTypes)
 			{
             
@@ -74,14 +76,14 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t");
             
-            #line 34 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 36 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\t");
             
-            #line 35 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 37 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
@@ -89,7 +91,7 @@ namespace DNAI.");
             this.Write("\r\n\t\t\tpublic static string[] OutputsAsStrings = new string[]\r\n\t\t\t{\r\n\t\t\t\t\"No Output" +
                     " Selected\",\r\n\t\t\t\t");
             
-            #line 40 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 42 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Outputs)
 				{
             
@@ -97,14 +99,14 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t\t\"");
             
-            #line 42 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 44 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write("\",\r\n\t\t\t\t");
             
-            #line 43 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 45 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
@@ -112,7 +114,7 @@ namespace DNAI.");
             this.Write("\t\t\t};\r\n\r\n\t\t\tpublic static string[] OutputsAsStringsQualified = new string[]\r\n\t\t\t{" +
                     "\r\n\t\t\t\t\"void\",\r\n\t\t\t\t");
             
-            #line 49 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 51 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Outputs)
 				{
             
@@ -120,14 +122,14 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t\ttypeof(");
             
-            #line 51 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 53 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[0]));
             
             #line default
             #line hidden
             this.Write(").AssemblyQualifiedName,\r\n\t\t\t\t");
             
-            #line 52 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 54 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
@@ -147,7 +149,7 @@ namespace DNAI.");
 			//[Header(""Input variables"")]
 			");
             
-            #line 66 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 68 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Inputs)
 			{ 
             
@@ -155,21 +157,21 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\tpublic ");
             
-            #line 68 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 70 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t\t");
             
-            #line 69 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 71 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\t//[Header(\"Output variables\")]\r\n\t\t\t");
             
-            #line 72 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 74 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var item in Outputs)
 			{ 
             
@@ -177,35 +179,35 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\tprivate ");
             
-            #line 74 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 76 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[0]));
             
             #line default
             #line hidden
             this.Write(" _");
             
-            #line 74 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 76 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[1]));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t\t\tpublic ");
             
-            #line 75 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 77 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\t\t{\r\n\t\t\t\t\tget { return _");
             
-            #line 77 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 79 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[1]));
             
             #line default
             #line hidden
             this.Write("; }\r\n\t\t\t\t\tprivate set\r\n\t\t\t\t\t{\r\n\t\t\t\t\t\t_");
             
-            #line 80 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 82 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.Split(' ')[1]));
             
             #line default
@@ -214,7 +216,7 @@ namespace DNAI.");
                     "ValueType = value.GetType(), Invoker = this });\r\n\t\t\t\t\t\t_cdtList.FindAll((x) => x" +
                     ".SelectedOutput == \"");
             
-            #line 82 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 84 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item));
             
             #line default
@@ -223,7 +225,7 @@ namespace DNAI.");
                     "null)\r\n\t\t\t\t\t\t\t\ty.OnOutputChanged.Invoke(new EventOutputChange { Value = value, V" +
                     "alueType = value.GetType(), Invoker = this });\r\n\t\t\t\t\t\t});\r\n\t\t\t\t\t}\r\n\t\t\t\t}\r\n\t\t\t");
             
-            #line 89 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 91 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default
@@ -231,7 +233,7 @@ namespace DNAI.");
             this.Write("\r\n\t\t\tprivate static readonly BinaryManager _manager = new BinaryManager();\r\n\r\n\t\t\t" +
                     "static ");
             
-            #line 93 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 95 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
@@ -246,15 +248,16 @@ namespace DNAI.");
 				_manager.Controller.SetRessourceDirectory(cwd + @""/Assets/DNAI/Scripts/"");
 				_manager.LoadCommandsFrom(@""Assets/DNAI/Scripts/"" + """);
             
-            #line 101 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 103 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(FilePath));
             
             #line default
             #line hidden
-            this.Write("\");\r\n\t\t\t}\r\n\r\n\t\t\t///<summary>\r\n\t\t\t/// Executes the Duly Behaviour by calling the c" +
-                    "reated function.\r\n\t\t\t/// Updates Outputs accordingly.\r\n\t\t\t///</summary>\r\n\t\t\t");
+            this.Write("\");\r\n\t\t\t\tPredictor.InitPredictor();\r\n\t\t\t}\r\n\r\n\t\t\t///<summary>\r\n\t\t\t/// Executes the" +
+                    " Duly Behaviour by calling the created function.\r\n\t\t\t/// Updates Outputs accordi" +
+                    "ngly.\r\n\t\t\t///</summary>\r\n\t\t\t");
             
-            #line 108 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 111 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  foreach (var f in Functions)
 			{ 
             
@@ -262,7 +265,7 @@ namespace DNAI.");
             #line hidden
             this.Write("\r\n\t\t\t\tpublic void Execute");
             
-            #line 111 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 114 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(f.Name));
             
             #line default
@@ -271,21 +274,21 @@ namespace DNAI.");
                     "ynamic>();\r\n\r\n\t\t\t\t\tgenerated_script_execution_results = _manager.Controller.Call" +
                     "Function(");
             
-            #line 115 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 118 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(f.FunctionId));
             
             #line default
             #line hidden
             this.Write(", new Dictionary<string, dynamic>{ ");
             
-            #line 115 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 118 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(f.FunctionArguments));
             
             #line default
             #line hidden
             this.Write(" });\r\n\t\t\t\t\t");
             
-            #line 116 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 119 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  if (Outputs.Count > 0)
 					{
 						foreach (var output in Outputs)
@@ -297,63 +300,63 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t\t\t\tif (generated_script_execution_results.ContainsKey(\"");
             
-            #line 122 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 125 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write("\"))\r\n\t\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\t\tif (generated_script_execution_results[\"");
             
-            #line 124 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 127 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write("\"].GetType() != typeof(");
             
-            #line 124 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 127 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varType));
             
             #line default
             #line hidden
             this.Write("))\r\n\t\t\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\t\t\tthis.");
             
-            #line 126 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 129 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write(" = Convert.ChangeType(generated_script_execution_results[\"");
             
-            #line 126 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 129 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write("\"], typeof(");
             
-            #line 126 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 129 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varType));
             
             #line default
             #line hidden
             this.Write("));\r\n\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t\telse\r\n\t\t\t\t\t\t\t\t{\r\n\t\t\t\t\t\t\t\t\tthis.");
             
-            #line 130 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 133 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write(" = generated_script_execution_results[\"");
             
-            #line 130 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 133 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(varName));
             
             #line default
             #line hidden
             this.Write("\"];\r\n\t\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\t}\r\n\t\t\t\t\t\t");
             
-            #line 133 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 136 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  }
 					} 
             
@@ -361,7 +364,7 @@ namespace DNAI.");
             #line hidden
             this.Write("\t\t\t\t}\r\n\t\t\t\t\r\n\t\t\t");
             
-            #line 137 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
+            #line 140 "C:\Users\nicol\Source\Repos\Duly\PluginUnity\CorePluginUnity\Generator\GeneratedCodeTemplate.tt"
  } 
             
             #line default

@@ -180,6 +180,7 @@ namespace Core.Plugin.Unity.Generator
 #endif
 
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreCommand.dll");
+                _parameters.ReferencedAssemblies.Add(assemblyPath + "CorePackage.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CoreControl.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "CorePluginUnityRuntime.dll");
                 _parameters.ReferencedAssemblies.Add(assemblyPath + "MathNet.Numerics.dll");

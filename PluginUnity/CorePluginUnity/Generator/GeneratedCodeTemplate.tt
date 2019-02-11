@@ -11,6 +11,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using CoreCommand;
 using System.Collections.Generic;
+using CorePackage;
+using CorePackageCNTK;
 //using UnityEditorInternal;
 //using UnityEditor;
 //using Core.Plugin.Unity.Editor.Conditions.Inspector;
@@ -99,6 +101,7 @@ namespace DNAI.<#=Namespace#>
 				string cwd = Directory.GetCurrentDirectory();
 				_manager.Controller.SetRessourceDirectory(cwd + @"/Assets/DNAI/Scripts/");
 				_manager.LoadCommandsFrom(@"Assets/DNAI/Scripts/" + "<#=FilePath#>");
+				Predictor.InitPredictor();
 			}
 
 			///<summary>

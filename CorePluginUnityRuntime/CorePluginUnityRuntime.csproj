@@ -121,5 +121,11 @@
     <Compile Include="DNAIScriptConditionRuntime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CorePackageCNTK\CorePackageCNTK.csproj">
+      <Project>{9ACB0652-A0DB-42EE-BEF6-F3DC22B76964}</Project>
+      <Name>CorePackageCNTK</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

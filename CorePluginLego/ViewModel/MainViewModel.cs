@@ -194,7 +194,7 @@ namespace CorePluginLego.ViewModel
             }
         }
 
-        private string _comPort = "6";
+        private string _comPort = "8";
 
         public string ComPort
         { get => _comPort; set => Set(ref _comPort, value); }

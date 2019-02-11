@@ -31,6 +31,18 @@ namespace CorePackageCNTK
             try
             {
                 Model = CNTKHelper.LoadModel(path);
+                var info = Path.GetDirectoryName(path) + "/" + Path.GetFileNameWithoutExtension(path) + ".txt";
+                List<string> lines = new List<string>();
+                using (StreamReader sr = new StreamReader(info))
+                {
+                    while (sr.Peek() >= 0)
+                    {
+                        lines.Add(sr.ReadLine());
+                    }
+                }
+                
+                var shape = lines[2].Replace(" ", "").Replace("(", "").Replace(")", "").Split(',');
+                Predict(new DenseMatrix(Int32.Parse(shape[1]), Int32.Parse(shape[2])));
                 LastModelLoaded = path;
             }
             catch (Exception ex)
@@ -47,12 +59,12 @@ namespace CorePackageCNTK
             CNTK.Variable inputVar = Model.Arguments.Single();
 
             double[] original = inputs.ToRowMajorArray();
-            for (int i = 0; i < original.Length; i++)
-            {
-                if (i != 0 && i % 28 == 0)
-                    Console.Write("\n");
-                Console.Write((int)(original[i] * 10) + ",");
-            }
+            //for (int i = 0; i < original.Length; i++)
+            //{
+            //    if (i != 0 && i % 28 == 0)
+            //        Console.Write("\n");
+            //    Console.Write((int)(original[i] * 10) + ",");
+            //}
             List<float> converted = original.Select(o => (float)o).ToList();
 
             NDShape inputShape = inputVar.Shape;

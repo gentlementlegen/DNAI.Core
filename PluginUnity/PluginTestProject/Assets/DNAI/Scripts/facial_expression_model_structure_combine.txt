@@ -1,0 +1,3 @@
+conv2d_1_input
+dense_3/Softmax
+(None, 48, 48, 1)

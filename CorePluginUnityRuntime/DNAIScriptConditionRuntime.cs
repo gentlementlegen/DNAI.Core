@@ -78,6 +78,7 @@ namespace Core.Plugin.Unity.Runtime
 
         public void Initialize(Type t)
         {
+
             //cdt = new AConditionRuntime();
             cdt = Activator.CreateInstance(t) as AConditionRuntime;
             cdt.SetCurrentType(SelectedOutput.Split(' ')[0]);

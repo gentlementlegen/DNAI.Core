@@ -70,7 +70,8 @@ namespace CoreControl
             GET_SHAPE,
             GET_INDEX_VALUE,
             RESIZE,
-            CLASSIFY
+            CLASSIFY,
+            LOAD_MODEL
         };
 
         /// <summary>
@@ -129,7 +130,8 @@ namespace CoreControl
             { INSTRUCTION_ID.GET_SHAPE, 0 },
             { INSTRUCTION_ID.GET_INDEX_VALUE, 0 },
             { INSTRUCTION_ID.RESIZE, 0 },
-            { INSTRUCTION_ID.CLASSIFY, 0 }
+            { INSTRUCTION_ID.CLASSIFY, 0 },
+            { INSTRUCTION_ID.LOAD_MODEL, 0 }
         };
 
         /// <summary>
@@ -188,7 +190,8 @@ namespace CoreControl
             { INSTRUCTION_ID.GET_SHAPE,             args => new GetShape() },
             { INSTRUCTION_ID.GET_INDEX_VALUE,       args => new GetIndexValue() },
             { INSTRUCTION_ID.RESIZE,                args => new Resize() },
-            { INSTRUCTION_ID.CLASSIFY,              args => new Classify() }
+            { INSTRUCTION_ID.CLASSIFY,              args => new Classify() },
+            { INSTRUCTION_ID.LOAD_MODEL,            args => new LoadModel() }
         };
 
         /// <summary>
@@ -247,7 +250,8 @@ namespace CoreControl
             { typeof(GetShape), INSTRUCTION_ID.GET_SHAPE },
             { typeof(GetIndexValue), INSTRUCTION_ID.GET_INDEX_VALUE },
             { typeof(Resize), INSTRUCTION_ID.RESIZE },
-            { typeof(Classify), INSTRUCTION_ID.CLASSIFY }
+            { typeof(Classify), INSTRUCTION_ID.CLASSIFY },
+            { typeof(LoadModel), INSTRUCTION_ID.LOAD_MODEL }
         };
 
         /// <summary>

@@ -106,8 +106,8 @@ public class DigitGenerator : DigitRecognizer
             displayedTextUI.text = "";
             loadImage.enabled = true;
 
-            //ExecuterecognizeDigit();
-            //OnImageRecognized();
+//            ExecuterecognizeDigit();
+//            OnImageRecognized();
 
             RecognitionAction = () =>
             {

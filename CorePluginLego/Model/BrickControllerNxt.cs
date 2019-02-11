@@ -52,7 +52,7 @@ namespace CorePluginLego.Model
             //_brick = await _connection.Connect();
             await System.Threading.Tasks.Task.Run(() =>
             {
-                _brick = new NxtBrick(NxtCommLinkType.Bluetooth, 6);
+                _brick = new NxtBrick(NxtCommLinkType.Bluetooth, 9);
                 _brick.MotorA = new NxtMotor();
                 _brick.MotorB = new NxtMotor();
                 _brick.MotorC = new NxtMotor();

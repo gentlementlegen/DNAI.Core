@@ -191,6 +191,7 @@
     <Compile Include="Execution\ExecRefresh\Formula.cs" />
     <Compile Include="Execution\ExecRefresh\FunctionCall.cs" />
     <Compile Include="Execution\ExecRefresh\Insert.cs" />
+    <Compile Include="Execution\ExecRefresh\LoadModel.cs" />
     <Compile Include="Execution\ExecRefresh\Predict.cs" />
     <Compile Include="Execution\AccessRefresh\Random.cs" />
     <Compile Include="Execution\ExecRefresh\Remove.cs" />
